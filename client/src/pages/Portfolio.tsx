@@ -16,7 +16,19 @@ export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const { data: projects = [], isLoading } = useQuery<Project[]>({
-    queryKey: ['/api/projects', { category: activeCategory !== 'all' ? activeCategory : undefined }],
+    queryKey: ['/api/projects', activeCategory],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (activeCategory !== 'all') {
+        params.append('category', activeCategory);
+      }
+      const url = `/api/projects${params.toString() ? `?${params.toString()}` : ''}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch projects: ${response.statusText}`);
+      }
+      return response.json();
+    },
   });
 
   return (
