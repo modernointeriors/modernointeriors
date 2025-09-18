@@ -1,0 +1,68 @@
+# Overview
+
+NIVORA is a sophisticated interior design studio website built as a full-stack application. It features a modern, dark-themed frontend showcasing design projects, services, and client management capabilities, with a comprehensive admin dashboard for content management. The application serves as both a marketing platform for the design studio and a business management tool for tracking projects, clients, and inquiries.
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+# System Architecture
+
+## Frontend Architecture
+- **React with TypeScript**: Single-page application using Wouter for client-side routing
+- **UI Framework**: Extensive use of shadcn/ui components built on Radix UI primitives
+- **Styling**: Tailwind CSS with custom design system featuring dark theme, golden accent colors, and sophisticated typography (Inter, Playfair Display fonts)
+- **State Management**: TanStack Query for server state management and caching
+- **Form Handling**: React Hook Form with Zod validation for type-safe form processing
+- **Build Tool**: Vite for development and production builds
+
+## Backend Architecture
+- **Express.js**: RESTful API server with structured routing and middleware
+- **Database ORM**: Drizzle ORM with PostgreSQL dialect for type-safe database operations
+- **Database Provider**: Neon serverless PostgreSQL with connection pooling
+- **API Design**: RESTful endpoints for projects, clients, inquiries, and services with proper error handling and validation
+- **Development Integration**: Custom Vite middleware for seamless full-stack development
+
+## Data Model
+The application manages four core entities:
+- **Projects**: Portfolio items with categories (residential, commercial, architecture), images, location, and status tracking
+- **Clients**: CRM functionality with contact information, company details, and relationship status
+- **Inquiries**: Contact form submissions with project type, budget, and message details
+- **Services**: Configurable service offerings with descriptions, features, and ordering
+- **Users**: Admin authentication system with role-based access
+
+## Component Architecture
+- **Modular UI Components**: Reusable components in `/components/ui` following consistent patterns
+- **Page Components**: Route-specific components handling data fetching and business logic
+- **Layout System**: Responsive navigation with mobile-first design and glass morphism effects
+- **Admin Dashboard**: Comprehensive management interface with tabbed navigation and CRUD operations
+
+## Authentication & Authorization
+- Basic user system with username/password authentication
+- Role-based access control (admin role)
+- Session management for admin dashboard access
+
+# External Dependencies
+
+## Database
+- **Neon Serverless PostgreSQL**: Cloud-hosted PostgreSQL with WebSocket connections for serverless compatibility
+- **Drizzle Kit**: Database migration and schema management tools
+
+## UI & Design
+- **Radix UI**: Headless component primitives for accessibility and customization
+- **Lucide Icons**: Icon library for consistent visual elements
+- **Tailwind CSS**: Utility-first CSS framework with custom design tokens
+- **Google Fonts**: Inter and Playfair Display for typography
+
+## Development Tools
+- **Replit Integration**: Custom Vite plugins for error overlay, cartographer, and dev banner
+- **TypeScript**: Full-stack type safety with shared schema definitions
+- **ESBuild**: Fast JavaScript bundler for production builds
+
+## Form & Validation
+- **Zod**: Schema validation library for type-safe form handling
+- **React Hook Form**: Performance-optimized form library with validation integration
+
+## Image Handling
+- **Unsplash**: External image service for placeholder content
+- **Custom Upload Component**: File upload interface with drag-and-drop support (mock implementation)
