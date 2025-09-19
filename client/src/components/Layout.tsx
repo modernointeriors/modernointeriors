@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -19,8 +19,29 @@ const getNavigation = (t: (key: string) => string) => [
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const updateScrollDirection = () => {
+      const scrollY = window.scrollY;
+      const direction = scrollY > lastScrollY ? "down" : "up";
+      
+      if (direction === "down" && scrollY > 100) {
+        setIsScrolled(true);
+      } else if (direction === "up" || scrollY < 50) {
+        setIsScrolled(false);
+      }
+      
+      lastScrollY = scrollY > 0 ? scrollY : 0;
+    };
+
+    window.addEventListener("scroll", updateScrollDirection);
+    return () => window.removeEventListener("scroll", updateScrollDirection);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === '/') return location === '/';
@@ -30,7 +51,9 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className="fixed top-0 left-16 right-0 z-50 bg-black/70 backdrop-blur-sm border-b border-white/10 py-4">
+      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm py-4 transition-transform duration-300 ${
+        isScrolled ? '-translate-y-full' : 'translate-y-0'
+      }`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
