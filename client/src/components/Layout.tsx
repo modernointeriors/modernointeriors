@@ -186,34 +186,34 @@ export default function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {/* Corporate Office */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6">CORPORATE OFFICE</h4>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">CORPORATE OFFICE</h4>
               <div className="space-y-2">
-                <p className="text-white font-medium">MARINA BAY SANDS</p>
-                <p className="text-white font-medium">TOWER 2, LEVEL 39,</p>
-                <p className="text-white font-medium">018956 SINGAPORE</p>
-                <p className="text-white font-medium mt-4">+65 6734 2987</p>
+                <p className="text-white/80 font-light">MARINA BAY SANDS</p>
+                <p className="text-white/80 font-light">TOWER 2, LEVEL 39,</p>
+                <p className="text-white/80 font-light">018956 SINGAPORE</p>
+                <p className="text-white/80 font-light mt-4">+65 6734 2987</p>
               </div>
             </div>
             
             {/* Navigation */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6">NAVIGATION</h4>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">NAVIGATION</h4>
               <ul className="space-y-2">
-                <li><Link href="/" className="text-white hover:text-gray-300 transition-colors">HOME</Link></li>
-                <li><Link href="/about" className="text-white hover:text-gray-300 transition-colors">ABOUT</Link></li>
-                <li><Link href="/portfolio" className="text-white hover:text-gray-300 transition-colors">PROJECTS</Link></li>
-                <li><Link href="/contact" className="text-white hover:text-gray-300 transition-colors">CONTACTS</Link></li>
+                <li><Link href="/" className="text-white/80 hover:text-white transition-colors font-light">HOME</Link></li>
+                <li><Link href="/about" className="text-white/80 hover:text-white transition-colors font-light">ABOUT</Link></li>
+                <li><Link href="/portfolio" className="text-white/80 hover:text-white transition-colors font-light">PROJECTS</Link></li>
+                <li><Link href="/contact" className="text-white/80 hover:text-white transition-colors font-light">CONTACTS</Link></li>
               </ul>
             </div>
             
             {/* Social Media */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6">SOCIAL MEDIA</h4>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">SOCIAL MEDIA</h4>
               <ul className="space-y-2">
                 <li>
                   <a 
                     href="#" 
-                    className="text-white hover:text-gray-300 transition-colors"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-instagram"
                   >
                     INSTAGRAM
@@ -222,7 +222,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="#" 
-                    className="text-white hover:text-gray-300 transition-colors"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-twitter"
                   >
                     X/TWITTER
@@ -231,7 +231,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="#" 
-                    className="text-white hover:text-gray-300 transition-colors"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-tiktok"
                   >
                     TIK TOK
@@ -240,7 +240,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="#" 
-                    className="text-white hover:text-gray-300 transition-colors"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-pinterest"
                   >
                     PINTEREST
@@ -251,16 +251,16 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Join Our News */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6">JOIN OUR NEWS</h4>
-              <p className="text-white mb-4">Receive notifications about new offers</p>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">JOIN OUR NEWS</h4>
+              <p className="text-white/80 mb-4 font-light">Receive notifications about new offers</p>
               <div className="flex">
                 <input
                   type="email"
                   placeholder="Email"
-                  className="bg-transparent border-0 border-b border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-white flex-grow px-0 py-2"
+                  className="bg-transparent border-0 border-b border-gray-600 text-white/80 placeholder-gray-400 focus:outline-none focus:border-white flex-grow px-0 py-2 font-light"
                   data-testid="newsletter-email"
                 />
-                <button className="ml-2 text-white hover:text-gray-300 transition-colors">
+                <button className="ml-2 text-white/80 hover:text-white transition-colors font-light">
                   →
                 </button>
               </div>
@@ -268,7 +268,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
           
           <div className="mt-16 pt-8 text-center border-t border-gray-800">
-            <p className="text-gray-400 text-sm">
+            <p className="text-white/60 text-sm font-light">
               © 2025 Moderno Interiors Design
             </p>
           </div>
