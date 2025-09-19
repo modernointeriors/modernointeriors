@@ -109,12 +109,6 @@ export default function Layout({ children }: LayoutProps) {
             </SheetContent>
         </Sheet>
         
-        {/* Logo - Vertical */}
-        <Link href="/" className="mb-auto">
-          <h1 className="text-white cursor-pointer tracking-wider font-serif font-bold transform -rotate-90 whitespace-nowrap text-sm" data-testid="logo">
-            NIVORA
-          </h1>
-        </Link>
         
         {/* Language Toggle - Vertical */}
         <div className="flex flex-col items-center space-y-2 text-xs font-medium">
@@ -139,6 +133,15 @@ export default function Layout({ children }: LayoutProps) {
           </button>
         </div>
       </aside>
+
+      {/* Logo - Top Right */}
+      <div className="fixed top-0 right-0 z-50 p-6">
+        <Link href="/">
+          <h1 className="text-xl font-serif font-bold text-white cursor-pointer tracking-wider" data-testid="logo">
+            NIVORA
+          </h1>
+        </Link>
+      </div>
 
       {/* Mobile Bottom Actions */}
       <div className="md:hidden fixed bottom-0 left-20 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
