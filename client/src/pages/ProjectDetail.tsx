@@ -157,7 +157,11 @@ export default function ProjectDetail() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
             <div className="text-white text-lg font-light tracking-wider">
-              NIVORA STUDIO
+              <img 
+                src="/attached_assets/logo.white.png" 
+                alt="NIVORA STUDIO" 
+                className="h-8 w-auto"
+              />
             </div>
             <nav className="hidden md:flex items-center space-x-8 text-sm">
               <Link href="/" className="text-zinc-400 hover:text-white transition-colors">HOME</Link>

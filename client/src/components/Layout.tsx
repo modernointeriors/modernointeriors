@@ -35,7 +35,11 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="text-white text-lg font-light tracking-wider">
-              NIVORA STUDIO
+              <img 
+                src="/attached_assets/logo.white.png" 
+                alt="NIVORA STUDIO" 
+                className="h-8 w-auto"
+              />
             </div>
             
             {/* Navigation Menu */}

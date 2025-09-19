@@ -94,7 +94,14 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-about">About NIVORA</h1>
+          <div className="flex items-center justify-center gap-4 mb-6" data-testid="heading-about">
+            <h1 className="text-4xl md:text-6xl font-sans font-light">About</h1>
+            <img 
+              src="/attached_assets/logo.white.png" 
+              alt="NIVORA" 
+              className="h-12 md:h-16 w-auto"
+            />
+          </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Where architectural vision meets interior perfection. We are a team of passionate designers creating extraordinary spaces worldwide.
           </p>
