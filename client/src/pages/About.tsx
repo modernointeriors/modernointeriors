@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "wouter";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Mail, Phone, Linkedin, Award, Star, Users, Calendar } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 
@@ -85,71 +85,12 @@ const teamMembers = [
   }
 ];
 
-const navigationItems = [
-  { id: 'story', label: 'Our Story' },
-  { id: 'philosophy', label: 'Philosophy' },
-  { id: 'team', label: 'Team' },
-  { id: 'approach', label: 'Our Approach' },
-  { id: 'contact-cta', label: 'Contact' }
-];
 
 export default function About() {
-  const [activeSection, setActiveSection] = useState('story');
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = navigationItems.map(item => item.id);
-      const scrollPosition = window.scrollY + 200;
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offsetTop = element.offsetTop - 120;
-      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="min-h-screen pt-24">
-      {/* Sticky Navigation */}
-      <div className="sticky top-20 z-40 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8 py-4 overflow-x-auto">
-            {navigationItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`whitespace-nowrap text-sm font-medium transition-colors hover:text-primary ${
-                  activeSection === item.id 
-                    ? 'text-primary border-b-2 border-primary' 
-                    : 'text-muted-foreground'
-                }`}
-                data-testid={`nav-${item.id}`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
