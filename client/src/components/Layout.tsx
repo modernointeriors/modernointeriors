@@ -37,7 +37,7 @@ export default function Layout({ children }: LayoutProps) {
             <Button 
               variant="ghost" 
               size="sm"
-              className="text-white hover:text-primary p-3 w-12 h-12 rounded-none mb-8"
+              className="text-white hover:text-[#FAA61A] p-3 w-12 h-12 rounded-none mb-8 hover:bg-transparent"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
