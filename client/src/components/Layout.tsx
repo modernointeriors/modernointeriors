@@ -30,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className="fixed top-0 left-16 right-0 z-50 bg-black border-b border-white/10 py-8">
+      <header className="fixed top-0 left-16 right-0 z-50 bg-black/70 backdrop-blur-sm border-b border-white/10 py-4">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -201,7 +201,7 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Main Content - Adjusted for header and sidebar */}
-      <main className="ml-16 pt-24 pb-20 md:pb-0">{children}</main>
+      <main className="ml-16 pt-20 pb-20 md:pb-0">{children}</main>
 
       {/* Footer - Adjusted for sidebar */}
       <footer className="ml-16 bg-card border-t border-border py-16">
