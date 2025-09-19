@@ -220,7 +220,7 @@ export default function BlogDetail() {
               {article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {(article.tags as any[]).map((tag: any, index: number) => (
-                    <Badge key={index} variant="secondary">
+                    <Badge key={index} variant="outline">
                       #{String(tag)}
                     </Badge>
                   ))}

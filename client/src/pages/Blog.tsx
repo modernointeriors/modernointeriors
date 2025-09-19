@@ -155,11 +155,11 @@ export default function Blog() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-muted h-48 rounded-lg mb-4" />
+                <div className="bg-white/10 h-48 rounded-lg mb-4" />
                 <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4" />
-                  <div className="h-3 bg-muted rounded w-1/2" />
-                  <div className="h-3 bg-muted rounded w-2/3" />
+                  <div className="h-4 bg-white/10 rounded w-3/4" />
+                  <div className="h-3 bg-white/10 rounded w-1/2" />
+                  <div className="h-3 bg-white/10 rounded w-2/3" />
                 </div>
               </div>
             ))}
@@ -232,7 +232,7 @@ export default function Blog() {
                   {article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? (
                     <div className="flex flex-wrap gap-2 mb-4">
                       {(article.tags as any[]).slice(0, 3).map((tag: any, index: number) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                        <Badge key={index} variant="outline" className="text-xs">
                           #{String(tag)}
                         </Badge>
                       ))}

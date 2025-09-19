@@ -252,7 +252,7 @@ export default function About() {
                           </h4>
                           <div className="flex flex-wrap gap-1">
                             {member.specialties.map((specialty, index) => (
-                              <Badge key={index} variant="secondary" className="text-xs">
+                              <Badge key={index} variant="outline" className="text-xs">
                                 {specialty}
                               </Badge>
                             ))}

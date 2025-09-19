@@ -59,7 +59,7 @@ export default function Admin() {
                 <LogOut className="h-4 w-4" />
                 Đăng xuất
               </Button>
-              <Badge variant="secondary" className="px-3 py-1">
+              <Badge variant="outline" className="px-3 py-1">
                 Admin Access
               </Badge>
             </div>
@@ -73,7 +73,7 @@ export default function Admin() {
               {tabs.map((tab) => (
                 <Button
                   key={tab.id}
-                  variant={activeTab === tab.id ? "default" : "secondary"}
+                  variant={activeTab === tab.id ? "default" : "outline"}
                   onClick={() => setActiveTab(tab.id)}
                   className="px-4 py-2"
                   data-testid={`tab-${tab.id}`}
