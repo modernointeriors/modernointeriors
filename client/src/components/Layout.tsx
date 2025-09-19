@@ -29,45 +29,129 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation Header */}
-      <header className="fixed top-0 w-full z-50 glass-card border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <div className="flex-shrink-0">
+      {/* Navigation Header - IIDA Style */}
+      <header className="fixed top-0 w-full z-50 bg-background/95 backdrop-blur-sm border-b border-border/30">
+        <div className="w-full px-6 lg:px-12">
+          <nav className="flex items-center justify-between h-16">
+            {/* Left Side - Logo and Menu */}
+            <div className="flex items-center space-x-8">
+              {/* Logo */}
               <Link href="/">
-                <h1 className="text-2xl font-serif font-bold text-gradient cursor-pointer" data-testid="logo">
+                <h1 className="text-xl font-serif font-bold text-primary cursor-pointer tracking-wider" data-testid="logo">
                   NIVORA
                 </h1>
               </Link>
+              
+              {/* Desktop Menu Trigger */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-muted-foreground hover:text-primary p-2"
+                    data-testid="button-main-menu"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-[400px] bg-background border-border">
+                  <div className="flex flex-col h-full">
+                    {/* Menu Header */}
+                    <div className="flex items-center justify-between py-6 border-b border-border">
+                      <h2 className="text-lg font-serif font-bold text-primary">NIVORA</h2>
+                    </div>
+                    
+                    {/* Navigation Menu */}
+                    <div className="flex-1 py-8">
+                      <div className="space-y-6">
+                        {navigation.map((item) => (
+                          <Link
+                            key={item.key}
+                            href={item.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`block text-lg font-medium transition-colors hover:text-primary ${
+                              isActive(item.href)
+                                ? 'text-primary'
+                                : 'text-foreground'
+                            }`}
+                            data-testid={`menu-nav-${item.key}`}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                      
+                      {/* Additional Menu Items */}
+                      <div className="mt-12 pt-8 border-t border-border">
+                        <div className="space-y-4">
+                          <Link 
+                            href="/services" 
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            Services
+                          </Link>
+                          <Link 
+                            href="/about" 
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            Our Story
+                          </Link>
+                          <Link 
+                            href="/contact" 
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            Get in Touch
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Menu Footer */}
+                    <div className="py-6 border-t border-border">
+                      <p className="text-xs text-muted-foreground">
+                        © 2024 NIVORA Design Studio
+                      </p>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
             
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <div className="flex items-baseline space-x-8">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.key}
-                    href={item.href}
-                    className={`px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'text-foreground nav-active'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                    data-testid={`nav-${item.key}`}
+            {/* Right Side - Actions and Language */}
+            <div className="flex items-center space-x-6">
+              {/* Action Buttons */}
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/contact">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-muted-foreground hover:text-primary font-medium"
+                    data-testid="button-contact"
                   >
-                    {item.name}
-                  </Link>
-                ))}
+                    Get Started
+                  </Button>
+                </Link>
+                <Link href="/portfolio">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-medium"
+                    data-testid="button-portfolio"
+                  >
+                    View Portfolio
+                  </Button>
+                </Link>
               </div>
               
               {/* Language Toggle */}
               <div className="flex items-center space-x-2 text-sm font-medium">
-                <Globe className="h-4 w-4 text-muted-foreground" />
                 <button
                   onClick={() => setLanguage('en')}
                   className={`px-2 py-1 transition-colors ${
-                    language === 'en' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                    language === 'en' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
                   }`}
                   data-testid="lang-en"
                 >
@@ -77,7 +161,7 @@ export default function Layout({ children }: LayoutProps) {
                 <button
                   onClick={() => setLanguage('vi')}
                   className={`px-2 py-1 transition-colors ${
-                    language === 'vi' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                    language === 'vi' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
                   }`}
                   data-testid="lang-vi"
                 >
@@ -85,69 +169,38 @@ export default function Layout({ children }: LayoutProps) {
                 </button>
               </div>
             </div>
-            
-            {/* Mobile menu button and language toggle */}
-            <div className="flex md:hidden items-center space-x-4">
-              {/* Mobile Language Toggle */}
-              <div className="flex items-center space-x-1 text-xs font-medium">
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`px-1 transition-colors ${
-                    language === 'en' ? 'text-foreground' : 'text-muted-foreground'
-                  }`}
-                  data-testid="mobile-lang-en"
-                >
-                  ENG
-                </button>
-                <span className="text-muted-foreground">|</span>
-                <button
-                  onClick={() => setLanguage('vi')}
-                  className={`px-1 transition-colors ${
-                    language === 'vi' ? 'text-foreground' : 'text-muted-foreground'
-                  }`}
-                  data-testid="mobile-lang-vi"
-                >
-                  VIE
-                </button>
-              </div>
-              
-              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    data-testid="button-mobile-menu"
-                  >
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                  <div className="flex flex-col space-y-6 mt-6">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.key}
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`text-lg font-medium transition-colors ${
-                          isActive(item.href)
-                            ? 'text-foreground'
-                            : 'text-muted-foreground hover:text-foreground'
-                        }`}
-                        data-testid={`mobile-nav-${item.key}`}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
           </nav>
         </div>
       </header>
 
+      {/* Mobile Bottom Actions */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
+        <div className="flex space-x-3">
+          <Link href="/contact" className="flex-1">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="w-full text-muted-foreground hover:text-primary"
+              data-testid="mobile-button-contact"
+            >
+              Get Started
+            </Button>
+          </Link>
+          <Link href="/portfolio" className="flex-1">
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              data-testid="mobile-button-portfolio"
+            >
+              Portfolio
+            </Button>
+          </Link>
+        </div>
+      </div>
+
       {/* Main Content */}
-      <main>{children}</main>
+      <main className="pb-20 md:pb-0">{children}</main>
 
       {/* Footer */}
       <footer className="bg-card border-t border-border py-16">
