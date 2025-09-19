@@ -51,58 +51,40 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm py-4 transition-transform duration-300 ${
+      <header className={`fixed top-0 left-16 right-4 z-50 transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
       }`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="text-white text-lg font-light tracking-wider">
-              <img 
-                src="/attached_assets/logo.white.png" 
-                alt="NIVORA STUDIO" 
-                className="h-8 w-auto"
-              />
-            </div>
-            
-            {/* Navigation Menu */}
-            <nav className="hidden md:flex items-center space-x-8 text-sm">
-              {navigation.map((item) => (
-                <Link 
-                  key={item.key}
-                  href={item.href} 
-                  className={`transition-colors hover:text-primary uppercase tracking-wide ${
-                    isActive(item.href) ? 'text-primary' : 'text-zinc-400'
-                  }`}
-                  data-testid={`nav-${item.key}`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-            
-            {/* Language Selector */}
-            <div className="flex items-center space-x-1 text-sm">
-              <button
-                onClick={() => setLanguage('en')}
-                className={`transition-colors px-2 py-1 ${
-                  language === 'en' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
-                }`}
-                data-testid="lang-en"
-              >
-                ENG
-              </button>
-              <span className="text-zinc-600">|</span>
-              <button
-                onClick={() => setLanguage('vi')}
-                className={`transition-colors px-2 py-1 ${
-                  language === 'vi' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
-                }`}
-                data-testid="lang-vi"
-              >
-                VIE
-              </button>
-            </div>
+        <div className="flex items-center justify-between bg-black/50 backdrop-blur-sm py-4 px-6 rounded-r-lg">
+          {/* Logo */}
+          <div className="text-white text-lg font-light tracking-wider">
+            <img 
+              src="/attached_assets/logo.white.png" 
+              alt="NIVORA STUDIO" 
+              className="h-8 w-auto"
+            />
+          </div>
+          
+          {/* Language Selector */}
+          <div className="flex items-center space-x-1 text-sm">
+            <button
+              onClick={() => setLanguage('en')}
+              className={`transition-colors px-2 py-1 ${
+                language === 'en' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
+              }`}
+              data-testid="lang-en"
+            >
+              ENG
+            </button>
+            <span className="text-zinc-600">|</span>
+            <button
+              onClick={() => setLanguage('vi')}
+              className={`transition-colors px-2 py-1 ${
+                language === 'vi' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
+              }`}
+              data-testid="lang-vi"
+            >
+              VIE
+            </button>
           </div>
         </div>
       </header>
