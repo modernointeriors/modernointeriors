@@ -10,6 +10,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Serve static files from attached_assets
+app.use('/attached_assets', express.static('attached_assets'));
+
 // Session configuration
 const PgSession = ConnectPgSimple(session);
 app.use(session({
