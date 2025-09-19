@@ -41,7 +41,7 @@ export default function Layout({ children }: LayoutProps) {
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <Menu className="h-7 w-7 rotate-90" />
+              <Menu className="h-9 w-9 rotate-90" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
