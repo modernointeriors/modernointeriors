@@ -139,8 +139,16 @@ export default function ProjectDetail() {
     );
   }
 
+  // Get images from new categorized fields with fallback to legacy fields
+  const coverImages = Array.isArray(project.coverImages) ? project.coverImages : [];
+  const contentImages = Array.isArray(project.contentImages) ? project.contentImages : [];
   const galleryImages = Array.isArray(project.galleryImages) ? project.galleryImages : 
                        Array.isArray(project.images) ? project.images : [];
+  
+  // Use cover images for main display, fallback to legacy fields if empty
+  const mainImages = coverImages.length > 0 ? coverImages : 
+                    contentImages.length > 0 ? contentImages :
+                    [project.heroImage, ...galleryImages].filter(Boolean);
   
   return (
     <div className="min-h-screen bg-black text-white">
@@ -189,16 +197,16 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        {/* Two Large Images Side by Side */}
+        {/* Two Large Images Side by Side - Using contentImages (16:9 or 1:1) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {/* First Large Image */}
-          {(project.heroImage || galleryImages[0]) && (
-            <div className="aspect-[4/5]">
+          {/* First Content Image */}
+          {(contentImages[0] || coverImages[0] || project.heroImage || galleryImages[0]) && (
+            <div className="aspect-video">
               <OptimizedImage
-                src={project.heroImage || galleryImages[0]}
+                src={contentImages[0] || coverImages[0] || project.heroImage || galleryImages[0]}
                 alt={project.title}
                 width={600}
-                height={750}
+                height={337}
                 wrapperClassName="w-full h-full"
                 className="w-full h-full object-cover"
                 priority={true}
@@ -207,14 +215,14 @@ export default function ProjectDetail() {
             </div>
           )}
 
-          {/* Second Large Image */}
-          {galleryImages[1] && (
-            <div className="aspect-[4/5]">
+          {/* Second Content Image */}
+          {(contentImages[1] || coverImages[1] || galleryImages[1]) && (
+            <div className="aspect-video">
               <OptimizedImage
-                src={galleryImages[1]}
+                src={contentImages[1] || coverImages[1] || galleryImages[1]}
                 alt={`${project.title} - Secondary view`}
                 width={600}
-                height={750}
+                height={337}
                 wrapperClassName="w-full h-full"
                 className="w-full h-full object-cover"
                 data-testid="img-secondary"
@@ -234,11 +242,11 @@ export default function ProjectDetail() {
 
           {/* Right Text Content with Small Image */}
           <div className="space-y-6">
-            {/* Small detail image */}
-            {galleryImages[2] && (
+            {/* Small detail image - from gallery images or cover images */}
+            {(galleryImages[0] || coverImages[0]) && (
               <div className="w-full max-w-sm">
                 <OptimizedImage
-                  src={galleryImages[2]}
+                  src={galleryImages[0] || coverImages[0]}
                   alt={`${project.title} - Detail`}
                   width={400}
                   height={300}
@@ -255,8 +263,8 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        {/* View More Button - Only show if there are additional images and not expanded */}
-        {galleryImages.length > 3 && !expanded && (
+        {/* View More Button - Only show if there are additional gallery images and not expanded */}
+        {galleryImages.length > 1 && !expanded && (
           <div className="text-center mb-16">
             <button 
               onClick={() => {
@@ -280,7 +288,7 @@ export default function ProjectDetail() {
         )}
 
         {/* Additional Gallery Section - Detailed Content */}
-        {expanded && galleryImages.length > 3 && (
+        {expanded && galleryImages.length > 1 && (
           <div id="additional-gallery" className="mt-24 space-y-16" data-testid="section-additional" tabIndex={-1}>
             {/* Additional detailed text content */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
@@ -308,19 +316,19 @@ export default function ProjectDetail() {
               </div>
             </div>
 
-            {/* Additional Gallery Images */}
+            {/* Additional Gallery Images (16:9 or 1:1 aspect ratio) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {galleryImages.slice(3).map((image: string, index: number) => (
-                <div key={index} className="aspect-[4/5]">
+              {galleryImages.slice(1).map((image: string, index: number) => (
+                <div key={index} className="aspect-video">
                   <OptimizedImage
                     src={image}
-                    alt={`${project.title} - Gallery ${index + 4}`}
+                    alt={`${project.title} - Gallery ${index + 2}`}
                     width={400}
-                    height={500}
+                    height={225}
                     wrapperClassName="w-full h-full"
                     className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    data-testid={`img-gallery-${index + 4}`}
+                    data-testid={`img-gallery-${index + 2}`}
                   />
                 </div>
               ))}
@@ -337,7 +345,7 @@ export default function ProjectDetail() {
                 <Link key={otherProject.id} href={`/project/${otherProject.id}`}>
                   <div className="group cursor-pointer aspect-square">
                     <OptimizedImage
-                      src={otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 
+                      src={(Array.isArray(otherProject.coverImages) ? otherProject.coverImages[0] : '') || (Array.isArray(otherProject.contentImages) ? otherProject.contentImages[0] : '') || otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 
                       alt={otherProject.title}
                       width={300}
                       height={300}

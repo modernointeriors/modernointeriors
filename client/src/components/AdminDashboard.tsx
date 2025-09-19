@@ -31,9 +31,13 @@ const projectSchema = z.object({
   style: z.string().optional(),
   designer: z.string().optional(),
   completionYear: z.string().optional(),
-  heroImage: z.string().optional(),
-  galleryImages: z.array(z.string()).default([]),
+  // New image categories with specific constraints
+  coverImages: z.array(z.string()).max(2, "Maximum 2 cover images allowed").default([]),
+  contentImages: z.array(z.string()).max(2, "Maximum 2 content images allowed").default([]),
+  galleryImages: z.array(z.string()).max(10, "Maximum 10 gallery images allowed").default([]),
   featured: z.boolean().default(false),
+  // Legacy fields for backward compatibility  
+  heroImage: z.string().optional(),
   images: z.array(z.string()).default([]), // Legacy field
   relatedProjects: z.array(z.string()).default([]),
   metaTitle: z.string().optional(),
@@ -150,9 +154,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       style: "",
       designer: "",
       completionYear: "",
-      heroImage: "",
+      // New image categories
+      coverImages: [],
+      contentImages: [],
       galleryImages: [],
       featured: false,
+      // Legacy fields for backward compatibility
+      heroImage: "",
       images: [],
       relatedProjects: [],
       metaTitle: "",
@@ -336,9 +344,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       style: project.style || "",
       designer: project.designer || "",
       completionYear: project.completionYear || "",
-      heroImage: project.heroImage || "",
+      // New image categories
+      coverImages: Array.isArray(project.coverImages) ? project.coverImages : [],
+      contentImages: Array.isArray(project.contentImages) ? project.contentImages : [],
       galleryImages: Array.isArray(project.galleryImages) ? project.galleryImages : [],
       featured: project.featured,
+      // Legacy fields for backward compatibility
+      heroImage: project.heroImage || "",
       images: Array.isArray(project.images) ? project.images : [],
       relatedProjects: Array.isArray(project.relatedProjects) ? project.relatedProjects as string[] : [],
       metaTitle: project.metaTitle || "",
@@ -688,15 +700,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   <FormField
                     control={projectForm.control}
-                    name="heroImage"
+                    name="coverImages"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hero Image</FormLabel>
+                        <FormLabel>Cover Images (Maximum 2, 3:4 Aspect Ratio)</FormLabel>
                         <FormControl>
                           <ImageUpload
-                            value={field.value ? [field.value] : []}
-                            onChange={(urls) => field.onChange(urls[0] || "")}
-                            multiple={false}
+                            value={field.value}
+                            onChange={field.onChange}
+                            multiple
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="contentImages"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Content Images (2 Images, 16:9 or 1:1 Aspect Ratio)</FormLabel>
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value}
+                            onChange={field.onChange}
+                            multiple
                           />
                         </FormControl>
                         <FormMessage />
@@ -709,12 +739,31 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     name="galleryImages"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Gallery Images</FormLabel>
+                        <FormLabel>Gallery Images (Maximum 10, 16:9 or 1:1 Aspect Ratio)</FormLabel>
                         <FormControl>
                           <ImageUpload
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Legacy fields for backward compatibility */}
+                  <FormField
+                    control={projectForm.control}
+                    name="heroImage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hero Image (Legacy - For Compatibility)</FormLabel>
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value ? [field.value] : []}
+                            onChange={(urls) => field.onChange(urls[0] || "")}
+                            multiple={false}
                           />
                         </FormControl>
                         <FormMessage />

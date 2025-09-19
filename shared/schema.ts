@@ -26,9 +26,13 @@ export const projects = pgTable("projects", {
   style: text("style"),
   designer: text("designer"), // Interior Designer name
   completionYear: text("completion_year"), // Year completed
-  heroImage: text("hero_image"), // Main project hero image
-  galleryImages: jsonb("gallery_images").default([]), // Additional gallery images
+  // Image categories with specific constraints
+  coverImages: jsonb("cover_images").default([]), // Max 2 images, 3:4 aspect ratio
+  contentImages: jsonb("content_images").default([]), // 2 images, 16:9 or 1:1 aspect ratio  
+  galleryImages: jsonb("gallery_images").default([]), // Max 10 images, 16:9 or 1:1 aspect ratio
   featured: boolean("featured").notNull().default(false),
+  // Legacy fields for backward compatibility
+  heroImage: text("hero_image"), // Legacy: Main project hero image
   images: jsonb("images").default([]), // Legacy field, keeping for compatibility
   relatedProjects: jsonb("related_projects").default([]), // Array of related project IDs
   // SEO fields
