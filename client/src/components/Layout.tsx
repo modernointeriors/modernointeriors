@@ -209,7 +209,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className="ml-16 pt-20 pb-20 md:pb-0">{children}</main>
 
       {/* Footer - Updated with dark design matching the provided image */}
-      <footer className="ml-16 bg-black text-white py-16">
+      <footer className="ml-16 bg-black text-white pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {/* Corporate Office */}
@@ -297,7 +297,7 @@ export default function Layout({ children }: LayoutProps) {
           
           <div className="border-t border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              ©2025 ALL RIGHTS RESERVED
+              © 2025 Moderno Interiors Design
             </p>
             <div className="mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">PRIVACY POLICY</a>
