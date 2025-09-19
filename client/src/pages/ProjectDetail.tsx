@@ -21,8 +21,8 @@ export default function ProjectDetail() {
   // Set SEO meta tags when project data is loaded
   useEffect(() => {
     if (project) {
-      const title = project.metaTitle || `${project.title} | NIVORA Design Studio`;
-      const description = project.metaDescription || project.detailedDescription || project.description || `Interior design project by NIVORA Design Studio`;
+      const title = project.metaTitle || `${project.title} | MODERNO INTERIORS Design Studio`;
+      const description = project.metaDescription || project.detailedDescription || project.description || `Interior design project by MODERNO INTERIORS Design Studio`;
       
       document.title = title;
       
@@ -57,7 +57,7 @@ export default function ProjectDetail() {
     
     // Cleanup function to reset title when component unmounts
     return () => {
-      document.title = 'NIVORA Design Studio';
+      document.title = 'MODERNO INTERIORS Design Studio';
     };
   }, [project]);
 
@@ -159,7 +159,7 @@ export default function ProjectDetail() {
             <div className="text-white text-lg font-light tracking-wider">
               <img 
                 src="/attached_assets/logo.white.png" 
-                alt="NIVORA STUDIO" 
+                alt="MODERNO INTERIORS STUDIO" 
                 className="h-8 w-auto"
               />
             </div>

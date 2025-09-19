@@ -55,7 +55,7 @@ export default function Home() {
             <div className="mb-4">
               <img 
                 src="/attached_assets/logo.white.png" 
-                alt="NIVORA" 
+                alt="MODERNO INTERIORS" 
                 className="h-24 md:h-32 w-auto mx-auto"
               />
             </div>

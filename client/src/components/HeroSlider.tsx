@@ -19,7 +19,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
           <div className="mb-4">
             <img 
               src="/attached_assets/logo.white.png" 
-              alt="NIVORA" 
+              alt="MODERNO INTERIORS" 
               className="h-24 md:h-32 w-auto mx-auto"
             />
           </div>
@@ -85,7 +85,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                         </h2>
                         
                         <span className="js-slider-slide-type sr-only">Project</span>
-                        <span className="js-slider-slide-author sr-only">{project.designer || 'NIVORA Studio'}</span>
+                        <span className="js-slider-slide-author sr-only">{project.designer || 'MODERNO INTERIORS Studio'}</span>
                         <time className="js-slider-slide-date sr-only">{project.completionYear || new Date().getFullYear()}</time>
                         <span className="js-slider-slide-published-in sr-only">{project.category}</span>
                       </div>
@@ -98,7 +98,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       <p className="text-sm font-light uppercase tracking-wider mb-1">Article</p>
                       <div className="flex items-center gap-2 text-sm font-light">
                         <span>by</span>
-                        <span className="font-medium">{project.designer || 'NIVORA Studio'}</span>
+                        <span className="font-medium">{project.designer || 'MODERNO INTERIORS Studio'}</span>
                       </div>
                     </div>
                     

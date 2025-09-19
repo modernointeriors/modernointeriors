@@ -23,10 +23,10 @@ export default function Blog() {
 
   // SEO meta tags
   useEffect(() => {
-    const title = language === 'vi' ? 'Tin tức & Blog | NIVORA Studio' : 'News & Blog | NIVORA Studio';
+    const title = language === 'vi' ? 'Tin tức & Blog | MODERNO INTERIORS Studio' : 'News & Blog | MODERNO INTERIORS Studio';
     const description = language === 'vi' 
-      ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ NIVORA Studio'
-      : 'Discover the latest design trends, helpful tips, and inspiring projects from NIVORA Studio';
+      ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ MODERNO INTERIORS Studio'
+      : 'Discover the latest design trends, helpful tips, and inspiring projects from MODERNO INTERIORS Studio';
       
     document.title = title;
     
@@ -61,7 +61,7 @@ export default function Blog() {
     
     return () => {
       // Reset title when leaving
-      document.title = 'NIVORA Studio';
+      document.title = 'MODERNO INTERIORS Studio';
     };
   }, [language]);
 
@@ -123,8 +123,8 @@ export default function Blog() {
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {language === 'vi' 
-              ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ NIVORA Studio'
-              : 'Discover the latest design trends, helpful tips, and inspiring projects from NIVORA Studio'
+              ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ MODERNO INTERIORS Studio'
+              : 'Discover the latest design trends, helpful tips, and inspiring projects from MODERNO INTERIORS Studio'
             }
           </p>
         </div>

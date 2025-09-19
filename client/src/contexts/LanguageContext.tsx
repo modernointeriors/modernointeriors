@@ -23,7 +23,7 @@ const translations = {
     'nav.admin': 'Admin',
     
     // Hero Section
-    'hero.studio': 'NIVORA STUDIO',
+    'hero.studio': 'MODERNO INTERIORS STUDIO',
     'hero.tagline': 'From concept to realization — creating structures that inspire and endure.',
     'hero.architecture': 'Architecture',
     'hero.interior': 'Interior Design',
@@ -60,7 +60,7 @@ const translations = {
     'nav.admin': 'Quản trị',
     
     // Hero Section
-    'hero.studio': 'NIVORA STUDIO',
+    'hero.studio': 'MODERNO INTERIORS STUDIO',
     'hero.tagline': 'Từ ý tưởng đến hiện thực — tạo nên những công trình truyền cảm hứng và bền vững.',
     'hero.architecture': 'Kiến trúc',
     'hero.interior': 'Thiết kế nội thất',

@@ -59,7 +59,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="text-white text-lg font-light tracking-wider">
             <img 
               src="/attached_assets/logo.white.png" 
-              alt="NIVORA STUDIO" 
+              alt="MODERNO INTERIORS STUDIO" 
               className="h-8 w-auto"
             />
           </div>
@@ -113,7 +113,7 @@ export default function Layout({ children }: LayoutProps) {
               <SheetTitle className="text-lg font-sans font-light text-primary">
                 <img 
                   src="/attached_assets/logo.white.png" 
-                  alt="NIVORA" 
+                  alt="MODERNO INTERIORS" 
                   className="h-12 w-auto"
                 />
               </SheetTitle>

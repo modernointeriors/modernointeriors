@@ -29,7 +29,7 @@ export default function BlogDetail() {
   // Update document title and meta tags for SEO
   useEffect(() => {
     if (article) {
-      document.title = article.metaTitle || `${article.title} | NIVORA Studio`;
+      document.title = article.metaTitle || `${article.title} | MODERNO INTERIORS Studio`;
       
       // Update meta description
       const metaDescription = document.querySelector('meta[name="description"]');
@@ -79,7 +79,7 @@ export default function BlogDetail() {
 
     return () => {
       // Reset title when leaving
-      document.title = 'NIVORA Studio';
+      document.title = 'MODERNO INTERIORS Studio';
     };
   }, [article]);
 
@@ -271,8 +271,8 @@ export default function BlogDetail() {
           </h3>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
             {language === 'vi' 
-              ? 'Hãy để NIVORA Studio giúp bạn biến ý tưởng thành hiện thực với dịch vụ thiết kế chuyên nghiệp.'
-              : 'Let NIVORA Studio help you turn your ideas into reality with our professional design services.'
+              ? 'Hãy để MODERNO INTERIORS Studio giúp bạn biến ý tưởng thành hiện thực với dịch vụ thiết kế chuyên nghiệp.'
+              : 'Let MODERNO INTERIORS Studio help you turn your ideas into reality with our professional design services.'
             }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -1,6 +1,6 @@
 # Overview
 
-NIVORA is a sophisticated interior design studio website built as a full-stack application. It features a modern, dark-themed frontend showcasing design projects, services, and client management capabilities, with a comprehensive admin dashboard for content management. The application serves as both a marketing platform for the design studio and a business management tool for tracking projects, clients, and inquiries.
+MODERNO INTERIORS is a sophisticated interior design studio website built as a full-stack application. It features a modern, dark-themed frontend showcasing design projects, services, and client management capabilities, with a comprehensive admin dashboard for content management. The application serves as both a marketing platform for the design studio and a business management tool for tracking projects, clients, and inquiries.
 
 # User Preferences
 

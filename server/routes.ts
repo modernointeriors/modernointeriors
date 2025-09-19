@@ -381,7 +381,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Return default content if none exists
         const defaultContent = {
           language: language as string,
-          heroTitle: "NIVORA",
+          heroTitle: "MODERNO INTERIORS",
           heroStudio: "STUDIO",
           heroTagline: "Transforming spaces into extraordinary experiences with sophisticated interior design",
           heroArchitectureLabel: "ARCHITECTURE",
