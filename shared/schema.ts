@@ -91,6 +91,36 @@ export const articles = pgTable("articles", {
   uniqueSlugLanguage: unique().on(table.slug, table.language),
 }));
 
+export const homepageContent = pgTable("homepage_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  language: varchar("language", { length: 5 }).notNull().default("en"), // en, vi
+  // Hero Section
+  heroBackgroundImage: text("hero_background_image"),
+  heroTitle: text("hero_title").notNull().default("NIVORA"),
+  heroStudio: text("hero_studio").notNull().default("STUDIO"),
+  heroTagline: text("hero_tagline"),
+  heroArchitectureLabel: text("hero_architecture_label"),
+  heroInteriorLabel: text("hero_interior_label"),
+  heroConsultationText: text("hero_consultation_text"),
+  // Featured Section
+  featuredBadge: text("featured_badge"),
+  featuredTitle: text("featured_title"),
+  featuredDescription: text("featured_description"),
+  // Stats Section
+  statsProjectsLabel: text("stats_projects_label"),
+  statsClientsLabel: text("stats_clients_label"),
+  statsAwardsLabel: text("stats_awards_label"),
+  statsExperienceLabel: text("stats_experience_label"),
+  // CTA Section
+  ctaTitle: text("cta_title"),
+  ctaDescription: text("cta_description"),
+  ctaButtonText: text("cta_button_text"),
+  ctaSecondaryButtonText: text("cta_secondary_button_text"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  uniqueLanguage: unique().on(table.language),
+}));
+
 // Relations
 export const clientsRelations = relations(clients, ({ many }) => ({
   inquiries: many(inquiries),
@@ -137,6 +167,11 @@ export const insertArticleSchema = createInsertSchema(articles).omit({
   viewCount: true,
 });
 
+export const insertHomepageContentSchema = createInsertSchema(homepageContent).omit({
+  id: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -155,3 +190,6 @@ export type Service = typeof services.$inferSelect;
 
 export type InsertArticle = z.infer<typeof insertArticleSchema>;
 export type Article = typeof articles.$inferSelect;
+
+export type InsertHomepageContent = z.infer<typeof insertHomepageContentSchema>;
+export type HomepageContent = typeof homepageContent.$inferSelect;

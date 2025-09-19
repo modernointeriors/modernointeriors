@@ -5,10 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import type { Project } from "@shared/schema";
+import type { Project, HomepageContent } from "@shared/schema";
 
 export default function Home() {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
   const { data: featuredProjects, isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
     queryFn: async () => {
@@ -24,6 +24,14 @@ export default function Home() {
     revenue: string;
   }>({
     queryKey: ['/api/dashboard/stats'],
+  });
+
+  const { data: homepageContent } = useQuery<HomepageContent>({
+    queryKey: ['/api/homepage-content', language],
+    queryFn: async () => {
+      const response = await fetch(`/api/homepage-content?language=${language}`);
+      return response.json();
+    },
   });
 
   const scrollToSection = (sectionId: string) => {
@@ -49,30 +57,30 @@ export default function Home() {
         {/* Header Content - Matching Reference Layout */}
         <div className="absolute top-8 left-8 z-20">
           <div className="text-white/90 text-sm font-light tracking-wider">
-            {t('hero.studio')}
+            {homepageContent?.heroStudio || 'STUDIO'}
           </div>
         </div>
         
         <div className="absolute top-8 left-8 mt-12 z-20 max-w-md">
           <p className="text-white/80 text-sm leading-relaxed">
-            {t('hero.tagline')}
+            {homepageContent?.heroTagline || 'Transforming spaces into extraordinary experiences with sophisticated interior design'}
           </p>
         </div>
         
         {/* Large NIVORA Text Overlay */}
         <div className="relative z-10 text-center px-4">
           <h1 className="text-[8rem] md:text-[12rem] lg:text-[15rem] xl:text-[18rem] font-light text-white/95 tracking-wider leading-none" data-testid="hero-title">
-            NIVORA
+            {homepageContent?.heroTitle || 'NIVORA'}
           </h1>
         </div>
         
         {/* Side Labels */}
         <div className="absolute left-8 bottom-1/3 z-20 text-white/70 text-sm font-light tracking-wider">
-          {t('hero.architecture')}
+          {homepageContent?.heroArchitectureLabel || 'ARCHITECTURE'}
         </div>
         
         <div className="absolute right-8 bottom-1/3 z-20 text-white/70 text-sm font-light tracking-wider">
-          {t('hero.interior')}
+          {homepageContent?.heroInteriorLabel || 'INTERIOR'}
         </div>
         
         {/* Consultation Button */}
@@ -82,7 +90,7 @@ export default function Home() {
             asChild
             data-testid="button-consultation"
           >
-            <Link href="/contact">{t('hero.consultation')}</Link>
+            <Link href="/contact">{homepageContent?.heroConsultationText || 'FREE CONSULTATION'}</Link>
           </Button>
         </div>
         
@@ -95,10 +103,10 @@ export default function Home() {
       <section id="featured-projects" className="section-padding bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">{t('featured.badge')}</Badge>
-            <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6">{t('featured.title')}</h2>
+            <Badge variant="outline" className="mb-4">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
+            <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              {t('featured.description')}
+              {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
             </p>
           </div>
           
@@ -179,19 +187,19 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-projects">{stats.totalProjects}+</div>
-                <div className="text-sm text-muted-foreground">{t('stats.projects')}</div>
+                <div className="text-sm text-muted-foreground">{homepageContent?.statsProjectsLabel || 'Projects'}</div>
               </div>
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-clients">{stats.activeClients}+</div>
-                <div className="text-sm text-muted-foreground">{t('stats.clients')}</div>
+                <div className="text-sm text-muted-foreground">{homepageContent?.statsClientsLabel || 'Clients'}</div>
               </div>
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-inquiries">{stats.newInquiries}+</div>
-                <div className="text-sm text-muted-foreground">{t('stats.awards')}</div>
+                <div className="text-sm text-muted-foreground">{homepageContent?.statsAwardsLabel || 'Awards'}</div>
               </div>
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-revenue">8+</div>
-                <div className="text-sm text-muted-foreground">{t('stats.experience')}</div>
+                <div className="text-sm text-muted-foreground">{homepageContent?.statsExperienceLabel || 'Years'}</div>
               </div>
             </div>
           </div>
@@ -202,10 +210,10 @@ export default function Home() {
       <section className="section-padding bg-card">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">
-            {t('common.readyTransform')}
+            {homepageContent?.ctaTitle || 'Ready to Transform Your Space?'}
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            {t('common.collaborate')}
+            {homepageContent?.ctaDescription || "Let's collaborate to bring your vision to life."}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -213,7 +221,7 @@ export default function Home() {
               asChild
               data-testid="button-start-project"
             >
-              <Link href="/contact">{t('common.startYourProject')}</Link>
+              <Link href="/contact">{homepageContent?.ctaButtonText || 'Start Your Project'}</Link>
             </Button>
             <Button 
               variant="outline" 
@@ -221,7 +229,7 @@ export default function Home() {
               asChild
               data-testid="button-view-portfolio"
             >
-              <Link href="/portfolio">{t('common.viewPortfolio')}</Link>
+              <Link href="/portfolio">{homepageContent?.ctaSecondaryButtonText || 'View Our Portfolio'}</Link>
             </Button>
           </div>
         </div>

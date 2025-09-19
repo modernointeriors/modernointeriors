@@ -16,7 +16,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp } from "lucide-react";
-import type { Project, Client, Inquiry, Service } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent } from "@shared/schema";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -50,9 +51,32 @@ const serviceSchema = z.object({
   active: z.boolean().default(true),
 });
 
+const homepageContentSchema = z.object({
+  language: z.string().default("en"),
+  heroBackgroundImage: z.string().optional(),
+  heroTitle: z.string().min(1, "Hero title is required"),
+  heroStudio: z.string().min(1, "Studio text is required"),
+  heroTagline: z.string().optional(),
+  heroArchitectureLabel: z.string().optional(),
+  heroInteriorLabel: z.string().optional(),
+  heroConsultationText: z.string().optional(),
+  featuredBadge: z.string().optional(),
+  featuredTitle: z.string().optional(),
+  featuredDescription: z.string().optional(),
+  statsProjectsLabel: z.string().optional(),
+  statsClientsLabel: z.string().optional(),
+  statsAwardsLabel: z.string().optional(),
+  statsExperienceLabel: z.string().optional(),
+  ctaTitle: z.string().optional(),
+  ctaDescription: z.string().optional(),
+  ctaButtonText: z.string().optional(),
+  ctaSecondaryButtonText: z.string().optional(),
+});
+
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
+type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 
 interface AdminDashboardProps {
   activeTab: string;
@@ -61,6 +85,7 @@ interface AdminDashboardProps {
 export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { language } = useLanguage();
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [editingService, setEditingService] = useState<Service | null>(null);
@@ -92,6 +117,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: services = [], isLoading: servicesLoading } = useQuery<Service[]>({
     queryKey: ['/api/services'],
+  });
+
+  const { data: homepageContent, isLoading: homepageContentLoading } = useQuery<HomepageContent>({
+    queryKey: ['/api/homepage-content', language],
+    queryFn: async () => {
+      const response = await fetch(`/api/homepage-content?language=${language}`);
+      return response.json();
+    },
   });
 
   // Forms
@@ -135,6 +168,54 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       active: true,
     },
   });
+
+  const homepageContentForm = useForm<HomepageContentFormData>({
+    resolver: zodResolver(homepageContentSchema),
+    defaultValues: {
+      language: language,
+      heroTitle: "NIVORA",
+      heroStudio: "STUDIO",
+      heroTagline: "",
+      heroArchitectureLabel: "",
+      heroInteriorLabel: "",
+      heroConsultationText: "",
+      featuredBadge: "",
+      featuredTitle: "",
+      featuredDescription: "",
+      statsProjectsLabel: "",
+      statsClientsLabel: "",
+      statsAwardsLabel: "",
+      statsExperienceLabel: "",
+      ctaTitle: "",
+      ctaDescription: "",
+      ctaButtonText: "",
+      ctaSecondaryButtonText: "",
+    },
+  });
+
+  // Update form when content loads
+  if (homepageContent && !homepageContentForm.formState.isDirty) {
+    const formData = {
+      ...homepageContent,
+      heroBackgroundImage: homepageContent.heroBackgroundImage || undefined,
+      heroTagline: homepageContent.heroTagline || undefined,
+      heroArchitectureLabel: homepageContent.heroArchitectureLabel || undefined,
+      heroInteriorLabel: homepageContent.heroInteriorLabel || undefined,
+      heroConsultationText: homepageContent.heroConsultationText || undefined,
+      featuredBadge: homepageContent.featuredBadge || undefined,
+      featuredTitle: homepageContent.featuredTitle || undefined,
+      featuredDescription: homepageContent.featuredDescription || undefined,
+      statsProjectsLabel: homepageContent.statsProjectsLabel || undefined,
+      statsClientsLabel: homepageContent.statsClientsLabel || undefined,
+      statsAwardsLabel: homepageContent.statsAwardsLabel || undefined,
+      statsExperienceLabel: homepageContent.statsExperienceLabel || undefined,
+      ctaTitle: homepageContent.ctaTitle || undefined,
+      ctaDescription: homepageContent.ctaDescription || undefined,
+      ctaButtonText: homepageContent.ctaButtonText || undefined,
+      ctaSecondaryButtonText: homepageContent.ctaSecondaryButtonText || undefined,
+    };
+    homepageContentForm.reset(formData);
+  }
 
   // Mutations
   const createProjectMutation = useMutation({
@@ -206,6 +287,24 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  const updateHomepageContentMutation = useMutation({
+    mutationFn: async (data: HomepageContentFormData) => {
+      const response = await apiRequest('PUT', '/api/homepage-content', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/homepage-content', language] });
+      toast({ title: "Homepage content updated successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating homepage content",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   // Handlers
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
@@ -252,6 +351,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     } else {
       await createClientMutation.mutateAsync(data);
     }
+  };
+
+  const onHomepageContentSubmit = async (data: HomepageContentFormData) => {
+    await updateHomepageContentMutation.mutateAsync(data);
   };
 
   const formatDate = (date: string | Date) => {

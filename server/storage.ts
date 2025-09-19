@@ -1,11 +1,12 @@
 import { 
-  users, clients, projects, inquiries, services, articles,
+  users, clients, projects, inquiries, services, articles, homepageContent,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
   type Inquiry, type InsertInquiry,
   type Service, type InsertService,
-  type Article, type InsertArticle
+  type Article, type InsertArticle,
+  type HomepageContent, type InsertHomepageContent
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -57,6 +58,10 @@ export interface IStorage {
   updateArticle(id: string, article: Partial<InsertArticle>): Promise<Article>;
   deleteArticle(id: string): Promise<void>;
   incrementArticleViews(id: string): Promise<void>;
+
+  // Homepage Content
+  getHomepageContent(language?: string): Promise<HomepageContent | undefined>;
+  upsertHomepageContent(content: InsertHomepageContent): Promise<HomepageContent>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -282,6 +287,34 @@ export class DatabaseStorage implements IStorage {
       .update(articles)
       .set({ viewCount: sql`${articles.viewCount} + 1` })
       .where(eq(articles.id, id));
+  }
+
+  // Homepage Content
+  async getHomepageContent(language: string = "en"): Promise<HomepageContent | undefined> {
+    const [content] = await db
+      .select()
+      .from(homepageContent)
+      .where(eq(homepageContent.language, language));
+    return content || undefined;
+  }
+
+  async upsertHomepageContent(content: InsertHomepageContent): Promise<HomepageContent> {
+    const existing = await this.getHomepageContent(content.language || "en");
+    
+    if (existing) {
+      const [updatedContent] = await db
+        .update(homepageContent)
+        .set({ ...content, updatedAt: new Date() })
+        .where(eq(homepageContent.language, content.language || "en"))
+        .returning();
+      return updatedContent;
+    } else {
+      const [newContent] = await db
+        .insert(homepageContent)
+        .values(content)
+        .returning();
+      return newContent;
+    }
   }
 }
 

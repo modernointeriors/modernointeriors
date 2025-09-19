@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -345,6 +345,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete article" });
+    }
+  });
+
+  // Homepage Content routes
+  app.get("/api/homepage-content", async (req, res) => {
+    try {
+      const { language = "en" } = req.query;
+      const content = await storage.getHomepageContent(language as string);
+      
+      if (!content) {
+        // Return default content if none exists
+        const defaultContent = {
+          language: language as string,
+          heroTitle: "NIVORA",
+          heroStudio: "STUDIO",
+          heroTagline: "Transforming spaces into extraordinary experiences with sophisticated interior design",
+          heroArchitectureLabel: "ARCHITECTURE",
+          heroInteriorLabel: "INTERIOR",
+          heroConsultationText: "FREE CONSULTATION",
+          featuredBadge: "Featured Projects",
+          featuredTitle: "Transforming Spaces",
+          featuredDescription: "Discover our latest projects where innovation meets elegance.",
+          statsProjectsLabel: "Projects",
+          statsClientsLabel: "Clients",
+          statsAwardsLabel: "Awards",
+          statsExperienceLabel: "Years",
+          ctaTitle: "Ready to Transform Your Space?",
+          ctaDescription: "Let's collaborate to bring your vision to life.",
+          ctaButtonText: "Start Your Project",
+          ctaSecondaryButtonText: "View Our Portfolio"
+        };
+        return res.json(defaultContent);
+      }
+      
+      res.json(content);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch homepage content" });
+    }
+  });
+
+  app.put("/api/homepage-content", async (req, res) => {
+    try {
+      const validatedData = insertHomepageContentSchema.parse(req.body);
+      const content = await storage.upsertHomepageContent(validatedData);
+      res.json(content);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update homepage content" });
     }
   });
 
