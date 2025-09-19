@@ -266,15 +266,6 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </div>
           </div>
-          
-          <div className="border-t border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
-              © 2025 Moderno Interiors Design
-            </p>
-            <div className="mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">PRIVACY POLICY</a>
-            </div>
-          </div>
         </div>
       </footer>
     </div>
