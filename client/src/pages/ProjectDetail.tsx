@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import type { Project } from "@shared/schema";
 export default function ProjectDetail() {
   const [, params] = useRoute("/project/:id");
   const projectId = params?.id;
+  const [expanded, setExpanded] = useState(false);
 
   const { data: project, isLoading, error } = useQuery<Project>({
     queryKey: ['/api/projects', projectId],
@@ -165,139 +166,167 @@ export default function ProjectDetail() {
         </div>
       </header>
 
-      {/* Two Column Layout */}
+      {/* Main Content Layout */}
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left Column */}
-          <div className="space-y-8">
-            {/* Project Title */}
-            <div>
-              <h1 className="text-2xl font-light tracking-wider mb-6">
-                <span className="text-zinc-400">PROJECTS</span>
-                <span className="text-zinc-600 mx-3">•</span>
-                <span className="text-white uppercase" data-testid="text-project-title">
-                  {project.title}
-                </span>
-              </h1>
+        {/* Project Title Header */}
+        <div className="mb-12">
+          <h1 className="text-4xl font-light tracking-wider mb-8">
+            <span className="text-zinc-400">PROJECTS</span>
+            <span className="text-zinc-600 mx-4">•</span>
+            <span className="text-white uppercase" data-testid="text-project-title">
+              {project.title}
+            </span>
+          </h1>
 
-              <div className="space-y-2 text-sm text-zinc-400">
-                {project.designer && (
-                  <div data-testid="text-designer">[Interior designer] {project.designer}</div>
-                )}
-                {project.completionYear && (
-                  <div data-testid="text-year">[Year] {project.completionYear}</div>
-                )}
-              </div>
+          {/* Designer and Year Info Row */}
+          <div className="flex justify-between items-center text-sm text-zinc-400">
+            <div data-testid="text-designer">
+              {project.designer && `[Interior designer] ${project.designer}`}
             </div>
-
-            {/* Main Project Image */}
-            {(project.heroImage || galleryImages[0]) && (
-              <div className="aspect-[4/5]">
-                <OptimizedImage
-                  src={project.heroImage || galleryImages[0]}
-                  alt={project.title}
-                  width={600}
-                  height={750}
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full object-cover"
-                  priority={true}
-                  data-testid="img-main"
-                />
-              </div>
-            )}
-
-            {/* Description */}
-            <div className="space-y-6">
-              <p className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
-                {project.detailedDescription || project.description || "An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures."}
-              </p>
-
-              {/* Small thumbnail under description */}
-              {galleryImages[2] && (
-                <div className="w-32 h-24">
-                  <OptimizedImage
-                    src={galleryImages[2]}
-                    alt={`${project.title} - Detail`}
-                    width={128}
-                    height={96}
-                    wrapperClassName="w-full h-full"
-                    className="w-full h-full object-cover"
-                    data-testid="img-detail-thumb"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="space-y-8">
-            {/* Second large image */}
-            {galleryImages[1] && (
-              <div className="aspect-[4/5]">
-                <OptimizedImage
-                  src={galleryImages[1]}
-                  alt={`${project.title} - Secondary view`}
-                  width={600}
-                  height={750}
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full object-cover"
-                  data-testid="img-secondary"
-                />
-              </div>
-            )}
-
-            {/* Additional description text */}
-            <div className="space-y-6">
-              <p className="text-zinc-300 leading-relaxed text-base">
-                Elegant fireplace with laconic design creates an atmosphere of coziness and style, becoming an accent piece.
-              </p>
-              
-              <p className="text-zinc-300 leading-relaxed text-base">
-                Atmospheric lighting and accent details create a space filled with coziness, elegance and modern character.
-              </p>
-
-              {/* View More Button - Only show if there are additional images */}
-              {galleryImages.length > 2 && (
-                <div>
-                  <button 
-                    onClick={() => {
-                      document.getElementById('additional-gallery')?.scrollIntoView({ 
-                        behavior: 'smooth' 
-                      });
-                    }}
-                    className="border border-zinc-600 text-zinc-300 px-8 py-3 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors flex items-center gap-2" 
-                    data-testid="button-view-more"
-                  >
-                    <span className="text-lg">•</span>
-                    VIEW MORE
-                  </button>
-                </div>
-              )}
+            <div data-testid="text-year">
+              {project.completionYear && `[Year] ${project.completionYear}`}
             </div>
           </div>
         </div>
 
-        {/* Additional Gallery Section */}
-        <div id="additional-gallery" className="mt-24 space-y-16">
-          {galleryImages.length > 2 && (
+        {/* Two Large Images Side by Side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          {/* First Large Image */}
+          {(project.heroImage || galleryImages[0]) && (
+            <div className="aspect-[4/5]">
+              <OptimizedImage
+                src={project.heroImage || galleryImages[0]}
+                alt={project.title}
+                width={600}
+                height={750}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                priority={true}
+                data-testid="img-main"
+              />
+            </div>
+          )}
+
+          {/* Second Large Image */}
+          {galleryImages[1] && (
+            <div className="aspect-[4/5]">
+              <OptimizedImage
+                src={galleryImages[1]}
+                alt={`${project.title} - Secondary view`}
+                width={600}
+                height={750}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                data-testid="img-secondary"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Content Text Below Images */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
+          {/* Left Text Content */}
+          <div className="space-y-6">
+            <p className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
+              {project.detailedDescription || project.description || "An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures."}
+            </p>
+          </div>
+
+          {/* Right Text Content with Small Image */}
+          <div className="space-y-6">
+            {/* Small detail image */}
+            {galleryImages[2] && (
+              <div className="w-full max-w-sm">
+                <OptimizedImage
+                  src={galleryImages[2]}
+                  alt={`${project.title} - Detail`}
+                  width={400}
+                  height={300}
+                  wrapperClassName="w-full h-full"
+                  className="w-full h-full object-cover"
+                  data-testid="img-detail"
+                />
+              </div>
+            )}
+            
+            <p className="text-zinc-300 leading-relaxed text-base">
+              Elegant fireplace with laconic design creates an atmosphere of coziness and style, becoming an accent piece.
+            </p>
+          </div>
+        </div>
+
+        {/* View More Button - Only show if there are additional images and not expanded */}
+        {galleryImages.length > 3 && !expanded && (
+          <div className="text-center mb-16">
+            <button 
+              onClick={() => {
+                setExpanded(true);
+                // Delay scroll to allow content to render
+                setTimeout(() => {
+                  document.getElementById('additional-gallery')?.scrollIntoView({ 
+                    behavior: 'smooth' 
+                  });
+                }, 100);
+              }}
+              className="border border-zinc-600 text-zinc-300 px-8 py-3 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors inline-flex items-center gap-2" 
+              data-testid="button-view-more"
+              aria-expanded={expanded}
+              aria-controls="additional-gallery"
+            >
+              <span className="text-lg">•</span>
+              VIEW MORE
+            </button>
+          </div>
+        )}
+
+        {/* Additional Gallery Section - Detailed Content */}
+        {expanded && galleryImages.length > 3 && (
+          <div id="additional-gallery" className="mt-24 space-y-16" data-testid="section-additional" tabIndex={-1}>
+            {/* Additional detailed text content */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
+              <div className="space-y-6">
+                <h3 className="text-xl font-light tracking-wider text-white">Design Philosophy</h3>
+                <p className="text-zinc-300 leading-relaxed">
+                  The project embodies a sophisticated approach to modern interior design, where every element 
+                  is carefully curated to create a harmonious balance between functionality and aesthetic appeal.
+                </p>
+                <p className="text-zinc-300 leading-relaxed">
+                  Attention to detail is evident in the selection of materials, the play of light and shadow, 
+                  and the thoughtful integration of architectural elements that define the character of the space.
+                </p>
+              </div>
+              <div className="space-y-6">
+                <h3 className="text-xl font-light tracking-wider text-white">Material Selection</h3>
+                <p className="text-zinc-300 leading-relaxed">
+                  Premium materials were selected to enhance both durability and visual impact. Natural textures 
+                  and rich finishes create depth and warmth throughout the interior.
+                </p>
+                <p className="text-zinc-300 leading-relaxed">
+                  The careful balance of matte and glossy surfaces, combined with strategic lighting placement, 
+                  creates an atmosphere that evolves throughout the day.
+                </p>
+              </div>
+            </div>
+
+            {/* Additional Gallery Images */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {galleryImages.slice(2).map((image: string, index: number) => (
-                <div key={index} className="aspect-square">
+              {galleryImages.slice(3).map((image: string, index: number) => (
+                <div key={index} className="aspect-[4/5]">
                   <OptimizedImage
                     src={image}
-                    alt={`${project.title} - Gallery ${index + 3}`}
+                    alt={`${project.title} - Gallery ${index + 4}`}
                     width={400}
-                    height={400}
+                    height={500}
                     wrapperClassName="w-full h-full"
                     className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    data-testid={`img-gallery-${index + 3}`}
+                    data-testid={`img-gallery-${index + 4}`}
                   />
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* OTHER PROJECTS Section - Always show at least 4 */}
         {allProjects && allProjects.length > 0 && (
