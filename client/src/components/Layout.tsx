@@ -176,31 +176,6 @@ export default function Layout({ children }: LayoutProps) {
         </Sheet>
       </aside>
 
-      {/* Mobile Bottom Actions */}
-      <div className="md:hidden fixed bottom-0 left-16 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
-        <div className="flex space-x-3">
-          <Link href="/contact" className="flex-1">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              className="w-full text-muted-foreground hover:text-primary"
-              data-testid="mobile-button-contact"
-            >
-              Get Started
-            </Button>
-          </Link>
-          <Link href="/portfolio" className="flex-1">
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              data-testid="mobile-button-portfolio"
-            >
-              Portfolio
-            </Button>
-          </Link>
-        </div>
-      </div>
 
       {/* Main Content - Adjusted for header and sidebar */}
       <main className="ml-16 pt-20 pb-20 md:pb-0">{children}</main>
