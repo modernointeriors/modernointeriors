@@ -94,7 +94,6 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">About Us</Badge>
           <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6" data-testid="heading-about">About NIVORA</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Where architectural vision meets interior perfection. We are a team of passionate designers creating extraordinary spaces worldwide.
