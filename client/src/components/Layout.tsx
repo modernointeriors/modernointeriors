@@ -29,153 +29,119 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation Header - IIDA Style */}
-      <header className="fixed top-0 w-full z-50 bg-black border-b border-white/10">
-        <div className="w-full">
-          <nav className="flex items-center justify-between h-16">
-            {/* Left Side - Hamburger Menu and Logo */}
-            <div className="flex items-center">
-              {/* Hamburger Menu at Far Left */}
-              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-white hover:text-primary p-3 h-16 rounded-none"
-                    aria-label="Open navigation menu"
-                    data-testid="button-main-menu"
-                  >
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-              <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border">
-                <SheetHeader>
-                  <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
-                  <SheetDescription className="sr-only">Navigation menu</SheetDescription>
-                </SheetHeader>
-                <div className="flex flex-col h-full">{/* Navigation content */}
-                    
-                    {/* Navigation Menu */}
-                    <div className="flex-1 py-8">
-                      <div className="space-y-6">
-                        {navigation.map((item) => (
-                          <Link
-                            key={item.key}
-                            href={item.href}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className={`block text-lg font-medium transition-colors hover:text-primary ${
-                              isActive(item.href)
-                                ? 'text-primary'
-                                : 'text-foreground'
-                            }`}
-                            data-testid={`menu-nav-${item.key}`}
-                          >
-                            {item.name}
-                          </Link>
-                        ))}
-                      </div>
-                      
-                      {/* Additional Menu Items */}
-                      <div className="mt-12 pt-8 border-t border-border">
-                        <div className="space-y-4">
-                          <Link 
-                            href="/services" 
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            Services
-                          </Link>
-                          <Link 
-                            href="/about" 
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            Our Story
-                          </Link>
-                          <Link 
-                            href="/contact" 
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            Get in Touch
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Menu Footer */}
-                    <div className="py-6 border-t border-border">
-                      <p className="text-xs text-muted-foreground">
-                        © 2024 NIVORA Design Studio
-                      </p>
+      {/* Vertical Navigation Sidebar - IIDA Style */}
+      <aside className="fixed top-0 left-0 h-screen w-20 z-50 bg-black border-r border-white/10 flex flex-col items-center py-6">
+        {/* Hamburger Menu at Top */}
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="text-white hover:text-primary p-3 w-12 h-12 rounded-none mb-8"
+              aria-label="Open navigation menu"
+              data-testid="button-main-menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border">
+            <SheetHeader>
+              <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
+              <SheetDescription className="sr-only">Navigation menu</SheetDescription>
+            </SheetHeader>
+            <div className="flex flex-col h-full">{/* Navigation content */}
+                
+                {/* Navigation Menu */}
+                <div className="flex-1 py-8">
+                  <div className="space-y-6">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.key}
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`block text-lg font-medium transition-colors hover:text-primary ${
+                          isActive(item.href)
+                            ? 'text-primary'
+                            : 'text-foreground'
+                        }`}
+                        data-testid={`menu-nav-${item.key}`}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                  
+                  {/* Additional Menu Items */}
+                  <div className="mt-12 pt-8 border-t border-border">
+                    <div className="space-y-4">
+                      <Link 
+                        href="/services" 
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Services
+                      </Link>
+                      <Link 
+                        href="/about" 
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Our Story
+                      </Link>
+                      <Link 
+                        href="/contact" 
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Get in Touch
+                      </Link>
                     </div>
                   </div>
-                </SheetContent>
-              </Sheet>
-              
-              {/* Logo */}
-              <Link href="/" className="ml-6">
-                <h1 className="text-xl font-serif font-bold text-white cursor-pointer tracking-wider" data-testid="logo">
-                  NIVORA
-                </h1>
-              </Link>
-            </div>
-            
-            {/* Right Side - Actions and Language */}
-            <div className="flex items-center space-x-6 pr-6">
-              {/* Action Buttons */}
-              <div className="hidden md:flex items-center space-x-4">
-                <Link href="/contact">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-white/80 hover:text-primary font-medium"
-                    data-testid="button-contact"
-                  >
-                    Get Started
-                  </Button>
-                </Link>
-                <Link href="/portfolio">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-medium"
-                    data-testid="button-portfolio"
-                  >
-                    View Portfolio
-                  </Button>
-                </Link>
+                </div>
+                
+                {/* Menu Footer */}
+                <div className="py-6 border-t border-border">
+                  <p className="text-xs text-muted-foreground">
+                    © 2024 NIVORA Design Studio
+                  </p>
+                </div>
               </div>
-              
-              {/* Language Toggle */}
-              <div className="flex items-center space-x-2 text-sm font-medium">
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`px-2 py-1 transition-colors ${
-                    language === 'en' ? 'text-primary' : 'text-white/80 hover:text-primary'
-                  }`}
-                  data-testid="lang-en"
-                >
-                  ENG
-                </button>
-                <span className="text-white/60">|</span>
-                <button
-                  onClick={() => setLanguage('vi')}
-                  className={`px-2 py-1 transition-colors ${
-                    language === 'vi' ? 'text-primary' : 'text-white/80 hover:text-primary'
-                  }`}
-                  data-testid="lang-vi"
-                >
-                  VIE
-                </button>
-              </div>
-            </div>
-          </nav>
+            </SheetContent>
+        </Sheet>
+        
+        {/* Logo - Vertical */}
+        <Link href="/" className="mb-auto">
+          <h1 className="text-white cursor-pointer tracking-wider font-serif font-bold transform -rotate-90 whitespace-nowrap text-sm" data-testid="logo">
+            NIVORA
+          </h1>
+        </Link>
+        
+        {/* Language Toggle - Vertical */}
+        <div className="flex flex-col items-center space-y-2 text-xs font-medium">
+          <button
+            onClick={() => setLanguage('en')}
+            className={`px-1 py-1 transition-colors ${
+              language === 'en' ? 'text-primary' : 'text-white/80 hover:text-primary'
+            }`}
+            data-testid="lang-en"
+          >
+            ENG
+          </button>
+          <span className="text-white/60">|</span>
+          <button
+            onClick={() => setLanguage('vi')}
+            className={`px-1 py-1 transition-colors ${
+              language === 'vi' ? 'text-primary' : 'text-white/80 hover:text-primary'
+            }`}
+            data-testid="lang-vi"
+          >
+            VIE
+          </button>
         </div>
-      </header>
+      </aside>
 
       {/* Mobile Bottom Actions */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
+      <div className="md:hidden fixed bottom-0 left-20 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
         <div className="flex space-x-3">
           <Link href="/contact" className="flex-1">
             <Button 
@@ -200,11 +166,11 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </div>
 
-      {/* Main Content */}
-      <main className="pb-20 md:pb-0">{children}</main>
+      {/* Main Content - Adjusted for vertical sidebar */}
+      <main className="ml-20 pb-20 md:pb-0">{children}</main>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border py-16">
+      {/* Footer - Adjusted for vertical sidebar */}
+      <footer className="ml-20 bg-card border-t border-border py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
