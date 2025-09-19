@@ -68,13 +68,13 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   <div className="absolute inset-0 bg-black/40"></div>
                 </div>
                 
-                <div className="relative h-full flex flex-col justify-between z-10">
+                <div className="relative h-full flex flex-col justify-center z-10">
                   <Link 
                     href={`/project/${project.id}`} 
-                    className="flex-grow"
+                    className="block"
                     data-testid={`slide-link-${project.id}`}
                   >
-                    <div className="h-full flex flex-col justify-between max-w-md">
+                    <div className="max-w-md">
                       <h2 className="heading-0 js-slider-slide-title">
                         {project.title}
                       </h2>
