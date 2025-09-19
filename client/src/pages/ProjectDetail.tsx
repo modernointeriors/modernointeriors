@@ -70,6 +70,16 @@ export default function ProjectDetail() {
     enabled: !!project,
   });
 
+  // Fetch all projects for "OTHER PROJECTS" section
+  const { data: allProjects } = useQuery<Project[]>({
+    queryKey: ['/api/projects'],
+    select: (data) => {
+      // Filter out current project and get up to 4 other projects
+      return data.filter(p => p.id !== project?.id).slice(0, 4);
+    },
+    enabled: !!project,
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black">
@@ -111,253 +121,176 @@ export default function ProjectDetail() {
   
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Header */}
-      <header className="border-b border-zinc-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Header with navigation */}
+      <header className="py-8">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                asChild
-                className="text-zinc-400 hover:text-white"
-                data-testid="button-back"
-              >
-                <Link href="/portfolio">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  PROJECTS
-                </Link>
-              </Button>
+            <div className="text-white text-lg font-light tracking-wider">
+              NIVORA STUDIO
             </div>
-            <div className="text-right text-sm text-zinc-500">
-              <div className="uppercase tracking-wider">DISCOVER PAPER & BRAND</div>
+            <nav className="hidden md:flex items-center space-x-8 text-sm">
+              <Link href="/" className="text-zinc-400 hover:text-white transition-colors">HOME</Link>
+              <Link href="/about" className="text-zinc-400 hover:text-white transition-colors">ABOUT</Link>
+              <Link href="/portfolio" className="text-zinc-400 hover:text-white transition-colors">PROJECTS</Link>
+              <Link href="/contact" className="text-zinc-400 hover:text-white transition-colors">CONTACTS</Link>
+            </nav>
+            <div className="flex items-center space-x-4 text-sm">
+              <span className="text-zinc-400">ENG</span>
+              <span className="text-zinc-600">|</span>
+              <span className="text-zinc-400">RU</span>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-6">
         {/* Project Title Section */}
-        <div className="mb-16">
-          <div className="flex items-center space-x-2 mb-4">
-            <span className="text-zinc-500 uppercase tracking-wider text-sm">PROJECTS</span>
-            <span className="text-zinc-500">•</span>
-            <span className="text-white uppercase tracking-wider text-sm font-medium" data-testid="text-project-title">
+        <div className="mb-12">
+          <h1 className="text-2xl font-light tracking-wider mb-8">
+            <span className="text-zinc-400">PROJECTS</span>
+            <span className="text-zinc-600 mx-3">•</span>
+            <span className="text-white uppercase" data-testid="text-project-title">
               {project.title}
             </span>
-          </div>
+          </h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-end">
-            <div className="lg:col-span-2">
-              <div className="space-y-4">
-                {project.designer && (
-                  <div className="text-sm text-zinc-400">
-                    <span className="text-zinc-500">Interior Designer:</span> 
-                    <span className="text-white ml-2" data-testid="text-designer">{project.designer}</span>
-                  </div>
-                )}
-                {project.category && (
-                  <Badge variant="outline" className="border-zinc-700 text-zinc-300">
-                    {project.category}
-                  </Badge>
-                )}
-              </div>
+          <div className="flex items-center justify-between mb-12">
+            <div className="text-zinc-400">
+              {project.designer && (
+                <span data-testid="text-designer">[Interior designer] {project.designer}</span>
+              )}
             </div>
-
-            <div className="text-right">
+            <div className="text-zinc-400">
               {project.completionYear && (
-                <div className="text-2xl font-light text-white" data-testid="text-year">
-                  {project.completionYear}
-                </div>
+                <span data-testid="text-year">Year | {project.completionYear}</span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Hero Image */}
-        {(project.heroImage || galleryImages[0]) && (
-          <div className="mb-16">
-            <div className="relative overflow-hidden rounded-lg">
+        {/* Main Images Grid - Two large images at top */}
+        {galleryImages.length >= 2 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-12">
+            <div className="aspect-[4/5]">
               <OptimizedImage
-                src={project.heroImage || galleryImages[0]} 
-                alt={project.title}
-                width={1200}
-                height={800}
-                wrapperClassName="w-full h-[70vh]"
-                className="w-full h-full"
-                sizes="100vw"
+                src={galleryImages[0]}
+                alt={`${project.title} - Image 1`}
+                width={600}
+                height={750}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
                 priority={true}
-                data-testid="img-hero"
+                data-testid="img-gallery-1"
+              />
+            </div>
+            <div className="aspect-[4/5]">
+              <OptimizedImage
+                src={galleryImages[1]}
+                alt={`${project.title} - Image 2`}
+                width={600}
+                height={750}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                data-testid="img-gallery-2"
               />
             </div>
           </div>
         )}
 
-        {/* Project Description */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 mb-20">
+        {/* Description Section with smaller image on right */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
           <div className="lg:col-span-2">
-            <div className="prose prose-invert prose-lg max-w-none">
-              <p className="text-zinc-300 leading-relaxed text-lg">
-                {project.detailedDescription || project.description || "An interior where solid granite shades are combined with the warmth of terracotta furniture and soft textures."}
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            {project.location && (
-              <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-zinc-500 mt-1" />
-                <div>
-                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Location</div>
-                  <div className="text-white" data-testid="text-location">{project.location}</div>
-                </div>
-              </div>
-            )}
-
-            {project.area && (
-              <div className="flex items-start space-x-3">
-                <div className="h-5 w-5 bg-zinc-500 rounded-full mt-1" />
-                <div>
-                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Area</div>
-                  <div className="text-white" data-testid="text-area">{project.area}</div>
-                </div>
-              </div>
-            )}
-
-            {project.duration && (
-              <div className="flex items-start space-x-3">
-                <Calendar className="h-5 w-5 text-zinc-500 mt-1" />
-                <div>
-                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Duration</div>
-                  <div className="text-white" data-testid="text-duration">{project.duration}</div>
-                </div>
-              </div>
-            )}
-
-            {project.style && (
-              <div className="flex items-start space-x-3">
-                <Eye className="h-5 w-5 text-zinc-500 mt-1" />
-                <div>
-                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Style</div>
-                  <div className="text-white" data-testid="text-style">{project.style}</div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Gallery Images */}
-        {galleryImages.length > 1 && (
-          <div className="mb-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {galleryImages.slice(1).map((image: string, index: number) => (
-                <div key={index} className="group relative overflow-hidden rounded-lg">
-                  <OptimizedImage
-                    src={image} 
-                    alt={`${project.title} - Gallery ${index + 1}`}
-                    width={600}
-                    height={400}
-                    wrapperClassName="w-full h-80"
-                    className="w-full h-full group-hover:scale-105 transition-transform duration-700"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    data-testid={`img-gallery-${index}`}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Additional Project Details */}
-        <div className="mb-20">
-          <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">OTHER PROJECTS</div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {galleryImages.slice(0, 4).map((image: string, index: number) => (
-              <div key={index} className="relative overflow-hidden rounded-lg aspect-square">
+            <p className="text-zinc-300 leading-relaxed text-base mb-8" data-testid="text-description">
+              {project.detailedDescription || project.description || "An interior where solid granite shades are combined with the warmth of terracotta furniture and soft textures."}
+            </p>
+            
+            {/* Small thumbnail image on the left under description */}
+            {galleryImages[2] && (
+              <div className="w-24 h-16">
                 <OptimizedImage
-                  src={image} 
-                  alt={`${project.title} - Thumbnail ${index + 1}`}
-                  width={300}
-                  height={300}
+                  src={galleryImages[2]}
+                  alt={`${project.title} - Small thumbnail`}
+                  width={96}
+                  height={64}
                   wrapperClassName="w-full h-full"
-                  className="w-full h-full"
-                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  data-testid={`img-thumb-${index}`}
+                  className="w-full h-full object-cover"
+                  data-testid="img-small-thumb"
                 />
               </div>
-            ))}
+            )}
           </div>
+
+          {/* Smaller image on the right */}
+          {galleryImages[3] && (
+            <div className="aspect-square">
+              <OptimizedImage
+                src={galleryImages[3]}
+                alt={`${project.title} - Side image`}
+                width={400}
+                height={400}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                data-testid="img-side"
+              />
+            </div>
+          )}
         </div>
 
-        {/* Related Projects */}
-        {relatedProjects && relatedProjects.length > 0 && (
-          <div className="border-t border-zinc-800 pt-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              {relatedProjects.slice(0, 2).map((relatedProject) => (
-                <Link key={relatedProject.id} href={`/project/${relatedProject.id}`}>
-                  <div className="group cursor-pointer">
-                    <div className="text-sm text-zinc-500 uppercase tracking-wider mb-4">
-                      NIVORA STUDIO
-                    </div>
-                    <div className="mb-6">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <span className="text-zinc-500 uppercase tracking-wider text-sm">PROJECTS</span>
-                        <span className="text-zinc-500">•</span>
-                        <span className="text-white uppercase tracking-wider text-sm font-medium">
-                          {relatedProject.title}
-                        </span>
-                      </div>
-                      {relatedProject.designer && (
-                        <div className="text-sm text-zinc-400">
-                          <span className="text-zinc-500">Interior Designer:</span> 
-                          <span className="text-white ml-2">{relatedProject.designer}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="relative overflow-hidden rounded-lg mb-4">
-                      <OptimizedImage
-                        src={relatedProject.heroImage || (Array.isArray(relatedProject.images) ? relatedProject.images[0] : '') || '/placeholder-project.jpg'} 
-                        alt={relatedProject.title}
-                        width={500}
-                        height={600}
-                        wrapperClassName="w-full h-80"
-                        className="w-full h-full group-hover:scale-105 transition-transform duration-700"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        data-testid={`img-related-${relatedProject.id}`}
-                      />
-                    </div>
+        {/* Additional Layout Section with text and image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          <div className="space-y-6">
+            <p className="text-zinc-300 leading-relaxed text-sm">
+              Elegant finishes with second-design ceramic as complexes of corners and the flexibility to create a space.
+            </p>
+            
+            {/* View More Button */}
+            <div>
+              <button className="border border-zinc-600 text-zinc-300 px-6 py-2 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors" data-testid="button-view-more">
+                + VIEW MORE
+              </button>
+            </div>
+          </div>
 
-                    <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-                      {relatedProject.description}
-                    </p>
+          {/* Large bottom image */}
+          {galleryImages[4] && (
+            <div className="aspect-[4/5]">
+              <OptimizedImage
+                src={galleryImages[4]}
+                alt={`${project.title} - Bottom image`}
+                width={600}
+                height={750}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                data-testid="img-bottom"
+              />
+            </div>
+          )}
+        </div>
 
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-                      data-testid={`button-view-project-${relatedProject.id}`}
-                    >
-                      ← VIEW PROJECT
-                    </Button>
+        {/* OTHER PROJECTS Section - Only show if there are other projects */}
+        {allProjects && allProjects.length > 0 && (
+          <div className="mt-24 pt-16">
+            <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">OTHER PROJECTS</div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {allProjects.map((otherProject) => (
+                <Link key={otherProject.id} href={`/project/${otherProject.id}`}>
+                  <div className="group cursor-pointer aspect-square">
+                    <OptimizedImage
+                      src={otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 
+                      alt={otherProject.title}
+                      width={300}
+                      height={300}
+                      wrapperClassName="w-full h-full"
+                      className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                      data-testid={`img-other-project-${otherProject.id}`}
+                    />
                   </div>
                 </Link>
               ))}
             </div>
           </div>
         )}
-
-        {/* Contact CTA */}
-        <div className="text-center pt-20 border-t border-zinc-800 mt-20">
-          <Button 
-            size="lg" 
-            className="bg-white text-black hover:bg-zinc-200 px-8"
-            asChild
-            data-testid="button-start-project"
-          >
-            <Link href="/contact">Start Your Project</Link>
-          </Button>
-        </div>
       </div>
     </div>
   );
