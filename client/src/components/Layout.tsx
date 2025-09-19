@@ -123,7 +123,10 @@ export default function Layout({ children }: LayoutProps) {
         >
           ENG
         </button>
-        <span className="text-white/60">|</span>
+        <span className="text-white/60 flex flex-col space-y-1">
+          <div className="w-3 h-0.5 bg-white/60"></div>
+          <div className="w-3 h-0.5 bg-white/60"></div>
+        </span>
         <button
           onClick={() => setLanguage('vi')}
           className={`px-2 py-1 transition-colors ${
