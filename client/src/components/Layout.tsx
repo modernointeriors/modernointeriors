@@ -30,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-white/10 py-8">
+      <header className="fixed top-0 left-16 right-0 z-50 bg-black border-b border-white/10 py-8">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
