@@ -30,7 +30,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   }
 
   return (
-    <div className="bg-black text-white">
+    <div className="bg-black text-white h-screen">
       <Swiper
         modules={[Autoplay, EffectFade]}
         effect="fade"
@@ -41,7 +41,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
           disableOnInteraction: false,
         }}
         loop={true}
-        className="js-slider"
+        className="js-slider h-screen"
         data-slider-slug="hero"
         data-testid="hero-slider"
       >
@@ -57,7 +57,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
 
           return (
             <SwiperSlide key={project.id} data-testid={`slide-${project.id}`}>
-              <div className="wrapper relative pt-0 pb-36 max-h-[46.5rem] h-screen px-6 md:px-10 lg:px-16">
+              <div className="wrapper relative h-screen px-6 md:px-10 lg:px-16">
                 <div className="absolute inset-0">
                   <img 
                     src={backgroundImage} 
