@@ -134,14 +134,6 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </aside>
 
-      {/* Logo - Top Right Corner */}
-      <div className="fixed top-4 right-4 z-50">
-        <Link href="/">
-          <h1 className="text-xl font-serif font-bold text-white cursor-pointer tracking-wider" data-testid="logo">
-            NIVORA
-          </h1>
-        </Link>
-      </div>
 
       {/* Mobile Bottom Actions */}
       <div className="md:hidden fixed bottom-0 left-20 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
