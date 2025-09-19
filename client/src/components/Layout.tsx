@@ -30,18 +30,18 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-20 z-50 bg-black border-r border-white/10 flex flex-col items-center py-6">
+      <aside className="fixed top-0 left-0 h-screen w-16 z-50 bg-black border-r border-white/10 flex flex-col items-center py-6">
         {/* Hamburger Menu at Top */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button 
               variant="ghost" 
               size="sm"
-              className="text-white hover:text-[#FAA61A] p-3 w-12 h-12 rounded-none mb-8 hover:bg-transparent"
+              className="text-white hover:text-[#FAA61A] p-3 w-10 h-10 rounded-none mb-8 hover:bg-transparent flex items-center justify-center"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 rotate-90" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border">
@@ -136,7 +136,7 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Mobile Bottom Actions */}
-      <div className="md:hidden fixed bottom-0 left-20 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
+      <div className="md:hidden fixed bottom-0 left-16 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
         <div className="flex space-x-3">
           <Link href="/contact" className="flex-1">
             <Button 
@@ -162,10 +162,10 @@ export default function Layout({ children }: LayoutProps) {
       </div>
 
       {/* Main Content - Adjusted for vertical sidebar */}
-      <main className="ml-20 pb-20 md:pb-0">{children}</main>
+      <main className="ml-16 pb-20 md:pb-0">{children}</main>
 
       {/* Footer - Adjusted for vertical sidebar */}
-      <footer className="ml-20 bg-card border-t border-border py-16">
+      <footer className="ml-16 bg-card border-t border-border py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
