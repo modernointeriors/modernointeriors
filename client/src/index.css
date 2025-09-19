@@ -181,7 +181,7 @@
   .js-slider .swiper-button-next::after,
   .js-slider .swiper-button-prev::after {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 300;
   }
   
   .js-slider .swiper-pagination {
