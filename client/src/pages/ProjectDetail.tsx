@@ -165,10 +165,14 @@ export default function ProjectDetail() {
               <Link href="/portfolio" className="text-zinc-400 hover:text-white transition-colors">PROJECTS</Link>
               <Link href="/contact" className="text-zinc-400 hover:text-white transition-colors">CONTACTS</Link>
             </nav>
-            <div className="flex items-center space-x-4 text-sm">
-              <span className="text-zinc-400">ENG</span>
+            <div className="flex items-center space-x-1 text-sm">
+              <button className="text-zinc-400 hover:text-primary transition-colors px-2 py-1" data-testid="button-lang-eng">
+                ENG
+              </button>
               <span className="text-zinc-600">|</span>
-              <span className="text-zinc-400">RU</span>
+              <button className="text-zinc-400 hover:text-primary transition-colors px-2 py-1" data-testid="button-lang-eng2">
+                ENG
+              </button>
             </div>
           </div>
         </div>
