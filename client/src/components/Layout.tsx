@@ -110,30 +110,30 @@ export default function Layout({ children }: LayoutProps) {
         </Sheet>
         
         
-        {/* Language Toggle - Vertical */}
-        <div className="flex flex-col items-center space-y-2 text-xs font-medium">
-          <button
-            onClick={() => setLanguage('en')}
-            className={`px-1 py-1 transition-colors ${
-              language === 'en' ? 'text-primary' : 'text-white/80 hover:text-primary'
-            }`}
-            data-testid="lang-en"
-          >
-            ENG
-          </button>
-          <span className="text-white/60">|</span>
-          <button
-            onClick={() => setLanguage('vi')}
-            className={`px-1 py-1 transition-colors ${
-              language === 'vi' ? 'text-primary' : 'text-white/80 hover:text-primary'
-            }`}
-            data-testid="lang-vi"
-          >
-            VIE
-          </button>
-        </div>
       </aside>
 
+      {/* Language Toggle - Top Right */}
+      <div className="fixed top-4 right-4 z-50 flex items-center space-x-2 text-xs font-medium">
+        <button
+          onClick={() => setLanguage('en')}
+          className={`px-2 py-1 transition-colors ${
+            language === 'en' ? 'text-primary' : 'text-white/80 hover:text-primary'
+          }`}
+          data-testid="lang-en"
+        >
+          ENG
+        </button>
+        <span className="text-white/60">|</span>
+        <button
+          onClick={() => setLanguage('vi')}
+          className={`px-2 py-1 transition-colors ${
+            language === 'vi' ? 'text-primary' : 'text-white/80 hover:text-primary'
+          }`}
+          data-testid="lang-vi"
+        >
+          VIE
+        </button>
+      </div>
 
       {/* Mobile Bottom Actions */}
       <div className="md:hidden fixed bottom-0 left-20 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
