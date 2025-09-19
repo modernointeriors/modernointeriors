@@ -70,12 +70,34 @@ export default function ProjectDetail() {
     enabled: !!project,
   });
 
-  // Fetch all projects for "OTHER PROJECTS" section
+  // Fetch all projects for "OTHER PROJECTS" section with smart filtering
   const { data: allProjects } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
     select: (data) => {
-      // Filter out current project and get up to 4 other projects
-      return data.filter(p => p.id !== project?.id).slice(0, 4);
+      if (!project) return [];
+      
+      // Filter out current project
+      const otherProjects = data.filter(p => p.id !== project.id);
+      
+      // Sort by priority:
+      // 1. Same category first
+      // 2. Then by most recent (createdAt or updatedAt)
+      const sortedProjects = otherProjects.sort((a, b) => {
+        // Priority 1: Same category as current project (both must have categories)
+        const aMatchesCategory = !!project.category && !!a.category && a.category === project.category;
+        const bMatchesCategory = !!project.category && !!b.category && b.category === project.category;
+        
+        if (aMatchesCategory && !bMatchesCategory) return -1;
+        if (!aMatchesCategory && bMatchesCategory) return 1;
+        
+        // Priority 2: Most recent projects (using updatedAt or createdAt)
+        const aDate = new Date((a as any).updatedAt || (a as any).createdAt || 0);
+        const bDate = new Date((b as any).updatedAt || (b as any).createdAt || 0);
+        return bDate.getTime() - aDate.getTime();
+      });
+      
+      // Return exactly 4 projects for consistent layout
+      return sortedProjects.slice(0, 4);
     },
     enabled: !!project,
   });
@@ -143,133 +165,143 @@ export default function ProjectDetail() {
         </div>
       </header>
 
+      {/* Two Column Layout */}
       <div className="max-w-7xl mx-auto px-6">
-        {/* Project Title Section */}
-        <div className="mb-12">
-          <h1 className="text-2xl font-light tracking-wider mb-8">
-            <span className="text-zinc-400">PROJECTS</span>
-            <span className="text-zinc-600 mx-3">•</span>
-            <span className="text-white uppercase" data-testid="text-project-title">
-              {project.title}
-            </span>
-          </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Left Column */}
+          <div className="space-y-8">
+            {/* Project Title */}
+            <div>
+              <h1 className="text-2xl font-light tracking-wider mb-6">
+                <span className="text-zinc-400">PROJECTS</span>
+                <span className="text-zinc-600 mx-3">•</span>
+                <span className="text-white uppercase" data-testid="text-project-title">
+                  {project.title}
+                </span>
+              </h1>
 
-          <div className="flex items-center justify-between mb-12">
-            <div className="text-zinc-400">
-              {project.designer && (
-                <span data-testid="text-designer">[Interior designer] {project.designer}</span>
-              )}
+              <div className="space-y-2 text-sm text-zinc-400">
+                {project.designer && (
+                  <div data-testid="text-designer">[Interior designer] {project.designer}</div>
+                )}
+                {project.completionYear && (
+                  <div data-testid="text-year">[Year] {project.completionYear}</div>
+                )}
+              </div>
             </div>
-            <div className="text-zinc-400">
-              {project.completionYear && (
-                <span data-testid="text-year">Year | {project.completionYear}</span>
-              )}
-            </div>
-          </div>
-        </div>
 
-        {/* Main Images Grid - Two large images at top */}
-        {galleryImages.length >= 2 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-12">
-            <div className="aspect-[4/5]">
-              <OptimizedImage
-                src={galleryImages[0]}
-                alt={`${project.title} - Image 1`}
-                width={600}
-                height={750}
-                wrapperClassName="w-full h-full"
-                className="w-full h-full object-cover"
-                priority={true}
-                data-testid="img-gallery-1"
-              />
-            </div>
-            <div className="aspect-[4/5]">
-              <OptimizedImage
-                src={galleryImages[1]}
-                alt={`${project.title} - Image 2`}
-                width={600}
-                height={750}
-                wrapperClassName="w-full h-full"
-                className="w-full h-full object-cover"
-                data-testid="img-gallery-2"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Description Section with smaller image on right */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
-          <div className="lg:col-span-2">
-            <p className="text-zinc-300 leading-relaxed text-base mb-8" data-testid="text-description">
-              {project.detailedDescription || project.description || "An interior where solid granite shades are combined with the warmth of terracotta furniture and soft textures."}
-            </p>
-            
-            {/* Small thumbnail image on the left under description */}
-            {galleryImages[2] && (
-              <div className="w-24 h-16">
+            {/* Main Project Image */}
+            {(project.heroImage || galleryImages[0]) && (
+              <div className="aspect-[4/5]">
                 <OptimizedImage
-                  src={galleryImages[2]}
-                  alt={`${project.title} - Small thumbnail`}
-                  width={96}
-                  height={64}
+                  src={project.heroImage || galleryImages[0]}
+                  alt={project.title}
+                  width={600}
+                  height={750}
                   wrapperClassName="w-full h-full"
                   className="w-full h-full object-cover"
-                  data-testid="img-small-thumb"
+                  priority={true}
+                  data-testid="img-main"
                 />
               </div>
             )}
+
+            {/* Description */}
+            <div className="space-y-6">
+              <p className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
+                {project.detailedDescription || project.description || "An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures."}
+              </p>
+
+              {/* Small thumbnail under description */}
+              {galleryImages[2] && (
+                <div className="w-32 h-24">
+                  <OptimizedImage
+                    src={galleryImages[2]}
+                    alt={`${project.title} - Detail`}
+                    width={128}
+                    height={96}
+                    wrapperClassName="w-full h-full"
+                    className="w-full h-full object-cover"
+                    data-testid="img-detail-thumb"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Smaller image on the right */}
-          {galleryImages[3] && (
-            <div className="aspect-square">
-              <OptimizedImage
-                src={galleryImages[3]}
-                alt={`${project.title} - Side image`}
-                width={400}
-                height={400}
-                wrapperClassName="w-full h-full"
-                className="w-full h-full object-cover"
-                data-testid="img-side"
-              />
+          {/* Right Column */}
+          <div className="space-y-8">
+            {/* Second large image */}
+            {galleryImages[1] && (
+              <div className="aspect-[4/5]">
+                <OptimizedImage
+                  src={galleryImages[1]}
+                  alt={`${project.title} - Secondary view`}
+                  width={600}
+                  height={750}
+                  wrapperClassName="w-full h-full"
+                  className="w-full h-full object-cover"
+                  data-testid="img-secondary"
+                />
+              </div>
+            )}
+
+            {/* Additional description text */}
+            <div className="space-y-6">
+              <p className="text-zinc-300 leading-relaxed text-base">
+                Elegant fireplace with laconic design creates an atmosphere of coziness and style, becoming an accent piece.
+              </p>
+              
+              <p className="text-zinc-300 leading-relaxed text-base">
+                Atmospheric lighting and accent details create a space filled with coziness, elegance and modern character.
+              </p>
+
+              {/* View More Button - Only show if there are additional images */}
+              {galleryImages.length > 2 && (
+                <div>
+                  <button 
+                    onClick={() => {
+                      document.getElementById('additional-gallery')?.scrollIntoView({ 
+                        behavior: 'smooth' 
+                      });
+                    }}
+                    className="border border-zinc-600 text-zinc-300 px-8 py-3 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors flex items-center gap-2" 
+                    data-testid="button-view-more"
+                  >
+                    <span className="text-lg">•</span>
+                    VIEW MORE
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Gallery Section */}
+        <div id="additional-gallery" className="mt-24 space-y-16">
+          {galleryImages.length > 2 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {galleryImages.slice(2).map((image: string, index: number) => (
+                <div key={index} className="aspect-square">
+                  <OptimizedImage
+                    src={image}
+                    alt={`${project.title} - Gallery ${index + 3}`}
+                    width={400}
+                    height={400}
+                    wrapperClassName="w-full h-full"
+                    className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    data-testid={`img-gallery-${index + 3}`}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Additional Layout Section with text and image */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          <div className="space-y-6">
-            <p className="text-zinc-300 leading-relaxed text-sm">
-              Elegant finishes with second-design ceramic as complexes of corners and the flexibility to create a space.
-            </p>
-            
-            {/* View More Button */}
-            <div>
-              <button className="border border-zinc-600 text-zinc-300 px-6 py-2 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors" data-testid="button-view-more">
-                + VIEW MORE
-              </button>
-            </div>
-          </div>
-
-          {/* Large bottom image */}
-          {galleryImages[4] && (
-            <div className="aspect-[4/5]">
-              <OptimizedImage
-                src={galleryImages[4]}
-                alt={`${project.title} - Bottom image`}
-                width={600}
-                height={750}
-                wrapperClassName="w-full h-full"
-                className="w-full h-full object-cover"
-                data-testid="img-bottom"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* OTHER PROJECTS Section - Only show if there are other projects */}
+        {/* OTHER PROJECTS Section - Always show at least 4 */}
         {allProjects && allProjects.length > 0 && (
-          <div className="mt-24 pt-16">
+          <div className="mt-32 pt-16">
             <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">OTHER PROJECTS</div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {allProjects.map((otherProject) => (
