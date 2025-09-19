@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Menu, X, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -30,36 +30,30 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation Header - IIDA Style */}
-      <header className="fixed top-0 w-full z-50 bg-background/95 backdrop-blur-sm border-b border-border/30">
-        <div className="w-full px-6 lg:px-12">
+      <header className="fixed top-0 w-full z-50 bg-black border-b border-white/10">
+        <div className="w-full">
           <nav className="flex items-center justify-between h-16">
-            {/* Left Side - Logo and Menu */}
-            <div className="flex items-center space-x-8">
-              {/* Logo */}
-              <Link href="/">
-                <h1 className="text-xl font-serif font-bold text-primary cursor-pointer tracking-wider" data-testid="logo">
-                  NIVORA
-                </h1>
-              </Link>
-              
-              {/* Desktop Menu Trigger */}
+            {/* Left Side - Hamburger Menu and Logo */}
+            <div className="flex items-center">
+              {/* Hamburger Menu at Far Left */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="text-muted-foreground hover:text-primary p-2"
+                    className="text-white hover:text-primary p-3 h-16 rounded-none"
                     aria-label="Open navigation menu"
                     data-testid="button-main-menu"
                   >
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-[400px] bg-background border-border">
-                  <SheetHeader>
-                    <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
-                  </SheetHeader>
-                  <div className="flex flex-col h-full">{/* Navigation content */}
+              <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border">
+                <SheetHeader>
+                  <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
+                  <SheetDescription className="sr-only">Navigation menu</SheetDescription>
+                </SheetHeader>
+                <div className="flex flex-col h-full">{/* Navigation content */}
                     
                     {/* Navigation Menu */}
                     <div className="flex-1 py-8">
@@ -118,17 +112,24 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
                 </SheetContent>
               </Sheet>
+              
+              {/* Logo */}
+              <Link href="/" className="ml-6">
+                <h1 className="text-xl font-serif font-bold text-white cursor-pointer tracking-wider" data-testid="logo">
+                  NIVORA
+                </h1>
+              </Link>
             </div>
             
             {/* Right Side - Actions and Language */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-6 pr-6">
               {/* Action Buttons */}
               <div className="hidden md:flex items-center space-x-4">
                 <Link href="/contact">
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="text-muted-foreground hover:text-primary font-medium"
+                    className="text-white/80 hover:text-primary font-medium"
                     data-testid="button-contact"
                   >
                     Get Started
@@ -151,17 +152,17 @@ export default function Layout({ children }: LayoutProps) {
                 <button
                   onClick={() => setLanguage('en')}
                   className={`px-2 py-1 transition-colors ${
-                    language === 'en' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                    language === 'en' ? 'text-primary' : 'text-white/80 hover:text-primary'
                   }`}
                   data-testid="lang-en"
                 >
                   ENG
                 </button>
-                <span className="text-muted-foreground">|</span>
+                <span className="text-white/60">|</span>
                 <button
                   onClick={() => setLanguage('vi')}
                   className={`px-2 py-1 transition-colors ${
-                    language === 'vi' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                    language === 'vi' ? 'text-primary' : 'text-white/80 hover:text-primary'
                   }`}
                   data-testid="lang-vi"
                 >
