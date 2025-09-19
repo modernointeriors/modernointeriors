@@ -156,9 +156,9 @@
     display: none;
   }
 
-  /* Hero Slider Styles */
-  .hero-slider .swiper-button-next,
-  .hero-slider .swiper-button-prev {
+  /* IIDA-style Hero Slider */
+  .js-slider .swiper-button-next,
+  .js-slider .swiper-button-prev {
     color: white;
     width: 50px;
     height: 50px;
@@ -168,27 +168,56 @@
     transition: all 0.3s ease;
   }
   
-  .hero-slider .swiper-button-next:hover,
-  .hero-slider .swiper-button-prev:hover {
+  .js-slider .swiper-button-next:hover,
+  .js-slider .swiper-button-prev:hover {
     border-color: hsl(38, 95%, 54%);
     color: hsl(38, 95%, 54%);
     background: rgba(0, 0, 0, 0.4);
   }
   
-  .hero-slider .swiper-button-next::after,
-  .hero-slider .swiper-button-prev::after {
+  .js-slider .swiper-button-next::after,
+  .js-slider .swiper-button-prev::after {
     font-size: 16px;
     font-weight: 600;
   }
   
-  .hero-slider .swiper-pagination {
+  .js-slider .swiper-pagination {
     bottom: 2rem !important;
   }
   
-  .hero-slider .swiper-pagination-bullet {
+  .js-slider .swiper-pagination-bullet {
     width: 12px;
     height: 12px;
     margin: 0 6px;
     opacity: 1;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  .js-slider .swiper-pagination-bullet-active {
+    background: hsl(38, 95%, 54%);
+  }
+
+  /* IIDA-style Typography */
+  .heading-0 {
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    margin: 0;
+    color: white;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }

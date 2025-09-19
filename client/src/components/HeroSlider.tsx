@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { Link } from 'wouter';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
@@ -27,7 +26,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   }
 
   return (
-    <div className="bg-black text-white relative min-h-screen">
+    <div className="bg-black text-white">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"
@@ -44,7 +43,8 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
           disableOnInteraction: false,
         }}
         loop={true}
-        className="hero-slider h-screen"
+        className="js-slider"
+        data-slider-slug="hero"
         data-testid="hero-slider"
       >
         {projects.map((project) => {
@@ -59,8 +59,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
 
           return (
             <SwiperSlide key={project.id} data-testid={`slide-${project.id}`}>
-              <div className="relative h-screen pt-44 pb-36">
-                {/* Background Image with Overlay */}
+              <div className="wrapper relative pt-[11rem] pb-36 max-h-[46.5rem] h-screen px-6 md:px-10 lg:px-16">
                 <div className="absolute inset-0">
                   <img 
                     src={backgroundImage} 
@@ -71,49 +70,21 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   <div className="absolute inset-0 bg-black/40"></div>
                 </div>
                 
-                {/* Content */}
-                <div className="relative h-full flex flex-col justify-between z-10 px-8 md:px-12 lg:px-16">
+                <div className="relative h-full flex flex-col justify-between z-10">
                   <Link 
                     href={`/project/${project.id}`} 
-                    className="flex-grow group cursor-pointer"
+                    className="flex-grow"
                     data-testid={`slide-link-${project.id}`}
                   >
-                    <div className="h-full flex flex-col justify-between max-w-2xl">
-                      {/* Main Title */}
-                      <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-wider leading-tight group-hover:text-primary transition-colors duration-500">
+                    <div className="h-full flex flex-col justify-between max-w-md">
+                      <h2 className="heading-0 js-slider-slide-title">
                         {project.title}
                       </h2>
                       
-                      {/* Project Metadata */}
-                      <div className="space-y-2 text-white/80">
-                        <div className="flex items-center space-x-4 text-sm uppercase tracking-wider">
-                          <span className="text-primary font-medium">{project.category}</span>
-                          <span className="text-white/60">•</span>
-                          <span>{project.location}</span>
-                          {project.completionYear && (
-                            <>
-                              <span className="text-white/60">•</span>
-                              <span>{project.completionYear}</span>
-                            </>
-                          )}
-                        </div>
-                        
-                        {project.designer && (
-                          <div className="text-sm text-white/60">
-                            By {project.designer}
-                          </div>
-                        )}
-                        
-                        {project.area && (
-                          <div className="text-sm text-white/60">
-                            {project.area}
-                          </div>
-                        )}
-                        
-                        <div className="mt-6 inline-block px-4 py-2 border border-white/20 text-xs uppercase tracking-wider hover:border-primary hover:text-primary transition-colors">
-                          View Project
-                        </div>
-                      </div>
+                      <span className="js-slider-slide-type sr-only">Project</span>
+                      <span className="js-slider-slide-author sr-only">{project.designer || 'NIVORA Studio'}</span>
+                      <time className="js-slider-slide-date sr-only">{project.completionYear || new Date().getFullYear()}</time>
+                      <span className="js-slider-slide-published-in sr-only">{project.category}</span>
                     </div>
                   </Link>
                 </div>
@@ -122,7 +93,6 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
           );
         })}
       </Swiper>
-      
     </div>
   );
 }
