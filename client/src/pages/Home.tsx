@@ -3,14 +3,19 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import HeroSlider from "@/components/HeroSlider";
 import type { Project, HomepageContent } from "@shared/schema";
 
 export default function Home() {
   const { language } = useLanguage();
-  const { data: featuredProjects, isLoading } = useQuery<Project[]>({
+  const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
+  });
+
+  const { data: featuredProjects, isLoading } = useQuery<Project[]>({
+    queryKey: ['/api/projects', 'featured'],
     queryFn: async () => {
       const response = await fetch('/api/projects?featured=true');
       return response.json();
@@ -43,61 +48,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Matching Reference Design */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
-        
-        {/* Header Content - Matching Reference Layout */}
-        <div className="absolute top-8 left-8 z-20">
-          <div className="text-white/90 text-sm font-light tracking-wider">
-            {homepageContent?.heroStudio || 'STUDIO'}
+      {/* Hero Slider Section - IIDA Style */}
+      {projectsLoading ? (
+        <div className="bg-black text-white min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-6xl md:text-8xl font-light tracking-wider mb-4">NIVORA</h1>
+            <p className="text-lg text-white/80">Loading Projects...</p>
           </div>
         </div>
-        
-        <div className="absolute top-8 left-8 mt-12 z-20 max-w-md">
-          <p className="text-white/80 text-sm leading-relaxed">
-            {homepageContent?.heroTagline || 'Transforming spaces into extraordinary experiences with sophisticated interior design'}
-          </p>
-        </div>
-        
-        {/* Large NIVORA Text Overlay */}
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-[8rem] md:text-[12rem] lg:text-[15rem] xl:text-[18rem] font-light text-white/95 tracking-wider leading-none" data-testid="hero-title">
-            {homepageContent?.heroTitle || 'NIVORA'}
-          </h1>
-        </div>
-        
-        {/* Side Labels */}
-        <div className="absolute left-8 bottom-1/3 z-20 text-white/70 text-sm font-light tracking-wider">
-          {homepageContent?.heroArchitectureLabel || 'ARCHITECTURE'}
-        </div>
-        
-        <div className="absolute right-8 bottom-1/3 z-20 text-white/70 text-sm font-light tracking-wider">
-          {homepageContent?.heroInteriorLabel || 'INTERIOR'}
-        </div>
-        
-        {/* Consultation Button */}
-        <div className="absolute bottom-16 right-8 z-20">
-          <Button 
-            className="bg-white text-black hover:bg-white/90 px-8 py-3 text-sm font-medium tracking-wider"
-            asChild
-            data-testid="button-consultation"
-          >
-            <Link href="/contact">{homepageContent?.heroConsultationText || 'FREE CONSULTATION'}</Link>
-          </Button>
-        </div>
-        
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 animate-bounce">
-          <ChevronDown className="h-8 w-8" />
-        </div>
-      </section>
+      ) : (
+        <HeroSlider projects={allProjects || []} />
+      )}
 
       {/* Featured Projects Section */}
       <section id="featured-projects" className="section-padding bg-card">

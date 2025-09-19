@@ -11,27 +11,27 @@
   --card-foreground: hsl(0 0% 95%);
   --popover: hsl(0 0% 10%);
   --popover-foreground: hsl(0 0% 95%);
-  --primary: hsl(34 95% 54%);
+  --primary: hsl(38 95% 54%);
   --primary-foreground: hsl(0 0% 9%);
   --secondary: hsl(0 0% 25%);
   --secondary-foreground: hsl(0 0% 95%);
   --muted: hsl(0 0% 15%);
   --muted-foreground: hsl(0 0% 69%);
-  --accent: hsl(34 95% 54%);
+  --accent: hsl(38 95% 54%);
   --accent-foreground: hsl(0 0% 9%);
   --destructive: hsl(0 84% 60%);
   --destructive-foreground: hsl(0 0% 95%);
   --border: hsl(0 0% 20%);
   --input: hsl(0 0% 15%);
-  --ring: hsl(34 95% 54%);
+  --ring: hsl(38 95% 54%);
   --sidebar: hsl(0 0% 10%);
   --sidebar-foreground: hsl(0 0% 95%);
-  --sidebar-primary: hsl(34 95% 54%);
+  --sidebar-primary: hsl(38 95% 54%);
   --sidebar-primary-foreground: hsl(0 0% 9%);
   --sidebar-accent: hsl(0 0% 15%);
-  --sidebar-accent-foreground: hsl(34 95% 54%);
+  --sidebar-accent-foreground: hsl(38 95% 54%);
   --sidebar-border: hsl(0 0% 20%);
-  --sidebar-ring: hsl(34 95% 54%);
+  --sidebar-ring: hsl(38 95% 54%);
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-mono: 'JetBrains Mono', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', monospace;
@@ -45,27 +45,27 @@
   --card-foreground: hsl(0 0% 95%);
   --popover: hsl(0 0% 10%);
   --popover-foreground: hsl(0 0% 95%);
-  --primary: hsl(34 95% 54%);
+  --primary: hsl(38 95% 54%);
   --primary-foreground: hsl(0 0% 9%);
   --secondary: hsl(0 0% 25%);
   --secondary-foreground: hsl(0 0% 95%);
   --muted: hsl(0 0% 15%);
   --muted-foreground: hsl(0 0% 69%);
-  --accent: hsl(34 95% 54%);
+  --accent: hsl(38 95% 54%);
   --accent-foreground: hsl(0 0% 9%);
   --destructive: hsl(0 84% 60%);
   --destructive-foreground: hsl(0 0% 95%);
   --border: hsl(0 0% 20%);
   --input: hsl(0 0% 15%);
-  --ring: hsl(34 95% 54%);
+  --ring: hsl(38 95% 54%);
   --sidebar: hsl(0 0% 10%);
   --sidebar-foreground: hsl(0 0% 95%);
-  --sidebar-primary: hsl(34 95% 54%);
+  --sidebar-primary: hsl(38 95% 54%);
   --sidebar-primary-foreground: hsl(0 0% 9%);
   --sidebar-accent: hsl(0 0% 15%);
-  --sidebar-accent-foreground: hsl(34 95% 54%);
+  --sidebar-accent-foreground: hsl(38 95% 54%);
   --sidebar-border: hsl(0 0% 20%);
-  --sidebar-ring: hsl(34 95% 54%);
+  --sidebar-ring: hsl(38 95% 54%);
 }
 
 @layer base {
@@ -154,5 +154,41 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Hero Slider Styles */
+  .hero-slider .swiper-button-next,
+  .hero-slider .swiper-button-prev {
+    color: white;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .hero-slider .swiper-button-next:hover,
+  .hero-slider .swiper-button-prev:hover {
+    border-color: hsl(38, 95%, 54%);
+    color: hsl(38, 95%, 54%);
+    background: rgba(0, 0, 0, 0.4);
+  }
+  
+  .hero-slider .swiper-button-next::after,
+  .hero-slider .swiper-button-prev::after {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .hero-slider .swiper-pagination {
+    bottom: 2rem !important;
+  }
+  
+  .hero-slider .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    margin: 0 6px;
+    opacity: 1;
   }
 }

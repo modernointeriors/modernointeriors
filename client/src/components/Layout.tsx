@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Menu, X, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -49,17 +49,17 @@ export default function Layout({ children }: LayoutProps) {
                     variant="ghost" 
                     size="sm"
                     className="text-muted-foreground hover:text-primary p-2"
+                    aria-label="Open navigation menu"
                     data-testid="button-main-menu"
                   >
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-[400px] bg-background border-border">
-                  <div className="flex flex-col h-full">
-                    {/* Menu Header */}
-                    <div className="flex items-center justify-between py-6 border-b border-border">
-                      <h2 className="text-lg font-serif font-bold text-primary">NIVORA</h2>
-                    </div>
+                  <SheetHeader>
+                    <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col h-full">{/* Navigation content */}
                     
                     {/* Navigation Menu */}
                     <div className="flex-1 py-8">
