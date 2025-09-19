@@ -170,9 +170,6 @@ export default function Layout({ children }: LayoutProps) {
                 
                 {/* Menu Footer */}
                 <div className="py-6 border-t border-border">
-                  <p className="text-xs text-muted-foreground">
-                    © 2024 NIVORA Design Studio
-                  </p>
                 </div>
               </div>
             </SheetContent>
