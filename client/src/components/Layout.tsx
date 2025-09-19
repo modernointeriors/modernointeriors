@@ -59,15 +59,6 @@ export default function Layout({ children }: LayoutProps) {
                     {item.name}
                   </Link>
                 ))}
-                <Link href="/admin">
-                  <Button 
-                    size="sm"
-                    variant={isActive('/admin') ? "default" : "secondary"}
-                    data-testid="nav-admin"
-                  >
-                    {t('nav.admin')}
-                  </Button>
-                </Link>
               </div>
               
               {/* Language Toggle */}
@@ -147,15 +138,6 @@ export default function Layout({ children }: LayoutProps) {
                         {item.name}
                       </Link>
                     ))}
-                    <Link href="/admin" onClick={() => setMobileMenuOpen(false)}>
-                      <Button 
-                        variant={isActive('/admin') ? "default" : "secondary"}
-                        className="w-full"
-                        data-testid="mobile-nav-admin"
-                      >
-                        {t('nav.admin')}
-                      </Button>
-                    </Link>
                   </div>
                 </SheetContent>
               </Sheet>
