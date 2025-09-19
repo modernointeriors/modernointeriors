@@ -46,7 +46,13 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
             <SheetHeader>
-              <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
+              <SheetTitle className="text-lg font-serif font-bold text-primary">
+                <img 
+                  src="/attached_assets/logo.wordmark.png" 
+                  alt="NIVORA" 
+                  className="h-8 w-auto"
+                />
+              </SheetTitle>
               <SheetDescription className="sr-only">Navigation menu</SheetDescription>
             </SheetHeader>
             <div className="flex flex-col h-full">
@@ -169,7 +175,11 @@ export default function Layout({ children }: LayoutProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
-              <h3 className="text-2xl font-serif font-bold text-gradient mb-4">NIVORA</h3>
+              <img 
+                src="/attached_assets/logo.wordmark.png" 
+                alt="NIVORA" 
+                className="h-10 w-auto mb-4"
+              />
               <p className="text-muted-foreground mb-6 max-w-md">
                 Transforming spaces through innovative interior design and architectural excellence. 
                 Creating environments that inspire and elevate the human experience.
