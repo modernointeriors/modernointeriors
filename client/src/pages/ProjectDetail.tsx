@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MapPin, Calendar, DollarSign, Ruler } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, User, Eye } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Project } from "@shared/schema";
 
@@ -16,17 +17,70 @@ export default function ProjectDetail() {
     enabled: !!projectId,
   });
 
+  // Set SEO meta tags when project data is loaded
+  useEffect(() => {
+    if (project) {
+      const title = project.metaTitle || `${project.title} | NIVORA Design Studio`;
+      const description = project.metaDescription || project.detailedDescription || project.description || `Interior design project by NIVORA Design Studio`;
+      
+      document.title = title;
+      
+      // Update meta description
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.setAttribute('name', 'description');
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.setAttribute('content', description);
+      
+      // Add Open Graph meta tags
+      const updateMetaTag = (property: string, content: string) => {
+        let metaTag = document.querySelector(`meta[property="${property}"]`);
+        if (!metaTag) {
+          metaTag = document.createElement('meta');
+          metaTag.setAttribute('property', property);
+          document.head.appendChild(metaTag);
+        }
+        metaTag.setAttribute('content', content);
+      };
+      
+      updateMetaTag('og:title', title);
+      updateMetaTag('og:description', description);
+      updateMetaTag('og:type', 'article');
+      const firstGalleryImage = Array.isArray(project.galleryImages) ? project.galleryImages[0] : undefined;
+      if (project.heroImage || firstGalleryImage) {
+        updateMetaTag('og:image', project.heroImage || firstGalleryImage || '');
+      }
+    }
+    
+    // Cleanup function to reset title when component unmounts
+    return () => {
+      document.title = 'NIVORA Design Studio';
+    };
+  }, [project]);
+
+  const { data: relatedProjects } = useQuery<Project[]>({
+    queryKey: ['/api/projects'],
+    select: (data) => {
+      if (!project?.relatedProjects || !Array.isArray(project.relatedProjects)) return [];
+      const relatedIds = project.relatedProjects as string[];
+      return data.filter(p => relatedIds.includes(p.id) && p.id !== project.id).slice(0, 3);
+    },
+    enabled: !!project,
+  });
+
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-muted rounded w-1/4" />
-            <div className="h-12 bg-muted rounded w-1/2" />
-            <div className="h-96 bg-muted rounded-lg" />
+      <div className="min-h-screen bg-black">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="animate-pulse space-y-12">
+            <div className="h-8 bg-zinc-800 rounded w-1/4" />
+            <div className="h-16 bg-zinc-800 rounded w-1/2" />
+            <div className="h-[70vh] bg-zinc-800 rounded-lg" />
             <div className="space-y-4">
-              <div className="h-4 bg-muted rounded" />
-              <div className="h-4 bg-muted rounded w-3/4" />
+              <div className="h-4 bg-zinc-800 rounded" />
+              <div className="h-4 bg-zinc-800 rounded w-3/4" />
             </div>
           </div>
         </div>
@@ -36,14 +90,14 @@ export default function ProjectDetail() {
 
   if (error || !project) {
     return (
-      <div className="min-h-screen pt-24 flex items-center justify-center">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardContent className="pt-6 text-center">
-            <h2 className="text-xl font-semibold mb-2">Project Not Found</h2>
-            <p className="text-muted-foreground mb-4">
+            <h2 className="text-xl font-semibold mb-2 text-white">Project Not Found</h2>
+            <p className="text-zinc-400 mb-4">
               The project you're looking for doesn't exist or has been removed.
             </p>
-            <Button asChild data-testid="button-back-portfolio">
+            <Button asChild variant="outline" data-testid="button-back-portfolio">
               <Link href="/portfolio">Back to Portfolio</Link>
             </Button>
           </CardContent>
@@ -52,143 +106,257 @@ export default function ProjectDetail() {
     );
   }
 
+  const galleryImages = Array.isArray(project.galleryImages) ? project.galleryImages : 
+                       Array.isArray(project.images) ? project.images : [];
+  
   return (
-    <div className="min-h-screen pt-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <Button 
-          variant="ghost" 
-          className="mb-8"
-          asChild
-          data-testid="button-back"
-        >
-          <Link href="/portfolio">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Portfolio
-          </Link>
-        </Button>
-
-        {/* Project Header */}
-        <div className="mb-12">
-          <div className="flex flex-wrap gap-2 mb-4">
-            <Badge variant="secondary">{project.category}</Badge>
-            {project.featured && <Badge variant="default">Featured</Badge>}
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="border-b border-zinc-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                asChild
+                className="text-zinc-400 hover:text-white"
+                data-testid="button-back"
+              >
+                <Link href="/portfolio">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  PROJECTS
+                </Link>
+              </Button>
+            </div>
+            <div className="text-right text-sm text-zinc-500">
+              <div className="uppercase tracking-wider">DISCOVER PAPER & BRAND</div>
+            </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6" data-testid="text-project-title">
-            {project.title}
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl">
-            {project.description}
-          </p>
         </div>
+      </header>
 
-        {/* Project Images */}
-        <div className="mb-12">
-          {Array.isArray(project.images) && project.images.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {project.images.map((image: string, index: number) => (
-                <div key={index} className="group relative overflow-hidden rounded-lg">
-                  <OptimizedImage
-                    src={image} 
-                    alt={`${project.title} - Image ${index + 1}`}
-                    width={800}
-                    height={600}
-                    wrapperClassName="w-full h-80 lg:h-96"
-                    className="w-full h-full group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority={index === 0} // First image loads immediately
-                    data-testid={`img-project-${index}`}
-                  />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Project Title Section */}
+        <div className="mb-16">
+          <div className="flex items-center space-x-2 mb-4">
+            <span className="text-zinc-500 uppercase tracking-wider text-sm">PROJECTS</span>
+            <span className="text-zinc-500">•</span>
+            <span className="text-white uppercase tracking-wider text-sm font-medium" data-testid="text-project-title">
+              {project.title}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-end">
+            <div className="lg:col-span-2">
+              <div className="space-y-4">
+                {project.designer && (
+                  <div className="text-sm text-zinc-400">
+                    <span className="text-zinc-500">Interior Designer:</span> 
+                    <span className="text-white ml-2" data-testid="text-designer">{project.designer}</span>
+                  </div>
+                )}
+                {project.category && (
+                  <Badge variant="outline" className="border-zinc-700 text-zinc-300">
+                    {project.category}
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            <div className="text-right">
+              {project.completionYear && (
+                <div className="text-2xl font-light text-white" data-testid="text-year">
+                  {project.completionYear}
                 </div>
-              ))}
+              )}
             </div>
-          ) : (
-            <div className="bg-muted rounded-lg h-96 flex items-center justify-center">
-              <p className="text-muted-foreground">No images available</p>
-            </div>
-          )}
+          </div>
         </div>
 
-        {/* Project Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* Hero Image */}
+        {(project.heroImage || galleryImages[0]) && (
+          <div className="mb-16">
+            <div className="relative overflow-hidden rounded-lg">
+              <OptimizedImage
+                src={project.heroImage || galleryImages[0]} 
+                alt={project.title}
+                width={1200}
+                height={800}
+                wrapperClassName="w-full h-[70vh]"
+                className="w-full h-full"
+                sizes="100vw"
+                priority={true}
+                data-testid="img-hero"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Project Description */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 mb-20">
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-serif font-semibold mb-6">Project Overview</h2>
-            <div className="prose prose-invert max-w-none">
-              <p className="text-muted-foreground leading-relaxed">
-                {project.description || "This project showcases our commitment to creating exceptional spaces that blend functionality with aesthetic excellence. Every detail has been carefully considered to reflect the client's vision while maintaining our signature design philosophy."}
+            <div className="prose prose-invert prose-lg max-w-none">
+              <p className="text-zinc-300 leading-relaxed text-lg">
+                {project.detailedDescription || project.description || "An interior where solid granite shades are combined with the warmth of terracotta furniture and soft textures."}
               </p>
             </div>
           </div>
 
-          <div>
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-6">Project Details</h3>
-                <div className="space-y-4">
-                  {project.location && (
-                    <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="font-medium">Location</p>
-                        <p className="text-sm text-muted-foreground" data-testid="text-location">{project.location}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {project.area && (
-                    <div className="flex items-start gap-3">
-                      <Ruler className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="font-medium">Area</p>
-                        <p className="text-sm text-muted-foreground" data-testid="text-area">{project.area}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {project.duration && (
-                    <div className="flex items-start gap-3">
-                      <Calendar className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="font-medium">Duration</p>
-                        <p className="text-sm text-muted-foreground" data-testid="text-duration">{project.duration}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {project.budget && (
-                    <div className="flex items-start gap-3">
-                      <DollarSign className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="font-medium">Budget</p>
-                        <p className="text-sm text-muted-foreground" data-testid="text-budget">{project.budget}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {project.style && (
-                    <div className="flex items-start gap-3">
-                      <div className="h-5 w-5 bg-primary rounded-full mt-1" />
-                      <div>
-                        <p className="font-medium">Style</p>
-                        <p className="text-sm text-muted-foreground" data-testid="text-style">{project.style}</p>
-                      </div>
-                    </div>
-                  )}
+          <div className="space-y-6">
+            {project.location && (
+              <div className="flex items-start space-x-3">
+                <MapPin className="h-5 w-5 text-zinc-500 mt-1" />
+                <div>
+                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Location</div>
+                  <div className="text-white" data-testid="text-location">{project.location}</div>
                 </div>
+              </div>
+            )}
 
-                <div className="mt-8 pt-6 border-t border-border">
-                  <Button 
-                    size="lg" 
-                    className="w-full"
-                    asChild
-                    data-testid="button-start-project"
-                  >
-                    <Link href="/contact">Start Your Project</Link>
-                  </Button>
+            {project.area && (
+              <div className="flex items-start space-x-3">
+                <div className="h-5 w-5 bg-zinc-500 rounded-full mt-1" />
+                <div>
+                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Area</div>
+                  <div className="text-white" data-testid="text-area">{project.area}</div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            )}
+
+            {project.duration && (
+              <div className="flex items-start space-x-3">
+                <Calendar className="h-5 w-5 text-zinc-500 mt-1" />
+                <div>
+                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Duration</div>
+                  <div className="text-white" data-testid="text-duration">{project.duration}</div>
+                </div>
+              </div>
+            )}
+
+            {project.style && (
+              <div className="flex items-start space-x-3">
+                <Eye className="h-5 w-5 text-zinc-500 mt-1" />
+                <div>
+                  <div className="text-zinc-500 text-sm uppercase tracking-wider mb-1">Style</div>
+                  <div className="text-white" data-testid="text-style">{project.style}</div>
+                </div>
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* Gallery Images */}
+        {galleryImages.length > 1 && (
+          <div className="mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {galleryImages.slice(1).map((image: string, index: number) => (
+                <div key={index} className="group relative overflow-hidden rounded-lg">
+                  <OptimizedImage
+                    src={image} 
+                    alt={`${project.title} - Gallery ${index + 1}`}
+                    width={600}
+                    height={400}
+                    wrapperClassName="w-full h-80"
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    data-testid={`img-gallery-${index}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Additional Project Details */}
+        <div className="mb-20">
+          <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">OTHER PROJECTS</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {galleryImages.slice(0, 4).map((image: string, index: number) => (
+              <div key={index} className="relative overflow-hidden rounded-lg aspect-square">
+                <OptimizedImage
+                  src={image} 
+                  alt={`${project.title} - Thumbnail ${index + 1}`}
+                  width={300}
+                  height={300}
+                  wrapperClassName="w-full h-full"
+                  className="w-full h-full"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                  data-testid={`img-thumb-${index}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Related Projects */}
+        {relatedProjects && relatedProjects.length > 0 && (
+          <div className="border-t border-zinc-800 pt-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+              {relatedProjects.slice(0, 2).map((relatedProject) => (
+                <Link key={relatedProject.id} href={`/project/${relatedProject.id}`}>
+                  <div className="group cursor-pointer">
+                    <div className="text-sm text-zinc-500 uppercase tracking-wider mb-4">
+                      NIVORA STUDIO
+                    </div>
+                    <div className="mb-6">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="text-zinc-500 uppercase tracking-wider text-sm">PROJECTS</span>
+                        <span className="text-zinc-500">•</span>
+                        <span className="text-white uppercase tracking-wider text-sm font-medium">
+                          {relatedProject.title}
+                        </span>
+                      </div>
+                      {relatedProject.designer && (
+                        <div className="text-sm text-zinc-400">
+                          <span className="text-zinc-500">Interior Designer:</span> 
+                          <span className="text-white ml-2">{relatedProject.designer}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="relative overflow-hidden rounded-lg mb-4">
+                      <OptimizedImage
+                        src={relatedProject.heroImage || (Array.isArray(relatedProject.images) ? relatedProject.images[0] : '') || '/placeholder-project.jpg'} 
+                        alt={relatedProject.title}
+                        width={500}
+                        height={600}
+                        wrapperClassName="w-full h-80"
+                        className="w-full h-full group-hover:scale-105 transition-transform duration-700"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        data-testid={`img-related-${relatedProject.id}`}
+                      />
+                    </div>
+
+                    <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+                      {relatedProject.description}
+                    </p>
+
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                      data-testid={`button-view-project-${relatedProject.id}`}
+                    >
+                      ← VIEW PROJECT
+                    </Button>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Contact CTA */}
+        <div className="text-center pt-20 border-t border-zinc-800 mt-20">
+          <Button 
+            size="lg" 
+            className="bg-white text-black hover:bg-zinc-200 px-8"
+            asChild
+            data-testid="button-start-project"
+          >
+            <Link href="/contact">Start Your Project</Link>
+          </Button>
         </div>
       </div>
     </div>

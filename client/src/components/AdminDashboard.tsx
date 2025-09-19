@@ -22,14 +22,22 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
+  detailedDescription: z.string().optional(),
   category: z.enum(["residential", "commercial", "architecture"]),
   location: z.string().optional(),
   area: z.string().optional(),
   duration: z.string().optional(),
   budget: z.string().optional(),
   style: z.string().optional(),
+  designer: z.string().optional(),
+  completionYear: z.string().optional(),
+  heroImage: z.string().optional(),
+  galleryImages: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
-  images: z.array(z.string()).default([]),
+  images: z.array(z.string()).default([]), // Legacy field
+  relatedProjects: z.array(z.string()).default([]),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
 });
 
 const clientSchema = z.object({
@@ -133,14 +141,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     defaultValues: {
       title: "",
       description: "",
+      detailedDescription: "",
       category: "residential",
       location: "",
       area: "",
       duration: "",
       budget: "",
       style: "",
+      designer: "",
+      completionYear: "",
+      heroImage: "",
+      galleryImages: [],
       featured: false,
       images: [],
+      relatedProjects: [],
+      metaTitle: "",
+      metaDescription: "",
     },
   });
 
@@ -311,14 +327,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     projectForm.reset({
       title: project.title,
       description: project.description || "",
+      detailedDescription: project.detailedDescription || "",
       category: project.category as "residential" | "commercial" | "architecture",
       location: project.location || "",
       area: project.area || "",
       duration: project.duration || "",
       budget: project.budget || "",
       style: project.style || "",
+      designer: project.designer || "",
+      completionYear: project.completionYear || "",
+      heroImage: project.heroImage || "",
+      galleryImages: Array.isArray(project.galleryImages) ? project.galleryImages : [],
       featured: project.featured,
       images: Array.isArray(project.images) ? project.images : [],
+      relatedProjects: Array.isArray(project.relatedProjects) ? project.relatedProjects as string[] : [],
+      metaTitle: project.metaTitle || "",
+      metaDescription: project.metaDescription || "",
     });
     setIsProjectDialogOpen(true);
   };
@@ -576,10 +600,116 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   <FormField
                     control={projectForm.control}
-                    name="images"
+                    name="detailedDescription"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Images</FormLabel>
+                        <FormLabel>Detailed Description</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={5} placeholder="Rich detailed content for project page..." data-testid="textarea-project-detailed-description" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="designer"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Interior Designer</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="e.g. Nicolas Park" data-testid="input-project-designer" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="completionYear"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Completion Year</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="e.g. 2023" data-testid="input-project-year" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="duration"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Duration</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="e.g. 6 months" data-testid="input-project-duration" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="budget"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Budget</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="e.g. $50,000" data-testid="input-project-budget" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={projectForm.control}
+                    name="style"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Style</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="e.g. Modern, Contemporary" data-testid="input-project-style" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="heroImage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hero Image</FormLabel>
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value ? [field.value] : []}
+                            onChange={(urls) => field.onChange(urls[0] || "")}
+                            multiple={false}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="galleryImages"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Gallery Images</FormLabel>
                         <FormControl>
                           <ImageUpload
                             value={field.value}
@@ -591,6 +721,89 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       </FormItem>
                     )}
                   />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="images"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Legacy Images (Compatibility)</FormLabel>
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value}
+                            onChange={field.onChange}
+                            multiple
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="relatedProjects"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Related Projects</FormLabel>
+                        <FormControl>
+                          <div className="space-y-2">
+                            {projects.filter(p => p.id !== editingProject?.id).map((project) => (
+                              <div key={project.id} className="flex items-center space-x-2">
+                                <input
+                                  type="checkbox"
+                                  checked={field.value.includes(project.id)}
+                                  onChange={(e) => {
+                                    const newValue = e.target.checked
+                                      ? [...field.value, project.id]
+                                      : field.value.filter((id: string) => id !== project.id);
+                                    field.onChange(newValue);
+                                  }}
+                                  className="rounded border-border"
+                                />
+                                <label className="text-sm">{project.title}</label>
+                              </div>
+                            ))}
+                            {projects.filter(p => p.id !== editingProject?.id).length === 0 && (
+                              <p className="text-sm text-muted-foreground">No other projects available</p>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium">SEO Settings</h4>
+                    <FormField
+                      control={projectForm.control}
+                      name="metaTitle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Meta Title</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="SEO title for this project" data-testid="input-project-meta-title" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="metaDescription"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Meta Description</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={2} placeholder="SEO description for this project" data-testid="textarea-project-meta-description" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <div className="flex items-center space-x-2">
                     <input

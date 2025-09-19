@@ -16,6 +16,7 @@ export const projects = pgTable("projects", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   description: text("description"),
+  detailedDescription: text("detailed_description"), // Rich detailed content for project page
   category: varchar("category", { length: 50 }).notNull(), // residential, commercial, architecture
   status: varchar("status", { length: 20 }).notNull().default("active"), // active, archived
   location: text("location"),
@@ -23,8 +24,16 @@ export const projects = pgTable("projects", {
   duration: text("duration"),
   budget: text("budget"),
   style: text("style"),
+  designer: text("designer"), // Interior Designer name
+  completionYear: text("completion_year"), // Year completed
+  heroImage: text("hero_image"), // Main project hero image
+  galleryImages: jsonb("gallery_images").default([]), // Additional gallery images
   featured: boolean("featured").notNull().default(false),
-  images: jsonb("images").default([]), // array of image URLs
+  images: jsonb("images").default([]), // Legacy field, keeping for compatibility
+  relatedProjects: jsonb("related_projects").default([]), // Array of related project IDs
+  // SEO fields
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
