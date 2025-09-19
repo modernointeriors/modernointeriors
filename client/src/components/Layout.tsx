@@ -30,14 +30,14 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-16 z-50 bg-black border-r border-white/10 flex flex-col items-center py-6">
-        {/* Hamburger Menu at Top */}
+      <aside className="fixed top-0 left-0 h-screen w-16 z-50 bg-black border-r border-white/10 flex flex-col items-center justify-center">
+        {/* Hamburger Menu at Center */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button 
               variant="ghost" 
               size="sm"
-              className="text-white hover:text-[#FAA61A] p-3 w-10 h-10 rounded-none mb-8 hover:bg-transparent flex items-center justify-center"
+              className="text-white hover:text-[#FAA61A] p-3 w-10 h-10 rounded-none hover:bg-transparent flex items-center justify-center"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
