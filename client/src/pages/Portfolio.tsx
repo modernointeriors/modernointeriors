@@ -36,7 +36,7 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">Our Work</Badge>
+          <Badge variant="secondary" className="mb-4 uppercase">Our Work</Badge>
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">Portfolio</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Explore our comprehensive collection of interior design projects across various categories

@@ -70,7 +70,7 @@ export default function Home() {
       <section id="featured-projects" className="section-padding bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
+            <Badge variant="secondary" className="mb-4 uppercase">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
             <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
