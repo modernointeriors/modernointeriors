@@ -75,14 +75,14 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-8">
               {[1, 2].map((i) => (
                 <Card key={i} className="overflow-hidden">
-                  <div className="animate-pulse bg-muted h-80 w-full" />
+                  <div className="animate-pulse bg-white/10 h-80 w-full" />
                   <CardContent className="p-8">
                     <div className="animate-pulse space-y-4">
-                      <div className="h-6 bg-muted rounded w-3/4" />
-                      <div className="h-4 bg-muted rounded w-1/2" />
+                      <div className="h-6 bg-white/10 rounded w-3/4" />
+                      <div className="h-4 bg-white/10 rounded w-1/2" />
                       <div className="space-y-2">
-                        <div className="h-3 bg-muted rounded" />
-                        <div className="h-3 bg-muted rounded w-5/6" />
+                        <div className="h-3 bg-white/10 rounded" />
+                        <div className="h-3 bg-white/10 rounded w-5/6" />
                       </div>
                     </div>
                   </CardContent>

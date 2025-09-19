@@ -48,7 +48,7 @@ export default function Portfolio() {
           {categories.map((category) => (
             <Button
               key={category.value}
-              variant={activeCategory === category.value ? "default" : "secondary"}
+              variant={activeCategory === category.value ? "default" : "outline"}
               onClick={() => setActiveCategory(category.value)}
               className="px-6 py-3 font-medium"
               data-testid={`filter-${category.value}`}
@@ -63,11 +63,11 @@ export default function Portfolio() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-muted h-64 rounded-lg mb-4" />
+                <div className="bg-white/10 h-64 rounded-lg mb-4" />
                 <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4" />
-                  <div className="h-3 bg-muted rounded w-1/2" />
-                  <div className="h-3 bg-muted rounded w-2/3" />
+                  <div className="h-4 bg-white/10 rounded w-3/4" />
+                  <div className="h-3 bg-white/10 rounded w-1/2" />
+                  <div className="h-3 bg-white/10 rounded w-2/3" />
                 </div>
               </div>
             ))}

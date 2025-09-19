@@ -134,7 +134,7 @@ export default function Blog() {
           {categories.map((category) => (
             <Button
               key={category.value}
-              variant={activeCategory === category.value ? "default" : "secondary"}
+              variant={activeCategory === category.value ? "default" : "outline"}
               onClick={() => setActiveCategory(category.value)}
               className="px-6 py-3 font-medium"
               data-testid={`filter-${category.value}`}

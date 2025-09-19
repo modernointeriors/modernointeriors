@@ -98,16 +98,16 @@ export default function Services() {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <Card key={i} className="animate-pulse">
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-muted rounded-xl mb-6" />
+                  <div className="w-16 h-16 bg-white/10 rounded-xl mb-6" />
                   <div className="space-y-4">
-                    <div className="h-6 bg-muted rounded w-3/4" />
+                    <div className="h-6 bg-white/10 rounded w-3/4" />
                     <div className="space-y-2">
-                      <div className="h-4 bg-muted rounded" />
-                      <div className="h-4 bg-muted rounded w-5/6" />
+                      <div className="h-4 bg-white/10 rounded" />
+                      <div className="h-4 bg-white/10 rounded w-5/6" />
                     </div>
                     <div className="space-y-2 pt-4">
                       {[1, 2, 3, 4].map((j) => (
-                        <div key={j} className="h-3 bg-muted rounded w-4/5" />
+                        <div key={j} className="h-3 bg-white/10 rounded w-4/5" />
                       ))}
                     </div>
                   </div>
