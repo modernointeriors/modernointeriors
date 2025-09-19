@@ -186,7 +186,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {/* Corporate Office */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">CORPORATE OFFICE</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">CORPORATE OFFICE</h4>
               <div className="space-y-2">
                 <p className="text-white/80 font-light">MARINA BAY SANDS</p>
                 <p className="text-white/80 font-light">TOWER 2, LEVEL 39,</p>
@@ -197,7 +197,7 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Navigation */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">NAVIGATION</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">NAVIGATION</h4>
               <ul className="space-y-2">
                 <li><Link href="/" className="text-white/80 hover:text-white transition-colors font-light">HOME</Link></li>
                 <li><Link href="/about" className="text-white/80 hover:text-white transition-colors font-light">ABOUT</Link></li>
@@ -208,7 +208,7 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Social Media */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">SOCIAL MEDIA</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">SOCIAL MEDIA</h4>
               <ul className="space-y-2">
                 <li>
                   <a 
@@ -251,7 +251,7 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Join Our News */}
             <div>
-              <h4 className="text-sm tracking-widest text-gray-400 mb-6 font-light">JOIN OUR NEWS</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">JOIN OUR NEWS</h4>
               <p className="text-white/80 mb-4 font-light">Receive notifications about new offers</p>
               <div className="flex">
                 <input
