@@ -1,12 +1,10 @@
 import { Link } from 'wouter';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import { Autoplay, EffectFade } from 'swiper/modules';
 import type { Project } from '@shared/schema';
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
 interface HeroSliderProps {
@@ -34,16 +32,10 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   return (
     <div className="bg-black text-white">
       <Swiper
-        modules={[Navigation, Pagination, Autoplay, EffectFade]}
+        modules={[Autoplay, EffectFade]}
         effect="fade"
         spaceBetween={0}
         slidesPerView={1}
-        navigation={true}
-        pagination={{ 
-          clickable: true,
-          bulletClass: 'swiper-pagination-bullet !bg-white/50',
-          bulletActiveClass: 'swiper-pagination-bullet-active !bg-primary'
-        }}
         autoplay={{
           delay: 6000,
           disableOnInteraction: false,
