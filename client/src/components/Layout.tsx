@@ -44,7 +44,7 @@ export default function Layout({ children }: LayoutProps) {
               <Menu className="h-5 w-5 rotate-90" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border">
+          <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:absolute [&>button]:top-1/2 [&>button]:-translate-y-1/2 [&>button]:right-4 [&>button]:w-10 [&>button]:h-10 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:text-foreground [&>button]:hover:text-[#FAA61A] [&>button]:transition-colors">
             <SheetHeader>
               <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
               <SheetDescription className="sr-only">Navigation menu</SheetDescription>
@@ -69,32 +69,32 @@ export default function Layout({ children }: LayoutProps) {
                       </Link>
                     ))}
                   </div>
-                  
-                  {/* Additional Menu Items */}
-                  <div className="mt-12 pt-8 border-t border-border">
-                    <div className="space-y-4">
-                      <Link 
-                        href="/services" 
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        Services
-                      </Link>
-                      <Link 
-                        href="/about" 
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        Our Story
-                      </Link>
-                      <Link 
-                        href="/contact" 
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        Get in Touch
-                      </Link>
-                    </div>
+                </div>
+                
+                {/* Additional Menu Items - Moved to bottom */}
+                <div className="pb-6 border-t border-border pt-8">
+                  <div className="space-y-4">
+                    <Link 
+                      href="/services" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      Services
+                    </Link>
+                    <Link 
+                      href="/about" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      Our Story
+                    </Link>
+                    <Link 
+                      href="/contact" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      Get in Touch
+                    </Link>
                   </div>
                 </div>
                 
