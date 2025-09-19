@@ -57,7 +57,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
 
           return (
             <SwiperSlide key={project.id} data-testid={`slide-${project.id}`}>
-              <div className="wrapper relative pt-[11rem] pb-36 max-h-[46.5rem] h-screen px-6 md:px-10 lg:px-16">
+              <div className="wrapper relative pt-20 pb-36 max-h-[46.5rem] h-screen px-6 md:px-10 lg:px-16">
                 <div className="absolute inset-0">
                   <img 
                     src={backgroundImage} 
