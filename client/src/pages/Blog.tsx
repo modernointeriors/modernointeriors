@@ -193,7 +193,7 @@ export default function Blog() {
                       data-testid={`img-article-${article.id}`}
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                    <div className="w-full h-48 bg-black flex items-center justify-center">
                       <div className="text-6xl font-sans font-bold text-primary/30">N</div>
                     </div>
                   )}

@@ -110,14 +110,14 @@ export default function OptimizedImage({
     >
       {/* Placeholder/Skeleton */}
       {!isLoaded && !hasError && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+        <div className="absolute inset-0 bg-black animate-pulse flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-gray-300 border-t-primary rounded-full animate-spin" />
         </div>
       )}
 
       {/* Error fallback */}
       {hasError && (
-        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400">
+        <div className="absolute inset-0 bg-black flex items-center justify-center text-gray-400">
           <div className="text-center">
             <div className="text-2xl mb-2">📷</div>
             <div className="text-sm">Image unavailable</div>
