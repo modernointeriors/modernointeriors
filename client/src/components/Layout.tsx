@@ -208,81 +208,99 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content - Adjusted for header and sidebar */}
       <main className="ml-16 pt-20 pb-20 md:pb-0">{children}</main>
 
-      {/* Footer - Adjusted for sidebar */}
-      <footer className="ml-16 bg-card border-t border-border py-16">
+      {/* Footer - Updated with dark design matching the provided image */}
+      <footer className="ml-16 bg-black text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <img 
-                src="/attached_assets/logo.white.png" 
-                alt="NIVORA" 
-                className="h-16 w-auto mb-4"
-              />
-              <p className="text-muted-foreground mb-6 max-w-md">
-                Transforming spaces through innovative interior design and architectural excellence. 
-                Creating environments that inspire and elevate the human experience.
-              </p>
-              <div className="flex space-x-4">
-                <a 
-                  href="#" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="footer-instagram"
-                >
-                  <i className="fab fa-instagram text-xl" />
-                </a>
-                <a 
-                  href="#" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="footer-linkedin"
-                >
-                  <i className="fab fa-linkedin-in text-xl" />
-                </a>
-                <a 
-                  href="#" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="footer-pinterest"
-                >
-                  <i className="fab fa-pinterest-p text-xl" />
-                </a>
-                <a 
-                  href="#" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  data-testid="footer-houzz"
-                >
-                  <i className="fab fa-houzz text-xl" />
-                </a>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            {/* Corporate Office */}
+            <div>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6">CORPORATE OFFICE</h4>
+              <div className="space-y-2">
+                <p className="text-white font-medium">MARINA BAY SANDS</p>
+                <p className="text-white font-medium">TOWER 2, LEVEL 39,</p>
+                <p className="text-white font-medium">018956 SINGAPORE</p>
+                <p className="text-white font-medium mt-4">+65 6734 2987</p>
               </div>
             </div>
             
+            {/* Navigation */}
             <div>
-              <h4 className="text-lg font-light mb-4">Services</h4>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6">NAVIGATION</h4>
               <ul className="space-y-2">
-                <li><Link href="/services" className="text-muted-foreground hover:text-primary transition-colors">Residential Design</Link></li>
-                <li><Link href="/services" className="text-muted-foreground hover:text-primary transition-colors">Commercial Design</Link></li>
-                <li><Link href="/services" className="text-muted-foreground hover:text-primary transition-colors">Architecture</Link></li>
-                <li><Link href="/services" className="text-muted-foreground hover:text-primary transition-colors">Consultation</Link></li>
+                <li><Link href="/" className="text-white hover:text-gray-300 transition-colors">HOME</Link></li>
+                <li><Link href="/about" className="text-white hover:text-gray-300 transition-colors">ABOUT</Link></li>
+                <li><Link href="/portfolio" className="text-white hover:text-gray-300 transition-colors">PROJECTS</Link></li>
+                <li><Link href="/contact" className="text-white hover:text-gray-300 transition-colors">CONTACTS</Link></li>
               </ul>
             </div>
             
+            {/* Social Media */}
             <div>
-              <h4 className="text-lg font-light mb-4">Company</h4>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6">SOCIAL MEDIA</h4>
               <ul className="space-y-2">
-                <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
-                <li><Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">Portfolio</Link></li>
-                <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Careers</a></li>
+                <li>
+                  <a 
+                    href="#" 
+                    className="text-white hover:text-gray-300 transition-colors"
+                    data-testid="footer-instagram"
+                  >
+                    INSTAGRAM
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#" 
+                    className="text-white hover:text-gray-300 transition-colors"
+                    data-testid="footer-twitter"
+                  >
+                    X/TWITTER
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#" 
+                    className="text-white hover:text-gray-300 transition-colors"
+                    data-testid="footer-tiktok"
+                  >
+                    TIK TOK
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#" 
+                    className="text-white hover:text-gray-300 transition-colors"
+                    data-testid="footer-pinterest"
+                  >
+                    PINTEREST
+                  </a>
+                </li>
               </ul>
+            </div>
+            
+            {/* Join Our News */}
+            <div>
+              <h4 className="text-sm tracking-widest text-gray-400 mb-6">JOIN OUR NEWS</h4>
+              <p className="text-white mb-4">Receive notifications about new offers</p>
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="bg-transparent border-0 border-b border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-white flex-grow px-0 py-2"
+                  data-testid="newsletter-email"
+                />
+                <button className="ml-2 text-white hover:text-gray-300 transition-colors">
+                  →
+                </button>
+              </div>
             </div>
           </div>
           
-          <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-muted-foreground text-sm">
-              © 2024 NIVORA Design Studio. All rights reserved.
+          <div className="border-t border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">
+              ©2025 ALL RIGHTS RESERVED
             </p>
-            <div className="mt-4 md:mt-0 flex space-x-6">
-              <a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">Privacy Policy</a>
-              <a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">Terms of Service</a>
-              <a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">Sitemap</a>
+            <div className="mt-4 md:mt-0">
+              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">PRIVACY POLICY</a>
             </div>
           </div>
         </div>
