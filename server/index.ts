@@ -1,10 +1,66 @@
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
+import ConnectPgSimple from "connect-pg-simple";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Session configuration
+const PgSession = ConnectPgSimple(session);
+app.use(session({
+  store: new PgSession({
+    conString: process.env.DATABASE_URL,
+    tableName: 'session'
+  }),
+  secret: process.env.SESSION_SECRET || 'your-secret-key-here',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+  }
+}));
+
+// Passport configuration
+passport.use(new LocalStrategy(
+  async (username: string, password: string, done) => {
+    try {
+      // Simple hardcoded admin user for demo
+      // In production, this should check against a database
+      if (username === 'admin' && password === 'admin123') {
+        const user = { id: '1', username: 'admin' };
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Invalid credentials' });
+      }
+    } catch (error) {
+      return done(error);
+    }
+  }
+));
+
+passport.serializeUser((user: any, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id: string, done) => {
+  // In production, this should fetch from database
+  if (id === '1') {
+    const user = { id: '1', username: 'admin' };
+    done(null, user);
+  } else {
+    done(null, false);
+  }
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req, res, next) => {
   const start = Date.now();

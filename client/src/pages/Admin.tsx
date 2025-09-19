@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { LogOut, User } from "lucide-react";
 import AdminDashboard from "@/components/AdminDashboard";
 
 const tabs = [
@@ -14,6 +17,16 @@ const tabs = [
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState('overview');
+  const { user, logout } = useAuth();
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Đăng xuất thành công",
+      description: "Bạn đã được đăng xuất khỏi hệ thống.",
+    });
+  };
 
   return (
     <div className="min-h-screen pt-24 bg-background">
@@ -29,9 +42,27 @@ export default function Admin() {
                 Manage your projects, clients, and website content
               </p>
             </div>
-            <Badge variant="secondary" className="px-3 py-1">
-              Admin Access
-            </Badge>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="h-4 w-4" />
+                <span data-testid="text-current-user">
+                  {user?.username || 'Admin'}
+                </span>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleLogout}
+                className="flex items-center gap-2"
+                data-testid="button-logout"
+              >
+                <LogOut className="h-4 w-4" />
+                Đăng xuất
+              </Button>
+              <Badge variant="secondary" className="px-3 py-1">
+                Admin Access
+              </Badge>
+            </div>
           </div>
         </div>
 
