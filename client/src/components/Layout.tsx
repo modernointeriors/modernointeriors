@@ -44,7 +44,7 @@ export default function Layout({ children }: LayoutProps) {
               <Menu className="h-5 w-5 rotate-90" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:absolute [&>button]:top-1/2 [&>button]:-translate-y-1/2 [&>button]:right-4 [&>button]:w-10 [&>button]:h-10 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:text-foreground [&>button]:hover:text-[#FAA61A] [&>button]:transition-colors">
+          <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
             <SheetHeader>
               <SheetTitle className="text-lg font-serif font-bold text-primary">NIVORA</SheetTitle>
               <SheetDescription className="sr-only">Navigation menu</SheetDescription>
