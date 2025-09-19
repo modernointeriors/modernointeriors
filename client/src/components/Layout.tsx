@@ -51,10 +51,10 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-16 right-4 z-50 transition-transform duration-300 ${
+      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
       }`}>
-        <div className="flex items-center justify-between bg-black/50 backdrop-blur-sm py-4 px-6 rounded-r-lg">
+        <div className="flex items-center justify-between py-4 px-6">
           {/* Logo */}
           <div className="text-white text-lg font-light tracking-wider">
             <img 
