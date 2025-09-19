@@ -206,7 +206,7 @@ export default function BlogDetail() {
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6 leading-tight" data-testid="article-title">
+            <h1 className="text-4xl md:text-5xl font-sans font-bold mb-6 leading-tight" data-testid="article-title">
               {article.title}
             </h1>
 
@@ -266,7 +266,7 @@ export default function BlogDetail() {
 
         {/* CTA Section */}
         <div className="mt-16 py-12 text-center border-t border-border">
-          <h3 className="text-2xl font-serif font-bold mb-4">
+          <h3 className="text-2xl font-sans font-bold mb-4">
             {language === 'vi' ? 'Cần tư vấn thiết kế?' : 'Need Design Consultation?'}
           </h3>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">

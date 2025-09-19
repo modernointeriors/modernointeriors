@@ -513,7 +513,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-serif font-bold">Projects Management</h2>
+          <h2 className="text-2xl font-sans font-bold">Projects Management</h2>
           <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="button-add-project">
@@ -977,7 +977,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-serif font-bold">Client Management</h2>
+          <h2 className="text-2xl font-sans font-bold">Client Management</h2>
           <Dialog open={isClientDialogOpen} onOpenChange={setIsClientDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="button-add-client">
@@ -1164,7 +1164,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   if (activeTab === 'inquiries') {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-serif font-bold">Inquiry Management</h2>
+        <h2 className="text-2xl font-sans font-bold">Inquiry Management</h2>
 
         <Card>
           <CardContent className="p-0">
@@ -1274,7 +1274,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   if (activeTab === 'content') {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-serif font-bold">Content Management</h2>
+        <h2 className="text-2xl font-sans font-bold">Content Management</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>

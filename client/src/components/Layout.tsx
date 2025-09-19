@@ -50,7 +50,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
             <SheetHeader>
-              <SheetTitle className="text-lg font-serif font-bold text-primary">
+              <SheetTitle className="text-lg font-sans font-bold text-primary">
                 <img 
                   src="/attached_assets/logo.white.png" 
                   alt="NIVORA" 

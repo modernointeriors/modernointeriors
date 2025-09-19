@@ -118,7 +118,7 @@ export default function Blog() {
           <Badge variant="outline" className="mb-4">
             {language === 'vi' ? 'Tin tức & Blog' : 'News & Blog'}
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6" data-testid="heading-blog">
+          <h1 className="text-4xl md:text-6xl font-sans font-bold mb-6" data-testid="heading-blog">
             {language === 'vi' ? 'Tin tức & Cảm hứng' : 'News & Inspiration'}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -194,7 +194,7 @@ export default function Blog() {
                     />
                   ) : (
                     <div className="w-full h-48 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                      <div className="text-6xl font-serif font-bold text-primary/30">N</div>
+                      <div className="text-6xl font-sans font-bold text-primary/30">N</div>
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -219,7 +219,7 @@ export default function Blog() {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-serif font-semibold mb-3 line-clamp-2" data-testid={`text-title-${article.id}`}>
+                  <h3 className="text-xl font-sans font-semibold mb-3 line-clamp-2" data-testid={`text-title-${article.id}`}>
                     {article.title}
                   </h3>
                   

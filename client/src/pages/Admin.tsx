@@ -35,7 +35,7 @@ export default function Admin() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-serif font-bold mb-2" data-testid="heading-admin">
+              <h1 className="text-4xl font-sans font-bold mb-2" data-testid="heading-admin">
                 Admin Dashboard
               </h1>
               <p className="text-muted-foreground">

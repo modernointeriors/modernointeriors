@@ -86,7 +86,7 @@ export default function Services() {
         {/* Header */}
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">Our Services</Badge>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6" data-testid="heading-services">Design Excellence</h1>
+          <h1 className="text-4xl md:text-6xl font-sans font-bold mb-6" data-testid="heading-services">Design Excellence</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             From concept to completion, we offer comprehensive design services tailored to your unique vision and lifestyle.
           </p>
@@ -126,7 +126,7 @@ export default function Services() {
                     <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
                       <IconComponent className="h-8 w-8 text-primary" />
                     </div>
-                    <h3 className="text-xl font-serif font-semibold mb-4" data-testid={`text-title-${service.id}`}>
+                    <h3 className="text-xl font-sans font-semibold mb-4" data-testid={`text-title-${service.id}`}>
                       {service.title}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed mb-6">
@@ -151,7 +151,7 @@ export default function Services() {
 
         {/* CTA Section */}
         <section className="mt-24 bg-card rounded-2xl p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">
             Ready to Begin Your Design Journey?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">

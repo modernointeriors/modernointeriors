@@ -65,7 +65,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
-            <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
+            <h2 className="text-4xl md:text-6xl font-sans font-bold mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
             </p>
@@ -103,7 +103,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-serif font-semibold mb-2" data-testid={`text-title-${project.id}`}>{project.title}</h3>
+                    <h3 className="text-2xl font-sans font-semibold mb-2" data-testid={`text-title-${project.id}`}>{project.title}</h3>
                     <p className="text-muted-foreground mb-4" data-testid={`text-category-${project.id}`}>
                       {project.category} • {project.location}
                     </p>
@@ -170,7 +170,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="section-padding bg-card">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">
+          <h2 className="text-4xl md:text-5xl font-sans font-bold mb-6">
             {homepageContent?.ctaTitle || 'Ready to Transform Your Space?'}
           </h2>
           <p className="text-xl text-muted-foreground mb-8">

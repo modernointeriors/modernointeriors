@@ -10,7 +10,7 @@ export default function Contact() {
         {/* Header */}
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">Contact Us</Badge>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6" data-testid="heading-contact">Get In Touch</h1>
+          <h1 className="text-4xl md:text-6xl font-sans font-bold mb-6" data-testid="heading-contact">Get In Touch</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Ready to transform your space? Let's discuss your vision and bring it to life.
           </p>
@@ -21,7 +21,7 @@ export default function Contact() {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl font-serif">Start Your Project</CardTitle>
+                <CardTitle className="text-2xl font-sans">Start Your Project</CardTitle>
               </CardHeader>
               <CardContent>
                 <ContactForm />
@@ -32,7 +32,7 @@ export default function Contact() {
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-2xl font-serif font-semibold mb-8">Contact Information</h2>
+              <h2 className="text-2xl font-sans font-semibold mb-8">Contact Information</h2>
               
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -95,7 +95,7 @@ export default function Contact() {
             {/* FAQ Section */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-xl font-serif font-semibold mb-4">Frequently Asked Questions</h3>
+                <h3 className="text-xl font-sans font-semibold mb-4">Frequently Asked Questions</h3>
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-medium mb-2">How long does a typical project take?</h4>
