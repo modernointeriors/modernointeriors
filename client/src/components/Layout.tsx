@@ -29,23 +29,69 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-16 z-50 bg-black border-r border-white/10 flex flex-col items-center justify-center">
-        {/* Hamburger Menu at Center */}
+      {/* Header with Navigation */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-white/10 py-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="text-white text-lg font-light tracking-wider">
+              NIVORA STUDIO
+            </div>
+            
+            {/* Navigation Menu */}
+            <nav className="hidden md:flex items-center space-x-8 text-sm">
+              {navigation.map((item) => (
+                <Link 
+                  key={item.key}
+                  href={item.href} 
+                  className={`transition-colors hover:text-primary uppercase tracking-wide ${
+                    isActive(item.href) ? 'text-primary' : 'text-zinc-400'
+                  }`}
+                  data-testid={`nav-${item.key}`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+            
+            {/* Language Selector */}
+            <div className="flex items-center space-x-1 text-sm">
+              <button
+                onClick={() => setLanguage('en')}
+                className={`transition-colors px-2 py-1 ${
+                  language === 'en' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
+                }`}
+                data-testid="lang-en"
+              >
+                ENG
+              </button>
+              <span className="text-zinc-600">|</span>
+              <button
+                onClick={() => setLanguage('vi')}
+                className={`transition-colors px-2 py-1 ${
+                  language === 'vi' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
+                }`}
+                data-testid="lang-vi"
+              >
+                VIE
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      {/* Mobile Menu */}
+      <div className="md:hidden">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button 
               variant="ghost" 
               size="lg"
-              className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center"
+              className="fixed top-6 left-6 z-50 text-white hover:text-primary"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <div className="flex flex-col items-center justify-center space-y-2 rotate-90 group-hover:text-primary">
-                <div className="w-8 h-0.5 bg-white group-hover:bg-primary transition-colors"></div>
-                <div className="w-8 h-0.5 bg-white group-hover:bg-primary transition-colors"></div>
-                <div className="w-8 h-0.5 bg-white group-hover:bg-primary transition-colors"></div>
-              </div>
+              <Menu className="w-6 h-6" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
@@ -117,36 +163,10 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </SheetContent>
         </Sheet>
-      </aside>
-
-      {/* Language Toggle - Top Right */}
-      <div className="fixed top-4 right-4 z-50 flex items-center space-x-2 text-xs font-light">
-        <button
-          onClick={() => setLanguage('en')}
-          className={`px-2 py-1 transition-colors ${
-            language === 'en' ? 'text-primary' : 'text-white/80 hover:text-primary'
-          }`}
-          data-testid="lang-en"
-        >
-          ENG
-        </button>
-        <span className="text-white/60 flex flex-col space-y-1">
-          <div className="w-3 h-0.5 bg-white/60"></div>
-          <div className="w-3 h-0.5 bg-white/60"></div>
-        </span>
-        <button
-          onClick={() => setLanguage('vi')}
-          className={`px-2 py-1 transition-colors ${
-            language === 'vi' ? 'text-primary' : 'text-white/80 hover:text-primary'
-          }`}
-          data-testid="lang-vi"
-        >
-          VIE
-        </button>
       </div>
 
       {/* Mobile Bottom Actions */}
-      <div className="md:hidden fixed bottom-0 left-16 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-4">
         <div className="flex space-x-3">
           <Link href="/contact" className="flex-1">
             <Button 
@@ -171,11 +191,11 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </div>
 
-      {/* Main Content - Adjusted for vertical sidebar */}
-      <main className="ml-16 pb-20 md:pb-0">{children}</main>
+      {/* Main Content - Adjusted for header */}
+      <main className="pt-24 pb-20 md:pb-0">{children}</main>
 
-      {/* Footer - Adjusted for vertical sidebar */}
-      <footer className="ml-16 bg-card border-t border-border py-16">
+      {/* Footer */}
+      <footer className="bg-card border-t border-border py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
