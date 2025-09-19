@@ -30,7 +30,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-20 z-50 bg-black border-r border-white/10 flex flex-col items-center py-6">
+      <aside className="fixed top-0 left-0 h-screen w-20 z-50 bg-black border-r border-white/10 flex flex-col items-center py-6 ml-[0px] mr-[0px] mt-[0px] mb-[0px] pl-[0px] pr-[0px] pt-[0px] pb-[0px]"></aside>
         {/* Hamburger Menu at Top */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
