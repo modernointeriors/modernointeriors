@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade } from 'swiper/modules';
+import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import type { Project } from '@shared/schema';
 
 // Import Swiper styles
@@ -32,13 +32,17 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   return (
     <div className="bg-black text-white h-screen">
       <Swiper
-        modules={[Autoplay, EffectFade]}
+        modules={[Autoplay, EffectFade, Navigation]}
         effect="fade"
         spaceBetween={0}
         slidesPerView={1}
         autoplay={{
           delay: 6000,
           disableOnInteraction: false,
+        }}
+        navigation={{
+          nextEl: '.swiper-button-next-custom',
+          prevEl: '.swiper-button-prev-custom',
         }}
         loop={true}
         className="js-slider h-screen"
@@ -68,23 +72,46 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   <div className="absolute inset-0 bg-black/40"></div>
                 </div>
                 
-                <div className="relative h-full flex flex-col justify-center z-10">
-                  <Link 
-                    href={`/project/${project.id}`} 
-                    className="block"
-                    data-testid={`slide-link-${project.id}`}
-                  >
-                    <div className="max-w-md">
-                      <h2 className="heading-0 js-slider-slide-title">
-                        {project.title}
-                      </h2>
-                      
-                      <span className="js-slider-slide-type sr-only">Project</span>
-                      <span className="js-slider-slide-author sr-only">{project.designer || 'NIVORA Studio'}</span>
-                      <time className="js-slider-slide-date sr-only">{project.completionYear || new Date().getFullYear()}</time>
-                      <span className="js-slider-slide-published-in sr-only">{project.category}</span>
+                <div className="relative h-full flex flex-col justify-between z-10">
+                  <div className="flex-1 flex items-center">
+                    <Link 
+                      href={`/project/${project.id}`} 
+                      className="block"
+                      data-testid={`slide-link-${project.id}`}
+                    >
+                      <div className="max-w-md">
+                        <h2 className="heading-0 js-slider-slide-title">
+                          {project.title}
+                        </h2>
+                        
+                        <span className="js-slider-slide-type sr-only">Project</span>
+                        <span className="js-slider-slide-author sr-only">{project.designer || 'NIVORA Studio'}</span>
+                        <time className="js-slider-slide-date sr-only">{project.completionYear || new Date().getFullYear()}</time>
+                        <span className="js-slider-slide-published-in sr-only">{project.category}</span>
+                      </div>
+                    </Link>
+                  </div>
+                  
+                  {/* Hero Footer */}
+                  <div className="flex justify-between items-end pb-8">
+                    <div className="text-white">
+                      <p className="text-sm font-light uppercase tracking-wider mb-1">Article</p>
+                      <div className="flex items-center gap-2 text-sm font-light">
+                        <span>by</span>
+                        <span className="font-medium">{project.designer || 'NIVORA Studio'}</span>
+                      </div>
                     </div>
-                  </Link>
+                    
+                    {/* Navigation Arrows */}
+                    <div className="flex gap-4">
+                      <button className="swiper-button-prev-custom w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                        ←
+                      </button>
+                      <button className="swiper-button-next-custom w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                        →
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </SwiperSlide>
