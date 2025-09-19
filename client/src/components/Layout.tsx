@@ -42,9 +42,9 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
             >
               <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
-                <div className="w-8 h-1 bg-white"></div>
-                <div className="w-8 h-1 bg-white"></div>
-                <div className="w-8 h-1 bg-white"></div>
+                <div className="w-8 h-0.5 bg-white"></div>
+                <div className="w-8 h-0.5 bg-white"></div>
+                <div className="w-8 h-0.5 bg-white"></div>
               </div>
             </Button>
           </SheetTrigger>
