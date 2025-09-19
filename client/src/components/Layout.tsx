@@ -41,7 +41,11 @@ export default function Layout({ children }: LayoutProps) {
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <Menu size={48} strokeWidth={4} className="rotate-90" style={{strokeLinecap: 'square'}} />
+              <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
+                <div className="w-8 h-1 bg-white"></div>
+                <div className="w-8 h-1 bg-white"></div>
+                <div className="w-8 h-1 bg-white"></div>
+              </div>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
