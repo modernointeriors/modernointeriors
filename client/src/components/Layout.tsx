@@ -48,7 +48,7 @@ export default function Layout({ children }: LayoutProps) {
             <SheetHeader>
               <SheetTitle className="text-lg font-serif font-bold text-primary">
                 <img 
-                  src="/attached_assets/logo.wordmark.png" 
+                  src="/attached_assets/logo.white.png" 
                   alt="NIVORA" 
                   className="h-8 w-auto"
                 />
@@ -176,7 +176,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
               <img 
-                src="/attached_assets/logo.wordmark.png" 
+                src="/attached_assets/logo.white.png" 
                 alt="NIVORA" 
                 className="h-10 w-auto mb-4"
               />
