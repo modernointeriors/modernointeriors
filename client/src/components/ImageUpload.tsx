@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface ImageUploadProps {
   value: string[];
@@ -153,10 +154,14 @@ export default function ImageUpload({
                 className="relative group rounded-lg overflow-hidden bg-muted aspect-square"
                 data-testid={`image-preview-${index}`}
               >
-                <img
+                <OptimizedImage
                   src={url}
                   alt={`Upload ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  width={200}
+                  height={200}
+                  wrapperClassName="w-full h-full"
+                  className="w-full h-full"
+                  sizes="200px"
                 />
                 
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

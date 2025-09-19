@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
 import { Mail, Phone, Linkedin, Award, Star, Users, Calendar } from "lucide-react";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const teamMembers = [
   {
@@ -201,10 +202,14 @@ export default function About() {
           </div>
           
           <div className="relative">
-            <img 
+            <OptimizedImage
               src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-              alt="NIVORA design team collaborating in modern studio" 
-              className="rounded-xl shadow-2xl w-full"
+              alt="NIVORA design team collaborating in modern studio"
+              width={800}
+              height={600}
+              wrapperClassName="w-full"
+              className="w-full h-full rounded-xl shadow-2xl"
+              sizes="(max-width: 1024px) 100vw, 50vw"
               data-testid="img-team-collaboration"
             />
             <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-primary/10 rounded-full -z-10" />
@@ -274,10 +279,14 @@ export default function About() {
                 data-testid={`card-member-${member.id}`}
               >
                 <CardContent className="p-6">
-                  <img 
+                  <OptimizedImage
                     src={member.image} 
                     alt={member.name}
-                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-primary/10"
+                    width={96}
+                    height={96}
+                    wrapperClassName="w-24 h-24 mx-auto mb-4"
+                    className="w-full h-full rounded-full border-4 border-primary/10"
+                    sizes="96px"
                     data-testid={`img-member-${member.id}`}
                   />
                   <h3 className="text-lg font-serif font-semibold mb-1" data-testid={`text-name-${member.id}`}>

@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Eye, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
 import { useState, useEffect } from "react";
 
@@ -181,10 +182,14 @@ export default function Blog() {
               <Card key={article.id} className="group overflow-hidden hover-scale" data-testid={`article-card-${article.id}`}>
                 <div className="relative">
                   {article.featuredImage ? (
-                    <img 
+                    <OptimizedImage
                       src={article.featuredImage} 
                       alt={article.title}
-                      className="w-full h-48 object-cover"
+                      width={400}
+                      height={192}
+                      wrapperClassName="w-full h-48"
+                      className="w-full h-full"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       data-testid={`img-article-${article.id}`}
                     />
                   ) : (

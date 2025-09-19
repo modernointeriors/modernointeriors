@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Eye, ArrowLeft, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
 import { useEffect } from "react";
 
@@ -241,10 +242,15 @@ export default function BlogDetail() {
           {/* Featured Image */}
           {article.featuredImage && (
             <div className="mb-8">
-              <img 
+              <OptimizedImage
                 src={article.featuredImage} 
                 alt={article.title}
-                className="w-full h-64 md:h-96 object-cover rounded-lg"
+                width={1200}
+                height={600}
+                wrapperClassName="w-full h-64 md:h-96"
+                className="w-full h-full rounded-lg"
+                sizes="100vw"
+                priority={true}
                 data-testid="article-featured-image"
               />
             </div>

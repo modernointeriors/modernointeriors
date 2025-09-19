@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, MapPin, Calendar, DollarSign, Ruler } from "lucide-react";
+import OptimizedImage from "@/components/OptimizedImage";
 import type { Project } from "@shared/schema";
 
 export default function ProjectDetail() {
@@ -87,10 +88,15 @@ export default function ProjectDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {project.images.map((image: string, index: number) => (
                 <div key={index} className="group relative overflow-hidden rounded-lg">
-                  <img 
+                  <OptimizedImage
                     src={image} 
                     alt={`${project.title} - Image ${index + 1}`}
-                    className="w-full h-80 lg:h-96 object-cover group-hover:scale-105 transition-transform duration-300"
+                    width={800}
+                    height={600}
+                    wrapperClassName="w-full h-80 lg:h-96"
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority={index === 0} // First image loads immediately
                     data-testid={`img-project-${index}`}
                   />
                 </div>

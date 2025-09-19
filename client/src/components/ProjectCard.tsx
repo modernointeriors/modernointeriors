@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import OptimizedImage from "@/components/OptimizedImage";
 import type { Project } from "@shared/schema";
 
 interface ProjectCardProps {
@@ -15,10 +16,14 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     <Card className="group overflow-hidden hover-scale project-hover">
       <Link href={`/project/${project.id}`}>
         <div className="relative">
-          <img 
+          <OptimizedImage
             src={projectImage}
             alt={project.title}
-            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+            width={600}
+            height={256}
+            wrapperClassName="w-full h-64"
+            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             data-testid={`img-project-${project.id}`}
           />
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
