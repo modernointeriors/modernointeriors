@@ -50,7 +50,7 @@ export default function Layout({ children }: LayoutProps) {
                 <img 
                   src="/attached_assets/logo.white.png" 
                   alt="NIVORA" 
-                  className="h-8 w-auto"
+                  className="h-12 w-auto"
                 />
               </SheetTitle>
               <SheetDescription className="sr-only">Navigation menu</SheetDescription>
@@ -178,7 +178,7 @@ export default function Layout({ children }: LayoutProps) {
               <img 
                 src="/attached_assets/logo.white.png" 
                 alt="NIVORA" 
-                className="h-10 w-auto mb-4"
+                className="h-16 w-auto mb-4"
               />
               <p className="text-muted-foreground mb-6 max-w-md">
                 Transforming spaces through innovative interior design and architectural excellence. 
