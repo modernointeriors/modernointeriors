@@ -50,7 +50,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
             <SheetHeader>
-              <SheetTitle className="text-lg font-sans font-bold text-primary">
+              <SheetTitle className="text-lg font-sans font-light text-primary">
                 <img 
                   src="/attached_assets/logo.white.png" 
                   alt="NIVORA" 
@@ -68,7 +68,7 @@ export default function Layout({ children }: LayoutProps) {
                         key={item.key}
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`block text-lg font-medium transition-colors hover:text-primary ${
+                        className={`block text-lg font-light transition-colors hover:text-primary ${
                           isActive(item.href)
                             ? 'text-primary'
                             : 'text-foreground'
@@ -120,7 +120,7 @@ export default function Layout({ children }: LayoutProps) {
       </aside>
 
       {/* Language Toggle - Top Right */}
-      <div className="fixed top-4 right-4 z-50 flex items-center space-x-2 text-xs font-medium">
+      <div className="fixed top-4 right-4 z-50 flex items-center space-x-2 text-xs font-light">
         <button
           onClick={() => setLanguage('en')}
           className={`px-2 py-1 transition-colors ${
@@ -221,7 +221,7 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-4">Services</h4>
+              <h4 className="text-lg font-light mb-4">Services</h4>
               <ul className="space-y-2">
                 <li><Link href="/services" className="text-muted-foreground hover:text-primary transition-colors">Residential Design</Link></li>
                 <li><Link href="/services" className="text-muted-foreground hover:text-primary transition-colors">Commercial Design</Link></li>
@@ -231,7 +231,7 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-4">Company</h4>
+              <h4 className="text-lg font-light mb-4">Company</h4>
               <ul className="space-y-2">
                 <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
                 <li><Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">Portfolio</Link></li>

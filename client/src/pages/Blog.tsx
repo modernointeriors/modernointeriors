@@ -118,7 +118,7 @@ export default function Blog() {
           <Badge variant="outline" className="mb-4">
             {language === 'vi' ? 'Tin tức & Blog' : 'News & Blog'}
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-sans font-bold mb-6" data-testid="heading-blog">
+          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-blog">
             {language === 'vi' ? 'Tin tức & Cảm hứng' : 'News & Inspiration'}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -136,7 +136,7 @@ export default function Blog() {
               key={category.value}
               variant={activeCategory === category.value ? "default" : "outline"}
               onClick={() => setActiveCategory(category.value)}
-              className="px-6 py-3 font-medium"
+              className="px-6 py-3 font-light"
               data-testid={`filter-${category.value}`}
             >
               {language === 'vi' ? {
@@ -166,7 +166,7 @@ export default function Blog() {
           </div>
         ) : articles.length === 0 ? (
           <div className="text-center py-16">
-            <h3 className="text-xl font-semibold mb-2">
+            <h3 className="text-xl font-light mb-2">
               {language === 'vi' ? 'Không tìm thấy bài viết' : 'No articles found'}
             </h3>
             <p className="text-muted-foreground">
@@ -194,7 +194,7 @@ export default function Blog() {
                     />
                   ) : (
                     <div className="w-full h-48 bg-black flex items-center justify-center">
-                      <div className="text-6xl font-sans font-bold text-primary/30">N</div>
+                      <div className="text-6xl font-sans font-light text-primary/30">N</div>
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -219,7 +219,7 @@ export default function Blog() {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-sans font-semibold mb-3 line-clamp-2" data-testid={`text-title-${article.id}`}>
+                  <h3 className="text-xl font-sans font-light mb-3 line-clamp-2" data-testid={`text-title-${article.id}`}>
                     {article.title}
                   </h3>
                   

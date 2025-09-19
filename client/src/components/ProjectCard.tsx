@@ -28,7 +28,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           />
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
             <div className="text-center text-white p-4">
-              <h3 className="text-lg font-sans font-semibold mb-2" data-testid={`text-title-${project.id}`}>
+              <h3 className="text-lg font-sans font-light mb-2" data-testid={`text-title-${project.id}`}>
                 {project.title}
               </h3>
               <p className="text-sm opacity-90 mb-4" data-testid={`text-category-${project.id}`}>
@@ -48,7 +48,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.featured && <Badge variant="default">Featured</Badge>}
         </div>
         <Link href={`/project/${project.id}`}>
-          <h3 className="text-xl font-sans font-semibold mb-2 hover:text-primary transition-colors">
+          <h3 className="text-xl font-sans font-light mb-2 hover:text-primary transition-colors">
             {project.title}
           </h3>
         </Link>

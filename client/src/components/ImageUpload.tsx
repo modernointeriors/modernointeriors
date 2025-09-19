@@ -104,7 +104,7 @@ export default function ImageUpload({
               <Upload className="h-8 w-8 text-muted-foreground" />
             </div>
             
-            <h3 className="text-lg font-medium mb-2">
+            <h3 className="text-lg font-light mb-2">
               {uploading ? "Uploading..." : "Upload Images"}
             </h3>
             
@@ -146,7 +146,7 @@ export default function ImageUpload({
       {/* Preview Images */}
       {currentImages.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-sm font-medium">Uploaded Images</h4>
+          <h4 className="text-sm font-light">Uploaded Images</h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {currentImages.map((url, index) => (
               <div

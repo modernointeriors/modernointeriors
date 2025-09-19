@@ -126,7 +126,7 @@ export default function ProjectDetail() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardContent className="pt-6 text-center">
-            <h2 className="text-xl font-semibold mb-2 text-white">Project Not Found</h2>
+            <h2 className="text-xl font-light mb-2 text-white">Project Not Found</h2>
             <p className="text-zinc-400 mb-4">
               The project you're looking for doesn't exist or has been removed.
             </p>

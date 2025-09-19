@@ -66,7 +66,7 @@ export default function Login() {
             <Lock className="w-6 h-6 text-primary-foreground" />
           </div>
           <div>
-            <CardTitle className="text-2xl font-bold">NIVORA Admin</CardTitle>
+            <CardTitle className="text-2xl font-light">NIVORA Admin</CardTitle>
             <CardDescription>
               Đăng nhập để truy cập bảng điều khiển quản trị
             </CardDescription>

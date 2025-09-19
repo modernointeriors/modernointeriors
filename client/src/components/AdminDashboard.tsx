@@ -411,8 +411,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Projects</p>
-                  <p className="text-2xl font-bold" data-testid="stat-total-projects">
+                  <p className="text-sm font-light text-muted-foreground">Total Projects</p>
+                  <p className="text-2xl font-light" data-testid="stat-total-projects">
                     {statsLoading ? "..." : stats?.totalProjects || 0}
                   </p>
                 </div>
@@ -425,8 +425,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Active Clients</p>
-                  <p className="text-2xl font-bold" data-testid="stat-active-clients">
+                  <p className="text-sm font-light text-muted-foreground">Active Clients</p>
+                  <p className="text-2xl font-light" data-testid="stat-active-clients">
                     {statsLoading ? "..." : stats?.activeClients || 0}
                   </p>
                 </div>
@@ -439,8 +439,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">New Inquiries</p>
-                  <p className="text-2xl font-bold" data-testid="stat-new-inquiries">
+                  <p className="text-sm font-light text-muted-foreground">New Inquiries</p>
+                  <p className="text-2xl font-light" data-testid="stat-new-inquiries">
                     {statsLoading ? "..." : stats?.newInquiries || 0}
                   </p>
                 </div>
@@ -453,8 +453,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Revenue (YTD)</p>
-                  <p className="text-2xl font-bold" data-testid="stat-revenue">
+                  <p className="text-sm font-light text-muted-foreground">Revenue (YTD)</p>
+                  <p className="text-2xl font-light" data-testid="stat-revenue">
                     {statsLoading ? "..." : stats?.revenue || "$0"}
                   </p>
                 </div>
@@ -489,7 +489,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 {inquiries.slice(0, 5).map((inquiry) => (
                   <div key={inquiry.id} className="flex items-center justify-between py-3 border-b border-border">
                     <div>
-                      <p className="font-medium">
+                      <p className="font-light">
                         New inquiry from {inquiry.firstName} {inquiry.lastName}
                       </p>
                       <p className="text-sm text-muted-foreground">
@@ -513,7 +513,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-sans font-bold">Projects Management</h2>
+          <h2 className="text-2xl font-sans font-light">Projects Management</h2>
           <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="button-add-project">
@@ -824,7 +824,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   />
 
                   <div className="space-y-4">
-                    <h4 className="text-sm font-medium">SEO Settings</h4>
+                    <h4 className="text-sm font-light">SEO Settings</h4>
                     <FormField
                       control={projectForm.control}
                       name="metaTitle"
@@ -861,7 +861,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       className="rounded border-border"
                       data-testid="checkbox-project-featured"
                     />
-                    <label className="text-sm font-medium">Featured Project</label>
+                    <label className="text-sm font-light">Featured Project</label>
                   </div>
 
                   <div className="flex justify-end space-x-2">
@@ -908,7 +908,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
             ) : projects.length === 0 ? (
               <div className="p-12 text-center">
-                <h3 className="text-lg font-semibold mb-2">No projects found</h3>
+                <h3 className="text-lg font-light mb-2">No projects found</h3>
                 <p className="text-muted-foreground">Create your first project to get started.</p>
               </div>
             ) : (
@@ -928,7 +928,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableRow key={project.id} data-testid={`row-project-${project.id}`}>
                       <TableCell>
                         <div>
-                          <p className="font-medium">{project.title}</p>
+                          <p className="font-light">{project.title}</p>
                           {project.featured && (
                             <Badge variant="default" className="mt-1">Featured</Badge>
                           )}
@@ -977,7 +977,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-sans font-bold">Client Management</h2>
+          <h2 className="text-2xl font-sans font-light">Client Management</h2>
           <Dialog open={isClientDialogOpen} onOpenChange={setIsClientDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="button-add-client">
@@ -1104,7 +1104,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
             ) : clients.length === 0 ? (
               <div className="p-12 text-center">
-                <h3 className="text-lg font-semibold mb-2">No clients found</h3>
+                <h3 className="text-lg font-light mb-2">No clients found</h3>
                 <p className="text-muted-foreground">Add your first client to get started.</p>
               </div>
             ) : (
@@ -1123,7 +1123,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {clients.map((client) => (
                     <TableRow key={client.id} data-testid={`row-client-${client.id}`}>
                       <TableCell>
-                        <p className="font-medium">
+                        <p className="font-light">
                           {client.firstName} {client.lastName}
                         </p>
                       </TableCell>
@@ -1164,7 +1164,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   if (activeTab === 'inquiries') {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold">Inquiry Management</h2>
+        <h2 className="text-2xl font-sans font-light">Inquiry Management</h2>
 
         <Card>
           <CardContent className="p-0">
@@ -1184,7 +1184,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
             ) : inquiries.length === 0 ? (
               <div className="p-12 text-center">
-                <h3 className="text-lg font-semibold mb-2">No inquiries found</h3>
+                <h3 className="text-lg font-light mb-2">No inquiries found</h3>
                 <p className="text-muted-foreground">New inquiries will appear here when submitted.</p>
               </div>
             ) : (
@@ -1204,7 +1204,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableRow key={inquiry.id} data-testid={`row-inquiry-${inquiry.id}`}>
                       <TableCell>
                         <div>
-                          <p className="font-medium">
+                          <p className="font-light">
                             {inquiry.firstName} {inquiry.lastName}
                           </p>
                           <p className="text-sm text-muted-foreground">{inquiry.email}</p>
@@ -1242,18 +1242,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </DialogHeader>
                             <div className="space-y-4">
                               <div>
-                                <h4 className="font-medium mb-1">Contact Information</h4>
+                                <h4 className="font-light mb-1">Contact Information</h4>
                                 <p>{inquiry.firstName} {inquiry.lastName}</p>
                                 <p className="text-muted-foreground">{inquiry.email}</p>
                                 {inquiry.phone && <p className="text-muted-foreground">{inquiry.phone}</p>}
                               </div>
                               <div>
-                                <h4 className="font-medium mb-1">Project Details</h4>
+                                <h4 className="font-light mb-1">Project Details</h4>
                                 <p>Type: {inquiry.projectType}</p>
                                 {inquiry.budget && <p>Budget: {inquiry.budget}</p>}
                               </div>
                               <div>
-                                <h4 className="font-medium mb-1">Message</h4>
+                                <h4 className="font-light mb-1">Message</h4>
                                 <p className="text-muted-foreground">{inquiry.message}</p>
                               </div>
                             </div>
@@ -1274,7 +1274,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   if (activeTab === 'content') {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold">Content Management</h2>
+        <h2 className="text-2xl font-sans font-light">Content Management</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
@@ -1333,14 +1333,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <CardContent>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Site Title</label>
+                <label className="text-sm font-light mb-2 block">Site Title</label>
                 <Input 
                   defaultValue="NIVORA - Interior Design Studio" 
                   data-testid="input-site-title"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium mb-2 block">Meta Description</label>
+                <label className="text-sm font-light mb-2 block">Meta Description</label>
                 <Textarea 
                   rows={3}
                   defaultValue="Premium interior design and architecture services. Transform your space with our expert design team."

@@ -37,7 +37,7 @@ export default function Portfolio() {
         {/* Header */}
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4">Our Work</Badge>
-          <h1 className="text-4xl md:text-6xl font-sans font-bold mb-6" data-testid="heading-portfolio">Portfolio</h1>
+          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">Portfolio</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Explore our comprehensive collection of interior design projects across various categories
           </p>
@@ -50,7 +50,7 @@ export default function Portfolio() {
               key={category.value}
               variant={activeCategory === category.value ? "default" : "outline"}
               onClick={() => setActiveCategory(category.value)}
-              className="px-6 py-3 font-medium"
+              className="px-6 py-3 font-light"
               data-testid={`filter-${category.value}`}
             >
               {category.label}
@@ -74,7 +74,7 @@ export default function Portfolio() {
           </div>
         ) : projects.length === 0 ? (
           <div className="text-center py-16">
-            <h3 className="text-xl font-semibold mb-2">No projects found</h3>
+            <h3 className="text-xl font-light mb-2">No projects found</h3>
             <p className="text-muted-foreground">
               {activeCategory === 'all' 
                 ? 'No projects are available at the moment.' 

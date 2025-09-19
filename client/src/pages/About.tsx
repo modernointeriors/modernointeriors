@@ -94,7 +94,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-sans font-bold mb-6" data-testid="heading-about">About NIVORA</h1>
+          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-about">About NIVORA</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Where architectural vision meets interior perfection. We are a team of passionate designers creating extraordinary spaces worldwide.
           </p>
@@ -103,7 +103,7 @@ export default function About() {
         {/* Company Story */}
         <section id="story" className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
           <div>
-            <h2 className="text-3xl md:text-4xl font-sans font-bold mb-8">Our Story</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-8">Our Story</h2>
             <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p>
                 Founded in 2015, NIVORA has established itself as a premier interior design studio, 
@@ -160,7 +160,7 @@ export default function About() {
         {/* Our Philosophy */}
         <section id="philosophy" className="bg-card rounded-2xl p-12 mb-24">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">Our Design Philosophy</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">Our Design Philosophy</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               We believe in creating spaces that tell stories, evoke emotions, and enhance the way people live and work.
             </p>
@@ -171,7 +171,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <div className="w-8 h-8 bg-primary rounded-full" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Timeless Elegance</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Timeless Elegance</h3>
               <p className="text-muted-foreground">
                 We create designs that transcend trends, focusing on timeless beauty and sophisticated aesthetics.
               </p>
@@ -181,7 +181,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <div className="w-8 h-8 bg-primary rounded-full" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Functional Beauty</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Functional Beauty</h3>
               <p className="text-muted-foreground">
                 Every element serves a purpose while contributing to the overall aesthetic harmony of the space.
               </p>
@@ -191,7 +191,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <div className="w-8 h-8 bg-primary rounded-full" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Personal Expression</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Personal Expression</h3>
               <p className="text-muted-foreground">
                 We collaborate closely with clients to ensure each design reflects their unique personality and lifestyle.
               </p>
@@ -202,7 +202,7 @@ export default function About() {
         {/* Team Section */}
         <section id="team" className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">Meet Our Team</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">Meet Our Team</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Our talented team of designers, architects, and project managers brings decades of combined experience.
             </p>
@@ -229,10 +229,10 @@ export default function About() {
                     sizes="96px"
                     data-testid={`img-member-${member.id}`}
                   />
-                  <h3 className="text-lg font-sans font-semibold mb-1" data-testid={`text-name-${member.id}`}>
+                  <h3 className="text-lg font-sans font-light mb-1" data-testid={`text-name-${member.id}`}>
                     {member.name}
                   </h3>
-                  <p className="text-primary mb-3 font-medium text-sm" data-testid={`text-role-${member.id}`}>
+                  <p className="text-primary mb-3 font-light text-sm" data-testid={`text-role-${member.id}`}>
                     {member.role}
                   </p>
                   
@@ -246,7 +246,7 @@ export default function About() {
                       
                       <div className="space-y-3">
                         <div>
-                          <h4 className="font-semibold text-sm mb-2 flex items-center">
+                          <h4 className="font-light text-sm mb-2 flex items-center">
                             <Star className="w-4 h-4 mr-2 text-primary" />
                             Specialties
                           </h4>
@@ -261,14 +261,14 @@ export default function About() {
                         
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div>
-                            <span className="font-medium flex items-center mb-1">
+                            <span className="font-light flex items-center mb-1">
                               <Calendar className="w-3 h-3 mr-1 text-primary" />
                               Experience
                             </span>
                             <span className="text-muted-foreground">{member.experience}</span>
                           </div>
                           <div>
-                            <span className="font-medium flex items-center mb-1">
+                            <span className="font-light flex items-center mb-1">
                               <Award className="w-3 h-3 mr-1 text-primary" />
                               Education
                             </span>
@@ -277,7 +277,7 @@ export default function About() {
                         </div>
                         
                         <div>
-                          <h4 className="font-semibold text-sm mb-2 flex items-center">
+                          <h4 className="font-light text-sm mb-2 flex items-center">
                             <Award className="w-4 h-4 mr-2 text-primary" />
                             Recent Awards
                           </h4>
@@ -341,7 +341,7 @@ export default function About() {
         {/* Our Approach Section */}
         <section id="approach" className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">Our Approach</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">Our Approach</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Every project is unique, and our process is tailored to bring your vision to life with precision and care.
             </p>
@@ -352,7 +352,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Users className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Discovery & Consultation</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Discovery & Consultation</h3>
               <p className="text-muted-foreground text-sm">
                 We begin by understanding your lifestyle, preferences, and functional needs through detailed consultations.
               </p>
@@ -362,7 +362,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Award className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Concept Development</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Concept Development</h3>
               <p className="text-muted-foreground text-sm">
                 Our team creates detailed mood boards, 3D renderings, and design concepts tailored to your vision.
               </p>
@@ -372,7 +372,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Star className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Design Implementation</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Design Implementation</h3>
               <p className="text-muted-foreground text-sm">
                 We coordinate with trusted contractors and artisans to bring every detail to life with precision.
               </p>
@@ -382,7 +382,7 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Calendar className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-semibold mb-4">Final Styling</h3>
+              <h3 className="text-xl font-sans font-light mb-4">Final Styling</h3>
               <p className="text-muted-foreground text-sm">
                 The finishing touches that transform your space into a perfectly curated environment.
               </p>
@@ -394,7 +394,7 @@ export default function About() {
         <section id="contact-cta" className="text-center mb-24">
           <Card className="bg-primary/5 border-primary/20">
             <CardContent className="p-12">
-              <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">
                 Let's Create Something Amazing Together
               </h2>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
