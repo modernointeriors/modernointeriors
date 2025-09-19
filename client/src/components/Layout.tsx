@@ -37,14 +37,14 @@ export default function Layout({ children }: LayoutProps) {
             <Button 
               variant="ghost" 
               size="lg"
-              className="text-white hover:text-[#FAA61A] w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center"
+              className="group text-white hover:text-[#FAA61A] w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
-                <div className="w-8 h-0.5 bg-white"></div>
-                <div className="w-8 h-0.5 bg-white"></div>
-                <div className="w-8 h-0.5 bg-white"></div>
+              <div className="flex flex-col items-center justify-center space-y-2 rotate-90 group-hover:text-[#FAA61A]">
+                <div className="w-8 h-0.5 bg-white group-hover:bg-[#FAA61A] transition-colors"></div>
+                <div className="w-8 h-0.5 bg-white group-hover:bg-[#FAA61A] transition-colors"></div>
+                <div className="w-8 h-0.5 bg-white group-hover:bg-[#FAA61A] transition-colors"></div>
               </div>
             </Button>
           </SheetTrigger>
