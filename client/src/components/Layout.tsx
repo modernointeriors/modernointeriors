@@ -2,23 +2,25 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Portfolio', href: '/portfolio' },
-  { name: 'Services', href: '/services' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' }
+const getNavigation = (t: (key: string) => string) => [
+  { name: t('nav.home'), href: '/', key: 'home' },
+  { name: t('nav.about'), href: '/about', key: 'about' },
+  { name: t('nav.projects'), href: '/portfolio', key: 'portfolio' },
+  { name: t('nav.contacts'), href: '/contact', key: 'contact' }
 ];
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
+  const navigation = getNavigation(t);
 
   const isActive = (href: string) => {
     if (href === '/') return location === '/';
@@ -41,18 +43,18 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+            <div className="hidden md:flex items-center space-x-8">
+              <div className="flex items-baseline space-x-8">
                 {navigation.map((item) => (
                   <Link
-                    key={item.name}
+                    key={item.key}
                     href={item.href}
                     className={`px-3 py-2 text-sm font-medium transition-colors ${
                       isActive(item.href)
                         ? 'text-foreground nav-active'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
-                    data-testid={`nav-${item.name.toLowerCase()}`}
+                    data-testid={`nav-${item.key}`}
                   >
                     {item.name}
                   </Link>
@@ -63,14 +65,61 @@ export default function Layout({ children }: LayoutProps) {
                     variant={isActive('/admin') ? "default" : "secondary"}
                     data-testid="nav-admin"
                   >
-                    Admin
+                    {t('nav.admin')}
                   </Button>
                 </Link>
               </div>
+              
+              {/* Language Toggle */}
+              <div className="flex items-center space-x-2 text-sm font-medium">
+                <Globe className="h-4 w-4 text-muted-foreground" />
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-2 py-1 transition-colors ${
+                    language === 'en' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  data-testid="lang-en"
+                >
+                  ENG
+                </button>
+                <span className="text-muted-foreground">|</span>
+                <button
+                  onClick={() => setLanguage('vi')}
+                  className={`px-2 py-1 transition-colors ${
+                    language === 'vi' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  data-testid="lang-vi"
+                >
+                  VIE
+                </button>
+              </div>
             </div>
             
-            {/* Mobile menu button */}
-            <div className="md:hidden">
+            {/* Mobile menu button and language toggle */}
+            <div className="flex md:hidden items-center space-x-4">
+              {/* Mobile Language Toggle */}
+              <div className="flex items-center space-x-1 text-xs font-medium">
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-1 transition-colors ${
+                    language === 'en' ? 'text-foreground' : 'text-muted-foreground'
+                  }`}
+                  data-testid="mobile-lang-en"
+                >
+                  ENG
+                </button>
+                <span className="text-muted-foreground">|</span>
+                <button
+                  onClick={() => setLanguage('vi')}
+                  className={`px-1 transition-colors ${
+                    language === 'vi' ? 'text-foreground' : 'text-muted-foreground'
+                  }`}
+                  data-testid="mobile-lang-vi"
+                >
+                  VIE
+                </button>
+              </div>
+              
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
                   <Button 
@@ -85,7 +134,7 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="flex flex-col space-y-6 mt-6">
                     {navigation.map((item) => (
                       <Link
-                        key={item.name}
+                        key={item.key}
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className={`text-lg font-medium transition-colors ${
@@ -93,7 +142,7 @@ export default function Layout({ children }: LayoutProps) {
                             ? 'text-foreground'
                             : 'text-muted-foreground hover:text-foreground'
                         }`}
-                        data-testid={`mobile-nav-${item.name.toLowerCase()}`}
+                        data-testid={`mobile-nav-${item.key}`}
                       >
                         {item.name}
                       </Link>
@@ -104,7 +153,7 @@ export default function Layout({ children }: LayoutProps) {
                         className="w-full"
                         data-testid="mobile-nav-admin"
                       >
-                        Admin Dashboard
+                        {t('nav.admin')}
                       </Button>
                     </Link>
                   </div>

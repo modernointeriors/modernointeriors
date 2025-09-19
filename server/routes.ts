@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -231,6 +231,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete service" });
+    }
+  });
+
+  // Articles/Blog routes
+  app.get("/api/articles", async (req, res) => {
+    try {
+      const { category, featured, status, language, tags } = req.query;
+      const filters: any = {};
+      
+      if (category) filters.category = category as string;
+      if (featured) filters.featured = featured === 'true';
+      if (status) filters.status = status as string;
+      if (language) filters.language = language as string;
+      if (tags) {
+        // Parse tags if it's a comma-separated string
+        filters.tags = typeof tags === 'string' ? tags.split(',') : tags;
+      }
+      
+      const articles = await storage.getArticles(filters);
+      res.json(articles);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch articles" });
+    }
+  });
+
+  app.get("/api/articles/:id", async (req, res) => {
+    try {
+      const article = await storage.getArticle(req.params.id);
+      if (!article) {
+        return res.status(404).json({ message: "Article not found" });
+      }
+      res.json(article);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch article" });
+    }
+  });
+
+  app.get("/api/articles/slug/:slug", async (req, res) => {
+    try {
+      const { language } = req.query;
+      const article = await storage.getArticleBySlug(req.params.slug, language as string);
+      if (!article) {
+        return res.status(404).json({ message: "Article not found" });
+      }
+      
+      // Increment view count for published articles
+      if (article.status === 'published') {
+        await storage.incrementArticleViews(article.id);
+        // Return updated article with incremented view count
+        const updatedArticle = await storage.getArticle(article.id);
+        res.json(updatedArticle);
+      } else {
+        res.json(article);
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch article" });
+    }
+  });
+
+  app.post("/api/articles", async (req, res) => {
+    try {
+      const validatedData = insertArticleSchema.parse(req.body);
+      
+      // Generate slug if not provided
+      if (!validatedData.slug) {
+        validatedData.slug = validatedData.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+      
+      // Set publishedAt if status is published and not already set
+      if (validatedData.status === 'published' && !validatedData.publishedAt) {
+        validatedData.publishedAt = new Date();
+      }
+      
+      const article = await storage.createArticle(validatedData);
+      res.status(201).json(article);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create article" });
+    }
+  });
+
+  app.put("/api/articles/:id", async (req, res) => {
+    try {
+      const validatedData = insertArticleSchema.partial().parse(req.body);
+      
+      // Update publishedAt if status is being set to published
+      if (validatedData.status === 'published') {
+        const currentArticle = await storage.getArticle(req.params.id);
+        if (currentArticle && currentArticle.status !== 'published') {
+          validatedData.publishedAt = new Date();
+        }
+      }
+      
+      const article = await storage.updateArticle(req.params.id, validatedData);
+      res.json(article);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update article" });
+    }
+  });
+
+  app.delete("/api/articles/:id", async (req, res) => {
+    try {
+      await storage.deleteArticle(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete article" });
     }
   });
 

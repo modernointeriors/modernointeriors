@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, boolean, jsonb, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -66,6 +66,31 @@ export const services = pgTable("services", {
   active: boolean("active").notNull().default(true),
 });
 
+export const articles = pgTable("articles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  slug: text("slug").notNull(),
+  excerpt: text("excerpt"),
+  content: text("content").notNull(),
+  featuredImage: text("featured_image"),
+  category: varchar("category", { length: 50 }).notNull().default("general"), // news, tips, projects, design-trends
+  tags: jsonb("tags").default([]), // array of tag strings
+  status: varchar("status", { length: 20 }).notNull().default("draft"), // draft, published, archived
+  language: varchar("language", { length: 5 }).notNull().default("en"), // en, vi
+  featured: boolean("featured").notNull().default(false),
+  publishedAt: timestamp("published_at"),
+  // SEO fields
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  metaKeywords: text("meta_keywords"),
+  // Analytics
+  viewCount: integer("view_count").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  uniqueSlugLanguage: unique().on(table.slug, table.language),
+}));
+
 // Relations
 export const clientsRelations = relations(clients, ({ many }) => ({
   inquiries: many(inquiries),
@@ -105,6 +130,13 @@ export const insertServiceSchema = createInsertSchema(services).omit({
   id: true,
 });
 
+export const insertArticleSchema = createInsertSchema(articles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  viewCount: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -120,3 +152,6 @@ export type Inquiry = typeof inquiries.$inferSelect;
 
 export type InsertService = z.infer<typeof insertServiceSchema>;
 export type Service = typeof services.$inferSelect;
+
+export type InsertArticle = z.infer<typeof insertArticleSchema>;
+export type Article = typeof articles.$inferSelect;

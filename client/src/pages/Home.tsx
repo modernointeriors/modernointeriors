@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { Project } from "@shared/schema";
 
 export default function Home() {
+  const { t } = useLanguage();
   const { data: featuredProjects, isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
     queryFn: async () => {
@@ -33,43 +35,55 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - Matching Reference Design */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
           }}
         >
-          <div className="hero-gradient absolute inset-0"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
         
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-          <h1 className="hero-text font-serif font-bold text-white mb-6 tracking-tighter" data-testid="hero-title">
+        {/* Header Content - Matching Reference Layout */}
+        <div className="absolute top-8 left-8 z-20">
+          <div className="text-white/90 text-sm font-light tracking-wider">
+            {t('hero.studio')}
+          </div>
+        </div>
+        
+        <div className="absolute top-8 left-8 mt-12 z-20 max-w-md">
+          <p className="text-white/80 text-sm leading-relaxed">
+            {t('hero.tagline')}
+          </p>
+        </div>
+        
+        {/* Large NIVORA Text Overlay */}
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-[8rem] md:text-[12rem] lg:text-[15rem] xl:text-[18rem] font-light text-white/95 tracking-wider leading-none" data-testid="hero-title">
             NIVORA
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 font-light max-w-2xl mx-auto leading-relaxed">
-            Where architectural vision meets interior perfection. Creating extraordinary spaces that inspire and elevate.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={() => scrollToSection('featured-projects')}
-              data-testid="button-view-work"
-            >
-              View Our Work
-            </Button>
-            <Button 
-              variant="outline"
-              size="lg"
-              className="border-white/30 text-white hover:bg-white/10"
-              asChild
-              data-testid="link-contact"
-            >
-              <Link href="/contact">Start Project</Link>
-            </Button>
-          </div>
+        </div>
+        
+        {/* Side Labels */}
+        <div className="absolute left-8 bottom-1/3 z-20 text-white/70 text-sm font-light tracking-wider">
+          {t('hero.architecture')}
+        </div>
+        
+        <div className="absolute right-8 bottom-1/3 z-20 text-white/70 text-sm font-light tracking-wider">
+          {t('hero.interior')}
+        </div>
+        
+        {/* Consultation Button */}
+        <div className="absolute bottom-16 right-8 z-20">
+          <Button 
+            className="bg-white text-black hover:bg-white/90 px-8 py-3 text-sm font-medium tracking-wider"
+            asChild
+            data-testid="button-consultation"
+          >
+            <Link href="/contact">{t('hero.consultation')}</Link>
+          </Button>
         </div>
         
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 animate-bounce">
@@ -81,10 +95,10 @@ export default function Home() {
       <section id="featured-projects" className="section-padding bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">Featured Project</Badge>
-            <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6">Luxury Portfolio</h2>
+            <Badge variant="outline" className="mb-4">{t('featured.badge')}</Badge>
+            <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6">{t('featured.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Discover our most prestigious projects, where sophisticated design meets uncompromising quality.
+              {t('featured.description')}
             </p>
           </div>
           
@@ -165,19 +179,19 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-projects">{stats.totalProjects}+</div>
-                <div className="text-sm text-muted-foreground">Projects Completed</div>
+                <div className="text-sm text-muted-foreground">{t('stats.projects')}</div>
               </div>
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-clients">{stats.activeClients}+</div>
-                <div className="text-sm text-muted-foreground">Happy Clients</div>
+                <div className="text-sm text-muted-foreground">{t('stats.clients')}</div>
               </div>
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-inquiries">{stats.newInquiries}+</div>
-                <div className="text-sm text-muted-foreground">Awards Won</div>
+                <div className="text-sm text-muted-foreground">{t('stats.awards')}</div>
               </div>
               <div>
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-revenue">8+</div>
-                <div className="text-sm text-muted-foreground">Years Experience</div>
+                <div className="text-sm text-muted-foreground">{t('stats.experience')}</div>
               </div>
             </div>
           </div>
@@ -188,10 +202,10 @@ export default function Home() {
       <section className="section-padding bg-card">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">
-            Ready to Transform Your Space?
+            {t('common.readyTransform')}
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Let's collaborate to create an extraordinary environment that reflects your vision and elevates your lifestyle.
+            {t('common.collaborate')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -199,7 +213,7 @@ export default function Home() {
               asChild
               data-testid="button-start-project"
             >
-              <Link href="/contact">Start Your Project</Link>
+              <Link href="/contact">{t('common.startYourProject')}</Link>
             </Button>
             <Button 
               variant="outline" 
@@ -207,7 +221,7 @@ export default function Home() {
               asChild
               data-testid="button-view-portfolio"
             >
-              <Link href="/portfolio">View Portfolio</Link>
+              <Link href="/portfolio">{t('common.viewPortfolio')}</Link>
             </Button>
           </div>
         </div>

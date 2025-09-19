@@ -1,13 +1,14 @@
 import { 
-  users, clients, projects, inquiries, services,
+  users, clients, projects, inquiries, services, articles,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
   type Inquiry, type InsertInquiry,
-  type Service, type InsertService
+  type Service, type InsertService,
+  type Article, type InsertArticle
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, like, and, or } from "drizzle-orm";
+import { eq, desc, like, and, or, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -41,6 +42,21 @@ export interface IStorage {
   createService(service: InsertService): Promise<Service>;
   updateService(id: string, service: Partial<InsertService>): Promise<Service>;
   deleteService(id: string): Promise<void>;
+
+  // Articles/Blog
+  getArticles(filters?: { 
+    category?: string; 
+    featured?: boolean; 
+    status?: string; 
+    language?: string;
+    tags?: string[];
+  }): Promise<Article[]>;
+  getArticle(id: string): Promise<Article | undefined>;
+  getArticleBySlug(slug: string, language?: string): Promise<Article | undefined>;
+  createArticle(article: InsertArticle): Promise<Article>;
+  updateArticle(id: string, article: Partial<InsertArticle>): Promise<Article>;
+  deleteArticle(id: string): Promise<void>;
+  incrementArticleViews(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -189,6 +205,83 @@ export class DatabaseStorage implements IStorage {
 
   async deleteService(id: string): Promise<void> {
     await db.delete(services).where(eq(services.id, id));
+  }
+
+  // Articles/Blog
+  async getArticles(filters?: { 
+    category?: string; 
+    featured?: boolean; 
+    status?: string; 
+    language?: string;
+    tags?: string[];
+  }): Promise<Article[]> {
+    const conditions = [];
+    
+    if (filters?.category) {
+      conditions.push(eq(articles.category, filters.category));
+    }
+    
+    if (filters?.featured !== undefined) {
+      conditions.push(eq(articles.featured, filters.featured));
+    }
+    
+    if (filters?.status) {
+      conditions.push(eq(articles.status, filters.status));
+    }
+    
+    if (filters?.language) {
+      conditions.push(eq(articles.language, filters.language));
+    }
+    
+    // For public queries, only show published articles
+    if (!filters?.status) {
+      conditions.push(eq(articles.status, 'published'));
+    }
+    
+    const query = conditions.length > 0
+      ? db.select().from(articles).where(and(...conditions))
+      : db.select().from(articles);
+    
+    return await query.orderBy(desc(articles.publishedAt), desc(articles.createdAt));
+  }
+
+  async getArticle(id: string): Promise<Article | undefined> {
+    const [article] = await db.select().from(articles).where(eq(articles.id, id));
+    return article || undefined;
+  }
+
+  async getArticleBySlug(slug: string, language?: string): Promise<Article | undefined> {
+    const conditions = [eq(articles.slug, slug)];
+    if (language) {
+      conditions.push(eq(articles.language, language));
+    }
+    const [article] = await db.select().from(articles).where(and(...conditions));
+    return article || undefined;
+  }
+
+  async createArticle(article: InsertArticle): Promise<Article> {
+    const [newArticle] = await db.insert(articles).values(article).returning();
+    return newArticle;
+  }
+
+  async updateArticle(id: string, article: Partial<InsertArticle>): Promise<Article> {
+    const [updatedArticle] = await db
+      .update(articles)
+      .set({ ...article, updatedAt: new Date() })
+      .where(eq(articles.id, id))
+      .returning();
+    return updatedArticle;
+  }
+
+  async deleteArticle(id: string): Promise<void> {
+    await db.delete(articles).where(eq(articles.id, id));
+  }
+
+  async incrementArticleViews(id: string): Promise<void> {
+    await db
+      .update(articles)
+      .set({ viewCount: sql`${articles.viewCount} + 1` })
+      .where(eq(articles.id, id));
   }
 }
 
