@@ -336,27 +336,37 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        {/* OTHER PROJECTS Section - Always show at least 4 */}
+        {/* OTHER PROJECTS Section - Horizontal Scroll */}
         {allProjects && allProjects.length > 0 && (
           <div className="mt-32 pt-16">
             <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">OTHER PROJECTS</div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {allProjects.map((otherProject) => (
-                <Link key={otherProject.id} href={`/project/${otherProject.id}`}>
-                  <div className="group cursor-pointer aspect-square">
-                    <OptimizedImage
-                      src={(Array.isArray(otherProject.coverImages) ? otherProject.coverImages[0] : '') || (Array.isArray(otherProject.contentImages) ? otherProject.contentImages[0] : '') || otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 
-                      alt={otherProject.title}
-                      width={300}
-                      height={300}
-                      wrapperClassName="w-full h-full"
-                      className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                      data-testid={`img-other-project-${otherProject.id}`}
-                    />
-                  </div>
-                </Link>
-              ))}
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                {allProjects.map((otherProject) => (
+                  <Link key={otherProject.id} href={`/project/${otherProject.id}`}>
+                    <div className="group cursor-pointer w-72 aspect-square flex-shrink-0">
+                      <OptimizedImage
+                        src={(Array.isArray(otherProject.coverImages) ? otherProject.coverImages[0] : '') || (Array.isArray(otherProject.contentImages) ? otherProject.contentImages[0] : '') || otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 
+                        alt={otherProject.title}
+                        width={288}
+                        height={288}
+                        wrapperClassName="w-full h-full"
+                        className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
+                        sizes="288px"
+                        data-testid={`img-other-project-${otherProject.id}`}
+                      />
+                      <div className="mt-4 space-y-2">
+                        <h3 className="text-white font-light tracking-wider text-sm uppercase">
+                          {otherProject.title}
+                        </h3>
+                        <p className="text-zinc-400 text-xs">
+                          {otherProject.category}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         )}
