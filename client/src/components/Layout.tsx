@@ -36,12 +36,12 @@ export default function Layout({ children }: LayoutProps) {
           <SheetTrigger asChild>
             <Button 
               variant="ghost" 
-              size="sm"
-              className="text-white hover:text-[#FAA61A] p-3 w-10 h-10 rounded-none hover:bg-transparent flex items-center justify-center"
+              size="lg"
+              className="text-white hover:text-[#FAA61A] p-4 w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <Menu className="h-5 w-5 rotate-90" />
+              <Menu className="h-7 w-7 rotate-90" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
