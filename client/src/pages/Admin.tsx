@@ -89,55 +89,6 @@ export default function Admin() {
 
         {/* Dashboard Content */}
         <AdminDashboard activeTab={activeTab} />
-
-        {/* Quick Actions */}
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button 
-                className="h-20 flex-col gap-2"
-                onClick={() => setActiveTab('projects')}
-                data-testid="button-add-project"
-              >
-                <i className="fas fa-plus text-xl" />
-                <span>Add New Project</span>
-              </Button>
-              
-              <Button 
-                variant="outline"
-                className="h-20 flex-col gap-2"
-                onClick={() => setActiveTab('articles')}
-                data-testid="button-manage-articles"
-              >
-                <i className="fas fa-newspaper text-xl text-primary" />
-                <span>Manage Articles</span>
-              </Button>
-              
-              <Button 
-                variant="outline"
-                className="h-20 flex-col gap-2"
-                onClick={() => setActiveTab('content')}
-                data-testid="button-manage-gallery"
-              >
-                <i className="fas fa-images text-xl text-primary" />
-                <span>Manage Gallery</span>
-              </Button>
-              
-              <Button 
-                variant="outline"
-                className="h-20 flex-col gap-2"
-                onClick={() => setActiveTab('inquiries')}
-                data-testid="button-view-inquiries"
-              >
-                <i className="fas fa-envelope text-xl text-primary" />
-                <span>View Inquiries</span>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
