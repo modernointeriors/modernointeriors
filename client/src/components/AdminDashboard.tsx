@@ -16,7 +16,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle } from "@shared/schema";
+import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const projectSchema = z.object({
@@ -88,6 +89,7 @@ const homepageContentSchema = z.object({
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
+type ArticleFormData = InsertArticle;
 type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 
 interface AdminDashboardProps {
@@ -101,9 +103,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [editingService, setEditingService] = useState<Service | null>(null);
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
   const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
+  const [isArticleDialogOpen, setIsArticleDialogOpen] = useState(false);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -129,6 +133,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: services = [], isLoading: servicesLoading } = useQuery<Service[]>({
     queryKey: ['/api/services'],
+  });
+
+  const { data: articles = [], isLoading: articlesLoading } = useQuery<Article[]>({
+    queryKey: ['/api/articles'],
   });
 
   const { data: homepageContent, isLoading: homepageContentLoading } = useQuery<HomepageContent>({
@@ -190,6 +198,25 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       features: [],
       order: 0,
       active: true,
+    },
+  });
+
+  const articleForm = useForm<ArticleFormData>({
+    resolver: zodResolver(insertArticleSchema),
+    defaultValues: {
+      title: "",
+      slug: "",
+      excerpt: "",
+      content: "",
+      featuredImage: "",
+      category: "general",
+      tags: [],
+      status: "draft",
+      language: "en",
+      featured: false,
+      metaTitle: "",
+      metaDescription: "",
+      metaKeywords: "",
     },
   });
 
@@ -329,6 +356,65 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  // Article Mutations
+  const createArticleMutation = useMutation({
+    mutationFn: async (data: ArticleFormData) => {
+      const response = await apiRequest('POST', '/api/articles', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
+      toast({ title: "Article created successfully" });
+      articleForm.reset();
+      setIsArticleDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating article",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateArticleMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<ArticleFormData> }) => {
+      const response = await apiRequest('PUT', `/api/articles/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
+      toast({ title: "Article updated successfully" });
+      setEditingArticle(null);
+      setIsArticleDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating article",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteArticleMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await apiRequest('DELETE', `/api/articles/${id}`);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
+      toast({ title: "Article deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting article",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   // Handlers
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
@@ -391,6 +477,35 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const onHomepageContentSubmit = async (data: HomepageContentFormData) => {
     await updateHomepageContentMutation.mutateAsync(data);
+  };
+
+  const handleEditArticle = (article: Article) => {
+    setEditingArticle(article);
+    articleForm.reset({
+      title: article.title,
+      slug: article.slug,
+      excerpt: article.excerpt || "",
+      content: article.content,
+      featuredImage: article.featuredImage || "",
+      category: article.category as "news" | "tips" | "projects" | "design-trends",
+      tags: Array.isArray(article.tags) ? article.tags as string[] : [],
+      status: article.status as "draft" | "published" | "archived",
+      language: article.language as "en" | "vi",
+      featured: article.featured,
+      publishedAt: article.publishedAt ? new Date(article.publishedAt) : undefined,
+      metaTitle: article.metaTitle || "",
+      metaDescription: article.metaDescription || "",
+      metaKeywords: article.metaKeywords || "",
+    });
+    setIsArticleDialogOpen(true);
+  };
+
+  const onArticleSubmit = async (data: ArticleFormData) => {
+    if (editingArticle) {
+      await updateArticleMutation.mutateAsync({ id: editingArticle.id, data });
+    } else {
+      await createArticleMutation.mutateAsync(data);
+    }
   };
 
   const formatDate = (date: string | Date) => {
@@ -1349,6 +1464,357 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
               <Button data-testid="button-save-seo">Save SEO Settings</Button>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (activeTab === 'articles') {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-sans font-light">Articles Management</h2>
+          <Dialog open={isArticleDialogOpen} onOpenChange={setIsArticleDialogOpen}>
+            <DialogTrigger asChild>
+              <Button data-testid="button-add-article">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Article
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingArticle ? "Edit Article" : "Add New Article"}
+                </DialogTitle>
+              </DialogHeader>
+              <Form {...articleForm}>
+                <form onSubmit={articleForm.handleSubmit(onArticleSubmit)} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={articleForm.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title *</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-article-title" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={articleForm.control}
+                      name="slug"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Slug</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-article-slug" placeholder="auto-generated-if-empty" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={articleForm.control}
+                    name="excerpt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Excerpt</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={3} data-testid="textarea-article-excerpt" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={articleForm.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Content *</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={8} data-testid="textarea-article-content" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <FormField
+                      control={articleForm.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-article-category">
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="news">News</SelectItem>
+                              <SelectItem value="tips">Tips</SelectItem>
+                              <SelectItem value="projects">Projects</SelectItem>
+                              <SelectItem value="design-trends">Design Trends</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={articleForm.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Status *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-article-status">
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="draft">Draft</SelectItem>
+                              <SelectItem value="published">Published</SelectItem>
+                              <SelectItem value="archived">Archived</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={articleForm.control}
+                      name="language"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Language *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-article-language">
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="en">English</SelectItem>
+                              <SelectItem value="vi">Vietnamese</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={articleForm.control}
+                      name="featured"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                          <FormControl>
+                            <input
+                              type="checkbox"
+                              checked={field.value}
+                              onChange={field.onChange}
+                              data-testid="checkbox-article-featured"
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>Featured Article</FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={articleForm.control}
+                      name="featuredImage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Featured Image</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-article-featured-image" placeholder="Image URL" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* SEO Settings Section */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium mb-4">SEO Settings</h3>
+                    <div className="space-y-4">
+                      <FormField
+                        control={articleForm.control}
+                        name="metaTitle"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Title</FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-article-meta-title" placeholder="Custom SEO title (optional)" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={articleForm.control}
+                        name="metaDescription"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Description</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={3} data-testid="textarea-article-meta-description" placeholder="Description for search engines (optional)" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={articleForm.control}
+                        name="metaKeywords"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Keywords</FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-article-meta-keywords" placeholder="Comma-separated keywords (optional)" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end space-x-2 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setIsArticleDialogOpen(false);
+                        setEditingArticle(null);
+                        articleForm.reset();
+                      }}
+                      data-testid="button-cancel-article"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={createArticleMutation.isPending || updateArticleMutation.isPending}
+                      data-testid="button-save-article"
+                    >
+                      {editingArticle ? "Update Article" : "Create Article"}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Articles</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {articlesLoading ? (
+              <div className="space-y-2">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-4 bg-muted rounded animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Language</TableHead>
+                    <TableHead>Featured</TableHead>
+                    <TableHead>Published</TableHead>
+                    <TableHead>SEO</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {articles.map((article) => (
+                    <TableRow key={article.id} data-testid={`row-article-${article.id}`}>
+                      <TableCell className="font-medium">{article.title}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" data-testid={`badge-category-${article.id}`}>
+                          {article.category}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={article.status === 'published' ? 'default' : 'secondary'}
+                          data-testid={`badge-status-${article.id}`}
+                        >
+                          {article.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" data-testid={`badge-language-${article.id}`}>
+                          {article.language.toUpperCase()}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {article.featured && <Badge data-testid={`badge-featured-${article.id}`}>Featured</Badge>}
+                      </TableCell>
+                      <TableCell data-testid={`text-published-${article.id}`}>
+                        {article.publishedAt ? formatDate(article.publishedAt) : '-'}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-1">
+                          {article.metaTitle && <Badge variant="outline" className="text-xs">Title</Badge>}
+                          {article.metaDescription && <Badge variant="outline" className="text-xs">Desc</Badge>}
+                          {article.metaKeywords && <Badge variant="outline" className="text-xs">Keywords</Badge>}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditArticle(article)}
+                            data-testid={`button-edit-article-${article.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteArticleMutation.mutate(article.id)}
+                            data-testid={`button-delete-article-${article.id}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
