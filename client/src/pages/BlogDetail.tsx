@@ -218,9 +218,9 @@ export default function BlogDetail() {
 
             {article.tags && Array.isArray(article.tags) && article.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-8">
-                {(article.tags as any[]).map((tag: any, index: number) => (
+                {(article.tags as string[]).map((tag: string, index: number) => (
                   <Badge key={index} variant="outline">
-                    #{String(tag)}
+                    #{tag}
                   </Badge>
                 ))}
               </div>
@@ -278,7 +278,7 @@ export default function BlogDetail() {
         </div>
 
         {/* Share Button */}
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-start mt-12 mb-8">
           <Button
             variant="outline"
             size="sm"
