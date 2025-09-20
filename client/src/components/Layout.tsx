@@ -202,6 +202,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li><Link href="/" className="text-white/80 hover:text-white transition-colors font-light">HOME</Link></li>
                 <li><Link href="/about" className="text-white/80 hover:text-white transition-colors font-light">ABOUT</Link></li>
                 <li><Link href="/portfolio" className="text-white/80 hover:text-white transition-colors font-light">PROJECTS</Link></li>
+                <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">NEWS</Link></li>
                 <li><Link href="/contact" className="text-white/80 hover:text-white transition-colors font-light">CONTACTS</Link></li>
               </ul>
             </div>
