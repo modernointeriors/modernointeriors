@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,7 @@ const tabs = [
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [, navigate] = useLocation();
   const { user, logout } = useAuth();
   const { toast } = useToast();
 
@@ -27,6 +29,8 @@ export default function Admin() {
       title: "Đăng xuất thành công",
       description: "Bạn đã được đăng xuất khỏi hệ thống.",
     });
+    // Redirect to home page after logout
+    navigate('/');
   };
 
   return (
