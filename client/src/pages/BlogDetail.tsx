@@ -3,12 +3,12 @@ import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Eye, ArrowLeft, Share2 } from "lucide-react";
+import { Calendar, Eye, ArrowLeft, Share2, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Related Articles Component
 function RelatedArticles({ currentArticleId, language }: { currentArticleId: string; language: string }) {
@@ -95,6 +95,7 @@ export default function BlogDetail() {
   const { slug } = useParams();
   const { language } = useLanguage();
   const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
 
   const { data: article, isLoading, error } = useQuery<Article>({
     queryKey: ['/api/articles/slug', slug, language],
@@ -199,6 +200,8 @@ export default function BlogDetail() {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
       toast({
         title: language === 'vi' ? 'Đã sao chép liên kết' : 'Link copied',
         description: language === 'vi' ? 'Liên kết đã được sao chép vào clipboard' : 'Link has been copied to clipboard',
@@ -356,9 +359,19 @@ export default function BlogDetail() {
             onClick={handleShare}
             className="hover:text-white hover:bg-transparent hover:font-bold transition-all"
             data-testid="button-share"
+            disabled={copied}
           >
-            <Share2 className="h-5 w-5 mr-2" />
-            {language === 'vi' ? 'Chia sẻ' : 'Share'}
+            {copied ? (
+              <>
+                <Check className="h-5 w-5 mr-2" />
+                {language === 'vi' ? 'Đã sao chép!' : 'Copied!'}
+              </>
+            ) : (
+              <>
+                <Share2 className="h-5 w-5 mr-2" />
+                {language === 'vi' ? 'Chia sẻ' : 'Share'}
+              </>
+            )}
           </Button>
         </div>
 
