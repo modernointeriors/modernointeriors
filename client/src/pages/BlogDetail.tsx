@@ -334,14 +334,20 @@ export default function BlogDetail() {
           />
         </article>
 
-        {/* Related Articles Section */}
-        <RelatedArticles currentArticleId={article.id} language={language} />
-
-        {/* Share Button */}
-        <div className="flex justify-start mt-12 mb-8 -ml-2">
+        {/* Published By and Share Section */}
+        <div className="flex items-center justify-between mt-12 mb-8 border-t border-gray-800 pt-6">
+          <div className="text-sm text-muted-foreground">
+            <span>
+              {language === 'vi' ? 'Được xuất bản bởi ' : 'Published by '}
+              <span className="text-primary font-medium">MODERNO INTERIORS Studio</span>
+            </span>
+            <div className="mt-1">
+              {formatDate(String(article.publishedAt || article.createdAt))}
+            </div>
+          </div>
           <Button
             variant="ghost"
-            size="md"
+            size="sm"
             onClick={handleShare}
             className="hover:text-white hover:bg-transparent hover:font-bold transition-all"
             data-testid="button-share"
@@ -350,6 +356,9 @@ export default function BlogDetail() {
             {language === 'vi' ? 'Chia sẻ' : 'Share'}
           </Button>
         </div>
+
+        {/* Related Articles Section */}
+        <RelatedArticles currentArticleId={article.id} language={language} />
       </div>
     </div>
   );
