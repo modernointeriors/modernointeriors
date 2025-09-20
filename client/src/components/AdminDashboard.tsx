@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -245,28 +245,30 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   });
 
   // Update form when content loads
-  if (homepageContent && !homepageContentForm.formState.isDirty) {
-    const formData = {
-      ...homepageContent,
-      heroBackgroundImage: homepageContent.heroBackgroundImage || undefined,
-      heroTagline: homepageContent.heroTagline || undefined,
-      heroArchitectureLabel: homepageContent.heroArchitectureLabel || undefined,
-      heroInteriorLabel: homepageContent.heroInteriorLabel || undefined,
-      heroConsultationText: homepageContent.heroConsultationText || undefined,
-      featuredBadge: homepageContent.featuredBadge || undefined,
-      featuredTitle: homepageContent.featuredTitle || undefined,
-      featuredDescription: homepageContent.featuredDescription || undefined,
-      statsProjectsLabel: homepageContent.statsProjectsLabel || undefined,
-      statsClientsLabel: homepageContent.statsClientsLabel || undefined,
-      statsAwardsLabel: homepageContent.statsAwardsLabel || undefined,
-      statsExperienceLabel: homepageContent.statsExperienceLabel || undefined,
-      ctaTitle: homepageContent.ctaTitle || undefined,
-      ctaDescription: homepageContent.ctaDescription || undefined,
-      ctaButtonText: homepageContent.ctaButtonText || undefined,
-      ctaSecondaryButtonText: homepageContent.ctaSecondaryButtonText || undefined,
-    };
-    homepageContentForm.reset(formData);
-  }
+  useEffect(() => {
+    if (homepageContent && !homepageContentForm.formState.isDirty) {
+      const formData = {
+        ...homepageContent,
+        heroBackgroundImage: homepageContent.heroBackgroundImage || undefined,
+        heroTagline: homepageContent.heroTagline || undefined,
+        heroArchitectureLabel: homepageContent.heroArchitectureLabel || undefined,
+        heroInteriorLabel: homepageContent.heroInteriorLabel || undefined,
+        heroConsultationText: homepageContent.heroConsultationText || undefined,
+        featuredBadge: homepageContent.featuredBadge || undefined,
+        featuredTitle: homepageContent.featuredTitle || undefined,
+        featuredDescription: homepageContent.featuredDescription || undefined,
+        statsProjectsLabel: homepageContent.statsProjectsLabel || undefined,
+        statsClientsLabel: homepageContent.statsClientsLabel || undefined,
+        statsAwardsLabel: homepageContent.statsAwardsLabel || undefined,
+        statsExperienceLabel: homepageContent.statsExperienceLabel || undefined,
+        ctaTitle: homepageContent.ctaTitle || undefined,
+        ctaDescription: homepageContent.ctaDescription || undefined,
+        ctaButtonText: homepageContent.ctaButtonText || undefined,
+        ctaSecondaryButtonText: homepageContent.ctaSecondaryButtonText || undefined,
+      };
+      homepageContentForm.reset(formData);
+    }
+  }, [homepageContent, homepageContentForm]);
 
   // Mutations
   const createProjectMutation = useMutation({
