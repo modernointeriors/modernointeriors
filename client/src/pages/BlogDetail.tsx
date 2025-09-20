@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Eye, ArrowLeft, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
 import { useEffect } from "react";
@@ -93,6 +94,7 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
 export default function BlogDetail() {
   const { slug } = useParams();
   const { language } = useLanguage();
+  const { toast } = useToast();
 
   const { data: article, isLoading, error } = useQuery<Article>({
     queryKey: ['/api/articles/slug', slug, language],
@@ -194,16 +196,19 @@ export default function BlogDetail() {
     return categoryMap[language][category as keyof typeof categoryMap.en] || category;
   };
 
-  const handleShare = () => {
-    if (navigator.share && article) {
-      navigator.share({
-        title: article.title,
-        text: article.excerpt || '',
-        url: window.location.href,
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: language === 'vi' ? 'Đã sao chép liên kết' : 'Link copied',
+        description: language === 'vi' ? 'Liên kết đã được sao chép vào clipboard' : 'Link has been copied to clipboard',
       });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
+    } catch (error) {
+      toast({
+        title: language === 'vi' ? 'Lỗi' : 'Error',
+        description: language === 'vi' ? 'Không thể sao chép liên kết' : 'Failed to copy link',
+        variant: 'destructive',
+      });
     }
   };
 
