@@ -357,7 +357,7 @@ export default function BlogDetail() {
             variant="ghost"
             size="sm"
             onClick={handleShare}
-            className="border border-white/20 rounded-full px-4 py-2 hover:bg-transparent transition-all"
+            className="border border-white/20 rounded-full px-4 py-2 hover:bg-white/10 hover:text-white transition-all"
             data-testid="button-share"
             disabled={copied}
           >
