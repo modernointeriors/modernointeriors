@@ -216,27 +216,15 @@ export default function BlogDetail() {
               </p>
             )}
 
-            <div className="flex items-center justify-between mb-8">
-              {article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {(article.tags as any[]).map((tag: any, index: number) => (
-                    <Badge key={index} variant="outline">
-                      #{String(tag)}
-                    </Badge>
-                  ))}
-                </div>
-              ) : null}
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShare}
-                data-testid="button-share"
-              >
-                <Share2 className="h-4 w-4 mr-2" />
-                {language === 'vi' ? 'Chia sẻ' : 'Share'}
-              </Button>
-            </div>
+            {article.tags && Array.isArray(article.tags) && article.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-8">
+                {(article.tags as any[]).map((tag: any, index: number) => (
+                  <Badge key={index} variant="outline">
+                    #{String(tag)}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Featured Image */}
@@ -265,7 +253,7 @@ export default function BlogDetail() {
         </article>
 
         {/* CTA Section */}
-        <div className="mt-16 py-12 text-center border-t border-border">
+        <div className="mt-16 py-12 text-center">
           <h3 className="text-2xl font-sans font-bold mb-4">
             {language === 'vi' ? 'Cần tư vấn thiết kế?' : 'Need Design Consultation?'}
           </h3>
@@ -287,6 +275,19 @@ export default function BlogDetail() {
               </Link>
             </Button>
           </div>
+        </div>
+
+        {/* Share Button */}
+        <div className="flex justify-center mt-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleShare}
+            data-testid="button-share"
+          >
+            <Share2 className="h-4 w-4 mr-2" />
+            {language === 'vi' ? 'Chia sẻ' : 'Share'}
+          </Button>
         </div>
       </div>
     </div>
