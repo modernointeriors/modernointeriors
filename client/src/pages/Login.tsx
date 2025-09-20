@@ -39,7 +39,10 @@ export default function Login() {
           title: "Đăng nhập thành công",
           description: "Chào mừng bạn trở lại!",
         });
-        navigate('/admin');
+        // Add a small delay to ensure auth context is updated
+        setTimeout(() => {
+          navigate('/admin');
+        }, 100);
       } else {
         toast({
           title: "Đăng nhập thất bại",

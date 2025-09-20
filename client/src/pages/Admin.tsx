@@ -12,6 +12,7 @@ const tabs = [
   { id: 'projects', label: 'Projects', icon: 'fas fa-briefcase' },
   { id: 'clients', label: 'CRM', icon: 'fas fa-users' },
   { id: 'inquiries', label: 'Inquiries', icon: 'fas fa-envelope' },
+  { id: 'articles', label: 'Articles', icon: 'fas fa-newspaper' },
   { id: 'content', label: 'Content', icon: 'fas fa-edit' }
 ];
 
@@ -103,6 +104,16 @@ export default function Admin() {
               >
                 <i className="fas fa-plus text-xl" />
                 <span>Add New Project</span>
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="h-20 flex-col gap-2"
+                onClick={() => setActiveTab('articles')}
+                data-testid="button-manage-articles"
+              >
+                <i className="fas fa-newspaper text-xl text-primary" />
+                <span>Manage Articles</span>
               </Button>
               
               <Button 
