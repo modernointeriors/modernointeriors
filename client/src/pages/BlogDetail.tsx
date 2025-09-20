@@ -2,11 +2,93 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Eye, ArrowLeft, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
 import { useEffect } from "react";
+
+// Related Articles Component
+function RelatedArticles({ currentArticleId, language }: { currentArticleId: string; language: string }) {
+  const { data: relatedArticles = [] } = useQuery<Article[]>({
+    queryKey: ['/api/articles', 'related', currentArticleId, language],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      params.append('language', language);
+      params.append('category', 'news');
+      const response = await fetch(`/api/articles?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch articles');
+      }
+      const articles = await response.json();
+      return articles.filter((article: Article) => article.id !== currentArticleId).slice(0, 3);
+    },
+  });
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  if (relatedArticles.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-16 py-12">
+      <h3 className="text-2xl font-sans font-bold mb-8">
+        {language === 'vi' ? 'Những bài viết khác trong News' : 'Other News Articles'}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {relatedArticles.map((article) => (
+          <Card key={article.id} className="group hover:shadow-lg transition-shadow">
+            <CardContent className="p-0">
+              {article.featuredImage && (
+                <div className="aspect-video overflow-hidden rounded-t-lg">
+                  <OptimizedImage
+                    src={article.featuredImage}
+                    alt={article.title}
+                    width={400}
+                    height={225}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
+              )}
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                  <Badge variant="outline">News</Badge>
+                  <span>•</span>
+                  <span>{formatDate(String(article.publishedAt || article.createdAt))}</span>
+                </div>
+                <h4 className="font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                  <Link href={`/blog/${article.slug}`} className="hover:underline">
+                    {article.title}
+                  </Link>
+                </h4>
+                {article.excerpt && (
+                  <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
+                    {article.excerpt}
+                  </p>
+                )}
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={`/blog/${article.slug}`}>
+                    {language === 'vi' ? 'Đọc thêm' : 'Read more'}
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function BlogDetail() {
   const { slug } = useParams();
@@ -218,9 +300,9 @@ export default function BlogDetail() {
 
             {article.tags && Array.isArray(article.tags) && article.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-8">
-                {(article.tags as string[]).map((tag: string, index: number) => (
+                {article.tags.map((tag, index) => (
                   <Badge key={index} variant="outline">
-                    #{tag}
+                    #{String(tag)}
                   </Badge>
                 ))}
               </div>
@@ -252,30 +334,8 @@ export default function BlogDetail() {
           />
         </article>
 
-        {/* CTA Section */}
-        <div className="mt-16 py-12 text-center">
-          <h3 className="text-2xl font-sans font-bold mb-4">
-            {language === 'vi' ? 'Cần tư vấn thiết kế?' : 'Need Design Consultation?'}
-          </h3>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            {language === 'vi' 
-              ? 'Hãy để MODERNO INTERIORS Studio giúp bạn biến ý tưởng thành hiện thực với dịch vụ thiết kế chuyên nghiệp.'
-              : 'Let MODERNO INTERIORS Studio help you turn your ideas into reality with our professional design services.'
-            }
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild data-testid="button-contact-cta">
-              <Link href="/contact">
-                {language === 'vi' ? 'Liên hệ tư vấn' : 'Contact for Consultation'}
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild data-testid="button-portfolio-cta">
-              <Link href="/portfolio">
-                {language === 'vi' ? 'Xem dự án' : 'View Our Projects'}
-              </Link>
-            </Button>
-          </div>
-        </div>
+        {/* Related Articles Section */}
+        <RelatedArticles currentArticleId={article.id} language={language} />
 
         {/* Share Button */}
         <div className="flex justify-start mt-12 mb-8">
