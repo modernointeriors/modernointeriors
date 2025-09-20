@@ -288,7 +288,7 @@ export default function BlogDetail() {
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-sans font-bold mb-6 leading-tight" data-testid="article-title">
+            <h1 className="text-4xl md:text-5xl font-sans font-bold mb-6 leading-tight text-white" data-testid="article-title">
               {article.title}
             </h1>
 
@@ -298,15 +298,15 @@ export default function BlogDetail() {
               </p>
             )}
 
-            {article.tags && Array.isArray(article.tags) && article.tags.length > 0 && (
+            {article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? (
               <div className="flex flex-wrap gap-2 mb-8">
-                {article.tags.map((tag, index) => (
+                {(article.tags as string[]).map((tag, index) => (
                   <Badge key={index} variant="outline">
-                    #{String(tag)}
+                    #{tag}
                   </Badge>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Featured Image */}
