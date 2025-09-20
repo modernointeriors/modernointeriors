@@ -115,7 +115,7 @@ export default function Blog() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">
+          <Badge variant="secondary" className="mb-4 border-0">
             {language === 'vi' ? 'Tin tức & Blog' : 'News & Blog'}
           </Badge>
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-blog">
