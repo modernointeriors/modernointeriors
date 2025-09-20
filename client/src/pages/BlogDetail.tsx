@@ -340,12 +340,13 @@ export default function BlogDetail() {
         {/* Share Button */}
         <div className="flex justify-start mt-12 mb-8">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={handleShare}
+            className="hover:text-white hover:bg-transparent"
             data-testid="button-share"
           >
-            <Share2 className="h-4 w-4 mr-2" />
+            <Share2 className="h-4 w-4 mr-2 hover:text-white" />
             {language === 'vi' ? 'Chia sẻ' : 'Share'}
           </Button>
         </div>
