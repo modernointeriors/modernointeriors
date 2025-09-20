@@ -13,6 +13,7 @@ const getNavigation = (t: (key: string) => string) => [
   { name: t('nav.home'), href: '/', key: 'home' },
   { name: t('nav.about'), href: '/about', key: 'about' },
   { name: t('nav.projects'), href: '/portfolio', key: 'portfolio' },
+  { name: t('nav.news'), href: '/blog', key: 'news' },
   { name: t('nav.contacts'), href: '/contact', key: 'contact' }
 ];
 

@@ -20,6 +20,7 @@ const translations = {
     'nav.services': 'SERVICES',
     'nav.contact': 'CONTACT',
     'nav.contacts': 'CONTACTS',
+    'nav.news': 'NEWS',
     'nav.admin': 'Admin',
     
     // Hero Section
@@ -57,6 +58,7 @@ const translations = {
     'nav.services': 'DỊCH VỤ',
     'nav.contact': 'LIÊN HỆ',
     'nav.contacts': 'LIÊN HỆ',
+    'nav.news': 'TIN TỨC',
     'nav.admin': 'Quản trị',
     
     // Hero Section
