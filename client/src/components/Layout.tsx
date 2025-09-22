@@ -3,26 +3,58 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Menu, X, Globe } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage, type Language } from "@/contexts/LanguageContext";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const getNavigation = (t: (key: string) => string) => [
-  { name: t('nav.home'), href: '/', key: 'home' },
-  { name: t('nav.about'), href: '/about', key: 'about' },
-  { name: t('nav.projects'), href: '/portfolio', key: 'portfolio' },
-  { name: t('nav.news'), href: '/blog', key: 'news' },
-  { name: t('nav.contacts'), href: '/contact', key: 'contact' }
-];
+const getNavigation = (t: (key: string) => string, language: string) => {
+  const prefix = language === 'en' ? '/en' : '/vn';
+  return [
+    { name: t('nav.home'), href: `${prefix}/`, key: 'home' },
+    { name: t('nav.about'), href: `${prefix}/about`, key: 'about' },
+    { name: t('nav.projects'), href: `${prefix}/portfolio`, key: 'portfolio' },
+    { name: t('nav.news'), href: `${prefix}/blog`, key: 'news' },
+    { name: t('nav.contacts'), href: `${prefix}/contact`, key: 'contact' }
+  ];
+};
 
 export default function Layout({ children }: LayoutProps) {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-  const navigation = getNavigation(t);
+  const navigation = getNavigation(t, language);
+
+  // Language switching with URL update
+  const handleLanguageChange = (lang: Language) => {
+    const getPathWithoutLanguage = (path: string): string => {
+      if (path.startsWith('/en') || path.startsWith('/vn')) {
+        return path.substring(3) || '/';
+      }
+      return path;
+    };
+    
+    setLanguage(lang);
+    const currentPath = getPathWithoutLanguage(location);
+    const newPath = lang === 'en' ? `/en${currentPath}` : `/vn${currentPath}`;
+    navigate(newPath);
+  };
+
+  // Initialize language from URL
+  useEffect(() => {
+    const getLanguageFromURL = (path: string): Language => {
+      if (path.startsWith('/en')) return 'en';
+      if (path.startsWith('/vn')) return 'vi';
+      return 'en';
+    };
+    
+    const langFromURL = getLanguageFromURL(location);
+    if (langFromURL !== language) {
+      setLanguage(langFromURL);
+    }
+  }, [location, language, setLanguage]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -68,7 +100,7 @@ export default function Layout({ children }: LayoutProps) {
           {/* Language Selector */}
           <div className="flex items-center space-x-1 text-sm">
             <button
-              onClick={() => setLanguage('en')}
+              onClick={() => handleLanguageChange('en')}
               className={`transition-colors px-2 py-1 ${
                 language === 'en' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
               }`}
@@ -78,7 +110,7 @@ export default function Layout({ children }: LayoutProps) {
             </button>
             <span className="text-zinc-600">|</span>
             <button
-              onClick={() => setLanguage('vi')}
+              onClick={() => handleLanguageChange('vi')}
               className={`transition-colors px-2 py-1 ${
                 language === 'vi' ? 'text-primary' : 'text-zinc-400 hover:text-primary'
               }`}
@@ -146,21 +178,21 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="pb-6 border-t border-border pt-8">
                   <div className="space-y-4">
                     <Link 
-                      href="/services" 
+                      href={`${language === 'en' ? '/en' : '/vn'}/services`} 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Services
                     </Link>
                     <Link 
-                      href="/about" 
+                      href={`${language === 'en' ? '/en' : '/vn'}/about`} 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Our Story
                     </Link>
                     <Link 
-                      href="/contact" 
+                      href={`${language === 'en' ? '/en' : '/vn'}/contact`} 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -217,27 +249,27 @@ export default function Layout({ children }: LayoutProps) {
               </h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/" className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vn'}/`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vn'}/about`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/portfolio" className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vn'}/portfolio`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">
+                  <Link href={`${language === 'en' ? '/en' : '/vn'}/blog`} className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">
                     {language === 'vi' ? 'TIN TỨC' : 'NEWS'}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vn'}/contact`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'LIÊN HỆ' : 'CONTACTS'}
                   </Link>
                 </li>
