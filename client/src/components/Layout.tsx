@@ -67,13 +67,13 @@ export default function Layout({ children }: LayoutProps) {
       }`}>
         <div className="flex items-center justify-between py-4 px-6">
           {/* Logo */}
-          <div className="text-white text-lg font-light tracking-wider">
+          <Link href="/" className="text-white text-lg font-light tracking-wider cursor-pointer">
             <img 
               src="/attached_assets/logo.white.png" 
               alt="MODERNO INTERIORS STUDIO" 
-              className="h-8 w-auto"
+              className="h-8 w-auto hover:opacity-80 transition-opacity"
             />
-          </div>
+          </Link>
           
           {/* Language Selector */}
           <div className="flex items-center space-x-1 text-sm">
@@ -122,11 +122,17 @@ export default function Layout({ children }: LayoutProps) {
           <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
-                <img 
-                  src="/attached_assets/logo.white.png" 
-                  alt="MODERNO INTERIORS" 
-                  className="h-12 w-auto"
-                />
+                <Link 
+                  href="/" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="cursor-pointer inline-block"
+                >
+                  <img 
+                    src="/attached_assets/logo.white.png" 
+                    alt="MODERNO INTERIORS" 
+                    className="h-12 w-auto hover:opacity-80 transition-opacity"
+                  />
+                </Link>
               </SheetTitle>
               <SheetDescription className="sr-only">Navigation menu</SheetDescription>
             </SheetHeader>
