@@ -223,11 +223,13 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <a 
-                    href="#" 
+                    href="https://www.facebook.com/moderno.interiors.design" 
                     className="text-white/80 hover:text-white transition-colors font-light"
-                    data-testid="footer-twitter"
+                    data-testid="footer-facebook"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    X/TWITTER
+                    FACEBOOK
                   </a>
                 </li>
                 <li>
