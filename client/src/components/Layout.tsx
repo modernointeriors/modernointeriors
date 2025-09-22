@@ -251,7 +251,7 @@ export default function Layout({ children }: LayoutProps) {
                     className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-zalo"
                   >
-                    ZALO OA
+                    ZALO
                   </a>
                 </li>
               </ul>
