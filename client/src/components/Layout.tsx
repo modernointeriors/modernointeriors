@@ -27,13 +27,10 @@ export default function Layout({ children }: LayoutProps) {
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t, language);
 
-  // Language switching with URL update
+  // Language switching without URL changes
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang);
-    // Get current page path without language prefix
-    const currentPage = location.replace(/^\/(en|vi)/, '') || '/';
-    const newPath = lang === 'en' ? `/en${currentPage}` : `/vi${currentPage}`;
-    navigate(newPath, { replace: true });
+    // Chỉ thay đổi ngôn ngữ hiển thị, không thay đổi URL
   };
 
   // No URL-based language detection needed
