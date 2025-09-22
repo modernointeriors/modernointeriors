@@ -206,7 +206,7 @@ export default function Layout({ children }: LayoutProps) {
                     <p className="text-white/80 font-light">Lầu 1, Tòa nhà Sabay</p>
                     <p className="text-white/80 font-light">140B Nguyễn Văn Trỗi</p>
                     <p className="text-white/80 font-light">Quận Phú Nhuận</p>
-                    <p className="text-white/80 font-light">TP. Hồ Chí Minh, Việt Nam</p>
+                    <p className="text-white/80 font-light">Thành phố Hồ Chí Minh, Việt Nam</p>
                   </>
                 ) : (
                   <>
