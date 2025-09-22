@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import HeroSlider from "@/components/HeroSlider";
 import type { Project, HomepageContent } from "@shared/schema";
 
 export default function Home() {
+  const [, navigate] = useLocation();
   const { language } = useLanguage();
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
@@ -78,71 +79,89 @@ export default function Home() {
           </div>
           
           {isLoading ? (
-            <div className="grid lg:grid-cols-2 gap-8">
-              {[1, 2].map((i) => (
-                <Card key={i} className="overflow-hidden">
-                  <div className="animate-pulse bg-white/10 h-80 w-full" />
-                  <CardContent className="p-8">
-                    <div className="animate-pulse space-y-4">
-                      <div className="h-6 bg-white/10 rounded w-3/4" />
-                      <div className="h-4 bg-white/10 rounded w-1/2" />
-                      <div className="space-y-2">
-                        <div className="h-3 bg-white/10 rounded" />
-                        <div className="h-3 bg-white/10 rounded w-5/6" />
+            <div className="overflow-x-auto">
+              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Card key={i} className="overflow-hidden w-80 flex-shrink-0">
+                    <div className="animate-pulse bg-white/10 h-48 w-full" />
+                    <CardContent className="p-6">
+                      <div className="animate-pulse space-y-3">
+                        <div className="h-5 bg-white/10 rounded w-3/4" />
+                        <div className="h-3 bg-white/10 rounded w-1/2" />
+                        <div className="space-y-2">
+                          <div className="h-3 bg-white/10 rounded" />
+                          <div className="h-3 bg-white/10 rounded w-5/6" />
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           ) : (
-            <div className="grid lg:grid-cols-2 gap-8">
-              {featuredProjects?.slice(0, 2).map((project) => (
-                <Card key={project.id} className="group overflow-hidden hover-scale">
-                  <div className="relative">
-                    <img 
-                      src={Array.isArray(project.images) && project.images[0] || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
-                      alt={project.title}
-                      className="w-full h-80 object-cover"
-                      data-testid={`img-project-${project.id}`}
-                    />
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-sans font-light mb-2" data-testid={`text-title-${project.id}`}>{project.title}</h3>
-                    <p className="text-muted-foreground mb-4" data-testid={`text-category-${project.id}`}>
-                      {project.category} • {project.location}
-                    </p>
-                    <p className="text-foreground/80 mb-6" data-testid={`text-description-${project.id}`}>
-                      {project.description}
-                    </p>
-                    <div className="grid grid-cols-2 gap-6 mb-6">
-                      {project.area && (
-                        <div>
-                          <h5 className="font-light mb-2">Area</h5>
-                          <p className="text-muted-foreground">{project.area}</p>
-                        </div>
-                      )}
-                      {project.duration && (
-                        <div>
-                          <h5 className="font-light mb-2">Duration</h5>
-                          <p className="text-muted-foreground">{project.duration}</p>
-                        </div>
-                      )}
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      asChild
-                      data-testid={`button-view-project-${project.id}`}
+            <>
+              {/* Scrollable Projects Grid */}
+              <div className="overflow-x-auto">
+                <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                  {featuredProjects?.slice(0, 10).map((project) => (
+                    <Card 
+                      key={project.id} 
+                      className="group overflow-hidden hover-scale cursor-pointer w-80 flex-shrink-0"
+                      onClick={() => navigate(`/project/${project.id}`)}
                     >
-                      <Link href={`/project/${project.id}`}>
-                        View Full Project <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                      <div className="relative">
+                        <img 
+                          src={Array.isArray(project.images) && project.images[0] || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
+                          alt={project.title}
+                          className="w-full h-48 object-cover"
+                          data-testid={`img-project-${project.id}`}
+                        />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </div>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-sans font-light mb-2 line-clamp-1" data-testid={`text-title-${project.id}`}>{project.title}</h3>
+                        <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${project.id}`}>
+                          {project.category} • {project.location}
+                        </p>
+                        <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-description-${project.id}`}>
+                          {project.description}
+                        </p>
+                        {(project.area || project.duration) && (
+                          <div className="grid grid-cols-2 gap-3 text-xs">
+                            {project.area && (
+                              <div>
+                                <h5 className="font-light mb-1">Area</h5>
+                                <p className="text-muted-foreground">{project.area}</p>
+                              </div>
+                            )}
+                            {project.duration && (
+                              <div>
+                                <h5 className="font-light mb-1">Duration</h5>
+                                <p className="text-muted-foreground">{project.duration}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              
+              {/* View More Projects Button */}
+              <div className="text-center mt-12">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  asChild
+                  data-testid="button-view-more-projects"
+                >
+                  <Link href="/portfolio">
+                    View More Projects <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </>
           )}
         </div>
       </section>
