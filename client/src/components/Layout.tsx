@@ -30,31 +30,25 @@ export default function Layout({ children }: LayoutProps) {
   // Language switching with URL update
   const handleLanguageChange = (lang: Language) => {
     const getPathWithoutLanguage = (path: string): string => {
-      if (path.startsWith('/en') || path.startsWith('/vn')) {
-        return path.substring(3) || '/';
+      // Handle complex cases where URL might have multiple prefixes
+      let cleanPath = path;
+      // Remove all language prefixes until none left
+      while (cleanPath.startsWith('/en') || cleanPath.startsWith('/vn')) {
+        if (cleanPath.startsWith('/en')) {
+          cleanPath = cleanPath.substring(3);
+        } else if (cleanPath.startsWith('/vn')) {
+          cleanPath = cleanPath.substring(3);
+        }
       }
-      return path;
+      return cleanPath || '/';
     };
     
-    setLanguage(lang);
     const currentPath = getPathWithoutLanguage(location);
     const newPath = lang === 'en' ? `/en${currentPath}` : `/vn${currentPath}`;
     navigate(newPath);
   };
 
-  // Initialize language from URL
-  useEffect(() => {
-    const getLanguageFromURL = (path: string): Language => {
-      if (path.startsWith('/en')) return 'en';
-      if (path.startsWith('/vn')) return 'vi';
-      return 'en';
-    };
-    
-    const langFromURL = getLanguageFromURL(location);
-    if (langFromURL !== language) {
-      setLanguage(langFromURL);
-    }
-  }, [location, language, setLanguage]);
+  // Language detection is now handled by LanguageProvider only
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
