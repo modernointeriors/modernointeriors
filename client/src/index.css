@@ -200,38 +200,28 @@
     background: hsl(38, 96%, 54%);
   }
 
-  /* Fix Swiper fade effect */
+  /* Fix Swiper fade effect - only control slide opacity, preserve positioning */
   .js-slider .swiper-slide {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
     opacity: 0;
-    z-index: 1;
+    transition: opacity 800ms ease-in-out;
   }
   
   .js-slider .swiper-slide-active {
     opacity: 1 !important;
-    z-index: 2 !important;
   }
   
   .js-slider .swiper-slide-duplicate-active {
     opacity: 1 !important;
-    z-index: 2 !important;
   }
   
-  /* Ensure wrapper doesn't interfere */
-  .js-slider .swiper-wrapper {
-    position: relative !important;
-    height: 100vh !important;
-  }
-  
-  /* Hide all non-active slides completely */
+  /* Ensure clean transitions - hide inactive slides but preserve their children */
   .js-slider .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-duplicate-active) {
     opacity: 0 !important;
-    visibility: hidden;
-    z-index: 0;
+  }
+  
+  /* Ensure wrapper height is maintained */
+  .js-slider .swiper-wrapper {
+    height: 100vh !important;
   }
 
   /* IIDA-style Typography */
