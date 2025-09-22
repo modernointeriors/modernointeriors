@@ -236,7 +236,7 @@ export default function Layout({ children }: LayoutProps) {
                     className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-tiktok"
                   >
-                    TIK TOK
+                    TIKTOK
                   </a>
                 </li>
                 <li>
