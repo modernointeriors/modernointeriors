@@ -214,9 +214,11 @@ export default function Layout({ children }: LayoutProps) {
               <ul className="space-y-2">
                 <li>
                   <a 
-                    href="#" 
+                    href="https://www.instagram.com/moderno.interiors/" 
                     className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     INSTAGRAM
                   </a>
