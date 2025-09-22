@@ -187,12 +187,26 @@ export default function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             {/* Corporate Office */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">CORPORATE OFFICE</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+                {language === 'vi' ? 'VĂN PHÒNG CHÍNH' : 'CORPORATE OFFICE'}
+              </h4>
               <div className="space-y-2">
-                <p className="text-white/80 font-light">MARINA BAY SANDS</p>
-                <p className="text-white/80 font-light">TOWER 2, LEVEL 39,</p>
-                <p className="text-white/80 font-light">018956 SINGAPORE</p>
-                <p className="text-white/80 font-light mt-4">+65 6734 2987</p>
+                {language === 'vi' ? (
+                  <>
+                    <p className="text-white/80 font-light">Lầu 1, Tòa nhà Sabay,</p>
+                    <p className="text-white/80 font-light">140B Nguyễn Văn Trỗi,</p>
+                    <p className="text-white/80 font-light">Quận Phú Nhuận,</p>
+                    <p className="text-white/80 font-light">Thành phố Hồ Chí Minh, Việt Nam</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-white/80 font-light">1st Floor, Sabay Building,</p>
+                    <p className="text-white/80 font-light">140B Nguyen Van Troi,</p>
+                    <p className="text-white/80 font-light">Phuong 8, Quan Phu Nhuan,</p>
+                    <p className="text-white/80 font-light">Ho Chi Minh City, Vietnam</p>
+                  </>
+                )}
+                <p className="text-white/80 font-light mt-4">094 367 9879</p>
               </div>
             </div>
             
