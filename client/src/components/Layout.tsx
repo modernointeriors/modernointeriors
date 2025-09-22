@@ -238,7 +238,7 @@ export default function Layout({ children }: LayoutProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    tiktok
+                    TIKTOK
                   </a>
                 </li>
                 <li>
