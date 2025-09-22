@@ -249,9 +249,9 @@ export default function Layout({ children }: LayoutProps) {
                   <a 
                     href="#" 
                     className="text-white/80 hover:text-white transition-colors font-light"
-                    data-testid="footer-pinterest"
+                    data-testid="footer-zalo"
                   >
-                    PINTEREST
+                    ZALO OA
                   </a>
                 </li>
               </ul>
