@@ -233,27 +233,48 @@ export default function Layout({ children }: LayoutProps) {
               </h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href={`/`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link 
+                    href={`/`} 
+                    className="text-white/80 hover:text-white transition-colors font-light"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
                     {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/about`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link 
+                    href={`/about`} 
+                    className="text-white/80 hover:text-white transition-colors font-light"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
                     {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/portfolio`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link 
+                    href={`/portfolio`} 
+                    className="text-white/80 hover:text-white transition-colors font-light"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
                     {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/blog`} className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">
+                  <Link 
+                    href={`/blog`} 
+                    className="text-white/80 hover:text-white transition-colors font-light" 
+                    data-testid="footer-news"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
                     {language === 'vi' ? 'TIN TỨC' : 'NEWS'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/contact`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link 
+                    href={`/contact`} 
+                    className="text-white/80 hover:text-white transition-colors font-light"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
                     {language === 'vi' ? 'LIÊN HỆ' : 'CONTACTS'}
                   </Link>
                 </li>
