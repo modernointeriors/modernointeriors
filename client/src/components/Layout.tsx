@@ -29,13 +29,29 @@ export default function Layout({ children }: LayoutProps) {
 
   // Language switching with URL update
   const handleLanguageChange = (lang: Language) => {
-    // Extract clean path by removing ALL language prefixes with regex
-    const cleanPath = location.replace(/^\/(en|vn)+/, '') || '/';
-    const newPath = lang === 'en' ? `/en${cleanPath}` : `/vn${cleanPath}`;
+    // Simple approach: extract page name from current URL
+    let basePath = '/';
+    
+    // Extract actual page path (after any language prefixes)
+    if (location.includes('/about')) basePath = '/about';
+    else if (location.includes('/portfolio')) basePath = '/portfolio';
+    else if (location.includes('/blog')) basePath = '/blog';
+    else if (location.includes('/contact')) basePath = '/contact';
+    else if (location.includes('/services')) basePath = '/services';
+    
+    setLanguage(lang);
+    const newPath = lang === 'en' ? `/en${basePath}` : `/vn${basePath}`;
     navigate(newPath);
   };
 
-  // Language detection is now handled by LanguageProvider only
+  // Detect language from URL on mount and location change
+  useEffect(() => {
+    if (location.startsWith('/en')) {
+      setLanguage('en');
+    } else if (location.startsWith('/vn')) {
+      setLanguage('vi');
+    }
+  }, [location, setLanguage]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;

@@ -91,25 +91,7 @@ const translations = {
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [location] = useLocation();
   const [language, setLanguage] = useState<Language>('en');
-
-  // Detect language from URL prefix (only update if different)
-  useEffect(() => {
-    const getLanguageFromURL = (path: string): Language => {
-      // Use regex to find first valid language prefix
-      const match = path.match(/^\/(en|vn)/);
-      if (match) {
-        return match[1] === 'en' ? 'en' : 'vi';
-      }
-      return 'en'; // default
-    };
-    
-    const langFromURL = getLanguageFromURL(location);
-    if (langFromURL !== language) {
-      setLanguage(langFromURL);
-    }
-  }, [location]);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations['en']] || key;
