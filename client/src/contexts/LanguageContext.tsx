@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useLocation } from 'wouter';
 
 export type Language = 'en' | 'vi';
 
@@ -90,7 +91,25 @@ const translations = {
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [location] = useLocation();
   const [language, setLanguage] = useState<Language>('en');
+
+  // Detect language from URL suffix
+  useEffect(() => {
+    const getLanguageFromURL = (path: string): Language => {
+      if (path.endsWith('/en')) return 'en';
+      if (path.endsWith('/vn')) return 'vi';
+      // Check for just /en or /vn
+      if (path === '/en') return 'en';
+      if (path === '/vn') return 'vi';
+      return 'en'; // default
+    };
+    
+    const langFromURL = getLanguageFromURL(location);
+    if (langFromURL !== language) {
+      setLanguage(langFromURL);
+    }
+  }, [location, language, setLanguage]);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations['en']] || key;
