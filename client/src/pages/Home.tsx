@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import HeroSlider from "@/components/HeroSlider";
-import type { Project, HomepageContent } from "@shared/schema";
+import type { Project, HomepageContent, Article } from "@shared/schema";
 
 export default function Home() {
   const [, navigate] = useLocation();
@@ -36,6 +36,14 @@ export default function Home() {
     queryKey: ['/api/homepage-content', language],
     queryFn: async () => {
       const response = await fetch(`/api/homepage-content?language=${language}`);
+      return response.json();
+    },
+  });
+
+  const { data: featuredArticles, isLoading: articlesLoading } = useQuery<Article[]>({
+    queryKey: ['/api/articles', 'featured', language],
+    queryFn: async () => {
+      const response = await fetch(`/api/articles?featured=true&language=${language}`);
       return response.json();
     },
   });
@@ -158,6 +166,105 @@ export default function Home() {
                 >
                   <Link href="/portfolio">
                     View More Projects <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Featured News Section */}
+      <section id="featured-news" className="section-padding bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <Badge variant="secondary" className="mb-4 uppercase">
+              {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
+            </Badge>
+            <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">
+              {language === 'vi' ? 'Cập nhật mới nhất' : 'Latest Updates'}
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              {language === 'vi' 
+                ? 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.'
+                : 'Discover the latest design trends and expert insights from our professional team.'}
+            </p>
+          </div>
+          
+          {articlesLoading ? (
+            <div className="overflow-x-auto">
+              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Card key={i} className="overflow-hidden w-80 flex-shrink-0">
+                    <div className="animate-pulse bg-white/10 h-48 w-full" />
+                    <CardContent className="p-6">
+                      <div className="animate-pulse space-y-3">
+                        <div className="h-5 bg-white/10 rounded w-3/4" />
+                        <div className="h-3 bg-white/10 rounded w-1/2" />
+                        <div className="space-y-2">
+                          <div className="h-3 bg-white/10 rounded" />
+                          <div className="h-3 bg-white/10 rounded w-5/6" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Scrollable Articles Grid */}
+              <div className="overflow-x-auto">
+                <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                  {featuredArticles?.slice(0, 10).map((article) => (
+                    <Card 
+                      key={article.id} 
+                      className="group overflow-hidden hover-scale cursor-pointer w-80 flex-shrink-0"
+                      onClick={() => navigate(`/blog/${article.slug}`)}
+                    >
+                      <div className="relative">
+                        <img 
+                          src={article.featuredImage || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
+                          alt={article.title}
+                          className="w-full h-48 object-cover"
+                          data-testid={`img-article-${article.id}`}
+                        />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </div>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-sans font-light mb-2 line-clamp-2" data-testid={`text-article-title-${article.id}`}>
+                          {article.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-3 text-sm">
+                          {article.publishedAt && new Date(article.publishedAt).toLocaleDateString(
+                            language === 'vi' ? 'vi-VN' : 'en-US',
+                            { 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            }
+                          )}
+                        </p>
+                        <p className="text-foreground/80 text-sm line-clamp-3" data-testid={`text-article-excerpt-${article.id}`}>
+                          {article.excerpt || 'Discover insights and trends in interior design...'}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              
+              {/* View More News Button */}
+              <div className="text-center mt-12">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  asChild
+                  data-testid="button-view-more-news"
+                >
+                  <Link href="/blog">
+                    {language === 'vi' ? 'Xem thêm tin tức' : 'View More News'} 
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </div>
