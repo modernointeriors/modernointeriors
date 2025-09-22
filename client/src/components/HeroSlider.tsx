@@ -55,26 +55,73 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
         data-testid="hero-slider"
       >
         {projects.map((project) => {
-          const backgroundImage = (
-            Array.isArray(project.coverImages) && project.coverImages[0] ||
-            Array.isArray(project.contentImages) && project.contentImages[0] ||
-            Array.isArray(project.galleryImages) && project.galleryImages[0] ||
-            project.heroImage ||
-            (Array.isArray(project.images) && project.images[0]) ||
-            'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080'
-          );
+          // Fallback images for different project types
+          const getFallbackImage = (category: string) => {
+            switch (category) {
+              case 'residential':
+                return 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+              case 'commercial':
+                return 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+              case 'architecture':
+                return 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+              default:
+                return 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+            }
+          };
+
+          // Force fallback for debugging problematic slides
+          const isProblematicSlide = project.title.includes('BOUTIQUE') || project.title.includes('INDUSTRIAL') || project.title.includes('SUSTAINABLE');
+          
+          const backgroundImage = isProblematicSlide 
+            ? getFallbackImage(project.category) // Force use fallback for debugging
+            : (
+                Array.isArray(project.coverImages) && project.coverImages[0] ||
+                Array.isArray(project.contentImages) && project.contentImages[0] ||
+                Array.isArray(project.galleryImages) && project.galleryImages[0] ||
+                project.heroImage ||
+                (Array.isArray(project.images) && project.images[0]) ||
+                'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080'
+              );
+
+          // Debug logging for each project
+          if (project.title.includes('BOUTIQUE') || project.title.includes('INDUSTRIAL') || project.title.includes('SUSTAINABLE')) {
+            console.log(`🔍 DEBUG ${project.title}:`, {
+              backgroundImage,
+              coverImages: project.coverImages,
+              heroImage: project.heroImage,
+              contentImages: project.contentImages,
+              galleryImages: project.galleryImages
+            });
+          }
 
           return (
             <SwiperSlide key={project.id} data-testid={`slide-${project.id}`}>
               <div className="wrapper relative h-screen px-6 md:px-10 lg:px-16">
                 <div className="absolute inset-0">
+                  {/* Debug overlay for problematic slides */}
+                  {(project.title.includes('BOUTIQUE') || project.title.includes('INDUSTRIAL') || project.title.includes('SUSTAINABLE')) && (
+                    <div className="absolute top-4 left-4 bg-red-500 text-white p-2 text-xs z-50 max-w-xs">
+                      DEBUG: {project.title}<br/>
+                      IMG: {backgroundImage.substring(0, 50)}...
+                    </div>
+                  )}
+                  
                   <img 
                     src={backgroundImage} 
                     alt={project.title}
                     className="absolute inset-0 w-full h-full object-cover"
                     data-testid={`slide-bg-${project.id}`}
+                    style={{ zIndex: 1 }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      console.error(`❌ Image failed to load for ${project.title}:`, backgroundImage);
+                      target.src = getFallbackImage(project.category);
+                    }}
+                    onLoad={() => {
+                      console.log(`✅ Image loaded successfully for ${project.title}:`, backgroundImage);
+                    }}
                   />
-                  <div className="absolute inset-0 bg-black/40"></div>
+                  <div className="absolute inset-0 bg-black/40" style={{ zIndex: 2 }}></div>
                 </div>
                 
                 <div className="relative h-full flex flex-col justify-between z-10">
