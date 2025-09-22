@@ -202,32 +202,36 @@
 
   /* Fix Swiper fade effect */
   .js-slider .swiper-slide {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
     opacity: 0;
-    transition-property: opacity;
-    transition-duration: 1000ms;
-    position: relative;
+    z-index: 1;
   }
   
   .js-slider .swiper-slide-active {
-    opacity: 1;
+    opacity: 1 !important;
+    z-index: 2 !important;
   }
   
   .js-slider .swiper-slide-duplicate-active {
-    opacity: 1;
+    opacity: 1 !important;
+    z-index: 2 !important;
   }
   
-  /* Ensure proper layering */
+  /* Ensure wrapper doesn't interfere */
   .js-slider .swiper-wrapper {
-    position: relative;
+    position: relative !important;
+    height: 100vh !important;
   }
   
-  .js-slider .swiper-slide img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  /* Hide all non-active slides completely */
+  .js-slider .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-duplicate-active) {
+    opacity: 0 !important;
+    visibility: hidden;
+    z-index: 0;
   }
 
   /* IIDA-style Typography */

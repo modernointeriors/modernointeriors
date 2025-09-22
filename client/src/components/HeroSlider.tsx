@@ -35,7 +35,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
         modules={[Autoplay, EffectFade, Navigation]}
         effect="fade"
         fadeEffect={{
-          crossFade: true,
+          crossFade: false,
         }}
         spaceBetween={0}
         slidesPerView={1}
