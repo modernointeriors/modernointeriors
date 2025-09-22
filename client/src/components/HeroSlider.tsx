@@ -34,11 +34,16 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
       <Swiper
         modules={[Autoplay, EffectFade, Navigation]}
         effect="fade"
+        fadeEffect={{
+          crossFade: true,
+        }}
         spaceBetween={0}
         slidesPerView={1}
+        speed={1000}
         autoplay={{
-          delay: 6000,
+          delay: 5000,
           disableOnInteraction: false,
+          pauseOnMouseEnter: true,
         }}
         navigation={{
           nextEl: '.swiper-button-next-custom',
