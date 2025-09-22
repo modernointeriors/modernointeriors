@@ -232,11 +232,13 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <a 
-                    href="#" 
+                    href="https://www.tiktok.com/@moderno.interiors" 
                     className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-tiktok"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    TIKTOK
+                    tiktok
                   </a>
                 </li>
                 <li>
