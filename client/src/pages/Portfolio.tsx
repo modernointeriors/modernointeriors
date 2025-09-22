@@ -89,20 +89,6 @@ export default function Portfolio() {
             ))}
           </div>
         )}
-
-        {/* Load More - placeholder for pagination */}
-        {projects.length > 0 && (
-          <div className="text-center mt-16">
-            <Button 
-              variant="outline" 
-              size="lg"
-              disabled
-              data-testid="button-load-more"
-            >
-              Load More Projects
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
