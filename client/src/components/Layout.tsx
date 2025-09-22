@@ -9,13 +9,14 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const getNavigation = (t: (key: string) => string) => {
+const getNavigation = (t: (key: string) => string, language: string) => {
+  const prefix = language === 'en' ? '/en' : '/vi';
   return [
-    { name: t('nav.home'), href: `/`, key: 'home' },
-    { name: t('nav.about'), href: `/about`, key: 'about' },
-    { name: t('nav.projects'), href: `/portfolio`, key: 'portfolio' },
-    { name: t('nav.news'), href: `/blog`, key: 'news' },
-    { name: t('nav.contacts'), href: `/contact`, key: 'contact' }
+    { name: t('nav.home'), href: `${prefix}`, key: 'home' },
+    { name: t('nav.about'), href: `${prefix}/about`, key: 'about' },
+    { name: t('nav.projects'), href: `${prefix}/portfolio`, key: 'portfolio' },
+    { name: t('nav.news'), href: `${prefix}/blog`, key: 'news' },
+    { name: t('nav.contacts'), href: `${prefix}/contact`, key: 'contact' }
   ];
 };
 
@@ -24,11 +25,15 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-  const navigation = getNavigation(t);
+  const navigation = getNavigation(t, language);
 
-  // Simple language switching without URL changes
+  // Language switching with URL update
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang);
+    // Get current page path without language prefix
+    const currentPage = location.replace(/^\/(en|vi)/, '') || '/';
+    const newPath = lang === 'en' ? `/en${currentPage}` : `/vi${currentPage}`;
+    navigate(newPath, { replace: true });
   };
 
   // No URL-based language detection needed
@@ -155,21 +160,21 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="pb-6 border-t border-border pt-8">
                   <div className="space-y-4">
                     <Link 
-                      href={`/services`} 
+                      href={`${language === 'en' ? '/en' : '/vi'}/services`} 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Services
                     </Link>
                     <Link 
-                      href={`/about`} 
+                      href={`${language === 'en' ? '/en' : '/vi'}/about`} 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Our Story
                     </Link>
                     <Link 
-                      href={`/contact`} 
+                      href={`${language === 'en' ? '/en' : '/vi'}/contact`} 
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -226,27 +231,27 @@ export default function Layout({ children }: LayoutProps) {
               </h4>
               <ul className="space-y-2">
                 <li>
-                  <Link href={`/`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vi'}`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/about`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vi'}/about`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/portfolio`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vi'}/portfolio`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/blog`} className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">
+                  <Link href={`${language === 'en' ? '/en' : '/vi'}/blog`} className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">
                     {language === 'vi' ? 'TIN TỨC' : 'NEWS'}
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/contact`} className="text-white/80 hover:text-white transition-colors font-light">
+                  <Link href={`${language === 'en' ? '/en' : '/vi'}/contact`} className="text-white/80 hover:text-white transition-colors font-light">
                     {language === 'vi' ? 'LIÊN HỆ' : 'CONTACTS'}
                   </Link>
                 </li>

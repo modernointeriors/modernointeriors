@@ -24,6 +24,51 @@ function Router() {
     <Switch>
       <Route path="/login" component={Login} />
       
+      {/* English routes */}
+      <Route path="/en/*" nest>
+        <Layout>
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/portfolio" component={Portfolio} />
+            <Route path="/project/:id" component={ProjectDetail} />
+            <Route path="/blog" component={Blog} />
+            <Route path="/blog/:slug" component={BlogDetail} />
+            <Route path="/services" component={Services} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/admin">
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            </Route>
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
+
+      {/* Vietnamese routes */}
+      <Route path="/vi/*" nest>
+        <Layout>
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/portfolio" component={Portfolio} />
+            <Route path="/project/:id" component={ProjectDetail} />
+            <Route path="/blog" component={Blog} />
+            <Route path="/blog/:slug" component={BlogDetail} />
+            <Route path="/services" component={Services} />
+            <Route path="/about" component={About} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/admin">
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            </Route>
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
+
+      {/* Default redirect to English */}
       <Route path="/*" >
         <Layout>
           <Switch>
