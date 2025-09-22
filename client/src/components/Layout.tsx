@@ -211,8 +211,8 @@ export default function Layout({ children }: LayoutProps) {
                 ) : (
                   <>
                     <p className="text-white/80 font-light">1st Floor, Sabay Building</p>
-                    <p className="text-white/80 font-light">140B Nguyen Van Troi</p>
-                    <p className="text-white/80 font-light">Phuong 8, Quan Phu Nhuan</p>
+                    <p className="text-white/80 font-light">140B Nguyen Van Troi Street</p>
+                    <p className="text-white/80 font-light">Phu Nhuan District</p>
                     <p className="text-white/80 font-light">Ho Chi Minh City, Vietnam</p>
                   </>
                 )}
