@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { Project } from "@shared/schema";
 
 const categories = [
@@ -13,6 +14,7 @@ const categories = [
 ];
 
 export default function Portfolio() {
+  const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
 
   const { data: projects = [], isLoading } = useQuery<Project[]>({
@@ -36,10 +38,17 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4 uppercase">Our Work</Badge>
-          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">Portfolio</h1>
+          <Badge variant="secondary" className="mb-4 uppercase">
+            {language === 'vi' ? 'Tác phẩm của chúng tôi' : 'Our Work'}
+          </Badge>
+          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">
+            {language === 'vi' ? 'Danh mục dự án' : 'Portfolio'}
+          </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Explore our comprehensive collection of interior design projects across various categories
+            {language === 'vi' 
+              ? 'Khám phá bộ sưu tập toàn diện các dự án thiết kế nội thất của chúng tôi qua nhiều danh mục khác nhau'
+              : 'Explore our comprehensive collection of interior design projects across various categories'
+            }
           </p>
         </div>
 
@@ -53,7 +62,12 @@ export default function Portfolio() {
               className="px-6 py-3 font-light"
               data-testid={`filter-${category.value}`}
             >
-              {category.label}
+              {language === 'vi' ? {
+                'all': 'Tất cả dự án',
+                'residential': 'Nhà ở',
+                'commercial': 'Thương mại', 
+                'architecture': 'Kiến trúc'
+              }[category.value] : category.label}
             </Button>
           ))}
         </div>
@@ -74,11 +88,13 @@ export default function Portfolio() {
           </div>
         ) : projects.length === 0 ? (
           <div className="text-center py-16">
-            <h3 className="text-xl font-light mb-2">No projects found</h3>
+            <h3 className="text-xl font-light mb-2">
+              {language === 'vi' ? 'Không tìm thấy dự án' : 'No projects found'}
+            </h3>
             <p className="text-muted-foreground">
               {activeCategory === 'all' 
-                ? 'No projects are available at the moment.' 
-                : `No ${activeCategory} projects are available.`
+                ? (language === 'vi' ? 'Hiện tại chưa có dự án nào.' : 'No projects are available at the moment.')
+                : (language === 'vi' ? `Không có dự án ${activeCategory === 'residential' ? 'nhà ở' : activeCategory === 'commercial' ? 'thương mại' : 'kiến trúc'} nào.` : `No ${activeCategory} projects are available.`)
               }
             </p>
           </div>
