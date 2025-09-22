@@ -94,14 +94,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [language, setLanguage] = useState<Language>('en');
 
-  // Detect language from URL suffix
+  // Detect language from URL prefix
   useEffect(() => {
     const getLanguageFromURL = (path: string): Language => {
-      if (path.endsWith('/en')) return 'en';
-      if (path.endsWith('/vn')) return 'vi';
-      // Check for just /en or /vn
-      if (path === '/en') return 'en';
-      if (path === '/vn') return 'vi';
+      if (path.startsWith('/en')) return 'en';
+      if (path.startsWith('/vn')) return 'vi';
       return 'en'; // default
     };
     

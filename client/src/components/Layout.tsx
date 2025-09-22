@@ -10,13 +10,13 @@ interface LayoutProps {
 }
 
 const getNavigation = (t: (key: string) => string, language: string) => {
-  const suffix = language === 'en' ? '/en' : '/vn';
+  const prefix = language === 'en' ? '/en' : '/vn';
   return [
-    { name: t('nav.home'), href: suffix, key: 'home' },
-    { name: t('nav.about'), href: `/about${suffix}`, key: 'about' },
-    { name: t('nav.projects'), href: `/portfolio${suffix}`, key: 'portfolio' },
-    { name: t('nav.news'), href: `/blog${suffix}`, key: 'news' },
-    { name: t('nav.contacts'), href: `/contact${suffix}`, key: 'contact' }
+    { name: t('nav.home'), href: `${prefix}/`, key: 'home' },
+    { name: t('nav.about'), href: `${prefix}/about`, key: 'about' },
+    { name: t('nav.projects'), href: `${prefix}/portfolio`, key: 'portfolio' },
+    { name: t('nav.news'), href: `${prefix}/blog`, key: 'news' },
+    { name: t('nav.contacts'), href: `${prefix}/contact`, key: 'contact' }
   ];
 };
 
@@ -30,25 +30,31 @@ export default function Layout({ children }: LayoutProps) {
   // Language switching with URL update
   const handleLanguageChange = (lang: Language) => {
     const getPathWithoutLanguage = (path: string): string => {
-      // Remove language suffixes
-      if (path.endsWith('/en') || path.endsWith('/vn')) {
-        return path.substring(0, path.lastIndexOf('/'));
-      }
-      // Handle root language routes
-      if (path === '/en' || path === '/vn') {
-        return '';
+      if (path.startsWith('/en') || path.startsWith('/vn')) {
+        return path.substring(3) || '/';
       }
       return path;
     };
     
     setLanguage(lang);
-    const basePath = getPathWithoutLanguage(location);
-    const suffix = lang === 'en' ? '/en' : '/vn';
-    const newPath = basePath === '' ? suffix : `${basePath}${suffix}`;
+    const currentPath = getPathWithoutLanguage(location);
+    const newPath = lang === 'en' ? `/en${currentPath}` : `/vn${currentPath}`;
     navigate(newPath);
   };
 
-  // Language is now handled by LanguageProvider
+  // Initialize language from URL
+  useEffect(() => {
+    const getLanguageFromURL = (path: string): Language => {
+      if (path.startsWith('/en')) return 'en';
+      if (path.startsWith('/vn')) return 'vi';
+      return 'en';
+    };
+    
+    const langFromURL = getLanguageFromURL(location);
+    if (langFromURL !== language) {
+      setLanguage(langFromURL);
+    }
+  }, [location, language, setLanguage]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
