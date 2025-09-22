@@ -176,38 +176,46 @@ export default function ProjectDetail() {
         </div>
 
         {/* Two Large Images Side by Side - Using contentImages (16:9 or 1:1) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {/* First Content Image */}
-          {(contentImages[0] || coverImages[0] || project.heroImage || galleryImages[0]) && (
-            <div className="aspect-video">
-              <OptimizedImage
-                src={contentImages[0] || coverImages[0] || project.heroImage || galleryImages[0]}
-                alt={project.title}
-                width={600}
-                height={337}
-                wrapperClassName="w-full h-full"
-                className="w-full h-full object-cover"
-                priority={true}
-                data-testid="img-main"
-              />
-            </div>
-          )}
+        {(() => {
+          const firstImage = contentImages[0] || coverImages[0] || project.heroImage || galleryImages[0];
+          const secondImage = contentImages[1] || coverImages[1] || galleryImages[1];
+          const hasSecondImage = Boolean(secondImage);
+          
+          return (
+            <div className={`grid gap-6 mb-16 ${hasSecondImage ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+              {/* First Content Image */}
+              {firstImage && (
+                <div className="aspect-video">
+                  <OptimizedImage
+                    src={firstImage}
+                    alt={project.title}
+                    width={600}
+                    height={337}
+                    wrapperClassName="w-full h-full"
+                    className="w-full h-full object-cover"
+                    priority={true}
+                    data-testid="img-main"
+                  />
+                </div>
+              )}
 
-          {/* Second Content Image */}
-          {(contentImages[1] || coverImages[1] || galleryImages[1]) && (
-            <div className="aspect-video">
-              <OptimizedImage
-                src={contentImages[1] || coverImages[1] || galleryImages[1]}
-                alt={`${project.title} - Secondary view`}
-                width={600}
-                height={337}
-                wrapperClassName="w-full h-full"
-                className="w-full h-full object-cover"
-                data-testid="img-secondary"
-              />
+              {/* Second Content Image */}
+              {hasSecondImage && (
+                <div className="aspect-video">
+                  <OptimizedImage
+                    src={secondImage}
+                    alt={`${project.title} - Secondary view`}
+                    width={600}
+                    height={337}
+                    wrapperClassName="w-full h-full"
+                    className="w-full h-full object-cover"
+                    data-testid="img-secondary"
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          );
+        })()}
 
         {/* Content Text Below Images */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
