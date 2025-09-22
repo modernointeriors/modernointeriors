@@ -184,25 +184,25 @@ export default function Layout({ children }: LayoutProps) {
       {/* Footer - Updated with dark design matching the provided image */}
       <footer className="ml-16 bg-black text-white pt-24 pb-8 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-16">
             {/* Corporate Office */}
             <div>
               <h4 className="text-sm tracking-widest text-white mb-6 font-light">
                 {language === 'vi' ? 'VĂN PHÒNG CHÍNH' : 'CORPORATE OFFICE'}
               </h4>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {language === 'vi' ? (
                   <>
-                    <p className="text-white/80 font-light">Lầu 1, Tòa nhà Sabay,</p>
-                    <p className="text-white/80 font-light">140B Nguyễn Văn Trỗi,</p>
-                    <p className="text-white/80 font-light">Quận Phú Nhuận,</p>
-                    <p className="text-white/80 font-light">Thành phố Hồ Chí Minh, Việt Nam</p>
+                    <p className="text-white/80 font-light">Lầu 1, Tòa nhà Sabay</p>
+                    <p className="text-white/80 font-light">140B Nguyễn Văn Trỗi</p>
+                    <p className="text-white/80 font-light">Quận Phú Nhuận</p>
+                    <p className="text-white/80 font-light">TP. Hồ Chí Minh, Việt Nam</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-white/80 font-light">1st Floor, Sabay Building,</p>
-                    <p className="text-white/80 font-light">140B Nguyen Van Troi,</p>
-                    <p className="text-white/80 font-light">Phuong 8, Quan Phu Nhuan,</p>
+                    <p className="text-white/80 font-light">1st Floor, Sabay Building</p>
+                    <p className="text-white/80 font-light">140B Nguyen Van Troi</p>
+                    <p className="text-white/80 font-light">Phuong 8, Quan Phu Nhuan</p>
                     <p className="text-white/80 font-light">Ho Chi Minh City, Vietnam</p>
                   </>
                 )}
@@ -212,19 +212,43 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Navigation */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">NAVIGATION</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+                {language === 'vi' ? 'ĐIỀU HƯỚNG' : 'NAVIGATION'}
+              </h4>
               <ul className="space-y-2">
-                <li><Link href="/" className="text-white/80 hover:text-white transition-colors font-light">HOME</Link></li>
-                <li><Link href="/about" className="text-white/80 hover:text-white transition-colors font-light">ABOUT</Link></li>
-                <li><Link href="/portfolio" className="text-white/80 hover:text-white transition-colors font-light">PROJECTS</Link></li>
-                <li><Link href="/blog" className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">NEWS</Link></li>
-                <li><Link href="/contact" className="text-white/80 hover:text-white transition-colors font-light">CONTACTS</Link></li>
+                <li>
+                  <Link href="/" className="text-white/80 hover:text-white transition-colors font-light">
+                    {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/about" className="text-white/80 hover:text-white transition-colors font-light">
+                    {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portfolio" className="text-white/80 hover:text-white transition-colors font-light">
+                    {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/blog" className="text-white/80 hover:text-white transition-colors font-light" data-testid="footer-news">
+                    {language === 'vi' ? 'TIN TỨC' : 'NEWS'}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="text-white/80 hover:text-white transition-colors font-light">
+                    {language === 'vi' ? 'LIÊN HỆ' : 'CONTACTS'}
+                  </Link>
+                </li>
               </ul>
             </div>
             
             {/* Social Media */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">SOCIAL MEDIA</h4>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+                {language === 'vi' ? 'MẠNG XÃ HỘI' : 'SOCIAL MEDIA'}
+              </h4>
               <ul className="space-y-2">
                 <li>
                   <a 
@@ -273,12 +297,16 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Join Our News */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">JOIN OUR NEWS</h4>
-              <p className="text-white/80 mb-4 font-light">Receive notifications about new offers</p>
+              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+                {language === 'vi' ? 'ĐĂNG KÝ TIN TỨC' : 'JOIN OUR NEWS'}
+              </h4>
+              <p className="text-white/80 mb-4 font-light">
+                {language === 'vi' ? 'Nhận thông báo về các ưu đãi mới' : 'Receive notifications about new offers'}
+              </p>
               <div className="flex">
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={language === 'vi' ? 'Email' : 'Email'}
                   className="bg-transparent border-0 border-b border-gray-600 text-white/80 placeholder-gray-400 focus:outline-none focus:border-white flex-grow px-0 py-2 font-light"
                   data-testid="newsletter-email"
                 />
