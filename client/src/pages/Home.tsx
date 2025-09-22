@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import HeroSlider from "@/components/HeroSlider";
+import ScrollableContainer from "@/components/ScrollableContainer";
 import type { Project, HomepageContent, Article } from "@shared/schema";
 
 export default function Home() {
@@ -109,7 +110,7 @@ export default function Home() {
           ) : (
             <>
               {/* Scrollable Projects Grid */}
-              <div className="overflow-x-auto">
+              <ScrollableContainer>
                 <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
                   {featuredProjects?.slice(0, 10).map((project) => (
                     <Card 
@@ -154,7 +155,7 @@ export default function Home() {
                     </Card>
                   ))}
                 </div>
-              </div>
+              </ScrollableContainer>
               
               {/* View More Projects Button */}
               <div className="text-center mt-12">
@@ -214,7 +215,7 @@ export default function Home() {
           ) : (
             <>
               {/* Scrollable Articles Grid */}
-              <div className="overflow-x-auto">
+              <ScrollableContainer>
                 <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
                   {featuredArticles?.slice(0, 10).map((article) => (
                     <Card 
@@ -252,7 +253,7 @@ export default function Home() {
                     </Card>
                   ))}
                 </div>
-              </div>
+              </ScrollableContainer>
               
               {/* View More News Button */}
               <div className="text-center mt-12">
