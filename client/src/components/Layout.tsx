@@ -27,31 +27,30 @@ export default function Layout({ children }: LayoutProps) {
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t, language);
 
+  // Normalize URL by removing all leading language prefixes
+  const normalize = (path: string): string => {
+    const rest = path.replace(/^(?:\/(?:en|vn))+(?=\/|$)/, "");
+    return rest === "" ? "/" : rest;
+  };
+
   // Language switching with URL update
   const handleLanguageChange = (lang: Language) => {
-    // Simple approach: extract page name from current URL
-    let basePath = '/';
-    
-    // Extract actual page path (after any language prefixes)
-    if (location.includes('/about')) basePath = '/about';
-    else if (location.includes('/portfolio')) basePath = '/portfolio';
-    else if (location.includes('/blog')) basePath = '/blog';
-    else if (location.includes('/contact')) basePath = '/contact';
-    else if (location.includes('/services')) basePath = '/services';
-    
-    setLanguage(lang);
-    const newPath = lang === 'en' ? `/en${basePath}` : `/vn${basePath}`;
-    navigate(newPath);
+    const base = normalize(location);
+    const newPath = `/${lang}${base === '/' ? '' : base}`;
+    if (newPath !== location) {
+      setLanguage(lang);
+      navigate(newPath, { replace: true });
+    }
   };
 
   // Detect language from URL on mount and location change
   useEffect(() => {
-    if (location.startsWith('/en')) {
-      setLanguage('en');
-    } else if (location.startsWith('/vn')) {
-      setLanguage('vi');
+    const match = location.match(/^\/(en|vn)(?=\/|$)/);
+    const inferred = match?.[1] === 'vn' ? 'vi' : 'en';
+    if (inferred !== language) {
+      setLanguage(inferred);
     }
-  }, [location, setLanguage]);
+  }, [location, language, setLanguage]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
