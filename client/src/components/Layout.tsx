@@ -29,22 +29,9 @@ export default function Layout({ children }: LayoutProps) {
 
   // Language switching with URL update
   const handleLanguageChange = (lang: Language) => {
-    const getPathWithoutLanguage = (path: string): string => {
-      // Handle complex cases where URL might have multiple prefixes
-      let cleanPath = path;
-      // Remove all language prefixes until none left
-      while (cleanPath.startsWith('/en') || cleanPath.startsWith('/vn')) {
-        if (cleanPath.startsWith('/en')) {
-          cleanPath = cleanPath.substring(3);
-        } else if (cleanPath.startsWith('/vn')) {
-          cleanPath = cleanPath.substring(3);
-        }
-      }
-      return cleanPath || '/';
-    };
-    
-    const currentPath = getPathWithoutLanguage(location);
-    const newPath = lang === 'en' ? `/en${currentPath}` : `/vn${currentPath}`;
+    // Extract clean path by removing ALL language prefixes with regex
+    const cleanPath = location.replace(/^\/(en|vn)+/, '') || '/';
+    const newPath = lang === 'en' ? `/en${cleanPath}` : `/vn${cleanPath}`;
     navigate(newPath);
   };
 
