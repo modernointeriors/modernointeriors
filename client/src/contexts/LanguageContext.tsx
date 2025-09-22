@@ -91,17 +91,7 @@ const translations = {
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [location] = useLocation();
   const [language, setLanguage] = useState<Language>('en');
-
-  // Detect language from URL
-  useEffect(() => {
-    if (location.startsWith('/vi')) {
-      setLanguage('vi');
-    } else if (location.startsWith('/en')) {
-      setLanguage('en');
-    }
-  }, [location]);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations['en']] || key;
