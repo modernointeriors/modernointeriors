@@ -79,7 +79,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       className="block"
                       data-testid={`slide-link-${project.id}`}
                     >
-                      <div className="max-w-md">
+                      <div className="max-w-2xl">
                         <h2 className="heading-0 js-slider-slide-title">
                           {project.title}
                         </h2>
