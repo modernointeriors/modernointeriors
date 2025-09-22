@@ -151,37 +151,7 @@ export default function ProjectDetail() {
                     [project.heroImage, ...galleryImages].filter(Boolean);
   
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Header with navigation */}
-      <header className="py-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between">
-            <div className="text-white text-lg font-light tracking-wider">
-              <img 
-                src="/attached_assets/logo.white.png" 
-                alt="MODERNO INTERIORS STUDIO" 
-                className="h-8 w-auto"
-              />
-            </div>
-            <nav className="hidden md:flex items-center space-x-8 text-sm">
-              <Link href="/" className="text-zinc-400 hover:text-white transition-colors">HOME</Link>
-              <Link href="/about" className="text-zinc-400 hover:text-white transition-colors">ABOUT</Link>
-              <Link href="/portfolio" className="text-zinc-400 hover:text-white transition-colors">PROJECTS</Link>
-              <Link href="/contact" className="text-zinc-400 hover:text-white transition-colors">CONTACTS</Link>
-            </nav>
-            <div className="flex items-center space-x-1 text-sm">
-              <button className="text-zinc-400 hover:text-primary transition-colors px-2 py-1" data-testid="button-lang-eng">
-                ENG
-              </button>
-              <span className="text-zinc-600">|</span>
-              <button className="text-zinc-400 hover:text-primary transition-colors px-2 py-1" data-testid="button-lang-eng2">
-                ENG
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen pt-24">
       {/* Main Content Layout */}
       <div className="max-w-7xl mx-auto px-6">
         {/* Project Title Header */}
