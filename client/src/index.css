@@ -37,9 +37,9 @@
   --font-mono: 'JetBrains Mono', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', monospace;
   --radius: 0.75rem;
   
-  /* 120fps Animation Variables */
-  --sidebar-dur: 1000ms;
-  --icon-dur: 500ms;
+  /* Ultra-Fast 120fps Animation Variables */
+  --sidebar-dur: 600ms;
+  --icon-dur: 300ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -302,7 +302,7 @@
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* 120fps Sequential timing: Bar1(0s) → Bar2(0.2s) → Bar3(0.4s) */
+  /* Ultra-Fast Sequential timing: Bar1(0s) → Bar2(0.1s) → Bar3(0.2s) */
   .animate-hamburger-loading-1 {
     animation: loading-effect var(--icon-dur) var(--ease-out) forwards;
     transform-origin: left center;
@@ -312,7 +312,7 @@
   }
 
   .animate-hamburger-loading-2 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0.2s forwards;
+    animation: loading-effect var(--icon-dur) var(--ease-out) 0.1s forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -320,16 +320,16 @@
   }
 
   .animate-hamburger-loading-3 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0.4s forwards;
+    animation: loading-effect var(--icon-dur) var(--ease-out) 0.2s forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  /* 120fps appearing - REVERSE order: Bar3(0s) → Bar2(0.2s) → Bar1(0.4s) */
+  /* Ultra-Fast appearing - REVERSE order: Bar3(0s) → Bar2(0.1s) → Bar1(0.2s) */
   .animate-hamburger-appear-1 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0.4s forwards;
+    animation: bars-appear var(--icon-dur) var(--ease-out) 0.2s forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -337,7 +337,7 @@
   }
 
   .animate-hamburger-appear-2 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0.2s forwards;
+    animation: bars-appear var(--icon-dur) var(--ease-out) 0.1s forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
