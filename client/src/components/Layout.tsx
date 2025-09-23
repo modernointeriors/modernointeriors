@@ -186,18 +186,24 @@ export default function Layout({ children }: LayoutProps) {
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
             >
-              <div className="flex flex-col items-center justify-center space-y-2 rotate-90 group-hover:text-primary">
+              <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
                 {/* Vạch 1 - Top line */}
-                <div className={`h-0.5 bg-white group-hover:bg-primary w-8 origin-left ${
-                  mobileMenuOpen ? 'animate-hamburger-line-1' : ''
+                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                  mobileMenuOpen 
+                    ? 'bg-primary animate-hamburger-line-1' 
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 2 - Middle line */}
-                <div className={`h-0.5 bg-white group-hover:bg-primary w-8 origin-left ${
-                  mobileMenuOpen ? 'animate-hamburger-line-2' : ''
+                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                  mobileMenuOpen 
+                    ? 'bg-primary animate-hamburger-line-2' 
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 3 - Bottom line */}
-                <div className={`h-0.5 bg-white group-hover:bg-primary w-8 origin-left ${
-                  mobileMenuOpen ? 'animate-hamburger-line-3' : ''
+                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                  mobileMenuOpen 
+                    ? 'bg-primary animate-hamburger-line-3' 
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
               </div>
             </Button>
