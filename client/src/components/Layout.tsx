@@ -193,11 +193,23 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </header>
 
+      {/* Custom Overlay for Click Outside Detection */}
+      {showSidebar && (
+        <div 
+          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log('🎯 Custom overlay click - smooth close');
+            setShowSidebar(false);
+          }}
+        />
+      )}
+
       {/* Vertical Navigation Sidebar - IIDA Style */}
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
-        <Sheet open={showSidebar} onOpenChange={(open) => {
-          // Do nothing here - we'll handle all closes manually
+        <Sheet open={showSidebar} modal={false} onOpenChange={() => {
+          // Completely disable automatic closing
         }}>
           <SheetTrigger asChild>
             <Button 
@@ -248,22 +260,10 @@ export default function Layout({ children }: LayoutProps) {
             style={{
               transitionDuration: '2600ms'
             }}
-            onPointerDownOutside={(e) => {
-              e.preventDefault(); // Prevent immediate close
-              console.log('Outside click detected - triggering smooth close');
-              // Force a smooth animated close with delay
-              setTimeout(() => setShowSidebar(false), 50);
-            }}
             onEscapeKeyDown={(e) => {
-              e.preventDefault(); // Prevent immediate close  
-              console.log('ESC key detected - triggering smooth close');
-              // Force a smooth animated close with delay
-              setTimeout(() => setShowSidebar(false), 50);
-            }}
-            onInteractOutside={(e) => {
-              e.preventDefault(); // Also prevent this event
-              console.log('Interact outside detected - triggering smooth close');
-              setTimeout(() => setShowSidebar(false), 50);
+              e.preventDefault();
+              console.log('⌨️ ESC key - starting smooth close sequence');
+              setShowSidebar(false);
             }}
           >
             <SheetHeader>
