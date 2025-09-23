@@ -285,7 +285,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               {/* Classic hamburger icon - rotated 90 degrees with click animation */}
               <div 
-                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[1000ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
+                className={`flex flex-col justify-center items-center space-y-2 w-10 h-8 transition-all duration-[1000ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
                   isClicked || showSidebar ? 'rotate-180' : 'rotate-90'
                 }`}
                 style={{
@@ -293,9 +293,9 @@ export default function Layout({ children }: LayoutProps) {
                   perspective: '1000px'
                 }}
               >
-                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
-                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
-                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-8 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-8 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-8 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
               </div>
             </Button>
           </SheetTrigger>
