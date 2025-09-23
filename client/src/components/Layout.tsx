@@ -208,8 +208,8 @@ export default function Layout({ children }: LayoutProps) {
       {/* Vertical Navigation Sidebar - IIDA Style */}
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
-        <Sheet open={showSidebar} modal={false} onOpenChange={() => {
-          // Completely disable automatic closing
+        <Sheet open={true} modal={false} onOpenChange={() => {
+          // Keep always open to maintain DOM presence for smooth animations
         }}>
           <SheetTrigger asChild>
             <Button 
@@ -259,7 +259,10 @@ export default function Layout({ children }: LayoutProps) {
             className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform transition-transform ease-standard"
             style={{
               transitionDuration: '2600ms',
-              transform: showSidebar ? 'translateX(0)' : 'translateX(-100%)'
+              transform: showSidebar ? 'translateX(0)' : 'translateX(-100%)',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              visibility: showSidebar ? 'visible' : 'visible', // Always visible for animation
+              pointerEvents: showSidebar ? 'auto' : 'none' // Disable interaction when closed
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
