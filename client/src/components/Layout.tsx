@@ -261,7 +261,9 @@ export default function Layout({ children }: LayoutProps) {
               className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
-              onClick={() => {
+              onClick={(e) => {
+                // Instant response - no delay
+                e.preventDefault();
                 setIsClicked(true);
                 // Open sidebar in parallel with animation (600ms for smooth parallel motion)
                 setTimeout(() => {
@@ -279,13 +281,17 @@ export default function Layout({ children }: LayoutProps) {
             >
               {/* Classic hamburger icon - rotated 90 degrees with click animation */}
               <div 
-                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[1200ms] ease-in-out group-hover:scale-110 ${
+                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[1200ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
                   isClicked || showSidebar ? 'rotate-180' : 'rotate-90'
                 }`}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  perspective: '1000px'
+                }}
               >
-                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
-                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
-                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
+                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
               </div>
             </Button>
           </SheetTrigger>
