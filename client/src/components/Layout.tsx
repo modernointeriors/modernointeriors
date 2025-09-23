@@ -23,6 +23,7 @@ export default function Layout({ children }: LayoutProps) {
   const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
 
@@ -75,21 +76,35 @@ export default function Layout({ children }: LayoutProps) {
             />
           </Link>
           
-          {/* Search Bar */}
-          <div className="flex-1 max-w-xl mx-8">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
-                className="w-full bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white/80 py-2 pr-8 text-sm font-light transition-colors"
-                data-testid="header-search"
-              />
-              <Search className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+          {/* Right Side: Search + Language */}
+          <div className="flex items-center gap-4">
+            {/* Expandable Search */}
+            <div className="flex items-center">
+              {/* Search Input - expands when searchOpen is true */}
+              <div className={`overflow-hidden transition-all duration-300 ${
+                searchOpen ? 'w-64 opacity-100' : 'w-0 opacity-0'
+              }`}>
+                <input
+                  type="text"
+                  placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+                  className="w-full bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white/80 py-2 text-sm font-light transition-colors"
+                  data-testid="header-search"
+                  autoFocus={searchOpen}
+                />
+              </div>
+              
+              {/* Search Icon Button */}
+              <button
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="text-white/60 hover:text-white transition-colors p-2"
+                data-testid="search-toggle"
+              >
+                <Search className="w-4 h-4" />
+              </button>
             </div>
-          </div>
-          
-          {/* Language Selector */}
-          <div className="flex items-center space-x-1 text-sm">
+            
+            {/* Language Selector */}
+            <div className="flex items-center space-x-1 text-sm">
             <button
               onClick={() => handleLanguageChange('en')}
               className={`transition-colors px-2 py-1 ${
@@ -109,6 +124,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               VIE
             </button>
+            </div>
           </div>
         </div>
       </header>
