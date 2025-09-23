@@ -273,27 +273,29 @@
     }
   }
 
-  /* Perfectly Synchronized Hamburger Animation - All Disappear Together */
+  /* Complete Disappearance Animation - Until Fully Gone */
   @keyframes hamburger-open-all {
-    0% { width: 2rem; opacity: 1; }
-    100% { width: 0; opacity: 0; } /* All lines disappear completely */
+    0% { width: 2rem; opacity: 1; transform: scaleX(1); }
+    50% { width: 1rem; opacity: 0.5; transform: scaleX(0.5); }
+    100% { width: 0; opacity: 0; transform: scaleX(0); visibility: hidden; } /* Completely gone */
   }
 
   @keyframes hamburger-close-all {
-    0% { width: 0; opacity: 0; }
-    100% { width: 2rem; opacity: 1; } /* All lines return together */
+    0% { width: 0; opacity: 0; transform: scaleX(0); visibility: hidden; }
+    50% { width: 1rem; opacity: 0.5; transform: scaleX(0.5); visibility: visible; }
+    100% { width: 2rem; opacity: 1; transform: scaleX(1); visibility: visible; } /* Fully restored */
   }
 
   .animate-hamburger-open-1,
   .animate-hamburger-open-2,
   .animate-hamburger-open-3 {
-    animation: hamburger-open-all 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: hamburger-open-all 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .animate-hamburger-close-1,
   .animate-hamburger-close-2,
   .animate-hamburger-close-3 {
-    animation: hamburger-close-all 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: hamburger-close-all 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .animate-hero-progress {

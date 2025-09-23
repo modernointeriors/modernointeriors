@@ -50,10 +50,10 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Delay sidebar appearance until synchronized hamburger animation finishes (700ms)
+      // Delay sidebar appearance until complete disappearance animation finishes (1000ms)
       const timer = setTimeout(() => {
         setShowSidebar(true);
-      }, 700);
+      }, 1000);
       return () => clearTimeout(timer);
     } else {
       // Hide sidebar immediately when closing
