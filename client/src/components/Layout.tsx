@@ -23,6 +23,7 @@ export default function Layout({ children }: LayoutProps) {
   const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [iconState, setIconState] = useState('normal'); // 'normal', 'animating-out', 'hidden', 'animating-in'
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
@@ -45,16 +46,32 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
+      // Start icon animation out
+      setIconState('animating-out');
       // Wait for all hamburger animations to finish completely (2.6s)
       const timer = setTimeout(() => {
+        setIconState('hidden');
         setShowSidebar(true);
       }, 2600); // Last animation finishes at 0.6s delay + 2s duration = 2.6s
       return () => clearTimeout(timer);
-    } else {
-      // Hide sidebar and reset state when closing
-      setShowSidebar(false);
     }
   }, [mobileMenuOpen]);
+
+  // Handle icon reverse animation when sidebar closes
+  useEffect(() => {
+    if (!showSidebar && iconState === 'hidden') {
+      // Wait for sidebar to close completely (800ms) then animate icon back
+      const timer = setTimeout(() => {
+        setIconState('animating-in');
+        // Reset to normal after animation completes (2.2s)
+        setTimeout(() => {
+          setIconState('normal');
+          setMobileMenuOpen(false);
+        }, 2200);
+      }, 800); // Wait for sidebar close animation
+      return () => clearTimeout(timer);
+    }
+  }, [showSidebar, iconState]);
 
   // Reset activity timer when user interacts with search
   const handleSearchActivity = () => {
@@ -177,7 +194,7 @@ export default function Layout({ children }: LayoutProps) {
         <Sheet open={showSidebar} onOpenChange={(open) => {
           if (!open) {
             setShowSidebar(false);
-            setMobileMenuOpen(false);
+            // Don't reset mobileMenuOpen here - let the icon animation handle it
           }
         }}>
           <SheetTrigger asChild>
@@ -190,23 +207,29 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setMobileMenuOpen(true)}
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
-                {/* Vạch 1 - Loading bar retraction first */}
+                {/* Vạch 1 - Loading bar with state-based animation */}
                 <div className={`absolute h-0.5 w-8 origin-right top-0 transition-colors duration-300 ${
-                  mobileMenuOpen 
+                  iconState === 'animating-out'
                     ? 'bg-primary animate-hamburger-out-1' 
-                    : 'bg-white group-hover:bg-primary animate-hamburger-in-1'
+                    : iconState === 'animating-in'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-1'
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 2 - Loading bar retraction second */}
+                {/* Vạch 2 - Loading bar with state-based animation */}
                 <div className={`absolute h-0.5 w-8 origin-right top-2.5 transition-colors duration-300 ${
-                  mobileMenuOpen 
+                  iconState === 'animating-out'
                     ? 'bg-primary animate-hamburger-out-2' 
-                    : 'bg-white group-hover:bg-primary animate-hamburger-in-2'
+                    : iconState === 'animating-in'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-2'
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 3 - Loading bar retraction third */}
+                {/* Vạch 3 - Loading bar with state-based animation */}
                 <div className={`absolute h-0.5 w-8 origin-right top-5 transition-colors duration-300 ${
-                  mobileMenuOpen 
+                  iconState === 'animating-out'
                     ? 'bg-primary animate-hamburger-out-3' 
-                    : 'bg-white group-hover:bg-primary animate-hamburger-in-3'
+                    : iconState === 'animating-in'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-3'
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
               </div>
             </Button>
