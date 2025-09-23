@@ -197,12 +197,7 @@ export default function Layout({ children }: LayoutProps) {
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
         <Sheet open={showSidebar} onOpenChange={(open) => {
-          if (!open) {
-            // Don't close immediately! Trigger animated close sequence
-            // This applies to ALL close actions: click outside, ESC, etc.
-            setShowSidebar(false);
-            // Icon animation will handle the rest in useEffect
-          }
+          // Do nothing here - we'll handle all closes manually
         }}>
           <SheetTrigger asChild>
             <Button 
@@ -250,12 +245,22 @@ export default function Layout({ children }: LayoutProps) {
           <SheetContent 
             side="left" 
             className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-[2600ms] ease-standard"
+            onPointerDownOutside={(e) => {
+              e.preventDefault(); // Prevent immediate close
+              // Trigger smooth animated close
+              setShowSidebar(false);
+            }}
+            onEscapeKeyDown={(e) => {
+              e.preventDefault(); // Prevent immediate close
+              // Trigger smooth animated close
+              setShowSidebar(false);
+            }}
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
                 <Link 
                   href="/" 
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => setShowSidebar(false)}
                   className="cursor-pointer inline-block"
                 >
                   <img 
@@ -275,7 +280,7 @@ export default function Layout({ children }: LayoutProps) {
                       <Link
                         key={item.key}
                         href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={() => setShowSidebar(false)}
                         className={`block text-lg font-light transition-colors hover:text-primary ${
                           isActive(item.href)
                             ? 'text-primary'
@@ -294,21 +299,21 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="space-y-4">
                     <Link 
                       href={`/services`} 
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => setShowSidebar(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Services
                     </Link>
                     <Link 
                       href={`/about`} 
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => setShowSidebar(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Our Story
                     </Link>
                     <Link 
                       href={`/contact`} 
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => setShowSidebar(false)}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Get in Touch
