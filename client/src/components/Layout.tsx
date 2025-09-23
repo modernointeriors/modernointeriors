@@ -168,14 +168,17 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
             >
               <div className="flex flex-col items-center justify-center space-y-2 rotate-90 group-hover:text-primary">
-                <div className={`w-8 h-0.5 bg-white group-hover:bg-primary transition-all duration-300 origin-center ${
-                  mobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''
+                {/* Vạch 1 - Rút ngắn nhất */}
+                <div className={`h-0.5 bg-white group-hover:bg-primary transition-all duration-500 origin-left ${
+                  mobileMenuOpen ? 'w-3' : 'w-8'
                 }`}></div>
-                <div className={`w-8 h-0.5 bg-white group-hover:bg-primary transition-all duration-300 ${
-                  mobileMenuOpen ? 'opacity-0 scale-0' : ''
+                {/* Vạch 2 - Rút ngắn trung bình */}
+                <div className={`h-0.5 bg-white group-hover:bg-primary transition-all duration-500 delay-75 origin-left ${
+                  mobileMenuOpen ? 'w-5' : 'w-8'
                 }`}></div>
-                <div className={`w-8 h-0.5 bg-white group-hover:bg-primary transition-all duration-300 origin-center ${
-                  mobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''
+                {/* Vạch 3 - Rút ngắn ít nhất */}
+                <div className={`h-0.5 bg-white group-hover:bg-primary transition-all duration-500 delay-150 origin-left ${
+                  mobileMenuOpen ? 'w-7' : 'w-8'
                 }`}></div>
               </div>
             </Button>
