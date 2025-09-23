@@ -46,7 +46,7 @@ export default function Layout({ children }: LayoutProps) {
   // Animation timing constants - Fast & Smooth
   const LOADING_DURATION = 2600; // 2.6s total (1.8s delay + 0.8s animation)
   const APPEAR_DURATION = 2600; // 2.6s total (1.8s delay + 0.8s animation) 
-  const SIDEBAR_DURATION = 1200; // 1.2s sidebar transition
+  const SIDEBAR_DURATION = 2600; // 2.6s sidebar transition (same as hamburger)
 
   // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
@@ -247,7 +247,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-[1200ms] ease-standard"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-[2600ms] ease-standard"
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
