@@ -187,21 +187,21 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <div className="flex flex-col items-end justify-center space-y-2 rotate-90">
-                {/* Vạch 1 - Top line */}
-                <div className={`h-0.5 w-8 origin-right transition-colors ${
+              <div className="flex flex-col justify-center space-y-2 rotate-90">
+                {/* Vạch 1 - Top line (chạy đầu tiên) */}
+                <div className={`h-0.5 w-8 origin-right transition-all ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-line-1' 
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 2 - Middle line */}
-                <div className={`h-0.5 w-8 origin-right transition-colors ${
+                {/* Vạch 2 - Middle line (chạy thứ hai) */}
+                <div className={`h-0.5 w-8 origin-right transition-all ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-line-2' 
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 3 - Bottom line */}
-                <div className={`h-0.5 w-8 origin-right transition-colors ${
+                {/* Vạch 3 - Bottom line (chạy cuối cùng) */}
+                <div className={`h-0.5 w-8 origin-right transition-all ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-line-3' 
                     : 'bg-white group-hover:bg-primary'

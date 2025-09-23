@@ -273,20 +273,34 @@
     }
   }
 
-  /* Staggered Hamburger Animation - Bottom-aligned Staircase */
+  /* Sequential Top-to-Bottom Hamburger Animation */
   @keyframes hamburger-line-1 {
     0% { width: 2rem; opacity: 1; }
-    100% { width: 0; opacity: 0; } /* Completely gone */
+    100% { width: 0; opacity: 0; } /* Top line disappears completely */
   }
 
   @keyframes hamburger-line-2 {
     0% { width: 2rem; opacity: 1; }
-    100% { width: 0.6rem; opacity: 0.8; } /* Short */
+    50% { width: 2rem; opacity: 1; } /* Wait for line 1 */
+    100% { width: 0.5rem; opacity: 0.7; } /* Middle line shrinks */
   }
 
   @keyframes hamburger-line-3 {
     0% { width: 2rem; opacity: 1; }
-    100% { width: 1.2rem; opacity: 1; } /* Medium */
+    66% { width: 2rem; opacity: 1; } /* Wait for line 1 & 2 */
+    100% { width: 1rem; opacity: 0.9; } /* Bottom line shrinks least */
+  }
+
+  .animate-hamburger-line-1 {
+    animation: hamburger-line-1 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-hamburger-line-2 {
+    animation: hamburger-line-2 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-hamburger-line-3 {
+    animation: hamburger-line-3 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .animate-hero-progress {
