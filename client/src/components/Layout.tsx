@@ -271,7 +271,7 @@ export default function Layout({ children }: LayoutProps) {
               >
                 {/* Vạch 1 - Sequential timing: starts immediately (0ms) */}
                 <div 
-                  className={`absolute h-0.5 w-8 top-0 transform-gpu ${
+                  className={`absolute h-1 w-8 top-0 transform-gpu border border-white/20 ${
                     iconState === 'opening'
                       ? 'bg-primary animate-opening-bar-1' 
                       : iconState === 'hidden'
@@ -283,12 +283,13 @@ export default function Layout({ children }: LayoutProps) {
                   style={{ 
                     willChange: 'transform, opacity',
                     contain: 'paint layout style',
-                    backfaceVisibility: 'hidden'
+                    backfaceVisibility: 'hidden',
+                    boxShadow: '0 0 1px rgba(255,255,255,0.5)'
                   }}
                 ></div>
                 {/* Vạch 2 - Sequential timing: starts at 225ms delay */}
                 <div 
-                  className={`absolute h-0.5 w-8 top-2.5 transform-gpu ${
+                  className={`absolute h-1 w-8 top-3 transform-gpu border border-white/20 ${
                     iconState === 'opening'
                       ? 'bg-primary animate-opening-bar-2' 
                       : iconState === 'hidden'
@@ -300,12 +301,13 @@ export default function Layout({ children }: LayoutProps) {
                   style={{ 
                     willChange: 'transform, opacity',
                     contain: 'paint layout style',
-                    backfaceVisibility: 'hidden'
+                    backfaceVisibility: 'hidden',
+                    boxShadow: '0 0 1px rgba(255,255,255,0.5)'
                   }}
                 ></div>
                 {/* Vạch 3 - Sequential timing: starts at 450ms delay */}
                 <div 
-                  className={`absolute h-0.5 w-8 top-5 transform-gpu ${
+                  className={`absolute h-1 w-8 top-6 transform-gpu border border-white/20 ${
                     iconState === 'opening'
                       ? 'bg-primary animate-opening-bar-3' 
                       : iconState === 'hidden'
@@ -317,7 +319,8 @@ export default function Layout({ children }: LayoutProps) {
                   style={{ 
                     willChange: 'transform, opacity',
                     contain: 'paint layout style',
-                    backfaceVisibility: 'hidden'
+                    backfaceVisibility: 'hidden',
+                    boxShadow: '0 0 1px rgba(255,255,255,0.5)'
                   }}
                 ></div>
               </div>
