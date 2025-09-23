@@ -241,7 +241,7 @@ export default function Layout({ children }: LayoutProps) {
                       : iconState === 'hidden'
                       ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
                       : iconState === 'closing'
-                      ? 'bg-primary animate-closing-bar-1'
+                      ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-1'
                       : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
                   }`}
                   style={{ willChange: 'transform, opacity' }}
@@ -254,7 +254,7 @@ export default function Layout({ children }: LayoutProps) {
                       : iconState === 'hidden'
                       ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
                       : iconState === 'closing'
-                      ? 'bg-primary animate-closing-bar-2'
+                      ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-2'
                       : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
                   }`}
                   style={{ willChange: 'transform, opacity' }}
@@ -267,7 +267,7 @@ export default function Layout({ children }: LayoutProps) {
                       : iconState === 'hidden'
                       ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
                       : iconState === 'closing'
-                      ? 'bg-primary animate-closing-bar-3'
+                      ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-3'
                       : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
                   }`}
                   style={{ willChange: 'transform, opacity' }}

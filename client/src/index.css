@@ -359,7 +359,7 @@
 
   /* CLOSING: Beautiful 3→2→1 sequence */
   .animate-closing-bar-1 {
-    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0.5s 1 forwards;
+    animation: bar-appear var(--bar-dur) var(--ease-smooth) 300ms 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -367,7 +367,7 @@
   }
 
   .animate-closing-bar-2 {
-    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0.3s 1 forwards;
+    animation: bar-appear var(--bar-dur) var(--ease-smooth) 150ms 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -375,7 +375,7 @@
   }
 
   .animate-closing-bar-3 {
-    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0s 1 forwards;
+    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0ms 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
