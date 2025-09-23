@@ -213,34 +213,34 @@ export default function Layout({ children }: LayoutProps) {
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
                 {/* Vạch 1 - Sequential timing: starts at 0s */}
-                <div className={`absolute h-0.5 w-8 top-0 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
+                <div className={`absolute h-0.5 w-8 top-0 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
                     ? 'bg-primary animate-hamburger-loading-1' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-appear-1'
-                    : 'bg-white group-hover:bg-primary'
+                    ? 'bg-primary opacity-0 scale-x-0 animate-hamburger-appear-1'
+                    : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
                 {/* Vạch 2 - Sequential timing: starts at 1s */}
-                <div className={`absolute h-0.5 w-8 top-2.5 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
+                <div className={`absolute h-0.5 w-8 top-2.5 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
                     ? 'bg-primary animate-hamburger-loading-2' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-appear-2'
-                    : 'bg-white group-hover:bg-primary'
+                    ? 'bg-primary opacity-0 scale-x-0 animate-hamburger-appear-2'
+                    : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
                 {/* Vạch 3 - Sequential timing: starts at 1.8s */}
-                <div className={`absolute h-0.5 w-8 top-5 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
+                <div className={`absolute h-0.5 w-8 top-5 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
                     ? 'bg-primary animate-hamburger-loading-3' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-appear-3'
-                    : 'bg-white group-hover:bg-primary'
+                    ? 'bg-primary opacity-0 scale-x-0 animate-hamburger-appear-3'
+                    : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
               </div>
             </Button>
