@@ -77,7 +77,7 @@ export default function Home() {
       )}
 
       {/* Featured Projects Section */}
-      <section id="featured-projects" className="section-padding bg-card">
+      <section id="featured-projects" className="py-12 md:py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 uppercase">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
@@ -176,7 +176,7 @@ export default function Home() {
       </section>
 
       {/* Featured News Section */}
-      <section id="featured-news" className="section-padding bg-background">
+      <section id="featured-news" className="py-12 md:py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 uppercase">
@@ -276,7 +276,7 @@ export default function Home() {
 
       {/* Stats Section */}
       {stats && (
-        <section className="py-16 bg-background">
+        <section className="py-12 md:py-14 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
@@ -301,7 +301,7 @@ export default function Home() {
       )}
 
       {/* CTA Section */}
-      <section className="section-padding bg-card">
+      <section className="py-12 md:py-16 bg-card">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-sans font-light mb-6">
             {homepageContent?.ctaTitle || 'Ready to Transform Your Space?'}
