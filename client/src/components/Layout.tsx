@@ -50,10 +50,10 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Delay sidebar appearance until synchronized hamburger animation finishes (800ms)
+      // Delay sidebar appearance until synchronized hamburger animation finishes (700ms)
       const timer = setTimeout(() => {
         setShowSidebar(true);
-      }, 800);
+      }, 700);
       return () => clearTimeout(timer);
     } else {
       // Hide sidebar immediately when closing
@@ -187,25 +187,25 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <div className="flex flex-col justify-center space-y-2 rotate-90">
-                {/* Vạch 1 - Top line */}
-                <div className={`h-0.5 w-8 origin-left transition-colors ${
+              <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
+                {/* Vạch 1 - Top line - Fixed position */}
+                <div className={`absolute h-0.5 w-8 origin-right transition-colors top-0 ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-open-1' 
                     : showSidebar === false && !mobileMenuOpen
                       ? 'bg-white group-hover:bg-primary animate-hamburger-close-1'
                       : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 2 - Middle line */}
-                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                {/* Vạch 2 - Middle line - Fixed position */}
+                <div className={`absolute h-0.5 w-8 origin-right transition-colors top-2.5 ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-open-2' 
                     : showSidebar === false && !mobileMenuOpen
                       ? 'bg-white group-hover:bg-primary animate-hamburger-close-2'
                       : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 3 - Bottom line */}
-                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                {/* Vạch 3 - Bottom line - Fixed position */}
+                <div className={`absolute h-0.5 w-8 origin-right transition-colors top-5 ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-open-3' 
                     : showSidebar === false && !mobileMenuOpen
