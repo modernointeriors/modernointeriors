@@ -313,9 +313,9 @@
     transform-origin: left;
   }
 
-  /* Sequential appearing - SAME order: Bar1(0s) → Bar2(1s) → Bar3(1.8s) */
+  /* Sequential appearing - REVERSE order: Bar3(0s) → Bar2(1s) → Bar1(1.8s) */
   .animate-hamburger-appear-1 {
-    animation: bars-appear 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: bars-appear 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards;
     transform-origin: left;
   }
 
@@ -325,7 +325,7 @@
   }
 
   .animate-hamburger-appear-3 {
-    animation: bars-appear 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards;
+    animation: bars-appear 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     transform-origin: left;
   }
 
