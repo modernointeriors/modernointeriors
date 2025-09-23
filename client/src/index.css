@@ -294,17 +294,17 @@
   }
 
   .animate-hamburger-line-1 {
-    animation: hamburger-line-1 0.8s ease-in-out forwards;
+    animation: hamburger-line-1 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     animation-delay: 0s;
   }
 
   .animate-hamburger-line-2 {
-    animation: hamburger-line-2 0.8s ease-in-out forwards;
-    animation-delay: 0.3s;
+    animation: hamburger-line-2 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.2s;
   }
 
   .animate-hamburger-line-3 {
-    animation: hamburger-line-3 0.8s ease-in-out forwards;
-    animation-delay: 0.6s;
+    animation: hamburger-line-3 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.4s;
   }
 }

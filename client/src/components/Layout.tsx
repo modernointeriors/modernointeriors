@@ -50,10 +50,10 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Delay sidebar appearance until staggered hamburger animation finishes (1500ms)
+      // Delay sidebar appearance until staggered hamburger animation finishes (1200ms)
       const timer = setTimeout(() => {
         setShowSidebar(true);
-      }, 1500);
+      }, 1200);
       return () => clearTimeout(timer);
     } else {
       // Hide sidebar immediately when closing
@@ -189,19 +189,19 @@ export default function Layout({ children }: LayoutProps) {
             >
               <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
                 {/* Vạch 1 - Top line */}
-                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                <div className={`h-0.5 w-8 origin-right transition-colors ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-line-1' 
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 2 - Middle line */}
-                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                <div className={`h-0.5 w-8 origin-right transition-colors ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-line-2' 
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 3 - Bottom line */}
-                <div className={`h-0.5 w-8 origin-left transition-colors ${
+                <div className={`h-0.5 w-8 origin-right transition-colors ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-line-3' 
                     : 'bg-white group-hover:bg-primary'
