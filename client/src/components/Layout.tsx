@@ -263,11 +263,11 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => {
                 setIsClicked(true);
-                // Open sidebar exactly when icon animation finishes (2750ms to compensate for lag)
+                // Open sidebar exactly when icon animation finishes (2800ms - perfect sync)
                 setTimeout(() => {
                   setMobileMenuOpen(true);
                   setShowSidebar(true);
-                }, 2750);
+                }, 2800);
               }}
               style={{
                 visibility: 'visible', // Always visible for now
