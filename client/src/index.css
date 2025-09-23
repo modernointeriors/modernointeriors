@@ -276,17 +276,17 @@
   /* Staggered Hamburger Animation - Bottom-aligned Staircase */
   @keyframes hamburger-line-1 {
     0% { width: 2rem; opacity: 1; }
-    100% { width: 0.15rem; opacity: 0.3; } /* Almost gone */
+    100% { width: 0; opacity: 0; } /* Completely gone */
   }
 
   @keyframes hamburger-line-2 {
     0% { width: 2rem; opacity: 1; }
-    100% { width: 0.8rem; opacity: 0.7; } /* Short */
+    100% { width: 0.6rem; opacity: 0.8; } /* Short */
   }
 
   @keyframes hamburger-line-3 {
     0% { width: 2rem; opacity: 1; }
-    100% { width: 1.4rem; opacity: 0.9; } /* Medium */
+    100% { width: 1.2rem; opacity: 1; } /* Medium */
   }
 
   .animate-hero-progress {
