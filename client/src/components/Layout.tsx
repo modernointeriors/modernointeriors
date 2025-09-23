@@ -263,11 +263,11 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => {
                 setIsClicked(true);
-                // Open sidebar exactly when animation finishes (1950ms to compensate for lag)
+                // Open sidebar exactly when icon animation finishes (2750ms to compensate for lag)
                 setTimeout(() => {
                   setMobileMenuOpen(true);
                   setShowSidebar(true);
-                }, 1950);
+                }, 2750);
               }}
               style={{
                 visibility: 'visible', // Always visible for now
@@ -279,7 +279,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               {/* Classic hamburger icon - rotated 90 degrees with click animation */}
               <div 
-                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[2000ms] ease-out group-hover:scale-110 ${
+                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[2800ms] ease-out group-hover:scale-110 ${
                   isClicked || showSidebar ? 'rotate-180' : 'rotate-90'
                 }`}
               >
