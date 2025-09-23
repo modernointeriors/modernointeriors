@@ -25,6 +25,7 @@ export default function Layout({ children }: LayoutProps) {
   const [showSidebar, setShowSidebar] = useState(false);
   const [iconState, setIconState] = useState('normal'); // 'normal', 'opening', 'hidden', 'closing'
   const [isClicked, setIsClicked] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   
   // Force reset icon to normal state on component mount and add debug
   useEffect(() => {
@@ -244,10 +245,13 @@ export default function Layout({ children }: LayoutProps) {
         }}
         onClick={(e) => {
           e.preventDefault();
+          if (isAnimating) return;
           // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+          setIsAnimating(true);
           setShowSidebar(false);
           setTimeout(() => {
             setIsClicked(false);
+            setIsAnimating(false);
           }, 900);
         }}
       />
@@ -266,14 +270,29 @@ export default function Layout({ children }: LayoutProps) {
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
               onClick={(e) => {
-                // Instant response - no delay
+                // Prevent double-click and animation conflicts
                 e.preventDefault();
-                setIsClicked(true);
-                // Open sidebar after 200ms delay (icon starts first)
-                setTimeout(() => {
-                  setMobileMenuOpen(true);
-                  setShowSidebar(true);
-                }, 200);
+                if (isAnimating) return;
+                
+                // Toggle sidebar logic
+                if (showSidebar) {
+                  // Close sidebar
+                  setIsAnimating(true);
+                  setShowSidebar(false);
+                  setTimeout(() => {
+                    setIsClicked(false);
+                    setIsAnimating(false);
+                  }, 900);
+                } else {
+                  // Open sidebar
+                  setIsAnimating(true);
+                  setIsClicked(true);
+                  setTimeout(() => {
+                    setMobileMenuOpen(true);
+                    setShowSidebar(true);
+                    setIsAnimating(false);
+                  }, 200);
+                }
               }}
               style={{
                 visibility: 'visible', // Always visible for now
@@ -314,10 +333,13 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
+              if (isAnimating) return;
               // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+              setIsAnimating(true);
               setShowSidebar(false);
               setTimeout(() => {
                 setIsClicked(false);
+                setIsAnimating(false);
               }, 900);
             }}
           >
@@ -326,10 +348,13 @@ export default function Layout({ children }: LayoutProps) {
                 <Link 
                   href="/" 
                   onClick={() => {
+                    if (isAnimating) return;
                     // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                    setIsAnimating(true);
                     setShowSidebar(false);
                     setTimeout(() => {
                       setIsClicked(false);
+                      setIsAnimating(false);
                     }, 900);
                   }}
                   className="cursor-pointer inline-block"
@@ -352,10 +377,13 @@ export default function Layout({ children }: LayoutProps) {
                         key={item.key}
                         href={item.href}
                         onClick={() => {
+                          if (isAnimating) return;
                           // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                          setIsAnimating(true);
                           setShowSidebar(false);
                           setTimeout(() => {
                             setIsClicked(false);
+                            setIsAnimating(false);
                           }, 900);
                         }}
                         className={`block text-lg font-light transition-colors hover:text-primary ${
@@ -377,10 +405,13 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/services`} 
                       onClick={() => {
+                        if (isAnimating) return;
                         // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                        setIsAnimating(true);
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
+                          setIsAnimating(false);
                         }, 900);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -390,10 +421,13 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/about`} 
                       onClick={() => {
+                        if (isAnimating) return;
                         // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                        setIsAnimating(true);
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
+                          setIsAnimating(false);
                         }, 900);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -403,10 +437,13 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/contact`} 
                       onClick={() => {
+                        if (isAnimating) return;
                         // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                        setIsAnimating(true);
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
+                          setIsAnimating(false);
                         }, 900);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
