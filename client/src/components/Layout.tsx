@@ -25,7 +25,6 @@ export default function Layout({ children }: LayoutProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
-  const [showSidebar, setShowSidebar] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
 
@@ -47,19 +46,6 @@ export default function Layout({ children }: LayoutProps) {
     setLastActivity(Date.now());
   };
 
-  // Handle sidebar timing - show after hamburger animation completes
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      // Delay sidebar appearance until smooth disappearance animation finishes (1400ms)
-      const timer = setTimeout(() => {
-        setShowSidebar(true);
-      }, 1400);
-      return () => clearTimeout(timer);
-    } else {
-      // Hide sidebar first, then trigger icon reappear animation after delay
-      setShowSidebar(false);
-    }
-  }, [mobileMenuOpen]);
 
   // Language switching without URL changes
   const handleLanguageChange = (lang: Language) => {
@@ -173,13 +159,9 @@ export default function Layout({ children }: LayoutProps) {
       {/* Vertical Navigation Sidebar - IIDA Style */}
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
-        <Sheet open={showSidebar} onOpenChange={(open) => {
+        <Sheet open={mobileMenuOpen} onOpenChange={(open) => {
           if (!open) {
-            // Smooth close: first hide sidebar, then trigger icon reappear
-            setShowSidebar(false);
-            setTimeout(() => {
-              setMobileMenuOpen(false);
-            }, 100);
+            setMobileMenuOpen(false);
           }
         }}>
           <SheetTrigger asChild>
@@ -191,37 +173,31 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
-                {/* Vạch 1 - Top line - Fixed position */}
-                <div className={`absolute h-0.5 w-8 origin-right transition-colors duration-300 top-0 ${
+              <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu will-change-transform">
+                {/* Vạch 1 - Loading sweep first */}
+                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[900ms] ease-linear top-0 ${
                   mobileMenuOpen 
-                    ? 'bg-primary animate-hamburger-open-1' 
-                    : !mobileMenuOpen && !showSidebar
-                      ? 'bg-white group-hover:bg-primary animate-hamburger-close-1'
-                      : 'bg-white group-hover:bg-primary'
-                }`}></div>
-                {/* Vạch 2 - Middle line - Fixed position */}
-                <div className={`absolute h-0.5 w-8 origin-right transition-colors duration-300 top-2.5 ${
+                    ? 'bg-primary scale-x-0 opacity-0' 
+                    : 'bg-white group-hover:bg-primary scale-x-100 opacity-100'
+                } transition-colors duration-300`}></div>
+                {/* Vạch 2 - Loading sweep second */}
+                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[900ms] ease-linear delay-75 top-2.5 ${
                   mobileMenuOpen 
-                    ? 'bg-primary animate-hamburger-open-2' 
-                    : !mobileMenuOpen && !showSidebar
-                      ? 'bg-white group-hover:bg-primary animate-hamburger-close-2'
-                      : 'bg-white group-hover:bg-primary'
-                }`}></div>
-                {/* Vạch 3 - Bottom line - Fixed position */}
-                <div className={`absolute h-0.5 w-8 origin-right transition-colors duration-300 top-5 ${
+                    ? 'bg-primary scale-x-0 opacity-0' 
+                    : 'bg-white group-hover:bg-primary scale-x-100 opacity-100'
+                } transition-colors duration-300`}></div>
+                {/* Vạch 3 - Loading sweep third */}
+                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[900ms] ease-linear delay-150 top-5 ${
                   mobileMenuOpen 
-                    ? 'bg-primary animate-hamburger-open-3' 
-                    : !mobileMenuOpen && !showSidebar
-                      ? 'bg-white group-hover:bg-primary animate-hamburger-close-3'
-                      : 'bg-white group-hover:bg-primary'
-                }`}></div>
+                    ? 'bg-primary scale-x-0 opacity-0' 
+                    : 'bg-white group-hover:bg-primary scale-x-100 opacity-100'
+                } transition-colors duration-300`}></div>
               </div>
             </Button>
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.33,1,0.68,1)]"
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
