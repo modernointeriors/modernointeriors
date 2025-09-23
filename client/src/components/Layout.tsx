@@ -22,6 +22,7 @@ const getNavigation = (t: (key: string) => string) => {
 export default function Layout({ children }: LayoutProps) {
   const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
@@ -40,6 +41,20 @@ export default function Layout({ children }: LayoutProps) {
 
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
+
+  // Handle sidebar timing - show after hamburger animation completes
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      // Wait for all hamburger animations to finish completely (2.6s)
+      const timer = setTimeout(() => {
+        setShowSidebar(true);
+      }, 2600); // Last animation finishes at 0.6s delay + 2s duration = 2.6s
+      return () => clearTimeout(timer);
+    } else {
+      // Hide sidebar and reset state when closing
+      setShowSidebar(false);
+    }
+  }, [mobileMenuOpen]);
 
   // Reset activity timer when user interacts with search
   const handleSearchActivity = () => {
@@ -159,8 +174,9 @@ export default function Layout({ children }: LayoutProps) {
       {/* Vertical Navigation Sidebar - IIDA Style */}
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
-        <Sheet open={mobileMenuOpen} onOpenChange={(open) => {
+        <Sheet open={showSidebar} onOpenChange={(open) => {
           if (!open) {
+            setShowSidebar(false);
             setMobileMenuOpen(false);
           }
         }}>
@@ -197,7 +213,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.33,1,0.68,1)]"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-800 ease-[cubic-bezier(0.23,1,0.32,1)]"
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
