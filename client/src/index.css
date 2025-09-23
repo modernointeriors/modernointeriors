@@ -273,29 +273,20 @@
     }
   }
 
-  /* 4-Step Hamburger Animation - Exact Pattern */
+  /* Staggered Hamburger Animation - Sequential Steps */
   @keyframes hamburger-line-1 {
-    0% { width: 2rem; }     /* Step 1: Full length */
-    25% { width: 2rem; }    /* Step 2: Still full */
-    50% { width: 1.5rem; }  /* Step 3: Shrink */
-    75% { width: 1rem; }    /* Step 4: Short */
-    100% { width: 0.75rem; }/* Final: Very short */
+    0% { width: 2rem; }
+    100% { width: 0.75rem; } /* Shortest */
   }
 
   @keyframes hamburger-line-2 {
-    0% { width: 2rem; }     /* Step 1: Full length */
-    25% { width: 1.5rem; }  /* Step 2: Start shrinking first */
-    50% { width: 1rem; }    /* Step 3: Medium */
-    75% { width: 0.5rem; }  /* Step 4: Very short */
-    100% { width: 0.25rem; }/* Final: Almost gone */
+    0% { width: 2rem; }
+    100% { width: 1.25rem; } /* Medium */
   }
 
   @keyframes hamburger-line-3 {
-    0% { width: 2rem; }     /* Step 1: Full length */
-    25% { width: 2rem; }    /* Step 2: Still full */
-    50% { width: 1.5rem; }  /* Step 3: Shrink */
-    75% { width: 1rem; }    /* Step 4: Short */
-    100% { width: 0.75rem; }/* Final: Very short */
+    0% { width: 2rem; }
+    100% { width: 1.75rem; } /* Longest */
   }
 
   .animate-hero-progress {
@@ -303,14 +294,17 @@
   }
 
   .animate-hamburger-line-1 {
-    animation: hamburger-line-1 1.5s ease-in-out forwards;
+    animation: hamburger-line-1 0.8s ease-in-out forwards;
+    animation-delay: 0s;
   }
 
   .animate-hamburger-line-2 {
-    animation: hamburger-line-2 1.5s ease-in-out forwards;
+    animation: hamburger-line-2 0.8s ease-in-out forwards;
+    animation-delay: 0.3s;
   }
 
   .animate-hamburger-line-3 {
-    animation: hamburger-line-3 1.5s ease-in-out forwards;
+    animation: hamburger-line-3 0.8s ease-in-out forwards;
+    animation-delay: 0.6s;
   }
 }
