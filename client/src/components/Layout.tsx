@@ -25,12 +25,18 @@ export default function Layout({ children }: LayoutProps) {
   const [showSidebar, setShowSidebar] = useState(false);
   const [iconState, setIconState] = useState('normal'); // 'normal', 'opening', 'hidden', 'closing'
   
-  // Force reset icon to normal state on component mount
+  // Force reset icon to normal state on component mount and add debug
   useEffect(() => {
+    console.log('🔧 Layout mounted - resetting icon state to normal');
     setIconState('normal');
     setMobileMenuOpen(false);
     setShowSidebar(false);
   }, []); // Run once on mount
+  
+  // Debug current icon state
+  useEffect(() => {
+    console.log('🎯 Icon state changed to:', iconState);
+  }, [iconState]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
@@ -251,12 +257,15 @@ export default function Layout({ children }: LayoutProps) {
               className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => {
+                console.log('🖱️ Hamburger clicked, current state:', iconState);
+                setMobileMenuOpen(true);
+              }}
               style={{
-                visibility: iconState === 'hidden' ? 'hidden' : 'visible',
-                opacity: iconState === 'hidden' ? 0 : 1,
+                visibility: 'visible', // Always visible for now
+                opacity: 1, // Always fully opaque for now
                 transition: 'opacity 450ms var(--ease-smooth), transform 450ms var(--ease-smooth)',
-                transform: iconState === 'hidden' ? 'scale(0.8) translate3d(0,0,0)' : 'scale(1) translate3d(0,0,0)',
+                transform: 'scale(1) translate3d(0,0,0)', // Always normal scale
                 willChange: 'transform, opacity'
               }}
             >
@@ -271,56 +280,35 @@ export default function Layout({ children }: LayoutProps) {
               >
                 {/* Vạch 1 - Sequential timing: starts immediately (0ms) */}
                 <div 
-                  className={`absolute h-1 w-8 top-0 transform-gpu border border-white/20 ${
-                    iconState === 'opening'
-                      ? 'bg-primary animate-opening-bar-1' 
-                      : iconState === 'hidden'
-                      ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
-                      : iconState === 'closing'
-                      ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-1'
-                      : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
-                  }`}
+                  className="absolute h-1 w-8 top-0 transform-gpu border border-white/20 bg-white group-hover:bg-primary transition-all duration-300 ease-out"
                   style={{ 
                     willChange: 'transform, opacity',
                     contain: 'paint layout style',
                     backfaceVisibility: 'hidden',
-                    boxShadow: '0 0 1px rgba(255,255,255,0.5)'
+                    boxShadow: '0 0 2px rgba(255,255,255,0.8)',
+                    transform: 'translate3d(0,0,0)'
                   }}
                 ></div>
                 {/* Vạch 2 - Sequential timing: starts at 225ms delay */}
                 <div 
-                  className={`absolute h-1 w-8 top-3 transform-gpu border border-white/20 ${
-                    iconState === 'opening'
-                      ? 'bg-primary animate-opening-bar-2' 
-                      : iconState === 'hidden'
-                      ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
-                      : iconState === 'closing'
-                      ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-2'
-                      : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
-                  }`}
+                  className="absolute h-1 w-8 top-3 transform-gpu border border-white/20 bg-white group-hover:bg-primary transition-all duration-300 ease-out"
                   style={{ 
                     willChange: 'transform, opacity',
                     contain: 'paint layout style',
                     backfaceVisibility: 'hidden',
-                    boxShadow: '0 0 1px rgba(255,255,255,0.5)'
+                    boxShadow: '0 0 2px rgba(255,255,255,0.8)',
+                    transform: 'translate3d(0,0,0)'
                   }}
                 ></div>
                 {/* Vạch 3 - Sequential timing: starts at 450ms delay */}
                 <div 
-                  className={`absolute h-1 w-8 top-6 transform-gpu border border-white/20 ${
-                    iconState === 'opening'
-                      ? 'bg-primary animate-opening-bar-3' 
-                      : iconState === 'hidden'
-                      ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
-                      : iconState === 'closing'
-                      ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-3'
-                      : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
-                  }`}
+                  className="absolute h-1 w-8 top-6 transform-gpu border border-white/20 bg-white group-hover:bg-primary transition-all duration-300 ease-out"
                   style={{ 
                     willChange: 'transform, opacity',
                     contain: 'paint layout style',
                     backfaceVisibility: 'hidden',
-                    boxShadow: '0 0 1px rgba(255,255,255,0.5)'
+                    boxShadow: '0 0 2px rgba(255,255,255,0.8)',
+                    transform: 'translate3d(0,0,0)'
                   }}
                 ></div>
               </div>
