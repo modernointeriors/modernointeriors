@@ -44,35 +44,35 @@ export default function Layout({ children }: LayoutProps) {
   }, [searchOpen, lastActivity]);
 
   // Animation timing constants
-  const BAR_DURATION = 600; // 0.6s per bar
-  const ICON_TOTAL_DURATION = BAR_DURATION * 3; // 1.8s total
+  const LOADING_DURATION = 1500; // 1.5s loading animation
+  const APPEAR_DURATION = 800; // 0.8s appearing animation
   const SIDEBAR_DURATION = 1200; // 1.2s sidebar transition
 
-  // Handle sidebar timing - show after hamburger animation completes
+  // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Start icon animation out
+      // Start loading animation
       setIconState('animating-out');
-      // Wait for all bars to disappear sequentially
+      // Wait for loading animation to complete
       const timer = setTimeout(() => {
         setIconState('hidden');
         setShowSidebar(true);
-      }, ICON_TOTAL_DURATION);
+      }, LOADING_DURATION);
       return () => clearTimeout(timer);
     }
   }, [mobileMenuOpen]);
 
-  // Handle icon reverse animation when sidebar closes
+  // Handle bars appearing when sidebar closes
   useEffect(() => {
     if (!showSidebar && iconState === 'hidden') {
-      // Wait for sidebar to close completely then animate icon back
+      // Wait for sidebar to close completely then animate bars back
       const timer = setTimeout(() => {
         setIconState('animating-in');
-        // Reset to normal after sequential animation completes
+        // Reset to normal after appearing animation completes
         setTimeout(() => {
           setIconState('normal');
           setMobileMenuOpen(false);
-        }, ICON_TOTAL_DURATION);
+        }, APPEAR_DURATION);
       }, SIDEBAR_DURATION);
       return () => clearTimeout(timer);
     }
@@ -212,34 +212,34 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setMobileMenuOpen(true)}
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
-                {/* Vạch 1 - Stateful directional animation */}
+                {/* Vạch 1 - Stateful loading animation */}
                 <div className={`absolute h-0.5 w-8 top-0 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-1' 
+                    ? 'bg-primary animate-hamburger-loading' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-1'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-appear'
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 2 - Stateful directional animation */}
+                {/* Vạch 2 - Stateful loading animation */}
                 <div className={`absolute h-0.5 w-8 top-2.5 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-2' 
+                    ? 'bg-primary animate-hamburger-loading' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-2'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-appear'
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
-                {/* Vạch 3 - Stateful directional animation */}
+                {/* Vạch 3 - Stateful loading animation */}
                 <div className={`absolute h-0.5 w-8 top-5 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-3' 
+                    ? 'bg-primary animate-hamburger-loading' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-3'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-appear'
                     : 'bg-white group-hover:bg-primary'
                 }`}></div>
               </div>
