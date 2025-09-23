@@ -274,6 +274,6 @@
   }
 
   .animate-hero-progress {
-    animation: hero-progress 5s linear infinite;
+    animation: hero-progress 5s linear forwards;
   }
 }

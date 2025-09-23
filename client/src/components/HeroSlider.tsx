@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'wouter';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
@@ -13,6 +14,14 @@ interface HeroSliderProps {
 }
 
 export default function HeroSlider({ projects }: HeroSliderProps) {
+  const [progressKey, setProgressKey] = useState(0);
+  const swiperRef = useRef<any>(null);
+
+  // Restart progress animation when slide changes
+  const handleSlideChange = () => {
+    setProgressKey(prev => prev + 1);
+  };
+
   if (!projects || projects.length === 0) {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
@@ -33,6 +42,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   return (
     <div className="bg-black text-white h-screen">
       <Swiper
+        ref={swiperRef}
         modules={[Autoplay, EffectFade, Navigation]}
         effect="fade"
         fadeEffect={{
@@ -51,6 +61,10 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
           prevEl: '.swiper-button-prev-custom',
         }}
         loop={true}
+        onSlideChange={handleSlideChange}
+        onAutoplayTimeLeft={(s, time, progress) => {
+          // Optional: could use this for more precise sync
+        }}
         className="js-slider h-screen"
         data-slider-slug="hero"
         data-testid="hero-slider"
@@ -181,6 +195,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                             strokeWidth="2"
                           />
                           <circle
+                            key={progressKey}
                             cx="24"
                             cy="24"
                             r="22"
