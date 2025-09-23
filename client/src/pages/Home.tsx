@@ -89,7 +89,7 @@ export default function Home() {
           
           {isLoading ? (
             <div className="overflow-x-auto">
-              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+              <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Card key={i} className="overflow-hidden w-80 flex-shrink-0">
                     <div className="animate-pulse bg-white/10 h-48 w-full" />
@@ -111,7 +111,7 @@ export default function Home() {
             <>
               {/* Scrollable Projects Grid */}
               <ScrollableContainer>
-                <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
                   {featuredProjects?.slice(0, 10).map((project) => (
                     <Card 
                       key={project.id} 
@@ -194,7 +194,7 @@ export default function Home() {
           
           {articlesLoading ? (
             <div className="overflow-x-auto">
-              <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+              <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Card key={i} className="overflow-hidden w-80 flex-shrink-0">
                     <div className="animate-pulse bg-white/10 h-48 w-full" />
@@ -216,7 +216,7 @@ export default function Home() {
             <>
               {/* Scrollable Articles Grid */}
               <ScrollableContainer>
-                <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
+                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
                   {featuredArticles?.slice(0, 10).map((article) => (
                     <Card 
                       key={article.id} 
