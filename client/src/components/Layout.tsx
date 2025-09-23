@@ -68,7 +68,11 @@ export default function Layout({ children }: LayoutProps) {
       }`}>
         <div className="flex items-center justify-between py-4 px-6">
           {/* Logo */}
-          <Link href="/" className="text-white text-lg font-light tracking-wider cursor-pointer">
+          <Link 
+            href="/" 
+            className="text-white text-lg font-light tracking-wider cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
             <img 
               src="/attached_assets/logo.white.png" 
               alt="MODERNO INTERIORS STUDIO" 
