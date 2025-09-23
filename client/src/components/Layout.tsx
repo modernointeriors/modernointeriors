@@ -244,9 +244,11 @@ export default function Layout({ children }: LayoutProps) {
         }}
         onClick={(e) => {
           e.preventDefault();
-          // Instant icon animation reset
-          setIsClicked(false);
+          // Sidebar closes immediately, icon resets after 200ms delay
           setShowSidebar(false);
+          setTimeout(() => {
+            setIsClicked(false);
+          }, 200);
         }}
       />
 
@@ -267,11 +269,11 @@ export default function Layout({ children }: LayoutProps) {
                 // Instant response - no delay
                 e.preventDefault();
                 setIsClicked(true);
-                // Open sidebar in parallel with animation (600ms for smooth parallel motion)
+                // Open sidebar after 200ms delay (icon starts first)
                 setTimeout(() => {
                   setMobileMenuOpen(true);
                   setShowSidebar(true);
-                }, 600);
+                }, 200);
               }}
               style={{
                 visibility: 'visible', // Always visible for now
@@ -283,7 +285,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               {/* Classic hamburger icon - rotated 90 degrees with click animation */}
               <div 
-                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[1200ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
+                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-[1000ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
                   isClicked || showSidebar ? 'rotate-180' : 'rotate-90'
                 }`}
                 style={{
@@ -312,9 +314,11 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
-              // Instant icon animation reset
-              setIsClicked(false);
+              // Sidebar closes immediately, icon resets after 200ms delay
               setShowSidebar(false);
+              setTimeout(() => {
+                setIsClicked(false);
+              }, 200);
             }}
           >
             <SheetHeader>
@@ -322,8 +326,11 @@ export default function Layout({ children }: LayoutProps) {
                 <Link 
                   href="/" 
                   onClick={() => {
-                    setIsClicked(false);
+                    // Sidebar closes immediately, icon resets after 200ms delay
                     setShowSidebar(false);
+                    setTimeout(() => {
+                      setIsClicked(false);
+                    }, 200);
                   }}
                   className="cursor-pointer inline-block"
                 >
@@ -345,8 +352,11 @@ export default function Layout({ children }: LayoutProps) {
                         key={item.key}
                         href={item.href}
                         onClick={() => {
-                          setIsClicked(false);
+                          // Sidebar closes immediately, icon resets after 200ms delay
                           setShowSidebar(false);
+                          setTimeout(() => {
+                            setIsClicked(false);
+                          }, 200);
                         }}
                         className={`block text-lg font-light transition-colors hover:text-primary ${
                           isActive(item.href)
@@ -367,8 +377,11 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/services`} 
                       onClick={() => {
-                        setIsClicked(false);
+                        // Sidebar closes immediately, icon resets after 200ms delay
                         setShowSidebar(false);
+                        setTimeout(() => {
+                          setIsClicked(false);
+                        }, 200);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -377,8 +390,11 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/about`} 
                       onClick={() => {
-                        setIsClicked(false);
+                        // Sidebar closes immediately, icon resets after 200ms delay
                         setShowSidebar(false);
+                        setTimeout(() => {
+                          setIsClicked(false);
+                        }, 200);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -387,8 +403,11 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/contact`} 
                       onClick={() => {
-                        setIsClicked(false);
+                        // Sidebar closes immediately, icon resets after 200ms delay
                         setShowSidebar(false);
+                        setTimeout(() => {
+                          setIsClicked(false);
+                        }, 200);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >

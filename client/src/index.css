@@ -38,7 +38,7 @@
   --radius: 0.75rem;
   
   /* Ultra-Smooth 240fps Animation Variables - Auto-scales to display refresh rate */
-  --sidebar-dur: 600ms;
+  --sidebar-dur: 1000ms;
   --bar-dur: 300ms;
   --bar-stagger: 300ms;
   --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
