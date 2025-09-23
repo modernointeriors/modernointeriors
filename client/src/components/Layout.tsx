@@ -60,7 +60,7 @@ export default function Layout({ children }: LayoutProps) {
   // Handle icon reverse animation when sidebar closes
   useEffect(() => {
     if (!showSidebar && iconState === 'hidden') {
-      // Wait for sidebar to close completely (800ms) then animate icon back
+      // Wait for sidebar to close completely (1200ms) then animate icon back
       const timer = setTimeout(() => {
         setIconState('animating-in');
         // Reset to normal after animation completes (2.2s)
@@ -68,7 +68,7 @@ export default function Layout({ children }: LayoutProps) {
           setIconState('normal');
           setMobileMenuOpen(false);
         }, 2200);
-      }, 800); // Wait for sidebar close animation
+      }, 1200); // Wait for sidebar close animation
       return () => clearTimeout(timer);
     }
   }, [showSidebar, iconState]);
@@ -242,7 +242,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-800 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-1200 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
