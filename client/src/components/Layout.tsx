@@ -49,10 +49,10 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Beautiful & Slow
-  const OPENING_DURATION = 1000; // 1.0s for bars 1→2→3 (0.5s delay + 0.5s anim)
-  const CLOSING_DURATION = 1000; // 1.0s for bars 3→2→1 (0.5s delay + 0.5s anim)
-  const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition
+  // Animation timing constants - Ultra-Smooth 120fps
+  const OPENING_DURATION = 900; // 0.9s for bars 1→2→3 (sync with CSS --bar-dur)
+  const CLOSING_DURATION = 900; // 0.9s for bars 3→2→1 (sync with CSS --bar-dur) 
+  const SIDEBAR_DURATION = 900; // 0.9s sidebar transition (sync with CSS --sidebar-dur)
 
   // OPENING: Show sidebar after hamburger 1→2→3 completes
   useEffect(() => {
@@ -220,42 +220,58 @@ export default function Layout({ children }: LayoutProps) {
             <Button 
               variant="ghost" 
               size="lg"
-              className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center"
+              className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
               onClick={() => setMobileMenuOpen(true)}
+              style={{
+                visibility: iconState === 'hidden' ? 'hidden' : 'visible',
+                opacity: iconState === 'hidden' ? 0 : 1,
+                transition: 'opacity 450ms var(--ease-smooth), transform 450ms var(--ease-smooth)',
+                transform: iconState === 'hidden' ? 'scale(0.8) translate3d(0,0,0)' : 'scale(1) translate3d(0,0,0)',
+                willChange: 'transform, opacity'
+              }}
             >
               <div className="relative flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu">
-                {/* Vạch 1 - Sequential timing: starts at 0s */}
-                <div className={`absolute h-0.5 w-8 top-0 transform-gpu will-change-transform will-change-opacity ${
-                  iconState === 'opening'
-                    ? 'bg-primary animate-opening-bar-1' 
-                    : iconState === 'hidden'
-                    ? 'bg-primary opacity-0 scale-x-0'
-                    : iconState === 'closing'
-                    ? 'bg-primary animate-closing-bar-1'
-                    : 'bg-white group-hover:bg-primary transition-colors duration-300'
-                }`}></div>
-                {/* Vạch 2 - Sequential timing: starts at 1s */}
-                <div className={`absolute h-0.5 w-8 top-2.5 transform-gpu will-change-transform will-change-opacity ${
-                  iconState === 'opening'
-                    ? 'bg-primary animate-opening-bar-2' 
-                    : iconState === 'hidden'
-                    ? 'bg-primary opacity-0 scale-x-0'
-                    : iconState === 'closing'
-                    ? 'bg-primary animate-closing-bar-2'
-                    : 'bg-white group-hover:bg-primary transition-colors duration-300'
-                }`}></div>
-                {/* Vạch 3 - Sequential timing: starts at 1.8s */}
-                <div className={`absolute h-0.5 w-8 top-5 transform-gpu will-change-transform will-change-opacity ${
-                  iconState === 'opening'
-                    ? 'bg-primary animate-opening-bar-3' 
-                    : iconState === 'hidden'
-                    ? 'bg-primary opacity-0 scale-x-0'
-                    : iconState === 'closing'
-                    ? 'bg-primary animate-closing-bar-3'
-                    : 'bg-white group-hover:bg-primary transition-colors duration-300'
-                }`}></div>
+                {/* Vạch 1 - Sequential timing: starts immediately (0ms) */}
+                <div 
+                  className={`absolute h-0.5 w-8 top-0 transform-gpu ${
+                    iconState === 'opening'
+                      ? 'bg-primary animate-opening-bar-1' 
+                      : iconState === 'hidden'
+                      ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
+                      : iconState === 'closing'
+                      ? 'bg-primary animate-closing-bar-1'
+                      : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
+                  }`}
+                  style={{ willChange: 'transform, opacity' }}
+                ></div>
+                {/* Vạch 2 - Sequential timing: starts at 225ms delay */}
+                <div 
+                  className={`absolute h-0.5 w-8 top-2.5 transform-gpu ${
+                    iconState === 'opening'
+                      ? 'bg-primary animate-opening-bar-2' 
+                      : iconState === 'hidden'
+                      ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
+                      : iconState === 'closing'
+                      ? 'bg-primary animate-closing-bar-2'
+                      : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
+                  }`}
+                  style={{ willChange: 'transform, opacity' }}
+                ></div>
+                {/* Vạch 3 - Sequential timing: starts at 450ms delay */}
+                <div 
+                  className={`absolute h-0.5 w-8 top-5 transform-gpu ${
+                    iconState === 'opening'
+                      ? 'bg-primary animate-opening-bar-3' 
+                      : iconState === 'hidden'
+                      ? 'bg-primary opacity-0 scale-x-0 translate3d(0,0,0)'
+                      : iconState === 'closing'
+                      ? 'bg-primary animate-closing-bar-3'
+                      : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
+                  }`}
+                  style={{ willChange: 'transform, opacity' }}
+                ></div>
               </div>
             </Button>
           </SheetTrigger>
