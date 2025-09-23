@@ -27,6 +27,7 @@ export default function Layout({ children }: LayoutProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
+  const [isAnimating, setIsAnimating] = useState(false); // Track animation state for performance
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
 
@@ -43,15 +44,16 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Ultra-Smooth & Fluid
-  const LOADING_DURATION = 1000; // 1.0s total (0.5s delay + 0.5s animation)
-  const APPEAR_DURATION = 1000; // 1.0s total (0.5s delay + 0.5s animation) 
-  const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition (matches smooth hamburger: 0.5s + 0.5s)
+  // Animation timing constants - 120fps Optimized
+  const LOADING_DURATION = 900; // 0.9s total (0.4s delay + 0.5s animation)
+  const APPEAR_DURATION = 900; // 0.9s total (0.4s delay + 0.5s animation) 
+  const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition (CSS var --sidebar-dur)
 
   // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
     if (mobileMenuOpen) {
       // Start loading animation
+      setIsAnimating(true);
       setIconState('animating-out');
       // Wait for loading animation to complete
       const timer = setTimeout(() => {
@@ -72,6 +74,7 @@ export default function Layout({ children }: LayoutProps) {
         setTimeout(() => {
           setIconState('normal');
           setMobileMenuOpen(false);
+          setIsAnimating(false); // Animation complete
         }, APPEAR_DURATION);
       }, SIDEBAR_DURATION);
       return () => clearTimeout(timer);
@@ -120,7 +123,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
+      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 ${isAnimating ? '' : 'backdrop-blur-sm'} transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
       }`}>
         <div className="flex items-center justify-between py-4 px-6">
@@ -220,7 +223,7 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
+              <div className="relative flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu">
                 {/* Vạch 1 - Sequential timing: starts at 0s */}
                 <div className={`absolute h-0.5 w-8 top-0 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
