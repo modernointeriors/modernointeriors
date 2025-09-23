@@ -273,7 +273,44 @@
     }
   }
 
+  /* 4-Step Hamburger Animation */
+  @keyframes hamburger-line-1 {
+    0% { width: 2rem; transform: translateY(0); }
+    25% { width: 2rem; transform: translateY(0); }
+    50% { width: 1.5rem; transform: translateY(0); }
+    75% { width: 1rem; transform: translateY(-0.25rem); }
+    100% { width: 0.75rem; transform: translateY(-0.5rem); }
+  }
+
+  @keyframes hamburger-line-2 {
+    0% { width: 2rem; opacity: 1; }
+    25% { width: 1.5rem; opacity: 1; }
+    50% { width: 1rem; opacity: 0.8; }
+    75% { width: 0.5rem; opacity: 0.5; }
+    100% { width: 0.25rem; opacity: 0.2; }
+  }
+
+  @keyframes hamburger-line-3 {
+    0% { width: 2rem; transform: translateY(0); }
+    25% { width: 2rem; transform: translateY(0); }
+    50% { width: 1.5rem; transform: translateY(0); }
+    75% { width: 1rem; transform: translateY(0.25rem); }
+    100% { width: 0.75rem; transform: translateY(0.5rem); }
+  }
+
   .animate-hero-progress {
     animation: hero-progress 5s linear forwards;
+  }
+
+  .animate-hamburger-line-1 {
+    animation: hamburger-line-1 1.5s ease-in-out forwards;
+  }
+
+  .animate-hamburger-line-2 {
+    animation: hamburger-line-2 1.5s ease-in-out forwards;
+  }
+
+  .animate-hamburger-line-3 {
+    animation: hamburger-line-3 1.5s ease-in-out forwards;
   }
 }

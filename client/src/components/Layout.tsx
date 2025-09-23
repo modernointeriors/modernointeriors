@@ -50,10 +50,10 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Delay sidebar appearance until hamburger animation finishes (650ms)
+      // Delay sidebar appearance until 4-step hamburger animation finishes (1500ms)
       const timer = setTimeout(() => {
         setShowSidebar(true);
-      }, 650);
+      }, 1500);
       return () => clearTimeout(timer);
     } else {
       // Hide sidebar immediately when closing
@@ -187,17 +187,17 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
             >
               <div className="flex flex-col items-center justify-center space-y-2 rotate-90 group-hover:text-primary">
-                {/* Vạch 1 - Rút ngắn nhất */}
-                <div className={`h-0.5 bg-white group-hover:bg-primary transition-all duration-500 origin-left ${
-                  mobileMenuOpen ? 'w-3' : 'w-8'
+                {/* Vạch 1 - Top line */}
+                <div className={`h-0.5 bg-white group-hover:bg-primary w-8 origin-left ${
+                  mobileMenuOpen ? 'animate-hamburger-line-1' : ''
                 }`}></div>
-                {/* Vạch 2 - Rút ngắn trung bình */}
-                <div className={`h-0.5 bg-white group-hover:bg-primary transition-all duration-500 delay-75 origin-left ${
-                  mobileMenuOpen ? 'w-5' : 'w-8'
+                {/* Vạch 2 - Middle line */}
+                <div className={`h-0.5 bg-white group-hover:bg-primary w-8 origin-left ${
+                  mobileMenuOpen ? 'animate-hamburger-line-2' : ''
                 }`}></div>
-                {/* Vạch 3 - Rút ngắn ít nhất */}
-                <div className={`h-0.5 bg-white group-hover:bg-primary transition-all duration-500 delay-150 origin-left ${
-                  mobileMenuOpen ? 'w-7' : 'w-8'
+                {/* Vạch 3 - Bottom line */}
+                <div className={`h-0.5 bg-white group-hover:bg-primary w-8 origin-left ${
+                  mobileMenuOpen ? 'animate-hamburger-line-3' : ''
                 }`}></div>
               </div>
             </Button>
