@@ -177,33 +177,33 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       
                       {/* Circular Progress Next Button */}
                       <div className="relative">
-                        <button className="swiper-button-next-custom w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors relative z-10">
+                        <button className="swiper-button-next-custom w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors relative z-10">
                           <ChevronRight className="w-4 h-4" />
                         </button>
                         
                         {/* Circular Progress Border */}
                         <svg 
-                          className="absolute inset-0 w-12 h-12 -rotate-90"
-                          viewBox="0 0 48 48"
+                          className="absolute inset-0 w-10 h-10 -rotate-90"
+                          viewBox="0 0 40 40"
                         >
                           <circle
-                            cx="24"
-                            cy="24"
-                            r="22"
+                            cx="20"
+                            cy="20"
+                            r="18"
                             fill="none"
                             stroke="rgba(255,255,255,0.3)"
-                            strokeWidth="2"
+                            strokeWidth="1"
                           />
                           <circle
                             key={progressKey}
-                            cx="24"
-                            cy="24"
-                            r="22"
+                            cx="20"
+                            cy="20"
+                            r="18"
                             fill="none"
                             stroke="rgba(255,255,255,0.8)"
-                            strokeWidth="2"
-                            strokeDasharray="138.23"
-                            strokeDashoffset="138.23"
+                            strokeWidth="1"
+                            strokeDasharray="113.1"
+                            strokeDashoffset="113.1"
                             className="animate-hero-progress"
                             strokeLinecap="round"
                           />

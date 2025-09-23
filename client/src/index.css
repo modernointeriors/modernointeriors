@@ -266,7 +266,7 @@
   /* Hero Progress Animation */
   @keyframes hero-progress {
     0% { 
-      stroke-dashoffset: 138.23;
+      stroke-dashoffset: 113.1;
     }
     100% { 
       stroke-dashoffset: 0;
