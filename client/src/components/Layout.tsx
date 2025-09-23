@@ -28,6 +28,14 @@ export default function Layout({ children }: LayoutProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
   const [isAnimating, setIsAnimating] = useState(false); // Track animation state for performance
+  
+  // Lock scroll during menu animation for 120fps performance
+  useEffect(() => {
+    document.body.style.overflow = showSidebar ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showSidebar]);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
 
@@ -196,17 +204,21 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </header>
 
-      {/* Custom Overlay for Click Outside Detection */}
-      {showSidebar && (
-        <div 
-          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log('🎯 Custom overlay click - smooth close');
-            setShowSidebar(false);
-          }}
-        />
-      )}
+      {/* Custom Overlay - Pre-mounted for 120fps performance */}
+      <div 
+        className="fixed inset-0 z-30 bg-black/30"
+        style={{
+          opacity: showSidebar ? 1 : 0,
+          pointerEvents: showSidebar ? 'auto' : 'none',
+          transition: 'opacity 300ms var(--ease-out)',
+          willChange: 'opacity'
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          console.log('🎯 Custom overlay click - smooth close');
+          setShowSidebar(false);
+        }}
+      />
 
       {/* Vertical Navigation Sidebar - IIDA Style */}
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
@@ -231,7 +243,7 @@ export default function Layout({ children }: LayoutProps) {
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-primary opacity-0 scale-x-0 animate-hamburger-appear-1'
+                    ? 'bg-primary animate-hamburger-appear-1'
                     : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
                 {/* Vạch 2 - Sequential timing: starts at 1s */}
@@ -241,7 +253,7 @@ export default function Layout({ children }: LayoutProps) {
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-primary opacity-0 scale-x-0 animate-hamburger-appear-2'
+                    ? 'bg-primary animate-hamburger-appear-2'
                     : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
                 {/* Vạch 3 - Sequential timing: starts at 1.8s */}
@@ -251,7 +263,7 @@ export default function Layout({ children }: LayoutProps) {
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-primary opacity-0 scale-x-0 animate-hamburger-appear-3'
+                    ? 'bg-primary animate-hamburger-appear-3'
                     : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
               </div>
@@ -261,7 +273,7 @@ export default function Layout({ children }: LayoutProps) {
             side="left" 
             className="w-[320px] sm:w-[400px] bg-background [&>button]:hidden transform-gpu will-change-transform will-change-contents backface-visibility-hidden border-0"
             style={{
-              transition: 'transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transition: 'transform var(--sidebar-dur) var(--ease-out)',
               transform: showSidebar ? 'translate3d(0, 0, 0)' : 'translate3d(-100%, 0, 0)',
               willChange: 'transform',
               visibility: showSidebar ? 'visible' : 'visible',
