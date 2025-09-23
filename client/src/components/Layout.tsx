@@ -43,10 +43,10 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Fast & Smooth
-  const LOADING_DURATION = 2600; // 2.6s total (1.8s delay + 0.8s animation)
-  const APPEAR_DURATION = 2600; // 2.6s total (1.8s delay + 0.8s animation) 
-  const SIDEBAR_DURATION = 800; // 0.8s sidebar transition (same as hamburger)
+  // Animation timing constants - Ultra-Fast & Smooth
+  const LOADING_DURATION = 1100; // 1.1s total (0.7s delay + 0.4s animation)
+  const APPEAR_DURATION = 1100; // 1.1s total (0.7s delay + 0.4s animation) 
+  const SIDEBAR_DURATION = 1100; // 1.1s sidebar transition (matches fast hamburger: 0.7s + 0.4s)
 
   // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
