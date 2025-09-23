@@ -262,11 +262,11 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              {/* Simple 3-line hamburger icon */}
-              <div className="flex flex-col justify-center items-center space-y-1.5 w-6 h-6">
-                <div className="w-5 h-0.5 bg-white rounded-sm"></div>
-                <div className="w-5 h-0.5 bg-white rounded-sm"></div>
-                <div className="w-5 h-0.5 bg-white rounded-sm"></div>
+              {/* Classic hamburger icon - longer, thinner, sharp corners */}
+              <div className="flex flex-col justify-center items-center space-y-1.5 w-8 h-6">
+                <div className="w-7 h-0.5 bg-white"></div>
+                <div className="w-7 h-0.5 bg-white"></div>
+                <div className="w-7 h-0.5 bg-white"></div>
               </div>
             </Button>
           </SheetTrigger>
