@@ -244,23 +244,26 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-[2600ms] ease-standard"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform ease-standard"
+            style={{
+              transitionDuration: '2600ms'
+            }}
             onPointerDownOutside={(e) => {
               e.preventDefault(); // Prevent immediate close
               console.log('Outside click detected - triggering smooth close');
-              // Trigger smooth animated close
-              setShowSidebar(false);
+              // Force a smooth animated close with delay
+              setTimeout(() => setShowSidebar(false), 50);
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault(); // Prevent immediate close  
               console.log('ESC key detected - triggering smooth close');
-              // Trigger smooth animated close
-              setShowSidebar(false);
+              // Force a smooth animated close with delay
+              setTimeout(() => setShowSidebar(false), 50);
             }}
             onInteractOutside={(e) => {
               e.preventDefault(); // Also prevent this event
               console.log('Interact outside detected - triggering smooth close');
-              setShowSidebar(false);
+              setTimeout(() => setShowSidebar(false), 50);
             }}
           >
             <SheetHeader>
