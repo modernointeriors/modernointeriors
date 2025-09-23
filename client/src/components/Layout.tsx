@@ -23,19 +23,15 @@ export default function Layout({ children }: LayoutProps) {
   const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [iconState, setIconState] = useState('normal'); // 'normal', 'animating-out', 'hidden', 'animating-in'
+  const [iconState, setIconState] = useState('normal'); // 'normal', 'opening', 'hidden', 'closing'
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
-  const [isAnimating, setIsAnimating] = useState(false); // Track animation state for performance
-  const [animationCompleted, setAnimationCompleted] = useState(false); // Prevent duplicate animations
   
-  // Lock scroll during menu animation for 120fps performance
+  // Lock scroll during menu for smooth performance
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [showSidebar]);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
@@ -53,45 +49,36 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Original Beautiful + Ultra-Smooth
-  const LOADING_DURATION = 1000; // 1.0s total (0.5s delay + 0.5s animation)
-  const APPEAR_DURATION = 1000; // 1.0s total (0.5s delay + 0.5s animation) 
-  const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition (CSS var --sidebar-dur)
+  // Animation timing constants - Perfect Sync
+  const OPENING_DURATION = 800; // 0.8s for bars 1→2→3 (0.4s delay + 0.4s anim)
+  const CLOSING_DURATION = 800; // 0.8s for bars 3→2→1 (0.4s delay + 0.4s anim)
+  const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition
 
-  // Handle sidebar timing - show after hamburger loading completes
+  // OPENING: Show sidebar after hamburger 1→2→3 completes
   useEffect(() => {
-    if (mobileMenuOpen) {
-      // Reset animation states for clean start
-      setAnimationCompleted(false);
-      setIsAnimating(true);
-      setIconState('animating-out');
-      // Wait for loading animation to complete
+    if (mobileMenuOpen && iconState === 'normal') {
+      setIconState('opening');
       const timer = setTimeout(() => {
         setIconState('hidden');
         setShowSidebar(true);
-      }, LOADING_DURATION);
+      }, OPENING_DURATION);
       return () => clearTimeout(timer);
     }
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, iconState]);
 
-  // Handle bars appearing when sidebar closes - PREVENT DUPLICATES
+  // CLOSING: Animate bars 3→2→1 after sidebar closes
   useEffect(() => {
-    if (!showSidebar && iconState === 'hidden' && !animationCompleted) {
-      // Wait for sidebar to close completely then animate bars back
+    if (!showSidebar && iconState === 'hidden') {
       const timer = setTimeout(() => {
-        setAnimationCompleted(true); // Set flag to prevent re-trigger
-        setIconState('animating-in');
-        // Reset to normal after appearing animation completes
+        setIconState('closing');
         setTimeout(() => {
           setIconState('normal');
           setMobileMenuOpen(false);
-          setIsAnimating(false); // Animation complete
-          setAnimationCompleted(false); // Reset for next cycle
-        }, APPEAR_DURATION);
+        }, CLOSING_DURATION);
       }, SIDEBAR_DURATION);
       return () => clearTimeout(timer);
     }
-  }, [showSidebar, iconState, animationCompleted]);
+  }, [showSidebar, iconState]);
 
   // Reset activity timer when user interacts with search
   const handleSearchActivity = () => {
@@ -135,7 +122,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 ${isAnimating ? '' : 'backdrop-blur-sm'} transition-transform duration-300 ${
+      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
       }`}>
         <div className="flex items-center justify-between py-4 px-6">
@@ -242,32 +229,32 @@ export default function Layout({ children }: LayoutProps) {
               <div className="relative flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu">
                 {/* Vạch 1 - Sequential timing: starts at 0s */}
                 <div className={`absolute h-0.5 w-8 top-0 transform-gpu will-change-transform will-change-opacity ${
-                  iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-loading-1' 
+                  iconState === 'opening'
+                    ? 'bg-primary animate-opening-bar-1' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
-                    : iconState === 'animating-in'
-                    ? 'bg-primary animate-hamburger-appear-1'
+                    : iconState === 'closing'
+                    ? 'bg-primary animate-closing-bar-1'
                     : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
                 {/* Vạch 2 - Sequential timing: starts at 1s */}
                 <div className={`absolute h-0.5 w-8 top-2.5 transform-gpu will-change-transform will-change-opacity ${
-                  iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-loading-2' 
+                  iconState === 'opening'
+                    ? 'bg-primary animate-opening-bar-2' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
-                    : iconState === 'animating-in'
-                    ? 'bg-primary animate-hamburger-appear-2'
+                    : iconState === 'closing'
+                    ? 'bg-primary animate-closing-bar-2'
                     : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
                 {/* Vạch 3 - Sequential timing: starts at 1.8s */}
                 <div className={`absolute h-0.5 w-8 top-5 transform-gpu will-change-transform will-change-opacity ${
-                  iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-loading-3' 
+                  iconState === 'opening'
+                    ? 'bg-primary animate-opening-bar-3' 
                     : iconState === 'hidden'
                     ? 'bg-primary opacity-0 scale-x-0'
-                    : iconState === 'animating-in'
-                    ? 'bg-primary animate-hamburger-appear-3'
+                    : iconState === 'closing'
+                    ? 'bg-primary animate-closing-bar-3'
                     : 'bg-white group-hover:bg-primary transition-colors duration-300'
                 }`}></div>
               </div>

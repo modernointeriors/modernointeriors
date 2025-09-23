@@ -37,10 +37,10 @@
   --font-mono: 'JetBrains Mono', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', monospace;
   --radius: 0.75rem;
   
-  /* Ultra-Smooth Animation Variables */
+  /* Perfect Smooth Animation Variables */
   --sidebar-dur: 1000ms;
-  --icon-dur: 500ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --bar-dur: 400ms;
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .dark {
@@ -278,22 +278,18 @@
     }
   }
 
-  /* Smooth GPU-Accelerated Loading Animation */
-  @keyframes loading-effect {
+  /* Smooth bar animations */
+  @keyframes bar-disappear {
     0% { transform: scaleX(1); opacity: 1; }
-    20% { transform: scaleX(0.85); opacity: 0.9; }
-    40% { transform: scaleX(0.6); opacity: 0.7; }
-    60% { transform: scaleX(0.35); opacity: 0.5; }
-    80% { transform: scaleX(0.15); opacity: 0.3; }
+    30% { transform: scaleX(0.7); opacity: 0.8; }
+    60% { transform: scaleX(0.3); opacity: 0.4; }
     100% { transform: scaleX(0); opacity: 0; }
   }
 
-  @keyframes bars-appear {
+  @keyframes bar-appear {
     0% { transform: scaleX(0); opacity: 0; }
-    20% { transform: scaleX(0.2); opacity: 0.3; }
-    40% { transform: scaleX(0.5); opacity: 0.6; }
-    60% { transform: scaleX(0.75); opacity: 0.8; }
-    80% { transform: scaleX(0.9); opacity: 0.95; }
+    30% { transform: scaleX(0.3); opacity: 0.4; }
+    60% { transform: scaleX(0.7); opacity: 0.8; }
     100% { transform: scaleX(1); opacity: 1; }
   }
 
@@ -302,50 +298,50 @@
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Smooth 1→2→3 sequence - Original timing, enhanced smoothness */
-  .animate-hamburger-loading-1 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0s 1 forwards;
+  /* OPENING: Smooth 1→2→3 sequence */
+  .animate-opening-bar-1 {
+    animation: bar-disappear var(--bar-dur) var(--ease-smooth) 0s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  .animate-hamburger-loading-2 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0.3s 1 forwards;
+  .animate-opening-bar-2 {
+    animation: bar-disappear var(--bar-dur) var(--ease-smooth) 0.2s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  .animate-hamburger-loading-3 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0.5s 1 forwards;
+  .animate-opening-bar-3 {
+    animation: bar-disappear var(--bar-dur) var(--ease-smooth) 0.4s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  /* Beautiful 3→2→1 sequence - Original timing, silk-smooth */
-  .animate-hamburger-appear-1 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0.5s 1 forwards;
+  /* CLOSING: Beautiful 3→2→1 sequence */
+  .animate-closing-bar-1 {
+    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0.4s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  .animate-hamburger-appear-2 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0.3s 1 forwards;
+  .animate-closing-bar-2 {
+    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0.2s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  .animate-hamburger-appear-3 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0s 1 forwards;
+  .animate-closing-bar-3 {
+    animation: bar-appear var(--bar-dur) var(--ease-smooth) 0s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
