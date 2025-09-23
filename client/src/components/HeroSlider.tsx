@@ -172,28 +172,20 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                     {/* Navigation Arrows */}
                     <div className="flex gap-4">
                       <button className="swiper-button-prev-custom w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
-                        ←
+                        &lt;
                       </button>
                       
                       {/* Circular Progress Next Button */}
                       <div className="relative">
                         <button className="swiper-button-next-custom w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors relative z-10">
-                          <ChevronRight className="w-4 h-4" />
+                          &gt;
                         </button>
                         
-                        {/* Circular Progress Border */}
+                        {/* Circular Progress Line */}
                         <svg 
                           className="absolute inset-0 w-10 h-10 -rotate-90"
                           viewBox="0 0 40 40"
                         >
-                          <circle
-                            cx="20"
-                            cy="20"
-                            r="18"
-                            fill="none"
-                            stroke="rgba(255,255,255,0.3)"
-                            strokeWidth="1"
-                          />
                           <circle
                             key={progressKey}
                             cx="20"
