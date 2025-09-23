@@ -46,7 +46,7 @@ export default function Layout({ children }: LayoutProps) {
   // Animation timing constants - Fast & Smooth
   const LOADING_DURATION = 2600; // 2.6s total (1.8s delay + 0.8s animation)
   const APPEAR_DURATION = 2600; // 2.6s total (1.8s delay + 0.8s animation) 
-  const SIDEBAR_DURATION = 2600; // 2.6s sidebar transition (same as hamburger)
+  const SIDEBAR_DURATION = 1200; // 1.2s sidebar transition (same as hamburger)
 
   // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
@@ -258,7 +258,7 @@ export default function Layout({ children }: LayoutProps) {
             side="left" 
             className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform transition-transform ease-standard"
             style={{
-              transitionDuration: '2600ms',
+              transitionDuration: '1200ms',
               transform: showSidebar ? 'translateX(0)' : 'translateX(-100%)',
               transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
               visibility: showSidebar ? 'visible' : 'visible', // Always visible for animation
