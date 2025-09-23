@@ -256,13 +256,16 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background [&>button]:hidden transform-gpu will-change-transform transition-transform ease-standard border-0"
+            className="w-[320px] sm:w-[400px] bg-background [&>button]:hidden transform-gpu will-change-transform will-change-contents backface-visibility-hidden border-0"
             style={{
-              transitionDuration: '800ms',
-              transform: showSidebar ? 'translateX(0)' : 'translateX(-100%)',
-              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-              visibility: showSidebar ? 'visible' : 'visible', // Always visible for animation
-              pointerEvents: showSidebar ? 'auto' : 'none' // Disable interaction when closed
+              transition: 'transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transform: showSidebar ? 'translate3d(0, 0, 0)' : 'translate3d(-100%, 0, 0)',
+              willChange: 'transform',
+              visibility: showSidebar ? 'visible' : 'visible',
+              pointerEvents: showSidebar ? 'auto' : 'none',
+              backfaceVisibility: 'hidden',
+              perspective: '1000px',
+              transformStyle: 'preserve-3d'
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
