@@ -168,9 +168,15 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
             >
               <div className="flex flex-col items-center justify-center space-y-2 rotate-90 group-hover:text-primary">
-                <div className="w-8 h-0.5 bg-white group-hover:bg-primary transition-colors"></div>
-                <div className="w-8 h-0.5 bg-white group-hover:bg-primary transition-colors"></div>
-                <div className="w-8 h-0.5 bg-white group-hover:bg-primary transition-colors"></div>
+                <div className={`w-8 h-0.5 bg-white group-hover:bg-primary transition-all duration-300 origin-center ${
+                  mobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''
+                }`}></div>
+                <div className={`w-8 h-0.5 bg-white group-hover:bg-primary transition-all duration-300 ${
+                  mobileMenuOpen ? 'opacity-0 scale-0' : ''
+                }`}></div>
+                <div className={`w-8 h-0.5 bg-white group-hover:bg-primary transition-all duration-300 origin-center ${
+                  mobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''
+                }`}></div>
               </div>
             </Button>
           </SheetTrigger>
