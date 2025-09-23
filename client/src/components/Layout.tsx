@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X, Globe, Search } from "lucide-react";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 
 interface LayoutProps {
@@ -74,6 +74,19 @@ export default function Layout({ children }: LayoutProps) {
               className="h-12 w-auto hover:opacity-80 transition-opacity"
             />
           </Link>
+          
+          {/* Search Bar */}
+          <div className="flex-1 max-w-xl mx-8">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+                className="w-full bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white/80 py-2 pr-8 text-sm font-light transition-colors"
+                data-testid="header-search"
+              />
+              <Search className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/60" />
+            </div>
+          </div>
           
           {/* Language Selector */}
           <div className="flex items-center space-x-1 text-sm">
