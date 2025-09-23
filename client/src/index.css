@@ -262,4 +262,18 @@
     white-space: nowrap;
     border: 0;
   }
+
+  /* Hero Progress Animation */
+  @keyframes hero-progress {
+    0% { 
+      stroke-dashoffset: 138.23;
+    }
+    100% { 
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .animate-hero-progress {
+    animation: hero-progress 5s linear infinite;
+  }
 }
