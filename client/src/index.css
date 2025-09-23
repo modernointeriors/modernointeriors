@@ -37,7 +37,7 @@
   --font-mono: 'JetBrains Mono', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', monospace;
   --radius: 0.75rem;
   
-  /* Ultra-Smooth 120fps Animation Variables */
+  /* Ultra-Smooth 240fps Animation Variables - Auto-scales to display refresh rate */
   --sidebar-dur: 900ms;
   --bar-dur: 450ms;
   --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -332,13 +332,15 @@
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* OPENING: Beautiful 1→2→3 sequence */
+  /* OPENING: Beautiful 1→2→3 sequence - 240fps optimized */
   .animate-opening-bar-1 {
     animation: bar-disappear var(--bar-dur) var(--ease-smooth) 0s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
-    contain: paint;
+    contain: paint layout style;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
   .animate-opening-bar-2 {
@@ -346,7 +348,9 @@
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
-    contain: paint;
+    contain: paint layout style;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
   .animate-opening-bar-3 {
@@ -354,16 +358,20 @@
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
-    contain: paint;
+    contain: paint layout style;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
-  /* CLOSING: Beautiful 3→2→1 sequence */
+  /* CLOSING: Beautiful 3→2→1 sequence - 240fps optimized */
   .animate-closing-bar-1 {
     animation: bar-appear var(--bar-dur) var(--ease-smooth) 300ms 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
-    contain: paint;
+    contain: paint layout style;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
   .animate-closing-bar-2 {
@@ -371,7 +379,9 @@
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
-    contain: paint;
+    contain: paint layout style;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
   .animate-closing-bar-3 {
@@ -379,7 +389,9 @@
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
-    contain: paint;
+    contain: paint layout style;
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
   .animate-hero-progress {

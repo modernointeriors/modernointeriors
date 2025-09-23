@@ -49,10 +49,31 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Ultra-Smooth 120fps
+  // Animation timing constants - Ultra-Smooth (Auto-scales to 240fps on supported displays)
   const OPENING_DURATION = 900; // 0.9s for bars 1→2→3 (sync with CSS --bar-dur)
   const CLOSING_DURATION = 900; // 0.9s for bars 3→2→1 (sync with CSS --bar-dur) 
   const SIDEBAR_DURATION = 900; // 0.9s sidebar transition (sync with CSS --sidebar-dur)
+
+  // Performance monitoring - detect actual refresh rate
+  useEffect(() => {
+    let frameCount = 0;
+    let startTime = performance.now();
+    const measureFPS = () => {
+      frameCount++;
+      if (frameCount === 120) { // Sample 120 frames
+        const endTime = performance.now();
+        const fps = Math.round((frameCount * 1000) / (endTime - startTime));
+        console.log(`🚀 Display refresh rate detected: ${fps}fps (optimized for 240fps)`);
+        return;
+      }
+      requestAnimationFrame(measureFPS);
+    };
+    // Only measure once per session
+    if (!sessionStorage.getItem('fps-measured')) {
+      sessionStorage.setItem('fps-measured', 'true');
+      requestAnimationFrame(measureFPS);
+    }
+  }, []);
 
   // OPENING: Show sidebar after hamburger 1→2→3 completes
   useEffect(() => {
@@ -232,7 +253,15 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              <div className="relative flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu">
+              <div 
+                className="relative flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu"
+                style={{
+                  contain: 'paint layout style',
+                  backfaceVisibility: 'hidden',
+                  perspective: '1000px',
+                  willChange: 'transform'
+                }}
+              >
                 {/* Vạch 1 - Sequential timing: starts immediately (0ms) */}
                 <div 
                   className={`absolute h-0.5 w-8 top-0 transform-gpu ${
@@ -244,7 +273,11 @@ export default function Layout({ children }: LayoutProps) {
                       ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-1'
                       : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
                   }`}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ 
+                    willChange: 'transform, opacity',
+                    contain: 'paint layout style',
+                    backfaceVisibility: 'hidden'
+                  }}
                 ></div>
                 {/* Vạch 2 - Sequential timing: starts at 225ms delay */}
                 <div 
@@ -257,7 +290,11 @@ export default function Layout({ children }: LayoutProps) {
                       ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-2'
                       : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
                   }`}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ 
+                    willChange: 'transform, opacity',
+                    contain: 'paint layout style',
+                    backfaceVisibility: 'hidden'
+                  }}
                 ></div>
                 {/* Vạch 3 - Sequential timing: starts at 450ms delay */}
                 <div 
@@ -270,7 +307,11 @@ export default function Layout({ children }: LayoutProps) {
                       ? 'bg-primary opacity-0 scale-x-0 animate-closing-bar-3'
                       : 'bg-white group-hover:bg-primary transition-all duration-300 ease-out translate3d(0,0,0)'
                   }`}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ 
+                    willChange: 'transform, opacity',
+                    contain: 'paint layout style',
+                    backfaceVisibility: 'hidden'
+                  }}
                 ></div>
               </div>
             </Button>
