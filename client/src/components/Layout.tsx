@@ -43,9 +43,9 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants
-  const LOADING_DURATION = 2400; // 2.4s total (1.8s delay + 0.6s animation)
-  const APPEAR_DURATION = 2200; // 2.2s total (1.6s delay + 0.6s animation) 
+  // Animation timing constants - Slow & Smooth
+  const LOADING_DURATION = 3000; // 3s total (1.8s delay + 1.2s animation)
+  const APPEAR_DURATION = 2800; // 2.8s total (1.6s delay + 1.2s animation) 
   const SIDEBAR_DURATION = 1200; // 1.2s sidebar transition
 
   // Handle sidebar timing - show after hamburger loading completes
