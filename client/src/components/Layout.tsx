@@ -262,7 +262,12 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              <Menu className="h-6 w-6" />
+              {/* Simple 3-line hamburger icon */}
+              <div className="flex flex-col justify-center items-center space-y-1.5 w-6 h-6">
+                <div className="w-5 h-0.5 bg-white rounded-sm"></div>
+                <div className="w-5 h-0.5 bg-white rounded-sm"></div>
+                <div className="w-5 h-0.5 bg-white rounded-sm"></div>
+              </div>
             </Button>
           </SheetTrigger>
           <SheetContent 
