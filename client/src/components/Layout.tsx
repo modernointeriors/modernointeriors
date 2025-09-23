@@ -28,6 +28,7 @@ export default function Layout({ children }: LayoutProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
   const [isAnimating, setIsAnimating] = useState(false); // Track animation state for performance
+  const [animationCompleted, setAnimationCompleted] = useState(false); // Prevent duplicate animations
   
   // Lock scroll during menu animation for 120fps performance
   useEffect(() => {
@@ -60,7 +61,8 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Start loading animation
+      // Reset animation states for clean start
+      setAnimationCompleted(false);
       setIsAnimating(true);
       setIconState('animating-out');
       // Wait for loading animation to complete
@@ -72,22 +74,24 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [mobileMenuOpen]);
 
-  // Handle bars appearing when sidebar closes
+  // Handle bars appearing when sidebar closes - PREVENT DUPLICATES
   useEffect(() => {
-    if (!showSidebar && iconState === 'hidden') {
+    if (!showSidebar && iconState === 'hidden' && !animationCompleted) {
       // Wait for sidebar to close completely then animate bars back
       const timer = setTimeout(() => {
+        setAnimationCompleted(true); // Set flag to prevent re-trigger
         setIconState('animating-in');
         // Reset to normal after appearing animation completes
         setTimeout(() => {
           setIconState('normal');
           setMobileMenuOpen(false);
           setIsAnimating(false); // Animation complete
+          setAnimationCompleted(false); // Reset for next cycle
         }, APPEAR_DURATION);
       }, SIDEBAR_DURATION);
       return () => clearTimeout(timer);
     }
-  }, [showSidebar, iconState]);
+  }, [showSidebar, iconState, animationCompleted]);
 
   // Reset activity timer when user interacts with search
   const handleSearchActivity = () => {
