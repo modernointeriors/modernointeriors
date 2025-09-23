@@ -25,6 +25,7 @@ export default function Layout({ children }: LayoutProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
+  const [showSidebar, setShowSidebar] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
 
@@ -45,6 +46,20 @@ export default function Layout({ children }: LayoutProps) {
   const handleSearchActivity = () => {
     setLastActivity(Date.now());
   };
+
+  // Handle sidebar timing - show after hamburger animation completes
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      // Delay sidebar appearance until hamburger animation finishes (650ms)
+      const timer = setTimeout(() => {
+        setShowSidebar(true);
+      }, 650);
+      return () => clearTimeout(timer);
+    } else {
+      // Hide sidebar immediately when closing
+      setShowSidebar(false);
+    }
+  }, [mobileMenuOpen]);
 
   // Language switching without URL changes
   const handleLanguageChange = (lang: Language) => {
@@ -158,7 +173,11 @@ export default function Layout({ children }: LayoutProps) {
       {/* Vertical Navigation Sidebar - IIDA Style */}
       <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
-        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <Sheet open={showSidebar} onOpenChange={(open) => {
+          if (!open) {
+            setMobileMenuOpen(false);
+          }
+        }}>
           <SheetTrigger asChild>
             <Button 
               variant="ghost" 
@@ -183,7 +202,10 @@ export default function Layout({ children }: LayoutProps) {
               </div>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden">
+          <SheetContent 
+            side="left" 
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden"
+          >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
                 <Link 
