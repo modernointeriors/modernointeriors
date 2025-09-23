@@ -269,48 +269,11 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              <div 
-                className="relative flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu"
-                style={{
-                  contain: 'paint layout style',
-                  backfaceVisibility: 'hidden',
-                  perspective: '1000px',
-                  willChange: 'transform'
-                }}
-              >
-                {/* Vạch 1 - Sequential timing: starts immediately (0ms) */}
-                <div 
-                  className="absolute h-1 w-8 top-0 transform-gpu border border-white/20 bg-white group-hover:bg-primary transition-all duration-300 ease-out"
-                  style={{ 
-                    willChange: 'transform, opacity',
-                    contain: 'paint layout style',
-                    backfaceVisibility: 'hidden',
-                    boxShadow: '0 0 2px rgba(255,255,255,0.8)',
-                    transform: 'translate3d(0,0,0)'
-                  }}
-                ></div>
-                {/* Vạch 2 - Sequential timing: starts at 225ms delay */}
-                <div 
-                  className="absolute h-1 w-8 top-3 transform-gpu border border-white/20 bg-white group-hover:bg-primary transition-all duration-300 ease-out"
-                  style={{ 
-                    willChange: 'transform, opacity',
-                    contain: 'paint layout style',
-                    backfaceVisibility: 'hidden',
-                    boxShadow: '0 0 2px rgba(255,255,255,0.8)',
-                    transform: 'translate3d(0,0,0)'
-                  }}
-                ></div>
-                {/* Vạch 3 - Sequential timing: starts at 450ms delay */}
-                <div 
-                  className="absolute h-1 w-8 top-6 transform-gpu border border-white/20 bg-white group-hover:bg-primary transition-all duration-300 ease-out"
-                  style={{ 
-                    willChange: 'transform, opacity',
-                    contain: 'paint layout style',
-                    backfaceVisibility: 'hidden',
-                    boxShadow: '0 0 2px rgba(255,255,255,0.8)',
-                    transform: 'translate3d(0,0,0)'
-                  }}
-                ></div>
+              {/* Simple hamburger icon - 3 horizontal bars */}
+              <div className="flex flex-col justify-center items-center space-y-1 w-6 h-6">
+                <div className="w-6 h-0.5 bg-white rounded-sm"></div>
+                <div className="w-6 h-0.5 bg-white rounded-sm"></div>
+                <div className="w-6 h-0.5 bg-white rounded-sm"></div>
               </div>
             </Button>
           </SheetTrigger>
