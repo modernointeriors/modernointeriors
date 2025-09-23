@@ -244,6 +244,8 @@ export default function Layout({ children }: LayoutProps) {
         }}
         onClick={(e) => {
           e.preventDefault();
+          // Instant icon animation reset
+          setIsClicked(false);
           setShowSidebar(false);
         }}
       />
@@ -310,6 +312,8 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
+              // Instant icon animation reset
+              setIsClicked(false);
               setShowSidebar(false);
             }}
           >
@@ -317,7 +321,10 @@ export default function Layout({ children }: LayoutProps) {
               <SheetTitle className="text-lg font-sans font-light text-primary">
                 <Link 
                   href="/" 
-                  onClick={() => setShowSidebar(false)}
+                  onClick={() => {
+                    setIsClicked(false);
+                    setShowSidebar(false);
+                  }}
                   className="cursor-pointer inline-block"
                 >
                   <img 
@@ -337,7 +344,10 @@ export default function Layout({ children }: LayoutProps) {
                       <Link
                         key={item.key}
                         href={item.href}
-                        onClick={() => setShowSidebar(false)}
+                        onClick={() => {
+                          setIsClicked(false);
+                          setShowSidebar(false);
+                        }}
                         className={`block text-lg font-light transition-colors hover:text-primary ${
                           isActive(item.href)
                             ? 'text-primary'
@@ -356,21 +366,30 @@ export default function Layout({ children }: LayoutProps) {
                   <div className="space-y-4">
                     <Link 
                       href={`/services`} 
-                      onClick={() => setShowSidebar(false)}
+                      onClick={() => {
+                        setIsClicked(false);
+                        setShowSidebar(false);
+                      }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Services
                     </Link>
                     <Link 
                       href={`/about`} 
-                      onClick={() => setShowSidebar(false)}
+                      onClick={() => {
+                        setIsClicked(false);
+                        setShowSidebar(false);
+                      }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Our Story
                     </Link>
                     <Link 
                       href={`/contact`} 
-                      onClick={() => setShowSidebar(false)}
+                      onClick={() => {
+                        setIsClicked(false);
+                        setShowSidebar(false);
+                      }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       Get in Touch
