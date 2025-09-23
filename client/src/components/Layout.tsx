@@ -118,7 +118,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               ENG
             </button>
-            <span className="text-zinc-600">|</span>
+            <span className="text-white/60">|</span>
             <button
               onClick={() => handleLanguageChange('vi')}
               className={`transition-colors px-2 py-1 ${
