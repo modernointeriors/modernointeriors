@@ -271,7 +271,7 @@ export default function Layout({ children }: LayoutProps) {
               {/* Classic hamburger icon - rotated 90 degrees with click animation */}
               <div 
                 className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-300 ease-out group-hover:scale-110 ${
-                  isClicked ? 'rotate-0' : 'rotate-90'
+                  isClicked ? 'rotate-180' : 'rotate-90'
                 }`}
               >
                 <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
