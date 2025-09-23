@@ -56,22 +56,26 @@ export default function Layout({ children }: LayoutProps) {
 
   // OPENING: Show sidebar after hamburger 1→2→3 completes
   useEffect(() => {
-    if (mobileMenuOpen && iconState === 'normal') {
+    if (mobileMenuOpen) {
+      console.log('🎯 Opening sidebar - starting animation');
       setIconState('opening');
       const timer = setTimeout(() => {
+        console.log('🎯 Animation complete - showing sidebar');
         setIconState('hidden');
         setShowSidebar(true);
       }, OPENING_DURATION);
       return () => clearTimeout(timer);
     }
-  }, [mobileMenuOpen, iconState]);
+  }, [mobileMenuOpen]);
 
   // CLOSING: Animate bars 3→2→1 after sidebar closes
   useEffect(() => {
     if (!showSidebar && iconState === 'hidden') {
+      console.log('🎯 Closing sidebar - starting bars animation');
       const timer = setTimeout(() => {
         setIconState('closing');
         setTimeout(() => {
+          console.log('🎯 Closing complete - back to normal');
           setIconState('normal');
           setMobileMenuOpen(false);
         }, CLOSING_DURATION);
