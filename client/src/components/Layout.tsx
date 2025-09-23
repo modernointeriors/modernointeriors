@@ -50,13 +50,13 @@ export default function Layout({ children }: LayoutProps) {
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      // Delay sidebar appearance until complete disappearance animation finishes (1000ms)
+      // Delay sidebar appearance until smooth disappearance animation finishes (1400ms)
       const timer = setTimeout(() => {
         setShowSidebar(true);
-      }, 1000);
+      }, 1400);
       return () => clearTimeout(timer);
     } else {
-      // Hide sidebar immediately when closing
+      // Hide sidebar first, then trigger icon reappear animation after delay
       setShowSidebar(false);
     }
   }, [mobileMenuOpen]);
@@ -175,7 +175,11 @@ export default function Layout({ children }: LayoutProps) {
         {/* Hamburger Menu at Center */}
         <Sheet open={showSidebar} onOpenChange={(open) => {
           if (!open) {
-            setMobileMenuOpen(false);
+            // Smooth close: first hide sidebar, then trigger icon reappear
+            setShowSidebar(false);
+            setTimeout(() => {
+              setMobileMenuOpen(false);
+            }, 100);
           }
         }}>
           <SheetTrigger asChild>
@@ -189,26 +193,26 @@ export default function Layout({ children }: LayoutProps) {
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
                 {/* Vạch 1 - Top line - Fixed position */}
-                <div className={`absolute h-0.5 w-8 origin-right transition-colors top-0 ${
+                <div className={`absolute h-0.5 w-8 origin-right transition-colors duration-300 top-0 ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-open-1' 
-                    : showSidebar === false && !mobileMenuOpen
+                    : !mobileMenuOpen && !showSidebar
                       ? 'bg-white group-hover:bg-primary animate-hamburger-close-1'
                       : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 2 - Middle line - Fixed position */}
-                <div className={`absolute h-0.5 w-8 origin-right transition-colors top-2.5 ${
+                <div className={`absolute h-0.5 w-8 origin-right transition-colors duration-300 top-2.5 ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-open-2' 
-                    : showSidebar === false && !mobileMenuOpen
+                    : !mobileMenuOpen && !showSidebar
                       ? 'bg-white group-hover:bg-primary animate-hamburger-close-2'
                       : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 3 - Bottom line - Fixed position */}
-                <div className={`absolute h-0.5 w-8 origin-right transition-colors top-5 ${
+                <div className={`absolute h-0.5 w-8 origin-right transition-colors duration-300 top-5 ${
                   mobileMenuOpen 
                     ? 'bg-primary animate-hamburger-open-3' 
-                    : showSidebar === false && !mobileMenuOpen
+                    : !mobileMenuOpen && !showSidebar
                       ? 'bg-white group-hover:bg-primary animate-hamburger-close-3'
                       : 'bg-white group-hover:bg-primary'
                 }`}></div>
@@ -217,7 +221,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]"
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
