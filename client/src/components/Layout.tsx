@@ -207,29 +207,29 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setMobileMenuOpen(true)}
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
-                {/* Vạch 1 - Loading bar with state-based animation */}
-                <div className={`absolute h-0.5 w-8 origin-right top-0 transition-colors duration-300 ${
+                {/* Vạch 1 - Directional loading bar animation */}
+                <div className={`absolute h-0.5 w-8 top-0 transition-colors duration-300 ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-1' 
+                    ? 'bg-primary animate-hamburger-out-1 origin-right' 
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-1'
-                    : 'bg-white group-hover:bg-primary'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-1 origin-left'
+                    : 'bg-white group-hover:bg-primary origin-right'
                 }`}></div>
-                {/* Vạch 2 - Loading bar with state-based animation */}
-                <div className={`absolute h-0.5 w-8 origin-right top-2.5 transition-colors duration-300 ${
+                {/* Vạch 2 - Directional loading bar animation */}
+                <div className={`absolute h-0.5 w-8 top-2.5 transition-colors duration-300 ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-2' 
+                    ? 'bg-primary animate-hamburger-out-2 origin-right' 
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-2'
-                    : 'bg-white group-hover:bg-primary'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-2 origin-left'
+                    : 'bg-white group-hover:bg-primary origin-right'
                 }`}></div>
-                {/* Vạch 3 - Loading bar with state-based animation */}
-                <div className={`absolute h-0.5 w-8 origin-right top-5 transition-colors duration-300 ${
+                {/* Vạch 3 - Directional loading bar animation */}
+                <div className={`absolute h-0.5 w-8 top-5 transition-colors duration-300 ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-3' 
+                    ? 'bg-primary animate-hamburger-out-3 origin-right' 
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-3'
-                    : 'bg-white group-hover:bg-primary'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-3 origin-left'
+                    : 'bg-white group-hover:bg-primary origin-right'
                 }`}></div>
               </div>
             </Button>
