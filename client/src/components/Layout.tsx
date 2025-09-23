@@ -33,10 +33,6 @@ export default function Layout({ children }: LayoutProps) {
     setShowSidebar(false);
   }, []); // Run once on mount
   
-  // Debug current icon state
-  useEffect(() => {
-    console.log('🎯 Icon state changed to:', iconState);
-  }, [iconState]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
@@ -257,10 +253,7 @@ export default function Layout({ children }: LayoutProps) {
               className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
-              onClick={() => {
-                console.log('🖱️ Hamburger clicked, current state:', iconState);
-                setMobileMenuOpen(true);
-              }}
+              onClick={() => setMobileMenuOpen(true)}
               style={{
                 visibility: 'visible', // Always visible for now
                 opacity: 1, // Always fully opaque for now
@@ -269,16 +262,7 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              {/* Animated hamburger icon - 240fps optimized */}
-              <div 
-                data-hamburger
-                data-state={iconState}
-                className="hamburger-container"
-              >
-                <span className="bar bar-1" style={{ '--i': 1 } as React.CSSProperties}></span>
-                <span className="bar bar-2" style={{ '--i': 2 } as React.CSSProperties}></span>
-                <span className="bar bar-3" style={{ '--i': 3 } as React.CSSProperties}></span>
-              </div>
+              <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
           <SheetContent 
