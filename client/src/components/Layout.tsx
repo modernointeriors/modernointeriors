@@ -198,8 +198,10 @@ export default function Layout({ children }: LayoutProps) {
         {/* Hamburger Menu at Center */}
         <Sheet open={showSidebar} onOpenChange={(open) => {
           if (!open) {
+            // Don't close immediately! Trigger animated close sequence
+            // This applies to ALL close actions: click outside, ESC, etc.
             setShowSidebar(false);
-            // Don't reset mobileMenuOpen here - let the icon animation handle it
+            // Icon animation will handle the rest in useEffect
           }
         }}>
           <SheetTrigger asChild>
