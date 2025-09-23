@@ -53,10 +53,10 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Ultra-Fast 120fps
-  const LOADING_DURATION = 500; // 0.5s total (0.2s delay + 0.3s animation)
-  const APPEAR_DURATION = 600; // 0.6s total (0.3s delay + 0.3s animation) 
-  const SIDEBAR_DURATION = 600; // 0.6s sidebar transition (CSS var --sidebar-dur)
+  // Animation timing constants - Original Beautiful + Ultra-Smooth
+  const LOADING_DURATION = 1000; // 1.0s total (0.5s delay + 0.5s animation)
+  const APPEAR_DURATION = 1000; // 1.0s total (0.5s delay + 0.5s animation) 
+  const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition (CSS var --sidebar-dur)
 
   // Handle sidebar timing - show after hamburger loading completes
   useEffect(() => {
@@ -214,7 +214,7 @@ export default function Layout({ children }: LayoutProps) {
         style={{
           opacity: showSidebar ? 1 : 0,
           pointerEvents: showSidebar ? 'auto' : 'none',
-          transition: 'opacity 200ms var(--ease-out)',
+          transition: 'opacity 400ms var(--ease-out)',
           willChange: 'opacity'
         }}
         onClick={(e) => {

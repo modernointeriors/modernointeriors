@@ -37,9 +37,9 @@
   --font-mono: 'JetBrains Mono', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', monospace;
   --radius: 0.75rem;
   
-  /* Ultra-Fast 120fps Animation Variables */
-  --sidebar-dur: 600ms;
-  --icon-dur: 300ms;
+  /* Ultra-Smooth Animation Variables */
+  --sidebar-dur: 1000ms;
+  --icon-dur: 500ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -302,7 +302,7 @@
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Loading 1→2→3 sequence - ONE TIME ONLY */
+  /* Smooth 1→2→3 sequence - Original timing, enhanced smoothness */
   .animate-hamburger-loading-1 {
     animation: loading-effect var(--icon-dur) var(--ease-out) 0s 1 forwards;
     transform-origin: left center;
@@ -312,7 +312,7 @@
   }
 
   .animate-hamburger-loading-2 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0.1s 1 forwards;
+    animation: loading-effect var(--icon-dur) var(--ease-out) 0.3s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -320,16 +320,16 @@
   }
 
   .animate-hamburger-loading-3 {
-    animation: loading-effect var(--icon-dur) var(--ease-out) 0.2s 1 forwards;
+    animation: loading-effect var(--icon-dur) var(--ease-out) 0.5s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
     contain: paint;
   }
 
-  /* Clean 3→2→1 sequence - ONE TIME ONLY */
+  /* Beautiful 3→2→1 sequence - Original timing, silk-smooth */
   .animate-hamburger-appear-1 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0.3s 1 forwards;
+    animation: bars-appear var(--icon-dur) var(--ease-out) 0.5s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -337,7 +337,7 @@
   }
 
   .animate-hamburger-appear-2 {
-    animation: bars-appear var(--icon-dur) var(--ease-out) 0.15s 1 forwards;
+    animation: bars-appear var(--icon-dur) var(--ease-out) 0.3s 1 forwards;
     transform-origin: left center;
     transform: translateZ(0);
     will-change: transform, opacity;
