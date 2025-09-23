@@ -273,7 +273,40 @@
     }
   }
 
-  /* Loading-Style Smooth Hamburger Animation - GPU Accelerated */
+  /* Slow Loading Bar Animation - Width-Based Retraction */
+  @keyframes hamburger-load-out {
+    0% { width: 2rem; opacity: 1; }
+    100% { width: 0; opacity: 0; } /* Gradually pull to nothing */
+  }
+
+  @keyframes hamburger-load-in {
+    0% { width: 0; opacity: 0; }
+    100% { width: 2rem; opacity: 1; } /* Gradually expand back */
+  }
+
+  .animate-hamburger-out-1 {
+    animation: hamburger-load-out 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-hamburger-out-2 {
+    animation: hamburger-load-out 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+  }
+
+  .animate-hamburger-out-3 {
+    animation: hamburger-load-out 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+  }
+
+  .animate-hamburger-in-1 {
+    animation: hamburger-load-in 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-hamburger-in-2 {
+    animation: hamburger-load-in 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+  }
+
+  .animate-hamburger-in-3 {
+    animation: hamburger-load-in 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  }
 
   .animate-hero-progress {
     animation: hero-progress 5s linear forwards;
