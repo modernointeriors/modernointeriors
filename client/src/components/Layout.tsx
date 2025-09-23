@@ -24,6 +24,7 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [iconState, setIconState] = useState('normal'); // 'normal', 'opening', 'hidden', 'closing'
+  const [isClicked, setIsClicked] = useState(false);
   
   // Force reset icon to normal state on component mount and add debug
   useEffect(() => {
@@ -253,7 +254,12 @@ export default function Layout({ children }: LayoutProps) {
               className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => {
+                setIsClicked(true);
+                setMobileMenuOpen(true);
+                // Reset rotation after animation completes
+                setTimeout(() => setIsClicked(false), 300);
+              }}
               style={{
                 visibility: 'visible', // Always visible for now
                 opacity: 1, // Always fully opaque for now
@@ -262,8 +268,12 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              {/* Classic hamburger icon - rotated 90 degrees with hover effect */}
-              <div className="flex flex-col justify-center items-center space-y-1.5 w-8 h-6 rotate-90 transition-all duration-300 ease-out group-hover:scale-110">
+              {/* Classic hamburger icon - rotated 90 degrees with click animation */}
+              <div 
+                className={`flex flex-col justify-center items-center space-y-1.5 w-8 h-6 transition-all duration-300 ease-out group-hover:scale-110 ${
+                  isClicked ? 'rotate-0' : 'rotate-90'
+                }`}
+              >
                 <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
                 <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
                 <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
