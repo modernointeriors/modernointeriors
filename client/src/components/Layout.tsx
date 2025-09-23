@@ -244,11 +244,11 @@ export default function Layout({ children }: LayoutProps) {
         }}
         onClick={(e) => {
           e.preventDefault();
-          // Sidebar closes immediately, icon resets after 200ms delay
+          // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
           setShowSidebar(false);
           setTimeout(() => {
             setIsClicked(false);
-          }, 200);
+          }, 1200);
         }}
       />
 
@@ -314,11 +314,11 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
-              // Sidebar closes immediately, icon resets after 200ms delay
+              // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
               setShowSidebar(false);
               setTimeout(() => {
                 setIsClicked(false);
-              }, 200);
+              }, 1200);
             }}
           >
             <SheetHeader>
@@ -326,11 +326,11 @@ export default function Layout({ children }: LayoutProps) {
                 <Link 
                   href="/" 
                   onClick={() => {
-                    // Sidebar closes immediately, icon resets after 200ms delay
+                    // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
                     setShowSidebar(false);
                     setTimeout(() => {
                       setIsClicked(false);
-                    }, 200);
+                    }, 1200);
                   }}
                   className="cursor-pointer inline-block"
                 >
@@ -352,11 +352,11 @@ export default function Layout({ children }: LayoutProps) {
                         key={item.key}
                         href={item.href}
                         onClick={() => {
-                          // Sidebar closes immediately, icon resets after 200ms delay
+                          // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
                           setShowSidebar(false);
                           setTimeout(() => {
                             setIsClicked(false);
-                          }, 200);
+                          }, 1200);
                         }}
                         className={`block text-lg font-light transition-colors hover:text-primary ${
                           isActive(item.href)
@@ -377,11 +377,11 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/services`} 
                       onClick={() => {
-                        // Sidebar closes immediately, icon resets after 200ms delay
+                        // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
-                        }, 200);
+                        }, 1200);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -390,11 +390,11 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/about`} 
                       onClick={() => {
-                        // Sidebar closes immediately, icon resets after 200ms delay
+                        // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
-                        }, 200);
+                        }, 1200);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -403,11 +403,11 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/contact`} 
                       onClick={() => {
-                        // Sidebar closes immediately, icon resets after 200ms delay
+                        // Sidebar closes immediately (1000ms), icon resets after sidebar closes + 200ms delay
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
-                        }, 200);
+                        }, 1200);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
