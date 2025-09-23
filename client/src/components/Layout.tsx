@@ -185,6 +185,7 @@ export default function Layout({ children }: LayoutProps) {
               className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
+              onClick={() => setMobileMenuOpen(true)}
             >
               <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
                 {/* Vạch 1 - Top line */}
