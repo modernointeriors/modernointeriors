@@ -161,15 +161,11 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   
                   {/* Hero Footer */}
                   <div className="flex justify-between items-end pb-8">
-                    <div className="flex items-center gap-8 text-white text-sm font-light">
-                      <div className="flex items-center gap-2">
-                        <span className="uppercase tracking-wider">ARTICLE</span>
-                        <span>by {project.designer || 'MODERNO INTERIORS Studio'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span>{project.completionYear || new Date().getFullYear()}</span>
-                        <span className="uppercase tracking-wider">{project.category}</span>
-                      </div>
+                    <div className="flex items-center gap-6 text-white text-sm font-light">
+                      <span>Article</span>
+                      <span>by {project.designer || 'MODERNO INTERIORS Studio'}</span>
+                      <span>{project.completionYear || new Date().getFullYear()}</span>
+                      <span className="capitalize">{project.category}</span>
                     </div>
                     
                     {/* Navigation Arrows */}
