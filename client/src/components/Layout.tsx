@@ -256,9 +256,10 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform ease-standard"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform transition-transform ease-standard"
             style={{
-              transitionDuration: '2600ms'
+              transitionDuration: '2600ms',
+              transform: showSidebar ? 'translateX(0)' : 'translateX(-100%)'
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
