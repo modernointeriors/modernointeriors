@@ -24,6 +24,13 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [iconState, setIconState] = useState('normal'); // 'normal', 'opening', 'hidden', 'closing'
+  
+  // Force reset icon to normal state on component mount
+  useEffect(() => {
+    setIconState('normal');
+    setMobileMenuOpen(false);
+    setShowSidebar(false);
+  }, []); // Run once on mount
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lastActivity, setLastActivity] = useState(Date.now());
