@@ -43,16 +43,21 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
+  // Animation timing constants
+  const BAR_DURATION = 600; // 0.6s per bar
+  const ICON_TOTAL_DURATION = BAR_DURATION * 3; // 1.8s total
+  const SIDEBAR_DURATION = 1200; // 1.2s sidebar transition
+
   // Handle sidebar timing - show after hamburger animation completes
   useEffect(() => {
     if (mobileMenuOpen) {
       // Start icon animation out
       setIconState('animating-out');
-      // Wait for all bars to disappear sequentially (1.8s)
+      // Wait for all bars to disappear sequentially
       const timer = setTimeout(() => {
         setIconState('hidden');
         setShowSidebar(true);
-      }, 1800); // Sequential animation: 3 bars × 0.6s each = 1.8s total
+      }, ICON_TOTAL_DURATION);
       return () => clearTimeout(timer);
     }
   }, [mobileMenuOpen]);
@@ -60,15 +65,15 @@ export default function Layout({ children }: LayoutProps) {
   // Handle icon reverse animation when sidebar closes
   useEffect(() => {
     if (!showSidebar && iconState === 'hidden') {
-      // Wait for sidebar to close completely (1200ms) then animate icon back
+      // Wait for sidebar to close completely then animate icon back
       const timer = setTimeout(() => {
         setIconState('animating-in');
-        // Reset to normal after sequential animation completes (1.8s)
+        // Reset to normal after sequential animation completes
         setTimeout(() => {
           setIconState('normal');
           setMobileMenuOpen(false);
-        }, 1800);
-      }, 1200); // Wait for sidebar close animation
+        }, ICON_TOTAL_DURATION);
+      }, SIDEBAR_DURATION);
       return () => clearTimeout(timer);
     }
   }, [showSidebar, iconState]);
@@ -208,41 +213,41 @@ export default function Layout({ children }: LayoutProps) {
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6">
                 {/* Vạch 1 - Stateful directional animation */}
-                <div className={`absolute h-0.5 w-8 top-0 transition-colors duration-300 ${
+                <div className={`absolute h-0.5 w-8 top-0 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-1 origin-right' 
+                    ? 'bg-primary animate-hamburger-out-1' 
                     : iconState === 'hidden'
-                    ? 'bg-primary opacity-0 w-0 origin-right'
+                    ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-1 origin-left'
-                    : 'bg-white group-hover:bg-primary origin-right'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-1'
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 2 - Stateful directional animation */}
-                <div className={`absolute h-0.5 w-8 top-2.5 transition-colors duration-300 ${
+                <div className={`absolute h-0.5 w-8 top-2.5 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-2 origin-right' 
+                    ? 'bg-primary animate-hamburger-out-2' 
                     : iconState === 'hidden'
-                    ? 'bg-primary opacity-0 w-0 origin-right'
+                    ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-2 origin-left'
-                    : 'bg-white group-hover:bg-primary origin-right'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-2'
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
                 {/* Vạch 3 - Stateful directional animation */}
-                <div className={`absolute h-0.5 w-8 top-5 transition-colors duration-300 ${
+                <div className={`absolute h-0.5 w-8 top-5 transition-colors duration-300 transform-gpu will-change-transform will-change-opacity ${
                   iconState === 'animating-out'
-                    ? 'bg-primary animate-hamburger-out-3 origin-right' 
+                    ? 'bg-primary animate-hamburger-out-3' 
                     : iconState === 'hidden'
-                    ? 'bg-primary opacity-0 w-0 origin-right'
+                    ? 'bg-primary opacity-0 scale-x-0'
                     : iconState === 'animating-in'
-                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-3 origin-left'
-                    : 'bg-white group-hover:bg-primary origin-right'
+                    ? 'bg-white group-hover:bg-primary animate-hamburger-in-3'
+                    : 'bg-white group-hover:bg-primary'
                 }`}></div>
               </div>
             </Button>
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-1200 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+            className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-[1200ms] ease-standard"
           >
             <SheetHeader>
               <SheetTitle className="text-lg font-sans font-light text-primary">
