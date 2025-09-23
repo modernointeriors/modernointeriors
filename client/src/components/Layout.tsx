@@ -247,12 +247,19 @@ export default function Layout({ children }: LayoutProps) {
             className="w-[320px] sm:w-[400px] bg-background border-border [&>button]:hidden transform-gpu will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-transform duration-[2600ms] ease-standard"
             onPointerDownOutside={(e) => {
               e.preventDefault(); // Prevent immediate close
+              console.log('Outside click detected - triggering smooth close');
               // Trigger smooth animated close
               setShowSidebar(false);
             }}
             onEscapeKeyDown={(e) => {
-              e.preventDefault(); // Prevent immediate close
+              e.preventDefault(); // Prevent immediate close  
+              console.log('ESC key detected - triggering smooth close');
               // Trigger smooth animated close
+              setShowSidebar(false);
+            }}
+            onInteractOutside={(e) => {
+              e.preventDefault(); // Also prevent this event
+              console.log('Interact outside detected - triggering smooth close');
               setShowSidebar(false);
             }}
           >
