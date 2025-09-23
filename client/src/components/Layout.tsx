@@ -48,11 +48,11 @@ export default function Layout({ children }: LayoutProps) {
     if (mobileMenuOpen) {
       // Start icon animation out
       setIconState('animating-out');
-      // Wait for all hamburger animations to finish completely (2.6s)
+      // Wait for all bars to disappear sequentially (1.8s)
       const timer = setTimeout(() => {
         setIconState('hidden');
         setShowSidebar(true);
-      }, 2600); // Last animation finishes at 0.6s delay + 2s duration = 2.6s
+      }, 1800); // Sequential animation: 3 bars × 0.6s each = 1.8s total
       return () => clearTimeout(timer);
     }
   }, [mobileMenuOpen]);
@@ -63,11 +63,11 @@ export default function Layout({ children }: LayoutProps) {
       // Wait for sidebar to close completely (1200ms) then animate icon back
       const timer = setTimeout(() => {
         setIconState('animating-in');
-        // Reset to normal after animation completes (2.2s)
+        // Reset to normal after sequential animation completes (1.8s)
         setTimeout(() => {
           setIconState('normal');
           setMobileMenuOpen(false);
-        }, 2200);
+        }, 1800);
       }, 1200); // Wait for sidebar close animation
       return () => clearTimeout(timer);
     }
