@@ -49,18 +49,16 @@ export default function Layout({ children }: LayoutProps) {
     return () => clearTimeout(timer);
   }, [searchOpen, lastActivity]);
 
-  // Animation timing constants - Perfect Sync
-  const OPENING_DURATION = 800; // 0.8s for bars 1→2→3 (0.4s delay + 0.4s anim)
-  const CLOSING_DURATION = 800; // 0.8s for bars 3→2→1 (0.4s delay + 0.4s anim)
+  // Animation timing constants - Beautiful & Slow
+  const OPENING_DURATION = 1000; // 1.0s for bars 1→2→3 (0.5s delay + 0.5s anim)
+  const CLOSING_DURATION = 1000; // 1.0s for bars 3→2→1 (0.5s delay + 0.5s anim)
   const SIDEBAR_DURATION = 1000; // 1.0s sidebar transition
 
   // OPENING: Show sidebar after hamburger 1→2→3 completes
   useEffect(() => {
     if (mobileMenuOpen) {
-      console.log('🎯 Opening sidebar - starting animation');
       setIconState('opening');
       const timer = setTimeout(() => {
-        console.log('🎯 Animation complete - showing sidebar');
         setIconState('hidden');
         setShowSidebar(true);
       }, OPENING_DURATION);
@@ -71,11 +69,9 @@ export default function Layout({ children }: LayoutProps) {
   // CLOSING: Animate bars 3→2→1 after sidebar closes
   useEffect(() => {
     if (!showSidebar && iconState === 'hidden') {
-      console.log('🎯 Closing sidebar - starting bars animation');
       const timer = setTimeout(() => {
         setIconState('closing');
         setTimeout(() => {
-          console.log('🎯 Closing complete - back to normal');
           setIconState('normal');
           setMobileMenuOpen(false);
         }, CLOSING_DURATION);
@@ -205,12 +201,11 @@ export default function Layout({ children }: LayoutProps) {
         style={{
           opacity: showSidebar ? 1 : 0,
           pointerEvents: showSidebar ? 'auto' : 'none',
-          transition: 'opacity 400ms var(--ease-out)',
+          transition: 'opacity 400ms var(--ease-smooth)',
           willChange: 'opacity'
         }}
         onClick={(e) => {
           e.preventDefault();
-          console.log('🎯 Custom overlay click - smooth close');
           setShowSidebar(false);
         }}
       />
@@ -268,7 +263,7 @@ export default function Layout({ children }: LayoutProps) {
             side="left" 
             className="w-[320px] sm:w-[400px] bg-background [&>button]:hidden transform-gpu will-change-transform will-change-contents backface-visibility-hidden border-0"
             style={{
-              transition: 'transform var(--sidebar-dur) var(--ease-out)',
+              transition: 'transform var(--sidebar-dur) var(--ease-smooth)',
               transform: showSidebar ? 'translate3d(0, 0, 0)' : 'translate3d(-100%, 0, 0)',
               willChange: 'transform',
               visibility: showSidebar ? 'visible' : 'visible',
@@ -279,7 +274,6 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
-              console.log('⌨️ ESC key - starting smooth close sequence');
               setShowSidebar(false);
             }}
           >

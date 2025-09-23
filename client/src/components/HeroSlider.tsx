@@ -84,42 +84,18 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
             }
           };
 
-          // Force fallback for debugging problematic slides
-          const isProblematicSlide = project.title.includes('BOUTIQUE') || project.title.includes('INDUSTRIAL') || project.title.includes('SUSTAINABLE');
-          
-          const backgroundImage = isProblematicSlide 
-            ? getFallbackImage(project.category) // Force use fallback for debugging
-            : (
-                Array.isArray(project.coverImages) && project.coverImages[0] ||
+          const backgroundImage = Array.isArray(project.coverImages) && project.coverImages[0] ||
                 Array.isArray(project.contentImages) && project.contentImages[0] ||
                 Array.isArray(project.galleryImages) && project.galleryImages[0] ||
                 project.heroImage ||
                 (Array.isArray(project.images) && project.images[0]) ||
-                'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080'
-              );
+                getFallbackImage(project.category);
 
-          // Debug logging for each project
-          if (project.title.includes('BOUTIQUE') || project.title.includes('INDUSTRIAL') || project.title.includes('SUSTAINABLE')) {
-            console.log(`🔍 DEBUG ${project.title}:`, {
-              backgroundImage,
-              coverImages: project.coverImages,
-              heroImage: project.heroImage,
-              contentImages: project.contentImages,
-              galleryImages: project.galleryImages
-            });
-          }
 
           return (
             <SwiperSlide key={project.id} data-testid={`slide-${project.id}`}>
               <div className="wrapper relative h-screen px-6 md:px-10 lg:px-16">
                 <div className="absolute inset-0">
-                  {/* Debug overlay for problematic slides */}
-                  {(project.title.includes('BOUTIQUE') || project.title.includes('INDUSTRIAL') || project.title.includes('SUSTAINABLE')) && (
-                    <div className="absolute top-4 left-4 bg-red-500 text-white p-2 text-xs z-50 max-w-xs">
-                      DEBUG: {project.title}<br/>
-                      IMG: {backgroundImage.substring(0, 50)}...
-                    </div>
-                  )}
                   
                   <img 
                     src={backgroundImage} 
@@ -129,11 +105,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                     style={{ zIndex: 1 }}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      console.error(`❌ Image failed to load for ${project.title}:`, backgroundImage);
                       target.src = getFallbackImage(project.category);
-                    }}
-                    onLoad={() => {
-                      console.log(`✅ Image loaded successfully for ${project.title}:`, backgroundImage);
                     }}
                   />
                   <div className="absolute inset-0 bg-black/40" style={{ zIndex: 2 }}></div>
