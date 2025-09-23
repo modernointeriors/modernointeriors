@@ -262,11 +262,11 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              {/* Classic hamburger icon - longer, thinner, sharp corners */}
-              <div className="flex flex-col justify-center items-center space-y-1.5 w-8 h-6">
-                <div className="w-7 h-0.5 bg-white"></div>
-                <div className="w-7 h-0.5 bg-white"></div>
-                <div className="w-7 h-0.5 bg-white"></div>
+              {/* Classic hamburger icon - rotated 90 degrees with hover effect */}
+              <div className="flex flex-col justify-center items-center space-y-1.5 w-8 h-6 rotate-90 transition-all duration-300 ease-out group-hover:scale-110">
+                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
+                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
+                <div className="w-7 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary"></div>
               </div>
             </Button>
           </SheetTrigger>
