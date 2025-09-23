@@ -187,7 +187,7 @@ export default function Layout({ children }: LayoutProps) {
               data-testid="button-main-menu"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <div className="flex flex-col items-center justify-center space-y-2 rotate-90">
+              <div className="flex flex-col items-end justify-center space-y-2 rotate-90">
                 {/* Vạch 1 - Top line */}
                 <div className={`h-0.5 w-8 origin-right transition-colors ${
                   mobileMenuOpen 
