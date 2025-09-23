@@ -256,7 +256,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-background [&>button]:hidden transform-gpu will-change-transform transition-transform ease-standard"
+            className="w-[320px] sm:w-[400px] bg-background [&>button]:hidden transform-gpu will-change-transform transition-transform ease-standard border-0"
             style={{
               transitionDuration: '1200ms',
               transform: showSidebar ? 'translateX(0)' : 'translateX(-100%)',
