@@ -24,8 +24,27 @@ export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [lastActivity, setLastActivity] = useState(Date.now());
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
+
+  // Auto-collapse search after 5 seconds of inactivity
+  useEffect(() => {
+    if (!searchOpen) return;
+
+    const timer = setTimeout(() => {
+      if (Date.now() - lastActivity >= 5000) {
+        setSearchOpen(false);
+      }
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [searchOpen, lastActivity]);
+
+  // Reset activity timer when user interacts with search
+  const handleSearchActivity = () => {
+    setLastActivity(Date.now());
+  };
 
   // Language switching without URL changes
   const handleLanguageChange = (lang: Language) => {
@@ -94,6 +113,9 @@ export default function Layout({ children }: LayoutProps) {
                   className="w-full bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white/80 py-2 text-sm font-light transition-colors"
                   data-testid="header-search"
                   autoFocus={searchOpen}
+                  onFocus={handleSearchActivity}
+                  onChange={handleSearchActivity}
+                  onKeyDown={handleSearchActivity}
                 />
               </div>
               
