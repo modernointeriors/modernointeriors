@@ -174,24 +174,24 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setMobileMenuOpen(true)}
             >
               <div className="flex flex-col justify-center items-center gap-2 rotate-90 w-8 h-6 transform-gpu will-change-transform">
-                {/* Vạch 1 - Loading sweep first */}
-                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[900ms] ease-linear top-0 ${
+                {/* Vạch 1 - Slow loading sweep first */}
+                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[1800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] top-0 ${
                   mobileMenuOpen 
                     ? 'bg-primary scale-x-0 opacity-0' 
                     : 'bg-white group-hover:bg-primary scale-x-100 opacity-100'
-                } transition-colors duration-300`}></div>
-                {/* Vạch 2 - Loading sweep second */}
-                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[900ms] ease-linear delay-75 top-2.5 ${
+                } transition-colors duration-500`}></div>
+                {/* Vạch 2 - Slow loading sweep second */}
+                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[1800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] delay-200 top-2.5 ${
                   mobileMenuOpen 
                     ? 'bg-primary scale-x-0 opacity-0' 
                     : 'bg-white group-hover:bg-primary scale-x-100 opacity-100'
-                } transition-colors duration-300`}></div>
-                {/* Vạch 3 - Loading sweep third */}
-                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[900ms] ease-linear delay-150 top-5 ${
+                } transition-colors duration-500`}></div>
+                {/* Vạch 3 - Slow loading sweep third */}
+                <div className={`absolute h-0.5 w-8 origin-right transform-gpu will-change-transform transition-[transform,opacity] duration-[1800ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] delay-400 top-5 ${
                   mobileMenuOpen 
                     ? 'bg-primary scale-x-0 opacity-0' 
                     : 'bg-white group-hover:bg-primary scale-x-100 opacity-100'
-                } transition-colors duration-300`}></div>
+                } transition-colors duration-500`}></div>
               </div>
             </Button>
           </SheetTrigger>
