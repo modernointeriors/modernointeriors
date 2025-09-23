@@ -54,7 +54,7 @@ export default function Layout({ children }: LayoutProps) {
 
   // Animation timing constants - Ultra-Fast 120fps
   const LOADING_DURATION = 500; // 0.5s total (0.2s delay + 0.3s animation)
-  const APPEAR_DURATION = 500; // 0.5s total (0.2s delay + 0.3s animation) 
+  const APPEAR_DURATION = 600; // 0.6s total (0.3s delay + 0.3s animation) 
   const SIDEBAR_DURATION = 600; // 0.6s sidebar transition (CSS var --sidebar-dur)
 
   // Handle sidebar timing - show after hamburger loading completes
