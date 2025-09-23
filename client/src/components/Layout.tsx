@@ -269,11 +269,15 @@ export default function Layout({ children }: LayoutProps) {
                 willChange: 'transform, opacity'
               }}
             >
-              {/* Simple hamburger icon - 3 horizontal bars */}
-              <div className="flex flex-col justify-center items-center space-y-1 w-6 h-6">
-                <div className="w-6 h-0.5 bg-white rounded-sm"></div>
-                <div className="w-6 h-0.5 bg-white rounded-sm"></div>
-                <div className="w-6 h-0.5 bg-white rounded-sm"></div>
+              {/* Animated hamburger icon - 240fps optimized */}
+              <div 
+                data-hamburger
+                data-state={iconState}
+                className="hamburger-container"
+              >
+                <span className="bar bar-1" style={{ '--i': 1 } as React.CSSProperties}></span>
+                <span className="bar bar-2" style={{ '--i': 2 } as React.CSSProperties}></span>
+                <span className="bar bar-3" style={{ '--i': 3 } as React.CSSProperties}></span>
               </div>
             </Button>
           </SheetTrigger>

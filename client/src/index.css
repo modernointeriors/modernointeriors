@@ -39,7 +39,8 @@
   
   /* Ultra-Smooth 240fps Animation Variables - Auto-scales to display refresh rate */
   --sidebar-dur: 900ms;
-  --bar-dur: 450ms;
+  --bar-dur: 300ms;
+  --bar-stagger: 300ms;
   --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-smooth-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --ease-smooth-out: cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -398,18 +399,66 @@
     animation: hero-progress 5s linear forwards;
   }
 
-  .animate-hamburger-line-1 {
-    animation: hamburger-line-1 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 0s;
+  /* 240fps Hamburger Icon Animation - Data-driven Sequential Bars */
+  .hamburger-container {
+    position: relative;
+    width: 24px;
+    height: 18px;
+    contain: paint;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
 
-  .animate-hamburger-line-2 {
-    animation: hamburger-line-2 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 0.2s;
+  .bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transform-origin: center;
+    opacity: 1;
+    transform: scaleX(1) translateZ(0);
+    transition: transform var(--bar-dur) var(--ease-smooth), opacity var(--bar-dur) var(--ease-smooth);
+    will-change: transform, opacity;
+    contain: paint layout style;
+    backface-visibility: hidden;
   }
 
-  .animate-hamburger-line-3 {
-    animation: hamburger-line-3 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 0.4s;
+  .bar-1 { top: 0; }
+  .bar-2 { top: 8px; }
+  .bar-3 { bottom: 0; }
+
+  /* Opening: 1→2→3 disappear with staggered delays */
+  [data-state="opening"] .bar {
+    transform: scaleX(0) translateZ(0);
+    opacity: 0;
+    transition-delay: calc((var(--i) - 1) * var(--bar-stagger));
+  }
+
+  /* Hidden: keep invisible while sidebar open */
+  [data-state="hidden"] .bar {
+    transform: scaleX(0) translateZ(0);
+    opacity: 0;
+    transition-delay: 0ms;
+  }
+
+  /* Closing: 3→2→1 reappear with reverse staggered delays */
+  [data-state="closing"] .bar {
+    transform: scaleX(1) translateZ(0);
+    opacity: 1;
+    transition-delay: calc((3 - var(--i)) * var(--bar-stagger));
+  }
+
+  /* Normal: idle state with full visibility */
+  [data-state="normal"] .bar {
+    transform: scaleX(1) translateZ(0);
+    opacity: 1;
+    transition-delay: 0ms;
+  }
+
+  /* Hover effect */
+  .group:hover [data-hamburger] .bar {
+    background: hsl(var(--primary));
   }
 }
