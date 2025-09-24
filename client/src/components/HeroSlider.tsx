@@ -17,6 +17,7 @@ interface HeroSliderProps {
 export default function HeroSlider({ projects }: HeroSliderProps) {
   const [progressKey, setProgressKey] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [showLoading, setShowLoading] = useState(true);
   const swiperRef = useRef<any>(null);
 
   // Restart progress animation when slide changes
@@ -24,23 +25,34 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
     setProgressKey(prev => prev + 1);
   };
 
-  // Animate loading progress
+  // Controlled loading animation
   useEffect(() => {
     if (!projects || projects.length === 0) {
+      const startTime = Date.now();
+      const duration = 2500; // 2.5 seconds total loading time
+      
       const interval = setInterval(() => {
-        setLoadingProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(interval);
-            return 90;
-          }
-          return prev + Math.random() * 10;
-        });
-      }, 200);
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100);
+        
+        setLoadingProgress(progress);
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          // Wait a bit then hide loading screen
+          setTimeout(() => {
+            setShowLoading(false);
+          }, 300);
+        }
+      }, 50);
+      
       return () => clearInterval(interval);
+    } else {
+      setShowLoading(false);
     }
   }, [projects]);
 
-  if (!projects || projects.length === 0) {
+  if ((!projects || projects.length === 0) && showLoading) {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -55,14 +67,25 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
             <Progress 
               value={loadingProgress} 
               className="h-1 bg-white/20" 
-              style={{
-                '--radix-progress-indicator-transform': `translateX(-${100 - loadingProgress}%)`
-              } as React.CSSProperties}
             />
-            <div className="mt-4">
-              <div className="w-2 h-2 bg-primary rounded-full mx-auto animate-pulse" />
-            </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!projects || projects.length === 0) {
+    return (
+      <div className="bg-black text-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4">
+            <img 
+              src="/attached_assets/logo.white.png" 
+              alt="MODERNO INTERIORS" 
+              className="h-24 md:h-32 w-auto mx-auto"
+            />
+          </div>
+          <p className="text-lg text-white/80">No projects available</p>
         </div>
       </div>
     );

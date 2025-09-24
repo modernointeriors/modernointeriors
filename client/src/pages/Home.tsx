@@ -15,6 +15,7 @@ export default function Home() {
   const [, navigate] = useLocation();
   const { language } = useLanguage();
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [showLoading, setShowLoading] = useState(true);
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -52,23 +53,28 @@ export default function Home() {
     },
   });
 
-  // Animate loading progress
+  // Controlled loading animation
   useEffect(() => {
-    if (projectsLoading) {
-      const interval = setInterval(() => {
-        setLoadingProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(interval);
-            return 90;
-          }
-          return prev + Math.random() * 10;
-        });
-      }, 200);
-      return () => clearInterval(interval);
-    } else {
-      setLoadingProgress(100);
-    }
-  }, [projectsLoading]);
+    const startTime = Date.now();
+    const duration = 2500; // 2.5 seconds total loading time
+    
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min((elapsed / duration) * 100, 100);
+      
+      setLoadingProgress(progress);
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        // Wait a bit then hide loading screen
+        setTimeout(() => {
+          setShowLoading(false);
+        }, 300);
+      }
+    }, 50);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -81,7 +87,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Slider Section - IIDA Style */}
-      {projectsLoading ? (
+      {showLoading ? (
         <div className="bg-black text-white min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="mb-8">
@@ -96,9 +102,6 @@ export default function Home() {
                 value={loadingProgress} 
                 className="h-1 bg-white/20" 
               />
-              <div className="mt-4">
-                <div className="w-2 h-2 bg-primary rounded-full mx-auto animate-pulse" />
-              </div>
             </div>
           </div>
         </div>
