@@ -14,6 +14,7 @@ const getNavigation = (t: (key: string) => string) => {
     { name: t('nav.home'), href: `/`, key: 'home' },
     { name: t('nav.about'), href: `/about`, key: 'about' },
     { name: t('nav.projects'), href: `/portfolio`, key: 'portfolio' },
+    { name: t('nav.services'), href: `/services`, key: 'services' },
     { name: t('nav.news'), href: `/blog`, key: 'news' },
     { name: t('nav.contacts'), href: `/contact`, key: 'contact' }
   ];
@@ -429,11 +430,11 @@ export default function Layout({ children }: LayoutProps) {
                   </div>
                 </div>
                 
-                {/* Additional Menu Items - Moved to bottom */}
+                {/* Legal & Policy Links */}
                 <div className="pb-6 border-t border-border pt-8">
                   <div className="space-y-4">
                     <Link 
-                      href={`/services`} 
+                      href={`/cookie-policy`} 
                       onClick={() => {
                         if (isAnimating) {
                           console.log('🚫 Footer link blocked - animation in progress');
@@ -451,10 +452,10 @@ export default function Layout({ children }: LayoutProps) {
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors nav-link-underline-sm"
                     >
-                      Services
+                      {language === 'vi' ? 'Thông Tin Cookie' : 'Cookie Information'}
                     </Link>
                     <Link 
-                      href={`/about`} 
+                      href={`/terms-conditions`} 
                       onClick={() => {
                         if (isAnimating) {
                           console.log('🚫 Footer link blocked - animation in progress');
@@ -472,10 +473,10 @@ export default function Layout({ children }: LayoutProps) {
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors nav-link-underline-sm"
                     >
-                      Our Story
+                      {language === 'vi' ? 'Điều Khoản & Điều Kiện' : 'Terms & Conditions'}
                     </Link>
                     <Link 
-                      href={`/contact`} 
+                      href={`/privacy-policy`} 
                       onClick={() => {
                         if (isAnimating) {
                           console.log('🚫 Footer link blocked - animation in progress');
@@ -493,7 +494,7 @@ export default function Layout({ children }: LayoutProps) {
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors nav-link-underline-sm"
                     >
-                      Get in Touch
+                      {language === 'vi' ? 'Chính Sách Bảo Mật' : 'Privacy Policy'}
                     </Link>
                   </div>
                 </div>
