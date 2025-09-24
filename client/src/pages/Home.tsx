@@ -141,7 +141,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
-              <h2 className="text-sm font-light tracking-widest text-foreground/60 mb-8 uppercase">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground mb-8 uppercase">
                 {homepageContent?.featuredBadge || 'Featured Projects'}
               </h2>
               <div className="max-w-4xl">
@@ -155,7 +155,7 @@ export default function Home() {
                 variant="outline" 
                 size="default"
                 asChild
-                className="border-white hover:bg-white hover:text-black"
+                className="rounded-none border-white hover:bg-white hover:text-black"
                 data-testid="button-view-more-projects"
               >
                 <Link href="/portfolio">
@@ -245,7 +245,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
-              <h2 className="text-sm font-light tracking-widest text-foreground/60 mb-8 uppercase">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground mb-8 uppercase">
                 {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
               </h2>
               <div className="max-w-4xl">
@@ -261,7 +261,7 @@ export default function Home() {
                 variant="outline" 
                 size="default"
                 asChild
-                className="border-white hover:bg-white hover:text-black"
+                className="rounded-none border-white hover:bg-white hover:text-black"
                 data-testid="button-view-more-news"
               >
                 <Link href="/blog">
