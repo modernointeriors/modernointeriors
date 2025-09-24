@@ -16,6 +16,7 @@ export default function Home() {
   const { language } = useLanguage();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
+  const [step03Expanded, setStep03Expanded] = useState(false);
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -75,6 +76,19 @@ export default function Home() {
     
     return () => clearInterval(interval);
   }, []);
+
+  // Auto-close step 03 after 4 seconds
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (step03Expanded) {
+      timer = setTimeout(() => {
+        setStep03Expanded(false);
+      }, 4000); // 4 seconds
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [step03Expanded]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -358,24 +372,23 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Step 03 - With Image */}
-            <div 
-              className="pb-8 group hover:border-primary/30 transition-colors cursor-pointer"
-              onClick={() => {
-                const nextSection = document.querySelector('footer');
-                if (nextSection) {
-                  nextSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            >
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            {/* Step 03 - With Image and Expandable Content */}
+            <div className="pb-8 group transition-colors cursor-pointer">
+              <div 
+                className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8"
+                onClick={() => setStep03Expanded(!step03Expanded)}
+              >
                 <div className="flex-1">
                   <div className="flex items-center gap-8 mb-4">
                     <span className="text-white/40 font-light text-lg">[03]</span>
                     <h3 className="text-xl md:text-2xl font-light text-white">
                       {language === 'vi' ? 'Thiết kế kiến trúc' : 'Architecture design'}
                     </h3>
-                    <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors ml-auto lg:ml-0" />
+                    <ArrowRight 
+                      className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ml-auto lg:ml-0 ${
+                        step03Expanded ? 'rotate-90 text-primary' : ''
+                      }`} 
+                    />
                   </div>
                   <p className="text-white/70 font-light max-w-lg">
                     {language === 'vi' 
@@ -390,6 +403,73 @@ export default function Home() {
                     alt="Modern Architecture"
                     className="w-full h-full object-cover"
                   />
+                </div>
+              </div>
+              
+              {/* Expandable Content */}
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                step03Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="border-l-2 border-primary pl-8 space-y-6">
+                  <h4 className="text-lg font-light text-primary">
+                    {language === 'vi' ? 'Chi tiết quy trình thiết kế:' : 'Design Process Details:'}
+                  </h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h5 className="text-white font-light mb-2">
+                        {language === 'vi' ? '📐 Phác thảo ban đầu' : '📐 Initial Sketches'}
+                      </h5>
+                      <p className="text-white/60 text-sm font-light">
+                        {language === 'vi' 
+                          ? 'Tạo ra các ý tưởng thiết kế đầu tiên dựa trên yêu cầu và sở thích của khách hàng.'
+                          : 'Create initial design concepts based on client requirements and preferences.'
+                        }
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <h5 className="text-white font-light mb-2">
+                        {language === 'vi' ? '🏗️ Mô hình 3D' : '🏗️ 3D Modeling'}
+                      </h5>
+                      <p className="text-white/60 text-sm font-light">
+                        {language === 'vi' 
+                          ? 'Phát triển mô hình 3D chi tiết để khách hàng có thể hình dung rõ ràng về không gian.'
+                          : 'Develop detailed 3D models so clients can clearly visualize the space.'
+                        }
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <h5 className="text-white font-light mb-2">
+                        {language === 'vi' ? '📋 Kế hoạch chi tiết' : '📋 Detailed Planning'}
+                      </h5>
+                      <p className="text-white/60 text-sm font-light">
+                        {language === 'vi' 
+                          ? 'Lập kế hoạch thi công chi tiết với timeline và vật liệu cụ thể.'
+                          : 'Create detailed construction plans with specific timeline and materials.'
+                        }
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <h5 className="text-white font-light mb-2">
+                        {language === 'vi' ? '✅ Phê duyệt cuối' : '✅ Final Approval'}
+                      </h5>
+                      <p className="text-white/60 text-sm font-light">
+                        {language === 'vi' 
+                          ? 'Xác nhận thiết kế cuối cùng trước khi bắt đầu thi công thực tế.'
+                          : 'Confirm final design before beginning actual construction.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center pt-4">
+                    <span className="text-primary/60 text-xs font-light">
+                      {language === 'vi' ? '✨ Nội dung sẽ tự động đóng sau 4 giây' : '✨ Content will auto-close in 4 seconds'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
