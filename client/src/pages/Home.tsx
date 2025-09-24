@@ -137,7 +137,7 @@ export default function Home() {
       <HeroSlider projects={allProjects || []} />
 
       {/* Featured Projects Section */}
-      <section id="featured-projects" className="py-6 md:py-8 bg-card">
+      <section id="featured-projects" className="py-12 md:py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
@@ -153,9 +153,9 @@ export default function Home() {
             <div className="flex-shrink-0 ml-8">
               <Button 
                 variant="outline" 
-                size="lg"
+                size="default"
                 asChild
-                className="rounded-none border-white hover:bg-white hover:text-black"
+                className="border-white hover:bg-white hover:text-black"
                 data-testid="button-view-more-projects"
               >
                 <Link href="/portfolio">
@@ -241,7 +241,7 @@ export default function Home() {
       </section>
 
       {/* Featured News Section */}
-      <section id="featured-news" className="py-6 md:py-8 bg-background">
+      <section id="featured-news" className="py-12 md:py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
@@ -259,9 +259,9 @@ export default function Home() {
             <div className="flex-shrink-0 ml-8">
               <Button 
                 variant="outline" 
-                size="lg"
+                size="default"
                 asChild
-                className="rounded-none border-white hover:bg-white hover:text-black"
+                className="border-white hover:bg-white hover:text-black"
                 data-testid="button-view-more-news"
               >
                 <Link href="/blog">
@@ -342,7 +342,7 @@ export default function Home() {
 
       {/* Process Section */}
       <section 
-        className="py-6 md:py-8 bg-black"
+        className="py-12 md:py-16 bg-black"
         onMouseEnter={handleProcessSectionMouseEnter}
         onMouseLeave={handleProcessSectionMouseLeave}
       >
