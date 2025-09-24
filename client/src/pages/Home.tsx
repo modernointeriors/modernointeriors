@@ -382,29 +382,20 @@ export default function Home() {
               onMouseLeave={handleStep03MouseLeave}
             >
               <div 
-                className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8"
+                className="flex items-center justify-between"
                 onClick={() => setStep03Expanded(!step03Expanded)}
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-8 mb-4">
-                    <span className="text-white/40 font-light text-lg">[03]</span>
-                    <h3 className="text-xl md:text-2xl font-light text-white">
-                      {language === 'vi' ? 'Thiết kế kiến trúc' : 'Architecture design'}
-                    </h3>
-                    <ArrowRight 
-                      className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ml-auto lg:ml-0 ${
-                        step03Expanded ? 'rotate-90 text-primary' : ''
-                      }`} 
-                    />
-                  </div>
+                <div className="flex items-center gap-8">
+                  <span className="text-white/40 font-light text-lg">[03]</span>
+                  <h3 className="text-xl md:text-2xl font-light text-white">
+                    {language === 'vi' ? 'Thiết kế kiến trúc' : 'Architecture design'}
+                  </h3>
                 </div>
-                <div className="w-full lg:w-48 h-32 bg-gray-800 rounded-lg overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop&q=80" 
-                    alt="Modern Architecture"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <ArrowRight 
+                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
+                    step03Expanded ? 'rotate-90 text-primary' : ''
+                  }`} 
+                />
               </div>
               
               {/* Expandable Content */}
