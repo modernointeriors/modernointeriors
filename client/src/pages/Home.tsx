@@ -85,7 +85,7 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-black">
       {/* Full Screen Loading Overlay */}
       {showLoading && (
         <div className="fixed inset-0 bg-black text-white flex items-center justify-center z-[9999]">
