@@ -141,11 +141,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
-              <Badge variant="secondary" className="mb-4 uppercase">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
-              <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
-              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-                {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
-              </p>
+              <h2 className="text-sm font-light tracking-widest text-foreground/60 mb-8 uppercase">
+                {homepageContent?.featuredBadge || 'Featured Projects'}
+              </h2>
+              <div className="max-w-4xl">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                  {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
+                </p>
+              </div>
             </div>
             <div className="flex-shrink-0 ml-8">
               <Button 
@@ -242,17 +245,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
-              <Badge variant="secondary" className="mb-4 uppercase">
+              <h2 className="text-sm font-light tracking-widest text-foreground/60 mb-8 uppercase">
                 {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
-              </Badge>
-              <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">
-                {language === 'vi' ? 'Cập nhật mới nhất' : 'Latest Updates'}
               </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-                {language === 'vi' 
-                  ? 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.'
-                  : 'Discover the latest design trends and expert insights from our professional team.'}
-              </p>
+              <div className="max-w-4xl">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                  {language === 'vi' 
+                    ? 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.'
+                    : 'Discover the latest design trends and expert insights from our professional team.'}
+                </p>
+              </div>
             </div>
             <div className="flex-shrink-0 ml-8">
               <Button 
