@@ -139,12 +139,27 @@ export default function Home() {
       {/* Featured Projects Section */}
       <section id="featured-projects" className="py-6 md:py-8 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 uppercase">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
-            <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
-            </p>
+          <div className="flex items-start justify-between mb-16">
+            <div className="text-left">
+              <Badge variant="secondary" className="mb-4 uppercase">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
+              <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">{homepageContent?.featuredTitle || 'Transforming Spaces'}</h2>
+              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+                {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
+              </p>
+            </div>
+            <div className="flex-shrink-0 ml-8">
+              <Button 
+                variant="outline" 
+                size="lg"
+                asChild
+                className="rounded-none border-white hover:bg-white hover:text-black"
+                data-testid="button-view-more-projects"
+              >
+                <Link href="/portfolio">
+                  View More Projects <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
           
           {isLoading ? (
@@ -217,20 +232,6 @@ export default function Home() {
                 </div>
               </ScrollableContainer>
               
-              {/* View More Projects Button */}
-              <div className="text-right mt-12">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  asChild
-                  className="rounded-none border-white hover:bg-white hover:text-black"
-                  data-testid="button-view-more-projects"
-                >
-                  <Link href="/portfolio">
-                    View More Projects <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
             </>
           )}
         </div>
@@ -239,18 +240,34 @@ export default function Home() {
       {/* Featured News Section */}
       <section id="featured-news" className="py-6 md:py-8 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 uppercase">
-              {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
-            </Badge>
-            <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">
-              {language === 'vi' ? 'Cập nhật mới nhất' : 'Latest Updates'}
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              {language === 'vi' 
-                ? 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.'
-                : 'Discover the latest design trends and expert insights from our professional team.'}
-            </p>
+          <div className="flex items-start justify-between mb-16">
+            <div className="text-left">
+              <Badge variant="secondary" className="mb-4 uppercase">
+                {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
+              </Badge>
+              <h2 className="text-4xl md:text-6xl font-sans font-light mb-6">
+                {language === 'vi' ? 'Cập nhật mới nhất' : 'Latest Updates'}
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+                {language === 'vi' 
+                  ? 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.'
+                  : 'Discover the latest design trends and expert insights from our professional team.'}
+              </p>
+            </div>
+            <div className="flex-shrink-0 ml-8">
+              <Button 
+                variant="outline" 
+                size="lg"
+                asChild
+                className="rounded-none border-white hover:bg-white hover:text-black"
+                data-testid="button-view-more-news"
+              >
+                <Link href="/blog">
+                  {language === 'vi' ? 'Xem thêm tin tức' : 'View More News'} 
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
           
           {articlesLoading ? (
@@ -316,21 +333,6 @@ export default function Home() {
                 </div>
               </ScrollableContainer>
               
-              {/* View More News Button */}
-              <div className="text-right mt-12">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  asChild
-                  className="rounded-none border-white hover:bg-white hover:text-black"
-                  data-testid="button-view-more-news"
-                >
-                  <Link href="/blog">
-                    {language === 'vi' ? 'Xem thêm tin tức' : 'View More News'} 
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
             </>
           )}
         </div>
