@@ -17,6 +17,7 @@ export default function Home() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
   const [step03Expanded, setStep03Expanded] = useState(false);
+  const [step03HoverTimer, setStep03HoverTimer] = useState<NodeJS.Timeout | null>(null);
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -77,18 +78,20 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-close step 03 after 4 seconds
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (step03Expanded) {
-      timer = setTimeout(() => {
-        setStep03Expanded(false);
-      }, 4000); // 4 seconds
+  // Handle step 03 hover auto-close
+  const handleStep03MouseLeave = () => {
+    const timer = setTimeout(() => {
+      setStep03Expanded(false);
+    }, 4000); // 4 seconds after mouse leaves
+    setStep03HoverTimer(timer);
+  };
+
+  const handleStep03MouseEnter = () => {
+    if (step03HoverTimer) {
+      clearTimeout(step03HoverTimer);
+      setStep03HoverTimer(null);
     }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [step03Expanded]);
+  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -373,7 +376,11 @@ export default function Home() {
             </div>
 
             {/* Step 03 - With Image and Expandable Content */}
-            <div className="pb-8 group transition-colors cursor-pointer">
+            <div 
+              className="pb-8 group transition-colors cursor-pointer"
+              onMouseEnter={handleStep03MouseEnter}
+              onMouseLeave={handleStep03MouseLeave}
+            >
               <div 
                 className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8"
                 onClick={() => setStep03Expanded(!step03Expanded)}
@@ -390,12 +397,6 @@ export default function Home() {
                       }`} 
                     />
                   </div>
-                  <p className="text-white/70 font-light max-w-lg">
-                    {language === 'vi' 
-                      ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
-                      : 'Development of sketches, 3D visualizations and planning solutions that help to see the future object even before construction begins.'
-                    }
-                  </p>
                 </div>
                 <div className="w-full lg:w-48 h-32 bg-gray-800 rounded-lg overflow-hidden">
                   <img 
@@ -411,9 +412,17 @@ export default function Home() {
                 step03Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
               }`}>
                 <div className="border-l-2 border-primary pl-8 space-y-6">
-                  <h4 className="text-lg font-light text-primary">
-                    {language === 'vi' ? 'Chi tiết quy trình thiết kế:' : 'Design Process Details:'}
-                  </h4>
+                  <div>
+                    <h4 className="text-lg font-light text-primary mb-4">
+                      {language === 'vi' ? 'Chi tiết quy trình thiết kế:' : 'Design Process Details:'}
+                    </h4>
+                    <p className="text-white/70 font-light mb-6">
+                      {language === 'vi' 
+                        ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
+                        : 'Development of sketches, 3D visualizations and planning solutions that help to see the future object even before construction begins.'
+                      }
+                    </p>
+                  </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -467,7 +476,7 @@ export default function Home() {
                   
                   <div className="text-center pt-4">
                     <span className="text-primary/60 text-xs font-light">
-                      {language === 'vi' ? '✨ Nội dung sẽ tự động đóng sau 4 giây' : '✨ Content will auto-close in 4 seconds'}
+                      {language === 'vi' ? '✨ Nội dung sẽ tự động đóng khi chuột rời khỏi vùng này' : '✨ Content will auto-close when mouse leaves this area'}
                     </span>
                   </div>
                 </div>
