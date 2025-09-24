@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Project } from "@shared/schema";
@@ -38,9 +37,6 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4 uppercase">
-            {language === 'vi' ? 'Tác phẩm của chúng tôi' : 'Our Work'}
-          </Badge>
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">
             {language === 'vi' ? 'Danh mục dự án' : 'Portfolio'}
           </h1>

@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Home, Building, Compass, Palette, Sofa, Lightbulb } from "lucide-react";
 import type { Service } from "@shared/schema";
 
@@ -85,7 +84,6 @@ export default function Services() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">Our Services</Badge>
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-services">Design Excellence</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             From concept to completion, we offer comprehensive design services tailored to your unique vision and lifestyle.
