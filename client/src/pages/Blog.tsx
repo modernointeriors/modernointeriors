@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Eye, ArrowRight } from "lucide-react";
+import { Calendar, Eye, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
@@ -20,6 +20,8 @@ const categories = [
 export default function Blog() {
   const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 9;
 
   // SEO meta tags
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function Blog() {
     };
   }, [language]);
 
-  const { data: articles = [], isLoading } = useQuery<Article[]>({
+  const { data: allArticles = [], isLoading } = useQuery<Article[]>({
     queryKey: ['/api/articles', activeCategory, language],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -80,6 +82,75 @@ export default function Blog() {
       return response.json();
     },
   });
+
+  // Reset to page 1 when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allArticles.length / articlesPerPage);
+  const startIndex = (currentPage - 1) * articlesPerPage;
+  const endIndex = startIndex + articlesPerPage;
+  const articles = allArticles.slice(startIndex, endIndex);
+
+  // Pagination component
+  const Pagination = () => {
+    if (totalPages <= 1) return null;
+
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+
+    return (
+      <div className="flex items-center justify-center gap-2 mt-16">
+        {/* Previous button */}
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+          disabled={currentPage === 1}
+          className={`w-12 h-12 flex items-center justify-center border border-white/20 ${
+            currentPage === 1 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-white hover:text-black transition-colors'
+          }`}
+          data-testid="pagination-prev"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        {/* Page numbers */}
+        {pages.map(page => (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`w-12 h-12 flex items-center justify-center border border-white/20 transition-colors ${
+              currentPage === page 
+                ? 'bg-white text-black'
+                : 'hover:bg-white hover:text-black'
+            }`}
+            data-testid={`pagination-page-${page}`}
+          >
+            {page}
+          </button>
+        ))}
+
+        {/* Next button */}
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+          disabled={currentPage === totalPages}
+          className={`w-12 h-12 flex items-center justify-center border border-white/20 ${
+            currentPage === totalPages 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-white hover:text-black transition-colors'
+          }`}
+          data-testid="pagination-next"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+    );
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -174,67 +245,80 @@ export default function Blog() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
-              <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-article-${article.id}`}>
-                <Link href={`/blog/${article.slug}`}>
-                  <div className="relative">
-                    {article.featuredImage ? (
-                      <OptimizedImage
-                        src={article.featuredImage}
-                        alt={article.title}
-                        width={600}
-                        height={256}
-                        wrapperClassName="w-full h-64"
-                        className="w-full h-full group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        data-testid={`img-article-${article.id}`}
-                      />
-                    ) : (
-                      <div className="w-full h-64 bg-black flex items-center justify-center">
-                        <div className="text-6xl font-sans font-light text-primary/30">N</div>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                      <div className="text-center text-white p-4">
-                        <h3 className="text-lg font-sans font-light mb-2" data-testid={`text-title-${article.id}`}>
-                          {article.title}
-                        </h3>
-                        <p className="text-sm opacity-90 mb-4" data-testid={`text-category-${article.id}`}>
-                          {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
-                        </p>
-                        <span className="inline-block px-4 py-2 border border-white/50 rounded-md text-sm hover:bg-white hover:text-black transition-colors">
-                          {language === 'vi' ? 'Xem bài viết' : 'View Article'}
-                        </span>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {articles.map((article) => (
+                <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-article-${article.id}`}>
+                  <Link href={`/blog/${article.slug}`}>
+                    <div className="relative">
+                      {article.featuredImage ? (
+                        <OptimizedImage
+                          src={article.featuredImage}
+                          alt={article.title}
+                          width={600}
+                          height={256}
+                          wrapperClassName="w-full h-64"
+                          className="w-full h-full group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          data-testid={`img-article-${article.id}`}
+                        />
+                      ) : (
+                        <div className="w-full h-64 bg-black flex items-center justify-center">
+                          <div className="text-6xl font-sans font-light text-primary/30">N</div>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                        <div className="text-center text-white p-4">
+                          <h3 className="text-lg font-sans font-light mb-2" data-testid={`text-title-${article.id}`}>
+                            {article.title}
+                          </h3>
+                          <p className="text-sm opacity-90 mb-4" data-testid={`text-category-${article.id}`}>
+                            {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
+                          </p>
+                          <span className="inline-block px-4 py-2 border border-white/50 rounded-md text-sm hover:bg-white hover:text-black transition-colors">
+                            {language === 'vi' ? 'Xem bài viết' : 'View Article'}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-                
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary">{getCategoryLabel(article.category)}</Badge>
-                    {article.featured && <Badge variant="default">{language === 'vi' ? 'Nổi bật' : 'Featured'}</Badge>}
-                  </div>
-                  <Link href={`/blog/${article.slug}`}>
-                    <h3 className="text-xl font-sans font-light mb-2 hover:text-primary transition-colors">
-                      {article.title}
-                    </h3>
                   </Link>
-                  <p className="text-muted-foreground text-sm mb-3">
-                    {formatDate(String(article.publishedAt || article.createdAt))}
-                  </p>
-                  {article.excerpt && (
-                    <p className="text-foreground/70 text-sm line-clamp-2">
-                      {article.excerpt}
+                  
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge variant="secondary">{getCategoryLabel(article.category)}</Badge>
+                      {article.featured && <Badge variant="default">{language === 'vi' ? 'Nổi bật' : 'Featured'}</Badge>}
+                    </div>
+                    <Link href={`/blog/${article.slug}`}>
+                      <h3 className="text-xl font-sans font-light mb-2 hover:text-primary transition-colors">
+                        {article.title}
+                      </h3>
+                    </Link>
+                    <p className="text-muted-foreground text-sm mb-3">
+                      {formatDate(String(article.publishedAt || article.createdAt))}
                     </p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    {article.excerpt && (
+                      <p className="text-foreground/70 text-sm line-clamp-2">
+                        {article.excerpt}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <Pagination />
+          </>
         )}
       </div>
+      
+      {/* Show results info */}
+      {!isLoading && allArticles.length > 0 && (
+        <div className="text-center text-muted-foreground text-sm mt-8">
+          {language === 'vi' 
+            ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, allArticles.length)} trong tổng số ${allArticles.length} bài viết`
+            : `Showing ${startIndex + 1}-${Math.min(endIndex, allArticles.length)} of ${allArticles.length} articles`
+          }
+        </div>
+      )}
     </div>
   );
 }
