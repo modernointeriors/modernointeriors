@@ -203,7 +203,7 @@ export default function Blog() {
                 onClick={() => setCurrentPage(page as number)}
                 className={`text-lg font-light transition-all duration-300 min-w-[28px] h-7 flex items-center justify-center ${
                   currentPage === page 
-                    ? 'text-white font-medium'
+                    ? 'text-white'
                     : 'text-white/70 hover:text-white'
                 }`}
                 data-testid={`pagination-page-${page}`}
