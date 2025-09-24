@@ -104,48 +104,52 @@ export default function Blog() {
     }
 
     return (
-      <div className="flex items-center justify-center gap-2 mt-16">
+      <div className="flex items-center justify-center gap-8 mt-16">
         {/* Previous button */}
         <button
           onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
           disabled={currentPage === 1}
-          className={`w-12 h-12 flex items-center justify-center border border-white/20 ${
+          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
             currentPage === 1 
-              ? 'opacity-50 cursor-not-allowed' 
-              : 'hover:bg-white hover:text-black transition-colors'
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
           }`}
           data-testid="pagination-prev"
         >
           <ChevronLeft className="w-4 h-4" />
+          {language === 'vi' ? 'TRƯỚC' : 'PREV'}
         </button>
 
         {/* Page numbers */}
-        {pages.map(page => (
-          <button
-            key={page}
-            onClick={() => setCurrentPage(page)}
-            className={`w-12 h-12 flex items-center justify-center border border-white/20 transition-colors ${
-              currentPage === page 
-                ? 'bg-white text-black'
-                : 'hover:bg-white hover:text-black'
-            }`}
-            data-testid={`pagination-page-${page}`}
-          >
-            {page}
-          </button>
-        ))}
+        <div className="flex items-center gap-6">
+          {pages.map(page => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`text-lg font-light transition-all duration-300 ${
+                currentPage === page 
+                  ? 'text-white border-b-2 border-white pb-1'
+                  : 'text-white/50 hover:text-white/80'
+              }`}
+              data-testid={`pagination-page-${page}`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
 
         {/* Next button */}
         <button
           onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
           disabled={currentPage === totalPages}
-          className={`w-12 h-12 flex items-center justify-center border border-white/20 ${
+          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
             currentPage === totalPages 
-              ? 'opacity-50 cursor-not-allowed' 
-              : 'hover:bg-white hover:text-black transition-colors'
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
           }`}
           data-testid="pagination-next"
         >
+          {language === 'vi' ? 'TIẾP' : 'NEXT'}
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
