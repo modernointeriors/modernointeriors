@@ -278,7 +278,7 @@ export default function Home() {
                   variant="outline" 
                   size="lg"
                   asChild
-                  className="rounded-none"
+                  className="rounded-none border-white hover:bg-white hover:text-black"
                   data-testid="button-view-more-projects"
                 >
                   <Link href="/portfolio">
@@ -377,7 +377,7 @@ export default function Home() {
                   variant="outline" 
                   size="lg"
                   asChild
-                  className="rounded-none"
+                  className="rounded-none border-white hover:bg-white hover:text-black"
                   data-testid="button-view-more-news"
                 >
                   <Link href="/blog">
