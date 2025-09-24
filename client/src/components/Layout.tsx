@@ -264,7 +264,7 @@ export default function Layout({ children }: LayoutProps) {
       />
 
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black border-r border-white/10 flex flex-col items-center justify-center">
+      <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
         <Sheet open={true} modal={false} onOpenChange={() => {
           // Keep always open to maintain DOM presence for smooth animations
