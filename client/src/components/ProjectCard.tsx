@@ -20,45 +20,43 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             src={projectImage}
             alt={project.title}
             width={600}
-            height={256}
-            wrapperClassName="w-full h-64"
+            height={192}
+            wrapperClassName="w-full h-48"
             className="w-full h-full group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             data-testid={`img-project-${project.id}`}
           />
-          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-            <div className="text-center text-white p-4">
-              <h3 className="text-lg font-sans font-light mb-2" data-testid={`text-title-${project.id}`}>
-                {project.title}
-              </h3>
-              <p className="text-sm opacity-90 mb-4" data-testid={`text-category-${project.id}`}>
-                {project.category} • {project.location || 'Location TBD'}
-              </p>
-              <span className="inline-block px-4 py-2 border border-white/50 rounded-md text-sm hover:bg-white hover:text-black transition-colors">
-                View Project
-              </span>
-            </div>
-          </div>
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
       </Link>
       
       <CardContent className="p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <Badge variant="secondary">{project.category}</Badge>
-          {project.featured && <Badge variant="default">Featured</Badge>}
-        </div>
-        <Link href={`/project/${project.id}`}>
-          <h3 className="text-xl font-sans font-light mb-2 hover:text-primary transition-colors">
-            {project.title}
-          </h3>
-        </Link>
-        <p className="text-muted-foreground text-sm mb-3">
-          {project.location || 'Location TBD'}
+        <h3 className="text-xl font-sans font-light mb-2 line-clamp-1" data-testid={`text-title-${project.id}`}>
+          {project.title}
+        </h3>
+        <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${project.id}`}>
+          {project.category} • {project.location || 'Location TBD'}
         </p>
         {project.description && (
-          <p className="text-foreground/70 text-sm line-clamp-2">
+          <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-description-${project.id}`}>
             {project.description}
           </p>
+        )}
+        {(project.area || project.duration) && (
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            {project.area && (
+              <div>
+                <h5 className="font-light mb-1">AREA</h5>
+                <p className="text-muted-foreground">{project.area}</p>
+              </div>
+            )}
+            {project.duration && (
+              <div>
+                <h5 className="font-light mb-1">DURATION</h5>
+                <p className="text-muted-foreground">{project.duration}</p>
+              </div>
+            )}
+          </div>
         )}
       </CardContent>
     </Card>
