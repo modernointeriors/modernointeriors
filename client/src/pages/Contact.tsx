@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
@@ -9,7 +10,10 @@ import { insertInquirySchema, type InsertInquiry } from "@shared/schema";
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
-    email: ''
+    email: '',
+    phone: '',
+    address: '',
+    requirements: ''
   });
   const { toast } = useToast();
 
@@ -22,7 +26,7 @@ export default function Contact() {
         title: "Request Sent Successfully",
         description: "We'll get back to you within 24 hours."
       });
-      setFormData({ name: '', email: '' });
+      setFormData({ name: '', email: '', phone: '', address: '', requirements: '' });
       queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
     },
     onError: () => {
@@ -37,10 +41,10 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email) {
+    if (!formData.name || !formData.email || !formData.phone) {
       toast({
         title: "Required Fields",
-        description: "Please fill in both name and email fields.",
+        description: "Please fill in name, email, and phone fields.",
         variant: "destructive"
       });
       return;
@@ -50,9 +54,9 @@ export default function Contact() {
       firstName: formData.name.split(' ')[0] || formData.name,
       lastName: formData.name.split(' ').slice(1).join(' ') || '',
       email: formData.email,
+      phone: formData.phone,
       projectType: 'consultation' as const,
-      message: 'Free consultation request',
-      phone: ''
+      message: `Address: ${formData.address}\n\nRequirements: ${formData.requirements}`
     };
 
     mutation.mutate(inquiryData);
@@ -74,28 +78,68 @@ export default function Contact() {
           </div>
 
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+            <div className="space-y-6">
+              {/* First row - Name and Email */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Name *"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-name"
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="E-mail *"
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-email"
+                  />
+                </div>
+              </div>
+              
+              {/* Second row - Phone and Address */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Input
+                    type="tel"
+                    placeholder="Phone *"
+                    value={formData.phone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-phone"
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Address"
+                    value={formData.address}
+                    onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-address"
+                  />
+                </div>
+              </div>
+              
+              {/* Third row - Requirements */}
               <div>
-                <Input
-                  type="text"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
-                  data-testid="input-name"
+                <Textarea
+                  placeholder="Requirements / Project Description"
+                  value={formData.requirements}
+                  onChange={(e) => setFormData(prev => ({ ...prev, requirements: e.target.value }))}
+                  className="bg-transparent border border-gray-600 rounded-none px-4 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
+                  data-testid="textarea-requirements"
                 />
               </div>
-              <div>
-                <Input
-                  type="email"
-                  placeholder="E-mail"
-                  value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
-                  data-testid="input-email"
-                />
-              </div>
-              <div className="flex justify-end">
+              
+              {/* Submit button */}
+              <div className="flex justify-end pt-6">
                 <Button
                   type="submit"
                   disabled={mutation.isPending}
