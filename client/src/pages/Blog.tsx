@@ -11,6 +11,8 @@ import { useState, useEffect } from "react";
 
 const categories = [
   { value: 'all', label: 'All Articles' },
+  { value: 'newest', label: 'Newest First' },
+  { value: 'oldest', label: 'Oldest First' },
   { value: 'news', label: 'News' },
   { value: 'tips', label: 'Design Tips' },
   { value: 'projects', label: 'Project Highlights' },
@@ -72,14 +74,31 @@ export default function Blog() {
     queryFn: async () => {
       const params = new URLSearchParams();
       params.append('language', language);
-      if (activeCategory !== 'all') {
+      if (activeCategory !== 'all' && activeCategory !== 'newest' && activeCategory !== 'oldest') {
         params.append('category', activeCategory);
       }
       const response = await fetch(`/api/articles?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to fetch articles');
       }
-      return response.json();
+      let articles = await response.json();
+      
+      // Sort articles based on activeCategory
+      if (activeCategory === 'newest') {
+        articles.sort((a: Article, b: Article) => {
+          const dateA = new Date(a.publishedAt || a.createdAt);
+          const dateB = new Date(b.publishedAt || b.createdAt);
+          return dateB.getTime() - dateA.getTime(); // Newest first
+        });
+      } else if (activeCategory === 'oldest') {
+        articles.sort((a: Article, b: Article) => {
+          const dateA = new Date(a.publishedAt || a.createdAt);
+          const dateB = new Date(b.publishedAt || b.createdAt);
+          return dateA.getTime() - dateB.getTime(); // Oldest first
+        });
+      }
+      
+      return articles;
     },
   });
 
@@ -213,6 +232,8 @@ export default function Blog() {
             >
               {language === 'vi' ? {
                 'all': 'Tất cả bài viết',
+                'newest': 'Mới nhất',
+                'oldest': 'Cũ nhất',
                 'news': 'Tin tức',
                 'tips': 'Mẹo thiết kế',
                 'projects': 'Dự án nổi bật',
