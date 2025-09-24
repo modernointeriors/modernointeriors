@@ -137,20 +137,13 @@ export default function Home() {
       <HeroSlider projects={allProjects || []} />
 
       {/* Featured Projects Section */}
-      <section id="featured-projects" className="py-12 md:py-16 bg-card">
+      <section id="featured-projects" className="py-8 md:py-12 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start justify-between mb-16">
-            <div className="text-left">
-              <h2 className="text-sm font-light tracking-widest text-muted-foreground mb-8 uppercase">
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
                 {homepageContent?.featuredBadge || 'Featured Projects'}
               </h2>
-              <div className="max-w-4xl">
-                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
-                  {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
-                </p>
-              </div>
-            </div>
-            <div className="flex-shrink-0 ml-8">
               <Button 
                 variant="outline" 
                 size="default"
@@ -162,6 +155,11 @@ export default function Home() {
                   View More Projects <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+            </div>
+            <div className="max-w-4xl">
+              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
+              </p>
             </div>
           </div>
           
@@ -241,7 +239,7 @@ export default function Home() {
       </section>
 
       {/* Featured News Section */}
-      <section id="featured-news" className="py-12 md:py-16 bg-background">
+      <section id="featured-news" className="py-8 md:py-12 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-start justify-between mb-16">
             <div className="text-left">
@@ -342,7 +340,7 @@ export default function Home() {
 
       {/* Process Section */}
       <section 
-        className="py-12 md:py-16 bg-black"
+        className="py-8 md:py-12 bg-black"
         onMouseEnter={handleProcessSectionMouseEnter}
         onMouseLeave={handleProcessSectionMouseLeave}
       >
