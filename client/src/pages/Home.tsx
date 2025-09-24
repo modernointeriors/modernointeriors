@@ -16,7 +16,11 @@ export default function Home() {
   const { language } = useLanguage();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
+  const [step01Expanded, setStep01Expanded] = useState(false);
+  const [step02Expanded, setStep02Expanded] = useState(false);
   const [step03Expanded, setStep03Expanded] = useState(false);
+  const [step04Expanded, setStep04Expanded] = useState(false);
+  const [step05Expanded, setStep05Expanded] = useState(false);
   const [step03HoverTimer, setStep03HoverTimer] = useState<NodeJS.Timeout | null>(null);
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
@@ -348,28 +352,70 @@ export default function Home() {
           {/* Process Steps */}
           <div className="space-y-8">
             {/* Step 01 */}
-            <div className="border-b border-white/10 pb-8 group hover:border-primary/30 transition-colors cursor-pointer">
-              <div className="flex items-center justify-between">
+            <div className="pb-8 group transition-colors cursor-pointer">
+              <div 
+                className="flex items-center justify-between"
+                onClick={() => setStep01Expanded(!step01Expanded)}
+              >
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[01]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
                     {language === 'vi' ? 'KHỞI ĐẦU & THẤU HIỂU' : 'DISCOVERY & UNDERSTANDING'}
                   </h3>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
+                <ArrowRight 
+                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
+                    step01Expanded ? 'rotate-90 text-primary' : ''
+                  }`} 
+                />
+              </div>
+              
+              {/* Expandable Content */}
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                step01Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="border-l-2 border-white/20 pl-8">
+                  <p className="text-white/70 font-light">
+                    {language === 'vi' 
+                      ? 'Chúng tôi bắt đầu bằng việc lắng nghe và phân tích sâu nhu cầu, sở thích và ngân sách của bạn. Một buổi khảo sát thực tế tại công trình sẽ giúp chúng tôi đưa ra những tư vấn phù hợp nhất.'
+                      : 'We begin by carefully listening to and analyzing your needs, preferences, and budget. An on-site survey of your property allows us to provide the most tailored advice.'
+                    }
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Step 02 */}
-            <div className="border-b border-white/10 pb-8 group hover:border-primary/30 transition-colors cursor-pointer">
-              <div className="flex items-center justify-between">
+            <div className="pb-8 group transition-colors cursor-pointer">
+              <div 
+                className="flex items-center justify-between"
+                onClick={() => setStep02Expanded(!step02Expanded)}
+              >
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[02]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
                     {language === 'vi' ? 'ĐỊNH HÌNH PHONG CÁCH' : 'STYLE & CONCEPT DEVELOPMENT'}
                   </h3>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
+                <ArrowRight 
+                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
+                    step02Expanded ? 'rotate-90 text-primary' : ''
+                  }`} 
+                />
+              </div>
+              
+              {/* Expandable Content */}
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                step02Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="border-l-2 border-white/20 pl-8">
+                  <p className="text-white/70 font-light">
+                    {language === 'vi' 
+                      ? 'Những ý tưởng sáng tạo được phác thảo, kết hợp cùng giải pháp công năng thông minh và thẩm mỹ tinh tế. Chúng tôi sẽ trình bày và thống nhất cùng bạn phương án thiết kế tối ưu nhất trước khi chính thức hợp tác.'
+                      : 'Creative ideas are sketched out, combining intelligent functional solutions with sophisticated aesthetics. We will present and finalize the optimal design proposal with you before formalizing our partnership.'
+                    }
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -412,28 +458,70 @@ export default function Home() {
             </div>
 
             {/* Step 04 */}
-            <div className="border-b border-white/10 pb-8 group hover:border-primary/30 transition-colors cursor-pointer">
-              <div className="flex items-center justify-between">
+            <div className="pb-8 group transition-colors cursor-pointer">
+              <div 
+                className="flex items-center justify-between"
+                onClick={() => setStep04Expanded(!step04Expanded)}
+              >
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[04]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
                     {language === 'vi' ? 'HIỆN THỰC HÓA CHUYÊN NGHIỆP' : 'PROFESSIONAL EXECUTION'}
                   </h3>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
+                <ArrowRight 
+                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
+                    step04Expanded ? 'rotate-90 text-primary' : ''
+                  }`} 
+                />
+              </div>
+              
+              {/* Expandable Content */}
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                step04Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="border-l-2 border-white/20 pl-8">
+                  <p className="text-white/70 font-light">
+                    {language === 'vi' 
+                      ? 'Quá trình thi công được lập kế hoạch và quản lý chặt chẽ bởi đội ngũ giám sát giàu kinh nghiệm. Chúng tôi cam kết đảm bảo đúng tiến độ, tuân thủ thiết kế và thường xuyên cập nhật thông tin minh bạch đến bạn.'
+                      : 'The construction process is meticulously planned and managed by our experienced supervision team. We are committed to on-time delivery, strict adherence to the design, and providing you with regular, transparent progress updates.'
+                    }
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Step 05 */}
-            <div className="border-b border-white/10 pb-8 group hover:border-primary/30 transition-colors cursor-pointer">
-              <div className="flex items-center justify-between">
+            <div className="pb-8 group transition-colors cursor-pointer">
+              <div 
+                className="flex items-center justify-between"
+                onClick={() => setStep05Expanded(!step05Expanded)}
+              >
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[05]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
                     {language === 'vi' ? 'BÀN GIAO & ĐỒNG HÀNH DÀI LÂU' : 'HANDOVER & LONG-TERM PARTNERSHIP'}
                   </h3>
                 </div>
-                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
+                <ArrowRight 
+                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
+                    step05Expanded ? 'rotate-90 text-primary' : ''
+                  }`} 
+                />
+              </div>
+              
+              {/* Expandable Content */}
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                step05Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="border-l-2 border-white/20 pl-8">
+                  <p className="text-white/70 font-light">
+                    {language === 'vi' 
+                      ? 'Dự án kết thúc bằng việc nghiệm thu kỹ lưỡng và bàn giao trọn vẹn. Nhưng mối quan hệ của chúng ta thì không. Với chính sách bảo hành, bảo trì uy tín, chúng tôi cam kết sẽ luôn đồng hành để đảm bảo không gian của bạn luôn hoàn hảo.'
+                      : 'The project concludes with a thorough inspection and seamless handover. But our relationship doesn\'t end there. With our reliable warranty and maintenance policy, we are committed to being your long-term partner, ensuring your space remains perfect.'
+                    }
+                  </p>
+                </div>
               </div>
             </div>
           </div>
