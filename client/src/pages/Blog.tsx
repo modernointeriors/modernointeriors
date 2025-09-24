@@ -201,7 +201,7 @@ export default function Blog() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page as number)}
-                className={`text-lg font-light transition-all duration-300 min-w-[28px] h-7 flex items-center justify-center ${
+                className={`text-xs font-light transition-all duration-300 min-w-[24px] h-6 flex items-center justify-center ${
                   currentPage === page 
                     ? 'text-white'
                     : 'text-white/70 hover:text-white'
