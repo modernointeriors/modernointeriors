@@ -245,11 +245,13 @@ export default function Home() {
       {/* Featured News Section */}
       <section id="featured-news" className="py-8 md:py-12 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start justify-between mb-16">
-            <div className="text-left">
-              <h2 className="text-sm font-light tracking-widest text-muted-foreground mb-8 uppercase">
+          <div className="mb-16">
+            <div className="mb-8">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
                 {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
               </h2>
+            </div>
+            <div className="flex items-start justify-between">
               <div className="max-w-4xl">
                 <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
                   {language === 'vi' 
@@ -257,20 +259,20 @@ export default function Home() {
                     : 'Discover the latest design trends and expert insights from our professional team.'}
                 </p>
               </div>
-            </div>
-            <div className="flex-shrink-0 ml-8">
-              <Button 
-                variant="outline" 
-                size="default"
-                asChild
-                className="rounded-none border-white hover:bg-white hover:text-black"
-                data-testid="button-view-more-news"
-              >
-                <Link href="/blog">
-                  {language === 'vi' ? 'Xem thêm tin tức' : 'View More News'} 
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <div className="flex-shrink-0 ml-8">
+                <Button 
+                  variant="outline" 
+                  size="default"
+                  asChild
+                  className="rounded-none border-white hover:bg-white hover:text-black"
+                  data-testid="button-view-more-news"
+                >
+                  <Link href="/blog">
+                    {language === 'vi' ? 'Xem thêm tin tức' : 'View More News'} 
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
           
