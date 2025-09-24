@@ -137,7 +137,7 @@ export default function Home() {
       <HeroSlider projects={allProjects || []} />
 
       {/* Featured Projects Section */}
-      <section id="featured-projects" className="py-8 md:py-12 bg-card">
+      <section id="featured-projects" className="py-6 md:py-8 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 uppercase">{homepageContent?.featuredBadge || 'Featured Projects'}</Badge>
@@ -237,7 +237,7 @@ export default function Home() {
       </section>
 
       {/* Featured News Section */}
-      <section id="featured-news" className="py-8 md:py-12 bg-background">
+      <section id="featured-news" className="py-6 md:py-8 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 uppercase">
@@ -338,7 +338,7 @@ export default function Home() {
 
       {/* Process Section */}
       <section 
-        className="py-16 md:py-24 bg-black"
+        className="py-6 md:py-8 bg-black"
         onMouseEnter={handleProcessSectionMouseEnter}
         onMouseLeave={handleProcessSectionMouseLeave}
       >
