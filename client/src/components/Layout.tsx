@@ -245,14 +245,19 @@ export default function Layout({ children }: LayoutProps) {
         }}
         onClick={(e) => {
           e.preventDefault();
-          if (isAnimating) return;
-          // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+          if (isAnimating) {
+            console.log('🚫 Overlay click blocked - animation in progress');
+            return;
+          }
+          // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+          console.log('🔒 Starting close animation (overlay)');
           setIsAnimating(true);
           setShowSidebar(false);
           setTimeout(() => {
             setIsClicked(false);
             setIsAnimating(false);
-          }, 900);
+            console.log('✅ Close animation completed (overlay)');
+          }, 1000);
         }}
       />
 
@@ -272,25 +277,34 @@ export default function Layout({ children }: LayoutProps) {
               onClick={(e) => {
                 // Prevent double-click and animation conflicts
                 e.preventDefault();
-                if (isAnimating) return;
+                if (isAnimating) {
+                  console.log('🚫 Click blocked - animation in progress');
+                  return;
+                }
                 
                 // Toggle sidebar logic
                 if (showSidebar) {
                   // Close sidebar
+                  console.log('🔒 Starting close animation');
                   setIsAnimating(true);
                   setShowSidebar(false);
                   setTimeout(() => {
                     setIsClicked(false);
                     setIsAnimating(false);
-                  }, 900);
+                    console.log('✅ Close animation completed');
+                  }, 1000); // Increased to 1000ms for safety
                 } else {
                   // Open sidebar
+                  console.log('🔒 Starting open animation');
                   setIsAnimating(true);
                   setIsClicked(true);
                   setTimeout(() => {
                     setMobileMenuOpen(true);
                     setShowSidebar(true);
-                    setIsAnimating(false);
+                    setTimeout(() => {
+                      setIsAnimating(false);
+                      console.log('✅ Open animation completed');
+                    }, 800); // Additional delay after sidebar opens
                   }, 200);
                 }
               }}
@@ -306,7 +320,7 @@ export default function Layout({ children }: LayoutProps) {
               <div 
                 className={`flex flex-col justify-center items-center space-y-2 w-10 h-8 transition-all duration-[1000ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
                   isClicked || showSidebar ? 'rotate-180' : 'rotate-90'
-                }`}
+                } ${isAnimating ? 'pointer-events-none opacity-70' : ''}`}
                 style={{
                   backfaceVisibility: 'hidden',
                   perspective: '1000px'
@@ -333,14 +347,19 @@ export default function Layout({ children }: LayoutProps) {
             }}
             onEscapeKeyDown={(e) => {
               e.preventDefault();
-              if (isAnimating) return;
-              // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+              if (isAnimating) {
+                console.log('🚫 ESC blocked - animation in progress');
+                return;
+              }
+              // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+              console.log('🔒 Starting close animation (ESC)');
               setIsAnimating(true);
               setShowSidebar(false);
               setTimeout(() => {
                 setIsClicked(false);
                 setIsAnimating(false);
-              }, 900);
+                console.log('✅ Close animation completed (ESC)');
+              }, 1000);
             }}
           >
             <SheetHeader>
@@ -348,14 +367,19 @@ export default function Layout({ children }: LayoutProps) {
                 <Link 
                   href="/" 
                   onClick={() => {
-                    if (isAnimating) return;
-                    // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                    if (isAnimating) {
+                      console.log('🚫 Link click blocked - animation in progress');
+                      return;
+                    }
+                    // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+                    console.log('🔒 Starting close animation (logo)');
                     setIsAnimating(true);
                     setShowSidebar(false);
                     setTimeout(() => {
                       setIsClicked(false);
                       setIsAnimating(false);
-                    }, 900);
+                      console.log('✅ Close animation completed (logo)');
+                    }, 1000);
                   }}
                   className="cursor-pointer inline-block"
                 >
@@ -377,14 +401,19 @@ export default function Layout({ children }: LayoutProps) {
                         key={item.key}
                         href={item.href}
                         onClick={() => {
-                          if (isAnimating) return;
-                          // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                          if (isAnimating) {
+                            console.log('🚫 Nav link blocked - animation in progress');
+                            return;
+                          }
+                          // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+                          console.log('🔒 Starting close animation (nav)');
                           setIsAnimating(true);
                           setShowSidebar(false);
                           setTimeout(() => {
                             setIsClicked(false);
                             setIsAnimating(false);
-                          }, 900);
+                            console.log('✅ Close animation completed (nav)');
+                          }, 1000);
                         }}
                         className={`block text-lg font-light transition-colors hover:text-primary ${
                           isActive(item.href)
@@ -405,14 +434,19 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/services`} 
                       onClick={() => {
-                        if (isAnimating) return;
-                        // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                        if (isAnimating) {
+                          console.log('🚫 Footer link blocked - animation in progress');
+                          return;
+                        }
+                        // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+                        console.log('🔒 Starting close animation (footer)');
                         setIsAnimating(true);
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
                           setIsAnimating(false);
-                        }, 900);
+                          console.log('✅ Close animation completed (footer)');
+                        }, 1000);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -421,14 +455,19 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/about`} 
                       onClick={() => {
-                        if (isAnimating) return;
-                        // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                        if (isAnimating) {
+                          console.log('🚫 Footer link blocked - animation in progress');
+                          return;
+                        }
+                        // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+                        console.log('🔒 Starting close animation (footer)');
                         setIsAnimating(true);
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
                           setIsAnimating(false);
-                        }, 900);
+                          console.log('✅ Close animation completed (footer)');
+                        }, 1000);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -437,14 +476,19 @@ export default function Layout({ children }: LayoutProps) {
                     <Link 
                       href={`/contact`} 
                       onClick={() => {
-                        if (isAnimating) return;
-                        // Sidebar closes immediately (800ms), icon resets after sidebar closes + 100ms delay
+                        if (isAnimating) {
+                          console.log('🚫 Footer link blocked - animation in progress');
+                          return;
+                        }
+                        // Sidebar closes immediately (800ms), icon resets after sidebar closes + 200ms delay
+                        console.log('🔒 Starting close animation (footer)');
                         setIsAnimating(true);
                         setShowSidebar(false);
                         setTimeout(() => {
                           setIsClicked(false);
                           setIsAnimating(false);
-                        }, 900);
+                          console.log('✅ Close animation completed (footer)');
+                        }, 1000);
                       }}
                       className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
