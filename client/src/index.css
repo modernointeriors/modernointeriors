@@ -415,7 +415,7 @@
   /* Navigation Link Underline Animation */
   .nav-link-underline {
     position: relative;
-    display: inline-block;
+    display: block;
   }
 
   .nav-link-underline::after {
@@ -438,7 +438,7 @@
   /* Small navigation link underline */
   .nav-link-underline-sm {
     position: relative;
-    display: inline-block;
+    display: block;
   }
 
   .nav-link-underline-sm::after {
