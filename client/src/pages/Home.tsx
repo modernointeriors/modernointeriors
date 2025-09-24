@@ -140,26 +140,30 @@ export default function Home() {
       <section id="featured-projects" className="py-8 md:py-12 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
-            <div className="flex items-center justify-between mb-8">
+            <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
                 {homepageContent?.featuredBadge || 'Featured Projects'}
               </h2>
-              <Button 
-                variant="outline" 
-                size="default"
-                asChild
-                className="rounded-none border-white hover:bg-white hover:text-black"
-                data-testid="button-view-more-projects"
-              >
-                <Link href="/portfolio">
-                  View More Projects <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
             </div>
-            <div className="max-w-4xl">
-              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
-                {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
-              </p>
+            <div className="flex items-start justify-between">
+              <div className="max-w-4xl">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                  {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
+                </p>
+              </div>
+              <div className="flex-shrink-0 ml-8">
+                <Button 
+                  variant="outline" 
+                  size="default"
+                  asChild
+                  className="rounded-none border-white hover:bg-white hover:text-black"
+                  data-testid="button-view-more-projects"
+                >
+                  <Link href="/portfolio">
+                    View More Projects <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
           
