@@ -549,7 +549,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/`} 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
@@ -558,7 +558,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/about`} 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
@@ -567,7 +567,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/portfolio`} 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
@@ -576,7 +576,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/blog`} 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm" 
+                    className="text-white/80 hover:text-white transition-colors font-light" 
                     data-testid="footer-news"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
@@ -586,7 +586,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/contact`} 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'LIÊN HỆ' : 'CONTACTS'}
@@ -604,7 +604,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="https://www.instagram.com/moderno.interiors/" 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-instagram"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -615,7 +615,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="https://www.facebook.com/moderno.interiors.design" 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-facebook"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -626,7 +626,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="https://www.tiktok.com/@moderno.interiors" 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-tiktok"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -637,7 +637,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="#" 
-                    className="text-white/80 hover:text-white transition-colors font-light nav-link-underline-sm"
+                    className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-zalo"
                   >
                     ZALO
