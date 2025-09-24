@@ -209,11 +209,12 @@ export default function Home() {
               </ScrollableContainer>
               
               {/* View More Projects Button */}
-              <div className="text-center mt-12">
+              <div className="text-right mt-12">
                 <Button 
                   variant="outline" 
                   size="lg"
                   asChild
+                  className="rounded-none"
                   data-testid="button-view-more-projects"
                 >
                   <Link href="/portfolio">
@@ -307,11 +308,12 @@ export default function Home() {
               </ScrollableContainer>
               
               {/* View More News Button */}
-              <div className="text-center mt-12">
+              <div className="text-right mt-12">
                 <Button 
                   variant="outline" 
                   size="lg"
                   asChild
+                  className="rounded-none"
                   data-testid="button-view-more-news"
                 >
                   <Link href="/blog">
