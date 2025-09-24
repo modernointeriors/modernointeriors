@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import ProjectCard from "@/components/ProjectCard";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import type { Project } from "@shared/schema";
 
 const categories = [
@@ -15,8 +16,10 @@ const categories = [
 export default function Portfolio() {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 9;
 
-  const { data: projects = [], isLoading } = useQuery<Project[]>({
+  const { data: allProjects = [], isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects', activeCategory],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -31,6 +34,151 @@ export default function Portfolio() {
       return response.json();
     },
   });
+
+  // Reset to page 1 when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allProjects.length / projectsPerPage);
+  const startIndex = (currentPage - 1) * projectsPerPage;
+  const endIndex = startIndex + projectsPerPage;
+  const projects = allProjects.slice(startIndex, endIndex);
+
+  // Pagination component
+  const Pagination = () => {
+    if (totalPages <= 1) return null;
+
+    // Smart pagination logic
+    const getPageNumbers = () => {
+      const delta = 2; // Number of pages to show around current page
+      const range = [];
+      const rangeWithDots = [];
+
+      // Always show first page
+      range.push(1);
+
+      // Add pages around current page
+      for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+        range.push(i);
+      }
+
+      // Always show last page (if more than 1 page)
+      if (totalPages > 1) {
+        range.push(totalPages);
+      }
+
+      // Remove duplicates and sort
+      const uniqueRange = Array.from(new Set(range)).sort((a, b) => a - b);
+
+      // Add dots where there are gaps
+      let l;
+      for (let i of uniqueRange) {
+        if (l) {
+          if (i - l === 2) {
+            rangeWithDots.push(l + 1);
+          } else if (i - l !== 1) {
+            rangeWithDots.push('...');
+          }
+        }
+        rangeWithDots.push(i);
+        l = i;
+      }
+
+      return rangeWithDots;
+    };
+
+    const pageNumbers = getPageNumbers();
+
+    return (
+      <div className="flex items-center justify-center gap-4 mt-16">
+        {/* First page button */}
+        <button
+          onClick={() => setCurrentPage(1)}
+          disabled={currentPage === 1}
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
+            currentPage === 1 
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
+          }`}
+          data-testid="pagination-first"
+        >
+          <ChevronsLeft className="w-4 h-4" />
+          {language === 'vi' ? 'ĐẦU' : 'FIRST'}
+        </button>
+        
+        {/* Previous button */}
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+          disabled={currentPage === 1}
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
+            currentPage === 1 
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
+          }`}
+          data-testid="pagination-prev"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          {language === 'vi' ? 'TRƯỚC' : 'PREV'}
+        </button>
+
+        {/* Page numbers */}
+        <div className="flex items-center gap-2">
+          {pageNumbers.map((page, index) => (
+            page === '...' ? (
+              <span key={`dots-${index}`} className="text-white/70 px-2">
+                ...
+              </span>
+            ) : (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page as number)}
+                className={`text-xs font-light transition-all duration-300 min-w-[24px] h-6 flex items-center justify-center ${
+                  currentPage === page 
+                    ? 'text-white'
+                    : 'text-white/70 hover:text-white'
+                }`}
+                data-testid={`pagination-page-${page}`}
+              >
+                {page}
+              </button>
+            )
+          ))}
+        </div>
+
+        {/* Next button */}
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+          disabled={currentPage === totalPages}
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
+            currentPage === totalPages 
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
+          }`}
+          data-testid="pagination-next"
+        >
+          {language === 'vi' ? 'TIẾP' : 'NEXT'}
+          <ChevronRight className="w-4 h-4" />
+        </button>
+        
+        {/* Last page button */}
+        <button
+          onClick={() => setCurrentPage(totalPages)}
+          disabled={currentPage === totalPages}
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
+            currentPage === totalPages 
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
+          }`}
+          data-testid="pagination-last"
+        >
+          {language === 'vi' ? 'CUỐI' : 'LAST'}
+          <ChevronsRight className="w-4 h-4" />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen pt-24">
@@ -95,13 +243,26 @@ export default function Portfolio() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+            <Pagination />
+          </>
         )}
       </div>
+      
+      {/* Show results info */}
+      {!isLoading && allProjects.length > 0 && (
+        <div className="text-center text-muted-foreground text-sm mt-8">
+          {language === 'vi' 
+            ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, allProjects.length)} trong tổng số ${allProjects.length} dự án`
+            : `Showing ${startIndex + 1}-${Math.min(endIndex, allProjects.length)} of ${allProjects.length} projects`
+          }
+        </div>
+      )}
     </div>
   );
 }
