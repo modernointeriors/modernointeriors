@@ -29,7 +29,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   useEffect(() => {
     if (!projects || projects.length === 0) {
       const startTime = Date.now();
-      const duration = 2500; // 2.5 seconds total loading time
+      const duration = 1800; // 1.8 seconds total loading time
       
       const interval = setInterval(() => {
         const elapsed = Date.now() - startTime;
@@ -54,23 +54,26 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
 
   if ((!projects || projects.length === 0) && showLoading) {
     return (
-      <div className="bg-black text-white min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="mb-8">
-            <img 
-              src="/attached_assets/logo.white.png" 
-              alt="MODERNO INTERIORS" 
-              className="h-24 md:h-32 w-auto mx-auto"
-            />
-          </div>
-          <div className="w-80 mx-auto">
-            <Progress 
-              value={loadingProgress} 
-              className="h-1 bg-white/20" 
-            />
+      <>
+        <div className="fixed inset-0 bg-black text-white flex items-center justify-center z-[9999]">
+          <div className="text-center">
+            <div className="mb-8">
+              <img 
+                src="/attached_assets/logo.white.png" 
+                alt="MODERNO INTERIORS" 
+                className="h-24 md:h-32 w-auto mx-auto"
+              />
+            </div>
+            <div className="w-80 mx-auto">
+              <Progress 
+                value={loadingProgress} 
+                className="h-1 bg-white/20" 
+              />
+            </div>
           </div>
         </div>
-      </div>
+        <div className="bg-black text-white min-h-screen"></div>
+      </>
     );
   }
 

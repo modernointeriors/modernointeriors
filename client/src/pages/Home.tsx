@@ -56,7 +56,7 @@ export default function Home() {
   // Controlled loading animation
   useEffect(() => {
     const startTime = Date.now();
-    const duration = 2500; // 2.5 seconds total loading time
+    const duration = 1800; // 1.8 seconds total loading time
     
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -86,9 +86,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Slider Section - IIDA Style */}
-      {showLoading ? (
-        <div className="bg-black text-white min-h-screen flex items-center justify-center">
+      {/* Full Screen Loading Overlay */}
+      {showLoading && (
+        <div className="fixed inset-0 bg-black text-white flex items-center justify-center z-[9999]">
           <div className="text-center">
             <div className="mb-8">
               <img 
@@ -105,9 +105,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      ) : (
-        <HeroSlider projects={allProjects || []} />
       )}
+
+      {/* Hero Slider Section - IIDA Style */}
+      <HeroSlider projects={allProjects || []} />
 
       {/* Featured Projects Section */}
       <section id="featured-projects" className="py-8 md:py-12 bg-card">
