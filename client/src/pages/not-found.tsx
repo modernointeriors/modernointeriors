@@ -28,7 +28,7 @@ export default function NotFound() {
         {/* Back to Home Link */}
         <Link 
           href="/"
-          className="inline-block text-primary hover:text-white transition-colors duration-300 font-light tracking-wide text-lg border-b border-primary hover:border-white pb-1"
+          className="inline-block text-primary hover:text-white transition-colors duration-300 font-light tracking-wide text-sm"
           data-testid="back-to-home"
         >
           {language === 'vi' ? 'QUAY LẠI TRANG CHỦ' : 'BACK TO HOME'}
