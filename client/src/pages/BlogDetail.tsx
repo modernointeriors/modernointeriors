@@ -42,50 +42,48 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
 
   return (
     <div className="mt-16 py-12">
-      <h3 className="text-2xl font-sans font-bold mb-8">
+      <h3 className="text-2xl font-sans font-light mb-8">
         {language === 'vi' ? 'Những bài viết khác trong News' : 'Other News Articles'}
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {relatedArticles.map((article) => (
-          <Link key={article.id} href={`/blog/${article.slug}`}>
-            <Card className="group overflow-hidden hover-scale project-hover cursor-pointer" data-testid={`card-related-article-${article.id}`}>
+          <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-related-article-${article.id}`}>
+            <Link href={`/blog/${article.slug}`}>
               <div className="relative">
                 {article.featuredImage ? (
                   <OptimizedImage
                     src={article.featuredImage}
                     alt={article.title}
-                    width={400}
-                    height={225}
-                    wrapperClassName="w-full h-64"
+                    width={600}
+                    height={192}
+                    wrapperClassName="w-full h-48"
                     className="w-full h-full group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, 33vw"
                     data-testid={`img-related-article-${article.id}`}
                   />
                 ) : (
-                  <div className="w-full h-64 bg-black flex items-center justify-center">
+                  <div className="w-full h-48 bg-black flex items-center justify-center">
                     <div className="text-6xl font-sans font-light text-primary/30">N</div>
                   </div>
                 )}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="secondary">News</Badge>
-                </div>
-                <h3 className="text-xl font-sans font-light mb-2 group-hover:text-primary transition-colors">
-                  {article.title}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-3">
-                  {formatDate(String(article.publishedAt || article.createdAt))}
+            </Link>
+            
+            <CardContent className="p-6">
+              <h3 className="text-xl font-sans font-light mb-2 line-clamp-1" data-testid={`text-title-${article.id}`}>
+                {article.title}
+              </h3>
+              <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${article.id}`}>
+                News • {formatDate(String(article.publishedAt || article.createdAt))}
+              </p>
+              {article.excerpt && (
+                <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-excerpt-${article.id}`}>
+                  {article.excerpt}
                 </p>
-                {article.excerpt && (
-                  <p className="text-foreground/70 text-sm line-clamp-2">
-                    {article.excerpt}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </Link>
+              )}
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>
@@ -297,7 +295,7 @@ export default function BlogDetail() {
               )}
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-sans font-bold mb-6 leading-tight text-white" data-testid="article-title">
+            <h1 className="text-4xl md:text-6xl font-sans font-light mb-6 leading-tight text-white" data-testid="article-title">
               {article.title}
             </h1>
 
