@@ -411,74 +411,13 @@ export default function Home() {
               <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                 step03Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
               }`}>
-                <div className="border-l-2 border-primary pl-8 space-y-6">
-                  <div>
-                    <h4 className="text-lg font-light text-primary mb-4">
-                      {language === 'vi' ? 'Chi tiết quy trình thiết kế:' : 'Design Process Details:'}
-                    </h4>
-                    <p className="text-white/70 font-light mb-6">
-                      {language === 'vi' 
-                        ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
-                        : 'Development of sketches, 3D visualizations and planning solutions that help to see the future object even before construction begins.'
-                      }
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="text-white font-light mb-2">
-                        {language === 'vi' ? '📐 Phác thảo ban đầu' : '📐 Initial Sketches'}
-                      </h5>
-                      <p className="text-white/60 text-sm font-light">
-                        {language === 'vi' 
-                          ? 'Tạo ra các ý tưởng thiết kế đầu tiên dựa trên yêu cầu và sở thích của khách hàng.'
-                          : 'Create initial design concepts based on client requirements and preferences.'
-                        }
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h5 className="text-white font-light mb-2">
-                        {language === 'vi' ? '🏗️ Mô hình 3D' : '🏗️ 3D Modeling'}
-                      </h5>
-                      <p className="text-white/60 text-sm font-light">
-                        {language === 'vi' 
-                          ? 'Phát triển mô hình 3D chi tiết để khách hàng có thể hình dung rõ ràng về không gian.'
-                          : 'Develop detailed 3D models so clients can clearly visualize the space.'
-                        }
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h5 className="text-white font-light mb-2">
-                        {language === 'vi' ? '📋 Kế hoạch chi tiết' : '📋 Detailed Planning'}
-                      </h5>
-                      <p className="text-white/60 text-sm font-light">
-                        {language === 'vi' 
-                          ? 'Lập kế hoạch thi công chi tiết với timeline và vật liệu cụ thể.'
-                          : 'Create detailed construction plans with specific timeline and materials.'
-                        }
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h5 className="text-white font-light mb-2">
-                        {language === 'vi' ? '✅ Phê duyệt cuối' : '✅ Final Approval'}
-                      </h5>
-                      <p className="text-white/60 text-sm font-light">
-                        {language === 'vi' 
-                          ? 'Xác nhận thiết kế cuối cùng trước khi bắt đầu thi công thực tế.'
-                          : 'Confirm final design before beginning actual construction.'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center pt-4">
-                    <span className="text-primary/60 text-xs font-light">
-                      {language === 'vi' ? '✨ Nội dung sẽ tự động đóng khi chuột rời khỏi vùng này' : '✨ Content will auto-close when mouse leaves this area'}
-                    </span>
-                  </div>
+                <div className="border-l-2 border-primary pl-8">
+                  <p className="text-white/70 font-light">
+                    {language === 'vi' 
+                      ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
+                      : 'Development of sketches, 3D visualizations and planning solutions that help to see the future object even before construction begins.'
+                    }
+                  </p>
                 </div>
               </div>
             </div>
