@@ -303,8 +303,8 @@ export default function Blog() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {articles.map((article) => (
-                <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-article-${article.id}`}>
-                  <Link href={`/blog/${article.slug}`}>
+                <Link key={article.id} href={`/blog/${article.slug}`}>
+                  <Card className="group overflow-hidden hover-scale project-hover cursor-pointer" data-testid={`card-article-${article.id}`}>
                     <div className="relative">
                       {article.featuredImage ? (
                         <OptimizedImage
@@ -322,42 +322,27 @@ export default function Blog() {
                           <div className="text-6xl font-sans font-light text-primary/30">N</div>
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                        <div className="text-center text-white p-4">
-                          <h3 className="text-lg font-sans font-light mb-2" data-testid={`text-title-${article.id}`}>
-                            {article.title}
-                          </h3>
-                          <p className="text-sm opacity-90 mb-4" data-testid={`text-category-${article.id}`}>
-                            {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
-                          </p>
-                          <span className="inline-block px-4 py-2 border border-white/50 rounded-md text-sm hover:bg-white hover:text-black transition-colors">
-                            {language === 'vi' ? 'Xem bài viết' : 'View Article'}
-                          </span>
-                        </div>
+                    </div>
+                    
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="secondary">{getCategoryLabel(article.category)}</Badge>
+                        {article.featured && <Badge variant="default">{language === 'vi' ? 'Nổi bật' : 'Featured'}</Badge>}
                       </div>
-                    </div>
-                  </Link>
-                  
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="secondary">{getCategoryLabel(article.category)}</Badge>
-                      {article.featured && <Badge variant="default">{language === 'vi' ? 'Nổi bật' : 'Featured'}</Badge>}
-                    </div>
-                    <Link href={`/blog/${article.slug}`}>
-                      <h3 className="text-xl font-sans font-light mb-2 hover:text-primary transition-colors">
+                      <h3 className="text-xl font-sans font-light mb-2 group-hover:text-primary transition-colors">
                         {article.title}
                       </h3>
-                    </Link>
-                    <p className="text-muted-foreground text-sm mb-3">
-                      {formatDate(String(article.publishedAt || article.createdAt))}
-                    </p>
-                    {article.excerpt && (
-                      <p className="text-foreground/70 text-sm line-clamp-2">
-                        {article.excerpt}
+                      <p className="text-muted-foreground text-sm mb-3">
+                        {formatDate(String(article.publishedAt || article.createdAt))}
                       </p>
-                    )}
-                  </CardContent>
-                </Card>
+                      {article.excerpt && (
+                        <p className="text-foreground/70 text-sm line-clamp-2">
+                          {article.excerpt}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
             <Pagination />
