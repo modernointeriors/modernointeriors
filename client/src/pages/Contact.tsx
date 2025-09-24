@@ -68,7 +68,6 @@ export default function Contact() {
       <section className="pt-32 pb-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-sm tracking-widest text-gray-400 mb-4" data-testid="label-request">REQUEST</p>
             <h1 className="text-4xl md:text-6xl font-light mb-6" data-testid="heading-questions">
               HAVE ANY QUESTIONS?
             </h1>
@@ -139,14 +138,14 @@ export default function Contact() {
               </div>
               
               {/* Submit button */}
-              <div className="flex justify-end pt-6">
+              <div className="flex justify-center pt-6">
                 <Button
                   type="submit"
                   disabled={mutation.isPending}
                   className="bg-white text-black hover:bg-gray-100 px-8 py-3 font-medium tracking-wide"
                   data-testid="button-leave-request"
                 >
-                  {mutation.isPending ? 'SENDING...' : '• LEAVE A REQUEST'}
+                  {mutation.isPending ? 'SENDING...' : 'LEAVE A REQUEST'}
                 </Button>
               </div>
             </div>
