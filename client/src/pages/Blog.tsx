@@ -179,77 +179,59 @@ export default function Blog() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article) => (
-              <Card key={article.id} className="group overflow-hidden hover-scale" data-testid={`article-card-${article.id}`}>
-                <div className="relative">
-                  {article.featuredImage ? (
-                    <OptimizedImage
-                      src={article.featuredImage} 
-                      alt={article.title}
-                      width={400}
-                      height={192}
-                      wrapperClassName="w-full h-48"
-                      className="w-full h-full"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      data-testid={`img-article-${article.id}`}
-                    />
-                  ) : (
-                    <div className="w-full h-48 bg-black flex items-center justify-center">
-                      <div className="text-6xl font-sans font-light text-primary/30">N</div>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {article.featured && (
-                    <Badge className="absolute top-4 left-4 bg-primary">
-                      {language === 'vi' ? 'Nổi bật' : 'Featured'}
-                    </Badge>
-                  )}
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                    <Badge variant="outline" className="text-xs">
-                      {getCategoryLabel(article.category)}
-                    </Badge>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {formatDate(String(article.publishedAt || article.createdAt))}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Eye className="h-3 w-3" />
-                      {article.viewCount}
+              <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-article-${article.id}`}>
+                <Link href={`/blog/${article.slug}`}>
+                  <div className="relative">
+                    {article.featuredImage ? (
+                      <OptimizedImage
+                        src={article.featuredImage}
+                        alt={article.title}
+                        width={600}
+                        height={256}
+                        wrapperClassName="w-full h-64"
+                        className="w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        data-testid={`img-article-${article.id}`}
+                      />
+                    ) : (
+                      <div className="w-full h-64 bg-black flex items-center justify-center">
+                        <div className="text-6xl font-sans font-light text-primary/30">N</div>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                      <div className="text-center text-white p-4">
+                        <h3 className="text-lg font-sans font-light mb-2" data-testid={`text-title-${article.id}`}>
+                          {article.title}
+                        </h3>
+                        <p className="text-sm opacity-90 mb-4" data-testid={`text-category-${article.id}`}>
+                          {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
+                        </p>
+                        <span className="inline-block px-4 py-2 border border-white/50 rounded-md text-sm hover:bg-white hover:text-black transition-colors">
+                          {language === 'vi' ? 'Xem bài viết' : 'View Article'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <h3 className="text-xl font-sans font-light mb-3 line-clamp-2" data-testid={`text-title-${article.id}`}>
-                    {article.title}
-                  </h3>
-                  
+                </Link>
+                
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge variant="secondary">{getCategoryLabel(article.category)}</Badge>
+                    {article.featured && <Badge variant="default">{language === 'vi' ? 'Nổi bật' : 'Featured'}</Badge>}
+                  </div>
+                  <Link href={`/blog/${article.slug}`}>
+                    <h3 className="text-xl font-sans font-light mb-2 hover:text-primary transition-colors">
+                      {article.title}
+                    </h3>
+                  </Link>
+                  <p className="text-muted-foreground text-sm mb-3">
+                    {formatDate(String(article.publishedAt || article.createdAt))}
+                  </p>
                   {article.excerpt && (
-                    <p className="text-muted-foreground mb-4 line-clamp-3" data-testid={`text-excerpt-${article.id}`}>
+                    <p className="text-foreground/70 text-sm line-clamp-2">
                       {article.excerpt}
                     </p>
                   )}
-                  
-                  {article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {(article.tags as any[]).slice(0, 3).map((tag: any, index: number) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          #{String(tag)}
-                        </Badge>
-                      ))}
-                    </div>
-                  ) : null}
-                  
-                  <Button 
-                    variant="outline" 
-                    asChild
-                    className="w-full"
-                    data-testid={`button-read-article-${article.id}`}
-                  >
-                    <Link href={`/blog/${article.slug}`}>
-                      {language === 'vi' ? 'Đọc thêm' : 'Read More'} 
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
                 </CardContent>
               </Card>
             ))}
