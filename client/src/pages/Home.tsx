@@ -56,7 +56,7 @@ export default function Home() {
   // Controlled loading animation
   useEffect(() => {
     const startTime = Date.now();
-    const duration = 1800; // 1.8 seconds total loading time
+    const duration = 1500; // 1.5 seconds total loading time
     
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -71,7 +71,7 @@ export default function Home() {
           setShowLoading(false);
         }, 300);
       }
-    }, 50);
+    }, 16); // 60fps for smoother animation
     
     return () => clearInterval(interval);
   }, []);
