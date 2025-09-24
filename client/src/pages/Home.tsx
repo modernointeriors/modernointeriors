@@ -21,11 +21,7 @@ export default function Home() {
   const [step03Expanded, setStep03Expanded] = useState(false);
   const [step04Expanded, setStep04Expanded] = useState(false);
   const [step05Expanded, setStep05Expanded] = useState(false);
-  const [step01HoverTimer, setStep01HoverTimer] = useState<NodeJS.Timeout | null>(null);
-  const [step02HoverTimer, setStep02HoverTimer] = useState<NodeJS.Timeout | null>(null);
-  const [step03HoverTimer, setStep03HoverTimer] = useState<NodeJS.Timeout | null>(null);
-  const [step04HoverTimer, setStep04HoverTimer] = useState<NodeJS.Timeout | null>(null);
-  const [step05HoverTimer, setStep05HoverTimer] = useState<NodeJS.Timeout | null>(null);
+  const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -86,74 +82,23 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Handle step auto-close hover functionality
-  const handleStep01MouseLeave = () => {
+  // Handle Process Section auto-close functionality
+  const handleProcessSectionMouseLeave = () => {
     const timer = setTimeout(() => {
+      // Close all expanded steps
       setStep01Expanded(false);
-    }, 4000); // 4 seconds after mouse leaves
-    setStep01HoverTimer(timer);
-  };
-
-  const handleStep01MouseEnter = () => {
-    if (step01HoverTimer) {
-      clearTimeout(step01HoverTimer);
-      setStep01HoverTimer(null);
-    }
-  };
-
-  const handleStep02MouseLeave = () => {
-    const timer = setTimeout(() => {
       setStep02Expanded(false);
-    }, 4000); // 4 seconds after mouse leaves
-    setStep02HoverTimer(timer);
-  };
-
-  const handleStep02MouseEnter = () => {
-    if (step02HoverTimer) {
-      clearTimeout(step02HoverTimer);
-      setStep02HoverTimer(null);
-    }
-  };
-
-  const handleStep03MouseLeave = () => {
-    const timer = setTimeout(() => {
       setStep03Expanded(false);
-    }, 4000); // 4 seconds after mouse leaves
-    setStep03HoverTimer(timer);
-  };
-
-  const handleStep03MouseEnter = () => {
-    if (step03HoverTimer) {
-      clearTimeout(step03HoverTimer);
-      setStep03HoverTimer(null);
-    }
-  };
-
-  const handleStep04MouseLeave = () => {
-    const timer = setTimeout(() => {
       setStep04Expanded(false);
-    }, 4000); // 4 seconds after mouse leaves
-    setStep04HoverTimer(timer);
-  };
-
-  const handleStep04MouseEnter = () => {
-    if (step04HoverTimer) {
-      clearTimeout(step04HoverTimer);
-      setStep04HoverTimer(null);
-    }
-  };
-
-  const handleStep05MouseLeave = () => {
-    const timer = setTimeout(() => {
       setStep05Expanded(false);
-    }, 4000); // 4 seconds after mouse leaves
-    setStep05HoverTimer(timer);
+    }, 4000); // 4 seconds after mouse leaves entire section
+    setProcessSectionHoverTimer(timer);
   };
 
-  const handleStep05MouseEnter = () => {
-    if (step05HoverTimer) {
-      clearTimeout(step05HoverTimer);
-      setStep05HoverTimer(null);
+  const handleProcessSectionMouseEnter = () => {
+    if (processSectionHoverTimer) {
+      clearTimeout(processSectionHoverTimer);
+      setProcessSectionHoverTimer(null);
     }
   };
 
@@ -392,7 +337,11 @@ export default function Home() {
       </section>
 
       {/* Process Section */}
-      <section className="py-16 md:py-24 bg-black">
+      <section 
+        className="py-16 md:py-24 bg-black"
+        onMouseEnter={handleProcessSectionMouseEnter}
+        onMouseLeave={handleProcessSectionMouseLeave}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Title */}
           <div className="mb-16">
@@ -412,11 +361,7 @@ export default function Home() {
           {/* Process Steps */}
           <div className="space-y-8">
             {/* Step 01 */}
-            <div 
-              className="pb-8 group transition-colors cursor-pointer"
-              onMouseEnter={handleStep01MouseEnter}
-              onMouseLeave={handleStep01MouseLeave}
-            >
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep01Expanded(!step01Expanded)}
@@ -450,11 +395,7 @@ export default function Home() {
             </div>
 
             {/* Step 02 */}
-            <div 
-              className="pb-8 group transition-colors cursor-pointer"
-              onMouseEnter={handleStep02MouseEnter}
-              onMouseLeave={handleStep02MouseLeave}
-            >
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep02Expanded(!step02Expanded)}
@@ -488,11 +429,7 @@ export default function Home() {
             </div>
 
             {/* Step 03 - With Expandable Content */}
-            <div 
-              className="pb-8 group transition-colors cursor-pointer"
-              onMouseEnter={handleStep03MouseEnter}
-              onMouseLeave={handleStep03MouseLeave}
-            >
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep03Expanded(!step03Expanded)}
@@ -526,11 +463,7 @@ export default function Home() {
             </div>
 
             {/* Step 04 */}
-            <div 
-              className="pb-8 group transition-colors cursor-pointer"
-              onMouseEnter={handleStep04MouseEnter}
-              onMouseLeave={handleStep04MouseLeave}
-            >
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep04Expanded(!step04Expanded)}
@@ -564,11 +497,7 @@ export default function Home() {
             </div>
 
             {/* Step 05 */}
-            <div 
-              className="pb-8 group transition-colors cursor-pointer"
-              onMouseEnter={handleStep05MouseEnter}
-              onMouseLeave={handleStep05MouseLeave}
-            >
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep05Expanded(!step05Expanded)}
