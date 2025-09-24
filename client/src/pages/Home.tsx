@@ -333,18 +333,14 @@ export default function Home() {
           {/* Section Title */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 mb-8">
-              {language === 'vi' ? 'QUY TRÌNH' : 'PROCESS'}
+              {language === 'vi' ? 'HÀNH TRÌNH KIẾN TẠO KHÔNG GIAN SỐNG CỦA BẠN' : 'THE JOURNEY TO YOUR DREAM SPACE'}
             </h2>
             <div className="max-w-4xl">
               <p className="text-2xl md:text-3xl font-light text-white leading-relaxed">
                 {language === 'vi' 
-                  ? 'CHÚNG TÔI QUẢN LÝ DỰ ÁN MỘT CÁCH NHẤT QUÁN VÀ MINH BẠCH - PHƯƠNG PHÁP NÀY CHO PHÉP CHÚNG TÔI ĐẠT ĐƯỢC '
-                  : 'WE MANAGE THE PROJECT CONSISTENTLY AND TRANSPARENTLY - THIS APPROACH ALLOWS US TO ACHIEVE '
+                  ? 'Từ ý tưởng đến hiện thực, chúng tôi đồng hành cùng bạn qua một quy trình 5 bước tinh gọn, hiệu quả và đầy cảm hứng.'
+                  : 'From concept to reality, we guide you through a streamlined, efficient, and inspiring 5-step process.'
                 }
-                <span className="text-primary">
-                  {language === 'vi' ? 'CHẤT LƯỢNG TỐI ĐA' : 'MAXIMUM QUALITY'}
-                </span>
-                {language === 'vi' ? ' VÀ ĐÁP ỨNG MỌI MONG ĐỢI CỦA BẠN.' : ' AND MEET YOUR EXPECTATIONS.'}
               </p>
             </div>
           </div>
@@ -357,7 +353,7 @@ export default function Home() {
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[01]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Thảo luận dự án' : 'Discussion of the project'}
+                    {language === 'vi' ? 'KHỞI ĐẦU & THẤU HIỂU' : 'DISCOVERY & UNDERSTANDING'}
                   </h3>
                 </div>
                 <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
@@ -370,14 +366,14 @@ export default function Home() {
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[02]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Ý tưởng' : 'Concept'}
+                    {language === 'vi' ? 'ĐỊNH HÌNH PHONG CÁCH' : 'STYLE & CONCEPT DEVELOPMENT'}
                   </h3>
                 </div>
                 <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
               </div>
             </div>
 
-            {/* Step 03 - With Image and Expandable Content */}
+            {/* Step 03 - With Expandable Content */}
             <div 
               className="pb-8 group transition-colors cursor-pointer"
               onMouseEnter={handleStep03MouseEnter}
@@ -390,7 +386,7 @@ export default function Home() {
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[03]</span>
                   <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Thiết kế kiến trúc' : 'Architecture design'}
+                    {language === 'vi' ? 'TRỰC QUAN HÓA KHÔNG GIAN' : 'VISUALIZING THE SPACE'}
                   </h3>
                 </div>
                 <ArrowRight 
@@ -407,8 +403,8 @@ export default function Home() {
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
                     {language === 'vi' 
-                      ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
-                      : 'Development of sketches, 3D visualizations and planning solutions that help to see the future object even before construction begins.'
+                      ? 'Không gian mơ ước của bạn sẽ được tái hiện sống động qua các bản vẽ phối cảnh 3D và moodboard vật liệu, màu sắc. Bạn sẽ thấy trước ngôi nhà của mình một cách chân thực nhất và cùng chúng tôi tinh chỉnh đến khi hoàn toàn ưng ý.'
+                      : 'Your dream space is brought to life through vivid 3D renderings and mood boards showcasing materials and colors. You get to see your future home with stunning realism, and we\'ll fine-tune every detail with you until it\'s perfect.'
                     }
                   </p>
                 </div>
@@ -420,14 +416,22 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-8">
                   <span className="text-white/40 font-light text-lg">[04]</span>
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-light text-white">
-                      {language === 'vi' ? 'Thiết kế nội thất &' : 'Interior design &'}
-                    </h3>
-                    <h3 className="text-xl md:text-2xl font-light text-white">
-                      {language === 'vi' ? 'Chỉ đạo nghệ thuật' : 'Art direction'}
-                    </h3>
-                  </div>
+                  <h3 className="text-xl md:text-2xl font-light text-white">
+                    {language === 'vi' ? 'HIỆN THỰC HÓA CHUYÊN NGHIỆP' : 'PROFESSIONAL EXECUTION'}
+                  </h3>
+                </div>
+                <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
+              </div>
+            </div>
+
+            {/* Step 05 */}
+            <div className="border-b border-white/10 pb-8 group hover:border-primary/30 transition-colors cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-8">
+                  <span className="text-white/40 font-light text-lg">[05]</span>
+                  <h3 className="text-xl md:text-2xl font-light text-white">
+                    {language === 'vi' ? 'BÀN GIAO & ĐỒNG HÀNH DÀI LÂU' : 'HANDOVER & LONG-TERM PARTNERSHIP'}
+                  </h3>
                 </div>
                 <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors" />
               </div>
