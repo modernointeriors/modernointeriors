@@ -145,10 +145,10 @@ export default function Blog() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`text-lg font-light transition-all duration-300 ${
+              className={`text-xl font-light transition-all duration-300 min-w-[32px] h-8 flex items-center justify-center ${
                 currentPage === page 
-                  ? 'text-white border-b-2 border-white pb-1'
-                  : 'text-white/50 hover:text-white/80'
+                  ? 'text-white border-b-2 border-white pb-1 font-medium'
+                  : 'text-white/70 hover:text-white'
               }`}
               data-testid={`pagination-page-${page}`}
             >
