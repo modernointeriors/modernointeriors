@@ -359,17 +359,25 @@ export default function Home() {
             </div>
 
             {/* Step 03 - With Image */}
-            <div className="bg-white/5 rounded-lg p-8 group hover:bg-white/10 transition-colors cursor-pointer">
+            <div 
+              className="pb-8 group hover:border-primary/30 transition-colors cursor-pointer"
+              onClick={() => {
+                const nextSection = document.querySelector('footer');
+                if (nextSection) {
+                  nextSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
                 <div className="flex-1">
                   <div className="flex items-center gap-8 mb-4">
-                    <span className="text-black font-light text-lg">[03]</span>
-                    <h3 className="text-xl md:text-2xl font-light text-black">
+                    <span className="text-white/40 font-light text-lg">[03]</span>
+                    <h3 className="text-xl md:text-2xl font-light text-white">
                       {language === 'vi' ? 'Thiết kế kiến trúc' : 'Architecture design'}
                     </h3>
-                    <ArrowRight className="w-5 h-5 text-black/60 group-hover:text-primary transition-colors ml-auto lg:ml-0" />
+                    <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-primary transition-colors ml-auto lg:ml-0" />
                   </div>
-                  <p className="text-black/70 font-light max-w-lg">
+                  <p className="text-white/70 font-light max-w-lg">
                     {language === 'vi' 
                       ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
                       : 'Development of sketches, 3D visualizations and planning solutions that help to see the future object even before construction begins.'
