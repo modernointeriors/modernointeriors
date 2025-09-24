@@ -412,4 +412,50 @@
     animation: hero-progress 5s linear forwards;
   }
 
+  /* Navigation Link Underline Animation */
+  .nav-link-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: hsl(38 96% 54%);
+    transition: width 0.3s ease-in-out;
+    transform: translateZ(0);
+    will-change: width;
+  }
+
+  .nav-link-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Small navigation link underline */
+  .nav-link-underline-sm {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-link-underline-sm::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: hsl(38 96% 54%);
+    transition: width 0.25s ease-in-out;
+    transform: translateZ(0);
+    will-change: width;
+  }
+
+  .nav-link-underline-sm:hover::after {
+    width: 100%;
+  }
+
 }
