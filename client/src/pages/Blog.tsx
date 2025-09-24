@@ -123,12 +123,12 @@ export default function Blog() {
     }
 
     return (
-      <div className="flex items-center justify-center gap-6 mt-16">
+      <div className="flex items-center justify-center gap-4 mt-16">
         {/* First page button */}
         <button
           onClick={() => setCurrentPage(1)}
           disabled={currentPage === 1}
-          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
             currentPage === 1 
               ? 'opacity-30 cursor-not-allowed text-white/50' 
               : 'text-white/70 hover:text-white'
@@ -143,7 +143,7 @@ export default function Blog() {
         <button
           onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
           disabled={currentPage === 1}
-          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
             currentPage === 1 
               ? 'opacity-30 cursor-not-allowed text-white/50' 
               : 'text-white/70 hover:text-white'
@@ -155,14 +155,14 @@ export default function Blog() {
         </button>
 
         {/* Page numbers */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           {pages.map(page => (
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`text-xl font-light transition-all duration-300 min-w-[32px] h-8 flex items-center justify-center ${
+              className={`text-lg font-light transition-all duration-300 min-w-[28px] h-7 flex items-center justify-center ${
                 currentPage === page 
-                  ? 'text-white border-b-2 border-white pb-1 font-medium'
+                  ? 'text-white font-medium'
                   : 'text-white/70 hover:text-white'
               }`}
               data-testid={`pagination-page-${page}`}
@@ -176,7 +176,7 @@ export default function Blog() {
         <button
           onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
           disabled={currentPage === totalPages}
-          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
             currentPage === totalPages 
               ? 'opacity-30 cursor-not-allowed text-white/50' 
               : 'text-white/70 hover:text-white'
@@ -191,7 +191,7 @@ export default function Blog() {
         <button
           onClick={() => setCurrentPage(totalPages)}
           disabled={currentPage === totalPages}
-          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
+          className={`flex items-center gap-1 text-xs font-light tracking-widest transition-colors ${
             currentPage === totalPages 
               ? 'opacity-30 cursor-not-allowed text-white/50' 
               : 'text-white/70 hover:text-white'
