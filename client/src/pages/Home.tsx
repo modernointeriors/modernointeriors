@@ -274,32 +274,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      {stats && (
-        <section className="py-6 md:py-10 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div>
-                <div className="text-3xl font-light text-primary mb-2" data-testid="stats-projects">{stats.totalProjects}+</div>
-                <div className="text-sm text-muted-foreground">{homepageContent?.statsProjectsLabel || 'Projects'}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-light text-primary mb-2" data-testid="stats-clients">{stats.activeClients}+</div>
-                <div className="text-sm text-muted-foreground">{homepageContent?.statsClientsLabel || 'Clients'}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-light text-primary mb-2" data-testid="stats-inquiries">{stats.newInquiries}+</div>
-                <div className="text-sm text-muted-foreground">{homepageContent?.statsAwardsLabel || 'Awards'}</div>
-              </div>
-              <div>
-                <div className="text-3xl font-light text-primary mb-2" data-testid="stats-revenue">8+</div>
-                <div className="text-sm text-muted-foreground">{homepageContent?.statsExperienceLabel || 'Years'}</div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* CTA Section */}
       <section className="py-8 md:py-12 bg-card">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
