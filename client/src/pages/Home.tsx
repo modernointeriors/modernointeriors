@@ -402,7 +402,7 @@ export default function Home() {
               <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                 step03Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
               }`}>
-                <div className="border-l-2 border-primary pl-8">
+                <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
                     {language === 'vi' 
                       ? 'Phát triển các bản phác thảo, hình ảnh 3D và các giải pháp quy hoạch giúp hình dung được đối tượng tương lai ngay cả trước khi bắt đầu xây dựng.'
