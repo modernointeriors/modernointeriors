@@ -234,14 +234,15 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </header>
 
-      {/* Custom Overlay - Pre-mounted for 120fps performance */}
+      {/* Custom Overlay with Backdrop Blur - Pre-mounted for 120fps performance */}
       <div 
-        className="fixed inset-0 z-30 bg-black/30"
+        className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm"
         style={{
           opacity: showSidebar ? 1 : 0,
           pointerEvents: showSidebar ? 'auto' : 'none',
-          transition: 'opacity 400ms var(--ease-smooth)',
-          willChange: 'opacity'
+          transition: 'opacity 400ms var(--ease-smooth), backdrop-filter 400ms var(--ease-smooth)',
+          willChange: 'opacity, backdrop-filter',
+          backdropFilter: showSidebar ? 'blur(4px)' : 'blur(0px)'
         }}
         onClick={(e) => {
           e.preventDefault();
