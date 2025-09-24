@@ -345,7 +345,7 @@ export default function Home() {
       </section>
 
       {/* Quality Materials Hero Section */}
-      <section className="relative h-screen bg-black overflow-hidden">
+      <section className="relative h-[70vh] bg-black overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -356,7 +356,7 @@ export default function Home() {
         </div>
         
         <div className="relative h-full flex items-center">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
               {/* Left side text */}
               <div className="text-white">
