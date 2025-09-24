@@ -117,10 +117,46 @@ export default function Blog() {
   const Pagination = () => {
     if (totalPages <= 1) return null;
 
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
+    // Smart pagination logic
+    const getPageNumbers = () => {
+      const delta = 2; // Number of pages to show around current page
+      const range = [];
+      const rangeWithDots = [];
+
+      // Always show first page
+      range.push(1);
+
+      // Add pages around current page
+      for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+        range.push(i);
+      }
+
+      // Always show last page (if more than 1 page)
+      if (totalPages > 1) {
+        range.push(totalPages);
+      }
+
+      // Remove duplicates and sort
+      const uniqueRange = Array.from(new Set(range)).sort((a, b) => a - b);
+
+      // Add dots where there are gaps
+      let l;
+      for (let i of uniqueRange) {
+        if (l) {
+          if (i - l === 2) {
+            rangeWithDots.push(l + 1);
+          } else if (i - l !== 1) {
+            rangeWithDots.push('...');
+          }
+        }
+        rangeWithDots.push(i);
+        l = i;
+      }
+
+      return rangeWithDots;
+    };
+
+    const pageNumbers = getPageNumbers();
 
     return (
       <div className="flex items-center justify-center gap-4 mt-16">
@@ -155,20 +191,26 @@ export default function Blog() {
         </button>
 
         {/* Page numbers */}
-        <div className="flex items-center gap-4">
-          {pages.map(page => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`text-lg font-light transition-all duration-300 min-w-[28px] h-7 flex items-center justify-center ${
-                currentPage === page 
-                  ? 'text-white font-medium'
-                  : 'text-white/70 hover:text-white'
-              }`}
-              data-testid={`pagination-page-${page}`}
-            >
-              {page}
-            </button>
+        <div className="flex items-center gap-2">
+          {pageNumbers.map((page, index) => (
+            page === '...' ? (
+              <span key={`dots-${index}`} className="text-white/70 px-2">
+                ...
+              </span>
+            ) : (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page as number)}
+                className={`text-lg font-light transition-all duration-300 min-w-[28px] h-7 flex items-center justify-center ${
+                  currentPage === page 
+                    ? 'text-white font-medium'
+                    : 'text-white/70 hover:text-white'
+                }`}
+                data-testid={`pagination-page-${page}`}
+              >
+                {page}
+              </button>
+            )
           ))}
         </div>
 
