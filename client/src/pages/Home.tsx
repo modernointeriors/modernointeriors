@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -7,11 +8,13 @@ import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import HeroSlider from "@/components/HeroSlider";
 import ScrollableContainer from "@/components/ScrollableContainer";
+import { Progress } from "@/components/ui/progress";
 import type { Project, HomepageContent, Article } from "@shared/schema";
 
 export default function Home() {
   const [, navigate] = useLocation();
   const { language } = useLanguage();
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -49,6 +52,24 @@ export default function Home() {
     },
   });
 
+  // Animate loading progress
+  useEffect(() => {
+    if (projectsLoading) {
+      const interval = setInterval(() => {
+        setLoadingProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(interval);
+            return 90;
+          }
+          return prev + Math.random() * 10;
+        });
+      }, 200);
+      return () => clearInterval(interval);
+    } else {
+      setLoadingProgress(100);
+    }
+  }, [projectsLoading]);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -56,20 +77,29 @@ export default function Home() {
     }
   };
 
+
   return (
     <div className="min-h-screen">
       {/* Hero Slider Section - IIDA Style */}
       {projectsLoading ? (
         <div className="bg-black text-white min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div className="mb-4">
+            <div className="mb-8">
               <img 
                 src="/attached_assets/logo.white.png" 
                 alt="MODERNO INTERIORS" 
                 className="h-24 md:h-32 w-auto mx-auto"
               />
             </div>
-            <p className="text-lg text-white/80">Loading Projects...</p>
+            <div className="w-80 mx-auto">
+              <Progress 
+                value={loadingProgress} 
+                className="h-1 bg-white/20" 
+              />
+              <div className="mt-4">
+                <div className="w-2 h-2 bg-primary rounded-full mx-auto animate-pulse" />
+              </div>
+            </div>
           </div>
         </div>
       ) : (

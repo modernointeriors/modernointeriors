@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import type { Project } from '@shared/schema';
 import { ChevronRight } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -15,6 +16,7 @@ interface HeroSliderProps {
 
 export default function HeroSlider({ projects }: HeroSliderProps) {
   const [progressKey, setProgressKey] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const swiperRef = useRef<any>(null);
 
   // Restart progress animation when slide changes
@@ -22,18 +24,45 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
     setProgressKey(prev => prev + 1);
   };
 
+  // Animate loading progress
+  useEffect(() => {
+    if (!projects || projects.length === 0) {
+      const interval = setInterval(() => {
+        setLoadingProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(interval);
+            return 90;
+          }
+          return prev + Math.random() * 10;
+        });
+      }, 200);
+      return () => clearInterval(interval);
+    }
+  }, [projects]);
+
   if (!projects || projects.length === 0) {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="mb-4">
+          <div className="mb-8">
             <img 
               src="/attached_assets/logo.white.png" 
               alt="MODERNO INTERIORS" 
               className="h-24 md:h-32 w-auto mx-auto"
             />
           </div>
-          <p className="text-lg text-white/80">Loading Projects...</p>
+          <div className="w-80 mx-auto">
+            <Progress 
+              value={loadingProgress} 
+              className="h-1 bg-white/20" 
+              style={{
+                '--radix-progress-indicator-transform': `translateX(-${100 - loadingProgress}%)`
+              } as React.CSSProperties}
+            />
+            <div className="mt-4">
+              <div className="w-2 h-2 bg-primary rounded-full mx-auto animate-pulse" />
+            </div>
+          </div>
         </div>
       </div>
     );
