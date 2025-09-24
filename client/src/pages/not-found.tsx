@@ -18,7 +18,7 @@ export default function NotFound() {
         </h2>
         
         {/* Description */}
-        <p className="text-white/60 font-light mb-12 max-w-md mx-auto leading-relaxed">
+        <p className="text-white/60 font-light mb-6 max-w-md mx-auto leading-relaxed">
           {language === 'vi' 
             ? 'Trang bạn tìm kiếm có thể đã được di chuyển, xóa hoặc không tồn tại.'
             : 'The page you are looking for might have been moved, deleted, or does not exist.'
