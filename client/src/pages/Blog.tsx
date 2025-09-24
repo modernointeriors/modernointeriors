@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Eye, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Eye, ArrowRight, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
@@ -123,7 +123,22 @@ export default function Blog() {
     }
 
     return (
-      <div className="flex items-center justify-center gap-8 mt-16">
+      <div className="flex items-center justify-center gap-6 mt-16">
+        {/* First page button */}
+        <button
+          onClick={() => setCurrentPage(1)}
+          disabled={currentPage === 1}
+          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
+            currentPage === 1 
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
+          }`}
+          data-testid="pagination-first"
+        >
+          <ChevronsLeft className="w-4 h-4" />
+          {language === 'vi' ? 'ĐẦU' : 'FIRST'}
+        </button>
+        
         {/* Previous button */}
         <button
           onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -170,6 +185,21 @@ export default function Blog() {
         >
           {language === 'vi' ? 'TIẾP' : 'NEXT'}
           <ChevronRight className="w-4 h-4" />
+        </button>
+        
+        {/* Last page button */}
+        <button
+          onClick={() => setCurrentPage(totalPages)}
+          disabled={currentPage === totalPages}
+          className={`flex items-center gap-2 text-sm font-light tracking-widest transition-colors ${
+            currentPage === totalPages 
+              ? 'opacity-30 cursor-not-allowed text-white/50' 
+              : 'text-white/70 hover:text-white'
+          }`}
+          data-testid="pagination-last"
+        >
+          {language === 'vi' ? 'CUỐI' : 'LAST'}
+          <ChevronsRight className="w-4 h-4" />
         </button>
       </div>
     );
