@@ -338,8 +338,8 @@ export default function Home() {
             <div className="max-w-4xl">
               <p className="text-2xl md:text-3xl font-light text-white leading-relaxed">
                 {language === 'vi' 
-                  ? 'Từ ý tưởng đến hiện thực, chúng tôi đồng hành cùng bạn qua một quy trình 5 bước tinh gọn, hiệu quả và đầy cảm hứng.'
-                  : 'From concept to reality, we guide you through a streamlined, efficient, and inspiring 5-step process.'
+                  ? 'TỪ Ý TƯỞNG ĐẾN HIỆN THỰC, CHÚNG TÔI ĐỒNG HÀNH CÙNG BẠN QUA MỘT QUY TRÌNH 5 BƯỚC TINH GỌN, HIỆU QUẢ VÀ ĐẦY CẢM HỨNG.'
+                  : 'FROM CONCEPT TO REALITY, WE GUIDE YOU THROUGH A STREAMLINED, EFFICIENT, AND INSPIRING 5-STEP PROCESS.'
                 }
               </p>
             </div>
