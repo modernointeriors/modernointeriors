@@ -12,10 +12,10 @@ interface LayoutProps {
 const getNavigation = (t: (key: string) => string) => {
   return [
     { name: t('nav.home'), href: `/`, key: 'home' },
-    { name: t('nav.about'), href: `/about`, key: 'about' },
-    { name: t('nav.projects'), href: `/portfolio`, key: 'portfolio' },
-    { name: t('nav.services'), href: `/services`, key: 'services' },
     { name: t('nav.news'), href: `/blog`, key: 'news' },
+    { name: t('nav.about'), href: `/about`, key: 'about' },
+    { name: t('nav.services'), href: `/services`, key: 'services' },
+    { name: t('nav.projects'), href: `/portfolio`, key: 'portfolio' },
     { name: t('nav.contacts'), href: `/contact`, key: 'contact' }
   ];
 };
@@ -557,6 +557,16 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <Link 
+                    href={`/blog`} 
+                    className="text-white/80 hover:text-white transition-colors font-light" 
+                    data-testid="footer-news"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    {language === 'vi' ? 'TIN TỨC' : 'NEWS'}
+                  </Link>
+                </li>
+                <li>
+                  <Link 
                     href={`/about`} 
                     className="text-white/80 hover:text-white transition-colors font-light"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -566,21 +576,20 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <Link 
+                    href={`/services`} 
+                    className="text-white/80 hover:text-white transition-colors font-light"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    {language === 'vi' ? 'DỊCH VỤ' : 'SERVICES'}
+                  </Link>
+                </li>
+                <li>
+                  <Link 
                     href={`/portfolio`} 
                     className="text-white/80 hover:text-white transition-colors font-light"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href={`/blog`} 
-                    className="text-white/80 hover:text-white transition-colors font-light" 
-                    data-testid="footer-news"
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  >
-                    {language === 'vi' ? 'TIN TỨC' : 'NEWS'}
                   </Link>
                 </li>
                 <li>
