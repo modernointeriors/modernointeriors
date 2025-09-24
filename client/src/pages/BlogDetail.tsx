@@ -47,44 +47,45 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {relatedArticles.map((article) => (
-          <Card key={article.id} className="group hover:shadow-lg transition-shadow">
-            <CardContent className="p-0">
-              {article.featuredImage && (
-                <div className="aspect-video overflow-hidden rounded-t-lg">
+          <Link key={article.id} href={`/blog/${article.slug}`}>
+            <Card className="group overflow-hidden hover-scale project-hover cursor-pointer" data-testid={`card-related-article-${article.id}`}>
+              <div className="relative">
+                {article.featuredImage ? (
                   <OptimizedImage
                     src={article.featuredImage}
                     alt={article.title}
                     width={400}
                     height={225}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    wrapperClassName="w-full h-64"
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    data-testid={`img-related-article-${article.id}`}
                   />
+                ) : (
+                  <div className="w-full h-64 bg-black flex items-center justify-center">
+                    <div className="text-6xl font-sans font-light text-primary/30">N</div>
+                  </div>
+                )}
+              </div>
+              
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="secondary">News</Badge>
                 </div>
-              )}
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                  <Badge variant="outline">News</Badge>
-                  <span>•</span>
-                  <span>{formatDate(String(article.publishedAt || article.createdAt))}</span>
-                </div>
-                <h4 className="font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                  <Link href={`/blog/${article.slug}`} className="hover:underline">
-                    {article.title}
-                  </Link>
-                </h4>
+                <h3 className="text-xl font-sans font-light mb-2 group-hover:text-primary transition-colors">
+                  {article.title}
+                </h3>
+                <p className="text-muted-foreground text-sm mb-3">
+                  {formatDate(String(article.publishedAt || article.createdAt))}
+                </p>
                 {article.excerpt && (
-                  <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
+                  <p className="text-foreground/70 text-sm line-clamp-2">
                     {article.excerpt}
                   </p>
                 )}
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href={`/blog/${article.slug}`}>
-                    {language === 'vi' ? 'Đọc thêm' : 'Read more'}
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
