@@ -450,7 +450,7 @@ export default function Layout({ children }: LayoutProps) {
                           console.log('✅ Close animation completed (footer)');
                         }, 1000);
                       }}
-                      className="block text-sm text-muted-foreground hover:text-white transition-colors nav-link-underline-sm"
+                      className="block text-sm text-muted-foreground hover:text-white transition-colors"
                     >
                       {language === 'vi' ? 'Thông Tin Cookie' : 'Cookie Information'}
                     </Link>
@@ -471,7 +471,7 @@ export default function Layout({ children }: LayoutProps) {
                           console.log('✅ Close animation completed (footer)');
                         }, 1000);
                       }}
-                      className="block text-sm text-muted-foreground hover:text-white transition-colors nav-link-underline-sm"
+                      className="block text-sm text-muted-foreground hover:text-white transition-colors"
                     >
                       {language === 'vi' ? 'Điều Khoản & Điều Kiện' : 'Terms & Conditions'}
                     </Link>
@@ -492,7 +492,7 @@ export default function Layout({ children }: LayoutProps) {
                           console.log('✅ Close animation completed (footer)');
                         }, 1000);
                       }}
-                      className="block text-sm text-muted-foreground hover:text-white transition-colors nav-link-underline-sm"
+                      className="block text-sm text-muted-foreground hover:text-white transition-colors"
                     >
                       {language === 'vi' ? 'Chính Sách Bảo Mật' : 'Privacy Policy'}
                     </Link>
