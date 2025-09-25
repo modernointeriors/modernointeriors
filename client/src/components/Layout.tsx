@@ -645,9 +645,11 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <a 
-                    href="#" 
+                    href="https://zalo.me/moderno" 
                     className="text-white/80 hover:text-white transition-colors font-light"
                     data-testid="footer-zalo"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     ZALO
                   </a>
