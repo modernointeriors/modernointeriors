@@ -429,7 +429,7 @@
     bottom: -2px;
     left: 0;
     width: 0;
-    height: 2px;
+    height: 1.5px;
     background-color: white;
     transition: width 0.3s ease-in-out;
     transform: translateZ(0);
@@ -458,7 +458,7 @@
     bottom: -1px;
     left: 0;
     width: 0;
-    height: 2px;
+    height: 1.5px;
     background-color: white;
     transition: width 0.25s ease-in-out;
     transform: translateZ(0);
