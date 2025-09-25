@@ -430,7 +430,7 @@
     left: 0;
     width: 0;
     height: 1px;
-    background-color: hsl(38 96% 54%);
+    background-color: white;
     transition: width 0.3s ease-in-out;
     transform: translateZ(0);
     will-change: width;
@@ -438,6 +438,11 @@
 
   .nav-link-underline:hover::after {
     width: 100%;
+  }
+
+  /* Active state overrides hover color */
+  .text-primary.nav-link-underline::after {
+    background-color: hsl(38 96% 54%);
   }
 
   /* Small navigation link underline */
@@ -454,7 +459,7 @@
     left: 0;
     width: 0;
     height: 1px;
-    background-color: hsl(38 96% 54%);
+    background-color: white;
     transition: width 0.25s ease-in-out;
     transform: translateZ(0);
     will-change: width;
@@ -462,6 +467,11 @@
 
   .nav-link-underline-sm:hover::after {
     width: 100%;
+  }
+
+  /* Active state overrides hover color for small links */
+  .text-primary.nav-link-underline-sm::after {
+    background-color: hsl(38 96% 54%);
   }
 
 }
