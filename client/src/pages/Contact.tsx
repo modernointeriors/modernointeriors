@@ -65,7 +65,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Request Section */}
-      <section className="pt-32 pb-24">
+      <section className="pt-32 pb-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-light mb-6" data-testid="heading-questions">
