@@ -65,13 +65,13 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Request Section */}
-      <section className="pt-32 pb-12">
+      <section className="pt-24 pb-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl md:text-6xl font-light mb-6" data-testid="heading-questions">
               HAVE ANY QUESTIONS?
             </h1>
-            <p className="text-xl text-gray-400 mb-12" data-testid="text-consultation">
+            <p className="text-xl text-gray-400 mb-8" data-testid="text-consultation">
               Leave a request for a free consultation
             </p>
           </div>
