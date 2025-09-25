@@ -417,10 +417,10 @@ export default function Layout({ children }: LayoutProps) {
                             console.log('✅ Close animation completed (nav)');
                           }, 1000);
                         }}
-                        className={`block text-lg font-light transition-colors hover:text-primary nav-link-underline ${
+                        className={`block text-lg font-light transition-colors nav-link-underline ${
                           isActive(item.href)
                             ? 'text-primary'
-                            : 'text-foreground'
+                            : 'text-foreground hover:text-white'
                         }`}
                         data-testid={`menu-nav-${item.key}`}
                       >
@@ -450,7 +450,7 @@ export default function Layout({ children }: LayoutProps) {
                           console.log('✅ Close animation completed (footer)');
                         }, 1000);
                       }}
-                      className="block text-sm text-muted-foreground hover:text-primary transition-colors nav-link-underline-sm"
+                      className="block text-sm text-muted-foreground hover:text-white transition-colors nav-link-underline-sm"
                     >
                       {language === 'vi' ? 'Thông Tin Cookie' : 'Cookie Information'}
                     </Link>
@@ -471,7 +471,7 @@ export default function Layout({ children }: LayoutProps) {
                           console.log('✅ Close animation completed (footer)');
                         }, 1000);
                       }}
-                      className="block text-sm text-muted-foreground hover:text-primary transition-colors nav-link-underline-sm"
+                      className="block text-sm text-muted-foreground hover:text-white transition-colors nav-link-underline-sm"
                     >
                       {language === 'vi' ? 'Điều Khoản & Điều Kiện' : 'Terms & Conditions'}
                     </Link>
@@ -492,7 +492,7 @@ export default function Layout({ children }: LayoutProps) {
                           console.log('✅ Close animation completed (footer)');
                         }, 1000);
                       }}
-                      className="block text-sm text-muted-foreground hover:text-primary transition-colors nav-link-underline-sm"
+                      className="block text-sm text-muted-foreground hover:text-white transition-colors nav-link-underline-sm"
                     >
                       {language === 'vi' ? 'Chính Sách Bảo Mật' : 'Privacy Policy'}
                     </Link>
