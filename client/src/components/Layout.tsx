@@ -509,7 +509,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
       {/* Main Content - Adjusted for header and sidebar */}
-      <main className="ml-16 pb-20 md:pb-16 mb-8">{children}</main>
+      <main className="ml-16 pb-8 md:pb-6 mb-4">{children}</main>
 
       {/* Footer - Updated with dark design matching the provided image */}
       <footer className="ml-16 bg-black text-white pt-24 pb-8 border-t border-gray-800">
