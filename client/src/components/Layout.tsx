@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Menu, X, Globe, Search } from "lucide-react";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
-import backgroundImage from "@assets/bg.website.jpg";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -166,7 +165,7 @@ export default function Layout({ children }: LayoutProps) {
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat z-[-1]"
         style={{
-          backgroundImage: `url(${backgroundImage})`,
+          backgroundImage: `url('/bg.website.jpg')`,
           backgroundAttachment: 'fixed'
         }}
       >
