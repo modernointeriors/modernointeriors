@@ -14,6 +14,7 @@ Preferred communication style: Simple, everyday language.
 - **Styling**: Tailwind CSS with custom design system featuring dark theme, golden accent colors, and sophisticated typography (Inter, Playfair Display fonts)
 - **State Management**: TanStack Query for server state management and caching
 - **Form Handling**: React Hook Form with Zod validation for type-safe form processing
+- **Internationalization**: Comprehensive Vietnamese translation system with useLanguage hook
 - **Build Tool**: Vite for development and production builds
 
 ## Backend Architecture
@@ -41,6 +42,13 @@ The application manages four core entities:
 - Basic user system with username/password authentication
 - Role-based access control (admin role)
 - Session management for admin dashboard access
+
+## Multilingual Support
+- **Language Context**: React Context-based translation system supporting English and Vietnamese
+- **Comprehensive Coverage**: All pages, forms, navigation, and admin interface fully translated
+- **Dynamic Content**: Services and page content dynamically rendered based on language selection
+- **Translation Keys**: Structured translation system with organized namespacing (nav, hero, about, services, contact, admin)
+- **Language Switching**: Seamless language switching throughout the application
 
 # External Dependencies
 
