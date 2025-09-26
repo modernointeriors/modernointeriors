@@ -677,19 +677,17 @@ export default function Home() {
             {/* Expand/Collapse Button */}
             <button
               onClick={() => setContactFormExpanded(!contactFormExpanded)}
-              className="flex items-center gap-4 text-left group cursor-pointer"
+              className="w-full flex items-center justify-between py-6 px-8 border border-white/20 group hover:border-white/40 transition-all duration-300"
               data-testid="button-toggle-form"
             >
-              <div className="w-8 h-8 border border-white/30 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
-                <div className={`transition-transform duration-300 ${contactFormExpanded ? 'rotate-90' : 'rotate-0'}`}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </div>
-              <span className="text-xl font-light tracking-wide">
+              <span className="text-xl font-light tracking-widest uppercase">
                 {language === 'vi' ? 'GỬI YÊU CẦU' : 'LEAVE A REQUEST'}
               </span>
+              <div className={`transition-transform duration-300 ${contactFormExpanded ? 'rotate-90' : 'rotate-0'}`}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </button>
           </div>
 
