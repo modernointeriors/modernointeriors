@@ -162,16 +162,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background relative">
       {/* Background Image */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-[-1]"
-        style={{
-          backgroundImage: `url('/bg.website.jpg')`,
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        {/* Overlay to maintain readability */}
-        <div className="absolute inset-0 bg-black/70"></div>
-      </div>
+      <div className="website-background"></div>
       {/* Top Header with Navigation */}
       <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
