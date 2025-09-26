@@ -99,6 +99,10 @@ const translations = {
     'about.executionDesc': 'From procurement to installation, we manage every detail to ensure flawless project delivery.',
     'about.finalStyling': 'Final Styling & Reveal',
     'about.stylingDesc': 'We add the finishing touches that transform your space into a masterpiece, ready for you to enjoy.',
+    'about.designImplementation': 'Design Implementation',
+    'about.implementationDesc': 'We coordinate with trusted contractors and artisans to bring every detail to life with precision.',
+    'about.finalStylingShort': 'Final Styling',
+    'about.stylingShortDesc': 'The finishing touches that transform your space into a perfectly curated environment.',
     
     // Services Page
     'services.title': 'Our Services',
@@ -115,6 +119,18 @@ const translations = {
     'services.contactUs': 'Contact Us Today',
     'services.ready': 'Ready to begin your design journey?',
     'services.readyDesc': 'Let\'s discuss your project and explore how we can bring your vision to life.',
+    
+    // Detailed Services
+    'services.residentialFeatures': 'Space Planning,Custom Furniture,Color Consultation,Project Management',
+    'services.commercialFeatures': 'Office Design,Retail Spaces,Hospitality Design,Brand Integration',
+    'services.architecturalFeatures': '3D Visualization,Technical Drawings,Building Permits,Construction Admin',
+    'services.consultationFeatures': 'Design Analysis,Budget Planning,Timeline Strategy,Style Direction',
+    'services.furnitureSelection': 'Furniture Selection',
+    'services.furnitureDesc': 'Curated furniture and decor selections that perfectly complement your design aesthetic.',
+    'services.furnitureFeatures': 'Custom Pieces,Vintage Sourcing,Art Curation,Accessory Selection',
+    'services.lightingDesign': 'Lighting Design',
+    'services.lightingDesc': 'Comprehensive lighting solutions that enhance ambiance and functionality throughout your space.',
+    'services.lightingFeatures': 'Ambient Lighting,Task Lighting,Accent Features,Smart Controls',
     
     // Contact Page
     'contact.title': 'Contact Us',
@@ -235,6 +251,10 @@ const translations = {
     'about.executionDesc': 'Từ mua sắm đến lắp đặt, chúng tôi quản lý mọi chi tiết để đảm bảo giao hàng dự án hoàn hảo.',
     'about.finalStyling': 'Trang Trí Cuối & Trình Bày',
     'about.stylingDesc': 'Chúng tôi thêm những nét hoàn thiện cuối cùng biến không gian của bạn thành kiệt tác, sẵn sàng để bạn thưởng thức.',
+    'about.designImplementation': 'Thực Hiện Thiết Kế',
+    'about.implementationDesc': 'Chúng tôi phối hợp với các nhà thầu và thợ thủ công đáng tin cậy để hiện thực từng chi tiết với độ chính xác cao.',
+    'about.finalStylingShort': 'Trang Trí Cuối',
+    'about.stylingShortDesc': 'Những nét hoàn thiện cuối cùng biến không gian của bạn thành môi trường được sắp xếp hoàn hảo.',
     
     // Services Page
     'services.title': 'Dịch Vụ Của Chúng Tôi',
@@ -251,6 +271,18 @@ const translations = {
     'services.contactUs': 'Liên Hệ Ngay Hôm Nay',
     'services.ready': 'Sẵn sàng bắt đầu hành trình thiết kế?',
     'services.readyDesc': 'Hãy thảo luận về dự án của bạn và khám phá cách chúng tôi có thể biến tầm nhìn của bạn thành hiện thực.',
+    
+    // Detailed Services
+    'services.residentialFeatures': 'Quy Hoạch Không Gian,Nội Thất Tùy Chỉnh,Tư Vấn Màu Sắc,Quản Lý Dự Án',
+    'services.commercialFeatures': 'Thiết Kế Văn Phòng,Không Gian Bán Lẻ,Thiết Kế Khách Sạn,Tích Hợp Thương Hiệu',
+    'services.architecturalFeatures': 'Hình Ảnh 3D,Bản Vẽ Kỹ Thuật,Giấy Phép Xây Dựng,Quản Lý Tô Thầu',
+    'services.consultationFeatures': 'Phân Tích Thiết Kế,Lên Kế Hoạch Ngân Sách,Chiến Lược Thời Gian,Hướng Dẫn Phong Cách',
+    'services.furnitureSelection': 'Lựa Chọn Nội Thất',
+    'services.furnitureDesc': 'Lựa chọn nội thất và đồ trang trí được tuyển chọn kỹ lưỡng, hoàn toàn phù hợp với thẩm mỹ thiết kế của bạn.',
+    'services.furnitureFeatures': 'Sản Phẩm Tùy Chỉnh,Tìm Kiếm Đồ Cổ,Tuyển Chọn Nghệ Thuật,Lựa Chọn Phụ Kiện',
+    'services.lightingDesign': 'Thiết Kế Ánh Sáng',
+    'services.lightingDesc': 'Giải pháp ánh sáng toàn diện tăng cường không khí và chức năng trong toàn bộ không gian của bạn.',
+    'services.lightingFeatures': 'Ánh Sáng Xâm Quanh,Ánh Sáng Công Việc,Đặc Tính Nhấn Mạnh,Điều Khiển Thông Minh',
     
     // Contact Page
     'contact.title': 'Liên Hệ',

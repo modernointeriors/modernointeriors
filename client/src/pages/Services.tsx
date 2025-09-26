@@ -4,63 +4,67 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, Building, Compass, Palette, Sofa, Lightbulb } from "lucide-react";
 import type { Service } from "@shared/schema";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const defaultServices = [
-  {
-    id: '1',
-    title: 'Residential Design',
-    description: 'Complete home transformations from concept to completion, creating personalized living spaces that reflect your lifestyle.',
-    icon: 'home',
-    features: ['Space Planning', 'Custom Furniture', 'Color Consultation', 'Project Management'],
-    order: 1,
-    active: true
-  },
-  {
-    id: '2',
-    title: 'Commercial Design',
-    description: 'Strategic workplace design that enhances productivity, brand identity, and employee wellbeing.',
-    icon: 'building',
-    features: ['Office Design', 'Retail Spaces', 'Hospitality Design', 'Brand Integration'],
-    order: 2,
-    active: true
-  },
-  {
-    id: '3',
-    title: 'Architectural Planning',
-    description: 'Comprehensive architectural services from initial concept through construction documentation.',
-    icon: 'compass',
-    features: ['3D Visualization', 'Technical Drawings', 'Building Permits', 'Construction Admin'],
-    order: 3,
-    active: true
-  },
-  {
-    id: '4',
-    title: 'Design Consultation',
-    description: 'Expert design guidance to help you make informed decisions for your space transformation.',
-    icon: 'palette',
-    features: ['Design Analysis', 'Budget Planning', 'Timeline Strategy', 'Style Direction'],
-    order: 4,
-    active: true
-  },
-  {
-    id: '5',
-    title: 'Furniture Selection',
-    description: 'Curated furniture and decor selections that perfectly complement your design aesthetic.',
-    icon: 'sofa',
-    features: ['Custom Pieces', 'Vintage Sourcing', 'Art Curation', 'Accessory Selection'],
-    order: 5,
-    active: true
-  },
-  {
-    id: '6',
-    title: 'Lighting Design',
-    description: 'Comprehensive lighting solutions that enhance ambiance and functionality throughout your space.',
-    icon: 'lightbulb',
-    features: ['Ambient Lighting', 'Task Lighting', 'Accent Features', 'Smart Controls'],
-    order: 6,
-    active: true
-  }
-];
+// Function to get default services with translations
+function getDefaultServices(t: (key: string) => string) {
+  return [
+    {
+      id: '1',
+      title: t('services.residential'),
+      description: t('services.residentialDesc'),
+      icon: 'home',
+      features: t('services.residentialFeatures').split(','),
+      order: 1,
+      active: true
+    },
+    {
+      id: '2',
+      title: t('services.commercial'),
+      description: t('services.commercialDesc'),
+      icon: 'building',
+      features: t('services.commercialFeatures').split(','),
+      order: 2,
+      active: true
+    },
+    {
+      id: '3',
+      title: t('services.architectural'),
+      description: t('services.architecturalDesc'),
+      icon: 'compass',
+      features: t('services.architecturalFeatures').split(','),
+      order: 3,
+      active: true
+    },
+    {
+      id: '4',
+      title: t('services.consultation'),
+      description: t('services.consultationDesc'),
+      icon: 'palette',
+      features: t('services.consultationFeatures').split(','),
+      order: 4,
+      active: true
+    },
+    {
+      id: '5',
+      title: t('services.furnitureSelection'),
+      description: t('services.furnitureDesc'),
+      icon: 'sofa',
+      features: t('services.furnitureFeatures').split(','),
+      order: 5,
+      active: true
+    },
+    {
+      id: '6',
+      title: t('services.lightingDesign'),
+      description: t('services.lightingDesc'),
+      icon: 'lightbulb',
+      features: t('services.lightingFeatures').split(','),
+      order: 6,
+      active: true
+    }
+  ];
+}
 
 const iconMap = {
   home: Home,
@@ -72,11 +76,13 @@ const iconMap = {
 };
 
 export default function Services() {
+  const { t } = useLanguage();
   const { data: services = [], isLoading } = useQuery<Service[]>({
     queryKey: ['/api/services'],
   });
 
-  // Use API services if available, otherwise fall back to default
+  // Use API services if available, otherwise fall back to translated default
+  const defaultServices = getDefaultServices(t);
   const displayServices = services.length > 0 ? services : defaultServices;
 
   return (
@@ -84,9 +90,9 @@ export default function Services() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-services">Design Excellence</h1>
+          <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-services">{t('services.title')}</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            From concept to completion, we offer comprehensive design services tailored to your unique vision and lifestyle.
+            {t('services.subtitle')}
           </p>
         </div>
 

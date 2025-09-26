@@ -371,9 +371,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Star className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Design Implementation</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.designImplementation')}</h3>
               <p className="text-muted-foreground text-sm">
-                We coordinate with trusted contractors and artisans to bring every detail to life with precision.
+                {t('about.implementationDesc')}
               </p>
             </div>
 
@@ -381,9 +381,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Calendar className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Final Styling</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.finalStylingShort')}</h3>
               <p className="text-muted-foreground text-sm">
-                The finishing touches that transform your space into a perfectly curated environment.
+                {t('about.stylingShortDesc')}
               </p>
             </div>
           </div>
