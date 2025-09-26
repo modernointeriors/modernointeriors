@@ -147,32 +147,6 @@ export default function Services() {
           </div>
         )}
 
-        {/* CTA Section */}
-        <section className="mt-24 bg-card rounded-2xl p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">
-            Ready to Begin Your Design Journey?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Let's discuss your project and create a space that perfectly reflects your vision and lifestyle.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg"
-              asChild
-              data-testid="button-get-quote"
-            >
-              <Link href="/contact">Get Free Quote</Link>
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              asChild
-              data-testid="button-view-portfolio"
-            >
-              <Link href="/portfolio">View Our Work</Link>
-            </Button>
-          </div>
-        </section>
       </div>
     </div>
   );
