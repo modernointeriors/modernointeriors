@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Lock, Eye, EyeOff } from 'lucide-react';
+import Layout from '@/components/Layout';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -62,83 +63,93 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-4 text-center">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-            <Lock className="w-6 h-6 text-primary-foreground" />
-          </div>
-          <div>
-            <CardTitle className="text-2xl font-light">MODERNO INTERIORS Admin</CardTitle>
-            <CardDescription>
-              Đăng nhập để truy cập bảng điều khiển quản trị
-            </CardDescription>
-          </div>
-        </CardHeader>
-        
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="username" data-testid="label-username">
-                Tên đăng nhập
-              </Label>
-              <Input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Nhập tên đăng nhập"
-                disabled={isLoading}
-                autoComplete="username"
-                data-testid="input-username"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password" data-testid="label-password">
-                Mật khẩu
-              </Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Nhập mật khẩu"
-                  disabled={isLoading}
-                  autoComplete="current-password"
-                  className="pr-10"
-                  data-testid="input-password"
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowPassword(!showPassword)}
-                  disabled={isLoading}
-                  data-testid="button-toggle-password"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
+    <Layout>
+      <div className="min-h-screen bg-black flex items-center justify-center py-24">
+        <div className="w-full max-w-md p-4">
+          <Card className="bg-black border border-white/10 shadow-2xl">
+            <CardHeader className="space-y-6 text-center">
+              <div className="mx-auto w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center">
+                <Lock className="w-8 h-8 text-black" />
               </div>
-            </div>
+              <div>
+                <CardTitle className="text-3xl font-light text-white tracking-wider mb-2">
+                  MODERNO INTERIORS
+                </CardTitle>
+                <CardTitle className="text-xl font-light text-yellow-500 mb-4">
+                  Admin Panel
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Đăng nhập để truy cập bảng điều khiển quản trị
+                </CardDescription>
+              </div>
+            </CardHeader>
             
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-              data-testid="button-login"
-            >
-              {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="username" className="text-white font-light" data-testid="label-username">
+                    Tên đăng nhập
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Nhập tên đăng nhập"
+                    disabled={isLoading}
+                    autoComplete="username"
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-yellow-500 focus-visible:ring-0"
+                    data-testid="input-username"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-white font-light" data-testid="label-password">
+                    Mật khẩu
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Nhập mật khẩu"
+                      disabled={isLoading}
+                      autoComplete="current-password"
+                      className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 pr-10 text-white placeholder-gray-400 focus:border-yellow-500 focus-visible:ring-0"
+                      data-testid="input-password"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400 hover:text-white"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                      data-testid="button-toggle-password"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                
+                <Button
+                  type="submit"
+                  className="w-full bg-yellow-500 text-black hover:bg-yellow-600 py-3 font-medium tracking-wide transition-all duration-300"
+                  disabled={isLoading}
+                  data-testid="button-login"
+                >
+                  {isLoading ? "ĐANG ĐĂNG NHẬP..." : "ĐĂNG NHẬP"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </Layout>
   );
 }
