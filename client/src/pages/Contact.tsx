@@ -6,8 +6,10 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { insertInquirySchema, type InsertInquiry } from "@shared/schema";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Contact() {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,16 +25,16 @@ export default function Contact() {
     },
     onSuccess: () => {
       toast({
-        title: "Request Sent Successfully",
-        description: "We'll get back to you within 24 hours."
+        title: t('contact.form.success'),
+        description: t('contact.form.successDesc')
       });
       setFormData({ name: '', email: '', phone: '', address: '', requirements: '' });
       queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to send request. Please try again.",
+        title: t('contact.form.error'),
+        description: t('contact.form.errorDesc'),
         variant: "destructive"
       });
     }
@@ -43,8 +45,8 @@ export default function Contact() {
     
     if (!formData.name || !formData.email || !formData.phone) {
       toast({
-        title: "Required Fields",
-        description: "Please fill in name, email, and phone fields.",
+        title: t('contact.form.error'),
+        description: t('contact.form.required'),
         variant: "destructive"
       });
       return;
@@ -69,10 +71,10 @@ export default function Contact() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
             <h1 className="text-3xl md:text-5xl font-light mb-4" data-testid="heading-questions">
-              HAVE ANY QUESTIONS?
+              {t('contact.title')}
             </h1>
             <p className="text-lg text-gray-400 mb-6" data-testid="text-consultation">
-              Leave a request for a free consultation
+              {t('contact.subtitle')}
             </p>
           </div>
 
@@ -83,7 +85,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="text"
-                    placeholder="Name"
+                    placeholder={t('contact.form.name')}
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -93,7 +95,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="email"
-                    placeholder="E-mail"
+                    placeholder={t('contact.form.email')}
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -107,7 +109,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="tel"
-                    placeholder="Phone"
+                    placeholder={t('contact.form.phone')}
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -117,7 +119,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="text"
-                    placeholder="Address"
+                    placeholder={t('contact.form.address')}
                     value={formData.address}
                     onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -129,7 +131,7 @@ export default function Contact() {
               {/* Third row - Requirements */}
               <div>
                 <Textarea
-                  placeholder="Requirements / Project Description"
+                  placeholder={t('contact.form.requirements')}
                   value={formData.requirements}
                   onChange={(e) => setFormData(prev => ({ ...prev, requirements: e.target.value }))}
                   className="bg-transparent border border-gray-600 rounded-none px-4 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
@@ -146,7 +148,7 @@ export default function Contact() {
                   className="bg-transparent border border-white text-white hover:bg-white hover:text-black hover:scale-105 px-8 py-3 font-medium tracking-wide transition-all duration-300 ease-in-out"
                   data-testid="button-leave-request"
                 >
-                  {mutation.isPending ? 'SENDING...' : 'LEAVE A REQUEST'}
+                  {mutation.isPending ? t('contact.form.sending') : t('contact.form.submit')}
                 </Button>
               </div>
             </div>
