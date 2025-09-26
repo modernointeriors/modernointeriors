@@ -299,7 +299,7 @@ export default function Blog() {
               key={category.value}
               variant="outline"
               onClick={() => setActiveCategory(category.value)}
-              className={`px-6 py-3 font-light border-white text-white hover:bg-white hover:text-black transition-all duration-200 ${
+              className={`px-6 py-3 font-light border-white text-white hover:bg-white hover:text-black transition-all duration-200 rounded-none ${
                 activeCategory === category.value 
                   ? 'bg-primary border-primary text-black hover:bg-primary hover:text-black' 
                   : 'bg-transparent'
