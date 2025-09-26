@@ -793,7 +793,7 @@ export default function Home() {
                 <Button
                   type="submit"
                   disabled={mutation.isPending}
-                  className="bg-transparent border border-white/30 text-white hover:border-white hover:bg-white/10 px-8 py-3 font-light tracking-widest uppercase transition-all duration-300 ease-in-out"
+                  className="bg-transparent border border-white/30 text-white hover:border-white hover:bg-white/10 px-8 py-3 font-light tracking-widest uppercase transition-all duration-300 ease-in-out rounded-none"
                   data-testid="button-leave-request"
                 >
                   {mutation.isPending 
