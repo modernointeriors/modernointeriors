@@ -8,21 +8,27 @@ import { useToast } from "@/hooks/use-toast";
 import { LogOut, User, BarChart3, Briefcase, Users, Mail, Newspaper, Edit3, Home } from "lucide-react";
 import AdminDashboard from "@/components/AdminDashboard";
 import Layout from "@/components/Layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const tabs = [
-  { id: 'overview', label: 'Overview', icon: BarChart3 },
-  { id: 'projects', label: 'Projects', icon: Briefcase },
-  { id: 'clients', label: 'CRM', icon: Users },
-  { id: 'inquiries', label: 'Inquiries', icon: Mail },
-  { id: 'articles', label: 'Articles', icon: Newspaper },
-  { id: 'content', label: 'Content', icon: Edit3 }
-];
+function getTabs(t: (key: string) => string) {
+  return [
+    { id: 'overview', label: t('admin.overview'), icon: BarChart3 },
+    { id: 'projects', label: t('admin.projects'), icon: Briefcase },
+    { id: 'clients', label: t('admin.crm'), icon: Users },
+    { id: 'inquiries', label: t('admin.inquiries'), icon: Mail },
+    { id: 'articles', label: t('admin.articles'), icon: Newspaper },
+    { id: 'content', label: t('admin.content'), icon: Edit3 }
+  ];
+}
 
 export default function Admin() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('overview');
   const [, navigate] = useLocation();
   const { user, logout } = useAuth();
   const { toast } = useToast();
+  
+  const tabs = getTabs(t);
 
   const handleLogout = () => {
     logout();
@@ -50,11 +56,11 @@ export default function Admin() {
                         <Home className="w-5 h-5 text-white" />
                       </div>
                       <h1 className="text-4xl font-light text-white tracking-wider" data-testid="heading-admin">
-                        ADMIN DASHBOARD
+                        {t('admin.dashboard').toUpperCase()}
                       </h1>
                     </div>
                     <p className="text-gray-400 font-light tracking-wide">
-                      Manage your projects, clients, and website content
+                      {t('admin.manage')}
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
@@ -70,10 +76,10 @@ export default function Admin() {
                       data-testid="button-logout"
                     >
                       <LogOut className="h-4 w-4 mr-2" />
-                      Đăng xuất
+                      {t('admin.logout')}
                     </Button>
                     <div className="px-3 py-1 bg-white/10 border border-white/20 rounded-md backdrop-blur-sm">
-                      <span className="text-xs text-white/80 font-light tracking-wide">Admin Access</span>
+                      <span className="text-xs text-white/80 font-light tracking-wide">{t('admin.access')}</span>
                     </div>
                   </div>
                 </div>

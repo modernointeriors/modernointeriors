@@ -85,9 +85,6 @@ const translations = {
     'about.personalDesc': 'We collaborate closely with clients to ensure each design reflects their unique personality and lifestyle.',
     'about.meetTeam': 'Meet Our Team',
     'about.teamDescription': 'Our talented team of designers, architects, and project managers brings decades of combined experience.',
-    'about.specialties': 'Specialties',
-    'about.experience': 'Experience',
-    'about.education': 'Education',
     'about.recentAwards': 'Recent Awards',
     'about.ourApproach': 'Our Approach',
     'about.approachSubtitle': 'Every project is unique, and our process is tailored to bring your vision to life with precision and care.',
@@ -163,6 +160,11 @@ const translations = {
     'admin.services': 'Services',
     'admin.clients': 'Clients',
     'admin.inquiries': 'Inquiries',
+    'admin.overview': 'Overview',
+    'admin.crm': 'CRM',
+    'admin.content': 'Content',
+    'admin.manage': 'Manage your projects, clients, and website content',
+    'admin.access': 'Admin Access',
   },
   vi: {
     // Navigation
@@ -237,9 +239,6 @@ const translations = {
     'about.personalDesc': 'Chúng tôi hợp tác chặt chẽ với khách hàng để đảm bảo mỗi thiết kế phản ánh cá tính và lối sống độc đáo của họ.',
     'about.meetTeam': 'Gặp Gỡ Đội Ngũ ',
     'about.teamDescription': 'Đội ngũ tài năng gồm các nhà thiết kế, kiến trúc sư và quản lý dự án mang lại hàng thập kỷ kinh nghiệm kết hợp.',
-    'about.specialties': 'Chuyên Môn',
-    'about.experience': 'Kinh Nghiệm',
-    'about.education': 'Học Vấn',
     'about.recentAwards': 'Giải Thưởng Gần Đây',
     'about.ourApproach': 'Phương Pháp Của Chúng Tôi',
     'about.approachSubtitle': 'Mỗi dự án đều độc đáo, và quy trình của chúng tôi được tùy chỉnh để biến tầm nhìn của bạn thành hiện thực với sự chính xác và chăm sóc.',
@@ -315,6 +314,11 @@ const translations = {
     'admin.services': 'Dịch Vụ',
     'admin.clients': 'Khách Hàng',
     'admin.inquiries': 'Yêu Cầu',
+    'admin.overview': 'Tổng Quan',
+    'admin.crm': 'CRM',
+    'admin.content': 'Nội Dung',
+    'admin.manage': 'Quản lý dự án, khách hàng và nội dung website của bạn',
+    'admin.access': 'Quyền Quản Trị',
   }
 };
 
