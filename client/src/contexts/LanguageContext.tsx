@@ -25,7 +25,7 @@ const translations = {
     'nav.admin': 'Admin',
     
     // Hero Section
-    'hero.studio': 'MODERNO INTERIORS DESIGN',
+    'hero.studio': 'Moderno Interiors Design',
     'hero.tagline': 'From concept to realization — creating structures that inspire and endure.',
     'hero.architecture': 'Architecture',
     'hero.interior': 'Interior Design',
@@ -63,7 +63,7 @@ const translations = {
     'nav.admin': 'Quản trị',
     
     // Hero Section
-    'hero.studio': 'MODERNO INTERIORS DESIGN',
+    'hero.studio': 'Moderno Interiors Design',
     'hero.tagline': 'Từ ý tưởng đến hiện thực — tạo nên những công trình truyền cảm hứng và bền vững.',
     'hero.architecture': 'Kiến trúc',
     'hero.interior': 'Thiết kế nội thất',

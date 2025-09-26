@@ -23,8 +23,8 @@ export default function ProjectDetail() {
   // Set SEO meta tags when project data is loaded
   useEffect(() => {
     if (project) {
-      const title = project.metaTitle || `${project.title} | MODERNO INTERIORS Design Studio`;
-      const description = project.metaDescription || project.detailedDescription || project.description || `Interior design project by MODERNO INTERIORS Design Studio`;
+      const title = project.metaTitle || `${project.title} | Moderno Interiors Design Studio`;
+      const description = project.metaDescription || project.detailedDescription || project.description || `Interior design project by Moderno Interiors Design Studio`;
       
       document.title = title;
       
@@ -59,7 +59,7 @@ export default function ProjectDetail() {
     
     // Cleanup function to reset title when component unmounts
     return () => {
-      document.title = 'MODERNO INTERIORS Design Studio';
+      document.title = 'Moderno Interiors Design Studio';
     };
   }, [project]);
 
