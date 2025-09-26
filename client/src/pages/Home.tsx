@@ -663,7 +663,7 @@ export default function Home() {
       </section>
 
       {/* Quick Contact Section */}
-      <section className="py-16 md:py-20 bg-black border-t border-white/10">
+      <section className="pt-16 md:pt-20 pb-2 bg-black border-t border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-6xl font-light mb-6" data-testid="heading-questions">
