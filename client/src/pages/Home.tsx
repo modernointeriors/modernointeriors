@@ -28,6 +28,7 @@ export default function Home() {
   const [step04Expanded, setStep04Expanded] = useState(false);
   const [step05Expanded, setStep05Expanded] = useState(false);
   const [contactFormExpanded, setContactFormExpanded] = useState(false);
+  const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
   
   // Quick contact form state (matching Contact page)
@@ -124,6 +125,18 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (processSectionHoverTimer) {
+        clearTimeout(processSectionHoverTimer);
+      }
+      if (autoCloseTimer) {
+        clearTimeout(autoCloseTimer);
+      }
+    };
+  }, [processSectionHoverTimer, autoCloseTimer]);
+
   // Handle Process Section auto-close functionality
   const handleProcessSectionMouseLeave = () => {
     const timer = setTimeout(() => {
@@ -141,6 +154,23 @@ export default function Home() {
     if (processSectionHoverTimer) {
       clearTimeout(processSectionHoverTimer);
       setProcessSectionHoverTimer(null);
+    }
+  };
+
+  // Auto-close handlers for Quick Contact section
+  const handleContactMouseEnter = () => {
+    if (autoCloseTimer) {
+      clearTimeout(autoCloseTimer);
+      setAutoCloseTimer(null);
+    }
+  };
+
+  const handleContactMouseLeave = () => {
+    if (contactFormExpanded) {
+      const timer = setTimeout(() => {
+        setContactFormExpanded(false);
+      }, 4000); // 4 seconds - between 3-5s as requested
+      setAutoCloseTimer(timer);
     }
   };
 
@@ -665,7 +695,11 @@ export default function Home() {
 
       {/* Quick Contact Section */}
       <section className="py-24 bg-black border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div 
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          onMouseEnter={handleContactMouseEnter}
+          onMouseLeave={handleContactMouseLeave}
+        >
           <div className="mb-8">
             <h1 className="text-3xl md:text-5xl font-light mb-6" data-testid="heading-questions">
               {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
