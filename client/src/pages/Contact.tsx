@@ -65,21 +65,21 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Request Section */}
-      <section className="pt-32 pb-2">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-6xl font-light mb-6" data-testid="heading-questions">
+      <section className="pt-40 pb-2">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl md:text-5xl font-light mb-4" data-testid="heading-questions">
               HAVE ANY QUESTIONS?
             </h1>
-            <p className="text-xl text-gray-400 mb-8" data-testid="text-consultation">
+            <p className="text-lg text-gray-400 mb-6" data-testid="text-consultation">
               Leave a request for a free consultation
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="space-y-6">
+          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+            <div className="space-y-4">
               {/* First row - Name and Email */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Input
                     type="text"
@@ -103,7 +103,7 @@ export default function Contact() {
               </div>
               
               {/* Second row - Phone and Address */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Input
                     type="tel"
