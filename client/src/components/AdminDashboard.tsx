@@ -1529,7 +1529,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <FormItem>
                         <FormLabel>Excerpt</FormLabel>
                         <FormControl>
-                          <Textarea {...field} rows={3} data-testid="textarea-article-excerpt" />
+                          <Textarea {...field} value={field.value || ''} rows={3} data-testid="textarea-article-excerpt" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -1649,7 +1649,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>Featured Image</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-article-featured-image" placeholder="Image URL" />
+                            <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="Image URL" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1668,7 +1668,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormItem>
                             <FormLabel>Meta Title</FormLabel>
                             <FormControl>
-                              <Input {...field} data-testid="input-article-meta-title" placeholder="Custom SEO title (optional)" />
+                              <Input {...field} value={field.value || ''} data-testid="input-article-meta-title" placeholder="Custom SEO title (optional)" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1682,7 +1682,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormItem>
                             <FormLabel>Meta Description</FormLabel>
                             <FormControl>
-                              <Textarea {...field} rows={3} data-testid="textarea-article-meta-description" placeholder="Description for search engines (optional)" />
+                              <Textarea {...field} value={field.value || ''} rows={3} data-testid="textarea-article-meta-description" placeholder="Description for search engines (optional)" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1696,7 +1696,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormItem>
                             <FormLabel>Meta Keywords</FormLabel>
                             <FormControl>
-                              <Input {...field} data-testid="input-article-meta-keywords" placeholder="Comma-separated keywords (optional)" />
+                              <Input {...field} value={field.value || ''} data-testid="input-article-meta-keywords" placeholder="Comma-separated keywords (optional)" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
