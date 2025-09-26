@@ -665,23 +665,12 @@ export default function Home() {
       {/* Quick Contact Section */}
       <section className="pt-48 md:pt-60 pb-24 bg-black border-t border-white/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8">
-              <span className="text-xs font-light text-white/70 tracking-widest uppercase">
-                {language === 'vi' ? 'HÀNH TRÌNH TỚI KHÔNG GIAN MƠ ƯỚC CỦA BẠN' : 'THE JOURNEY TO YOUR DREAM SPACE'}
-              </span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-light mb-6" data-testid="heading-journey">
-              {language === 'vi' 
-                ? 'TỪ Ý TƯỞNG ĐẾN HIỆN THỰC' 
-                : 'FROM CONCEPT TO REALITY'
-              }
+          <div className="mb-16">
+            <h1 className="text-3xl md:text-5xl font-light mb-6" data-testid="heading-questions">
+              {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
             </h1>
-            <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed" data-testid="text-process-description">
-              {language === 'vi' 
-                ? 'Chúng tôi đồng hành cùng bạn qua quy trình 5 bước hiệu quả, chuyên nghiệp và đầy cảm hứng để biến không gian mơ ước thành hiện thực.'
-                : 'We guide you through a streamlined, efficient, and inspiring 5-step process to transform your dream space into reality.'
-              }
+            <p className="text-lg text-gray-400 mb-12" data-testid="text-consultation">
+              {language === 'vi' ? 'Để lại yêu cầu tư vấn miễn phí' : 'Leave a request for a free consultation'}
             </p>
           </div>
 
