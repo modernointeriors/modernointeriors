@@ -13,7 +13,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const projectImage = Array.isArray(project.images) && project.images[0] || defaultImage;
 
   return (
-    <Card className="group overflow-hidden hover-scale project-hover">
+    <Card className="group overflow-hidden hover-scale project-hover h-[28rem] rounded-none">
       <Link href={`/project/${project.id}`}>
         <div className="relative">
           <OptimizedImage
@@ -21,7 +21,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             alt={project.title}
             width={600}
             height={192}
-            wrapperClassName="w-full h-48"
+            wrapperClassName="w-full h-full"
             className="w-full h-full group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             data-testid={`img-project-${project.id}`}

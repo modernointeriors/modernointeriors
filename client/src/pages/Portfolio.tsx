@@ -17,7 +17,7 @@ export default function Portfolio() {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const projectsPerPage = 9;
+  const projectsPerPage = 12;
 
   const { data: allProjects = [], isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects', activeCategory],
@@ -222,10 +222,10 @@ export default function Portfolio() {
 
         {/* Projects Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-white/10 h-64 rounded-lg mb-4" />
+                <div className="bg-white/10 h-[28rem] rounded-none mb-4" />
                 <div className="space-y-2">
                   <div className="h-4 bg-white/10 rounded w-3/4" />
                   <div className="h-3 bg-white/10 rounded w-1/2" />
@@ -248,7 +248,7 @@ export default function Portfolio() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {projects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
