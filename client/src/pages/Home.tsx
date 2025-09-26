@@ -315,14 +315,27 @@ export default function Home() {
                         </p>
                       </div>
                       
-                      {/* Bottom - Read More */}
-                      <div className="text-center">
-                        <div className="inline-block bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full">
-                          <span className="text-white text-sm font-light tracking-wide uppercase">
-                            {language === 'vi' ? 'ĐỌC THÊM' : 'READ MORE'}
-                          </span>
+                      {/* Bottom - Project Details */}
+                      {(project.area || project.duration) && (
+                        <div className="space-y-2">
+                          {project.area && (
+                            <div className="text-white/90">
+                              <span className="text-xs uppercase tracking-wide opacity-70">
+                                {language === 'vi' ? 'DIỆN TÍCH' : 'AREA'}
+                              </span>
+                              <p className="text-sm font-light">{project.area}</p>
+                            </div>
+                          )}
+                          {project.duration && (
+                            <div className="text-white/90">
+                              <span className="text-xs uppercase tracking-wide opacity-70">
+                                {language === 'vi' ? 'THỜI GIAN' : 'DURATION'}
+                              </span>
+                              <p className="text-sm font-light">{project.duration}</p>
+                            </div>
+                          )}
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 ))}
