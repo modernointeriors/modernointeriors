@@ -269,32 +269,23 @@ export default function Home() {
             <div className="overflow-x-auto">
               <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <Card key={i} className="overflow-hidden w-96 flex-shrink-0 rounded-none">
-                    <div className="animate-pulse bg-white/10 h-48 w-full" />
-                    <CardContent className="p-6">
-                      <div className="animate-pulse space-y-3">
-                        <div className="h-5 bg-white/10 rounded w-3/4" />
-                        <div className="h-3 bg-white/10 rounded w-1/2" />
-                        <div className="space-y-2">
-                          <div className="h-3 bg-white/10 rounded" />
-                          <div className="h-3 bg-white/10 rounded w-5/6" />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div key={i} className="group relative overflow-hidden cursor-pointer h-[28rem] w-96 flex-shrink-0 rounded-none">
+                    <div className="animate-pulse bg-white/10 h-full w-full" />
+                  </div>
                 ))}
               </div>
             </div>
           ) : (
             <>
-              {/* Featured Projects Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {featuredProjects?.slice(0, 4).map((project) => (
-                  <div 
-                    key={project.id} 
-                    className="group relative overflow-hidden cursor-pointer h-[28rem]"
-                    onClick={() => navigate(`/project/${project.id}`)}
-                  >
+              {/* Scrollable Projects Grid */}
+              <ScrollableContainer>
+                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
+                  {featuredProjects?.slice(0, 10).map((project) => (
+                    <div 
+                      key={project.id} 
+                      className="group relative overflow-hidden cursor-pointer h-[28rem] w-96 flex-shrink-0 rounded-none"
+                      onClick={() => navigate(`/project/${project.id}`)}
+                    >
                     <img 
                       src={Array.isArray(project.images) && project.images[0] || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
                       alt={project.title}
@@ -338,8 +329,9 @@ export default function Home() {
                       )}
                     </div>
                   </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </ScrollableContainer>
               
             </>
           )}
