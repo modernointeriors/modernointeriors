@@ -79,7 +79,7 @@ export default function ContactForm() {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First Name *</FormLabel>
+                <FormLabel>First Name</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -97,7 +97,7 @@ export default function ContactForm() {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last Name *</FormLabel>
+                <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -116,7 +116,7 @@ export default function ContactForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email Address *</FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <FormControl>
                 <Input 
                   {...field} 
@@ -154,7 +154,7 @@ export default function ContactForm() {
           name="projectType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Project Type *</FormLabel>
+              <FormLabel>Project Type</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger data-testid="select-project-type">
@@ -202,7 +202,7 @@ export default function ContactForm() {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Project Description *</FormLabel>
+              <FormLabel>Project Description</FormLabel>
               <FormControl>
                 <Textarea 
                   {...field}
