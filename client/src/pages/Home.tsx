@@ -677,7 +677,7 @@ export default function Home() {
             {/* Expand/Collapse Button */}
             <button
               onClick={() => setContactFormExpanded(!contactFormExpanded)}
-              className="w-full flex items-center justify-between py-6 px-8 border border-white/20 group hover:border-white/40 transition-all duration-300"
+              className="flex items-center gap-4 group transition-all duration-300"
               data-testid="button-toggle-form"
             >
               <span className="text-xl font-light tracking-widest uppercase">
