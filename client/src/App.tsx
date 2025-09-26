@@ -18,6 +18,9 @@ import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import Admin from "@/pages/Admin";
 import NotFound from "@/pages/not-found";
+import CookiePolicy from "@/pages/CookiePolicy";
+import TermsConditions from "@/pages/TermsConditions";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 function Router() {
   return (
@@ -35,6 +38,9 @@ function Router() {
             <Route path="/services" component={Services} />
             <Route path="/about" component={About} />
             <Route path="/contact" component={Contact} />
+            <Route path="/cookie-policy" component={CookiePolicy} />
+            <Route path="/terms-conditions" component={TermsConditions} />
+            <Route path="/privacy-policy" component={PrivacyPolicy} />
             <Route path="/admin">
               <ProtectedRoute>
                 <Admin />
