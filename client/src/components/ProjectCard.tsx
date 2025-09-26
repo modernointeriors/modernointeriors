@@ -1,7 +1,4 @@
 import { Link } from "wouter";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import OptimizedImage from "@/components/OptimizedImage";
 import type { Project } from "@shared/schema";
 
 interface ProjectCardProps {
@@ -13,52 +10,53 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const projectImage = Array.isArray(project.images) && project.images[0] || defaultImage;
 
   return (
-    <Card className="group overflow-hidden hover-scale project-hover h-[28rem] rounded-none">
+    <div 
+      className="group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none"
+    >
       <Link href={`/project/${project.id}`}>
-        <div className="relative">
-          <OptimizedImage
-            src={projectImage}
-            alt={project.title}
-            width={600}
-            height={192}
-            wrapperClassName="w-full h-full"
-            className="w-full h-full group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            data-testid={`img-project-${project.id}`}
-          />
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <img 
+          src={projectImage}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          data-testid={`img-project-${project.id}`}
+        />
+        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300" />
+        
+        {/* Content Overlay */}
+        <div className="absolute inset-0 p-6 flex flex-col justify-between">
+          {/* Top - Title */}
+          <div>
+            <h3 className="text-white text-xl font-light mb-2" data-testid={`text-title-${project.id}`}>
+              {project.title}
+            </h3>
+            <p className="text-white/80 text-sm uppercase tracking-wide" data-testid={`text-category-${project.id}`}>
+              {project.category}
+            </p>
+          </div>
+          
+          {/* Bottom - Project Details */}
+          {(project.area || project.duration) && (
+            <div className="flex justify-between items-end">
+              {project.duration && (
+                <div>
+                  <p className="text-white/80 text-xs uppercase tracking-wide mb-1">DURATION</p>
+                  <p className="text-white font-light" data-testid={`text-duration-${project.id}`}>
+                    {project.duration}
+                  </p>
+                </div>
+              )}
+              {project.area && (
+                <div className="text-right">
+                  <p className="text-white/80 text-xs uppercase tracking-wide mb-1">AREA</p>
+                  <p className="text-white font-light" data-testid={`text-area-${project.id}`}>
+                    {project.area}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </Link>
-      
-      <CardContent className="p-6">
-        <h3 className="text-xl font-sans font-light mb-2 line-clamp-1" data-testid={`text-title-${project.id}`}>
-          {project.title}
-        </h3>
-        <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${project.id}`}>
-          {project.category} • {project.location || 'Location TBD'}
-        </p>
-        {project.description && (
-          <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-description-${project.id}`}>
-            {project.description}
-          </p>
-        )}
-        {(project.area || project.duration) && (
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            {project.area && (
-              <div>
-                <h5 className="font-light mb-1">AREA</h5>
-                <p className="text-muted-foreground">{project.area}</p>
-              </div>
-            )}
-            {project.duration && (
-              <div>
-                <h5 className="font-light mb-1">DURATION</h5>
-                <p className="text-muted-foreground">{project.duration}</p>
-              </div>
-            )}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    </div>
   );
 }
