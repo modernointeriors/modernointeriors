@@ -376,7 +376,7 @@ export default function Home() {
             <div className="overflow-x-auto">
               <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <Card key={i} className="overflow-hidden h-[28rem] w-96 flex-shrink-0 rounded-none">
+                  <Card key={i} className="overflow-hidden h-[28rem] w-80 flex-shrink-0 rounded-none">
                     <div className="animate-pulse bg-white/10 h-48 w-full" />
                     <CardContent className="p-6">
                       <div className="animate-pulse space-y-3">
@@ -400,7 +400,7 @@ export default function Home() {
                   {featuredArticles?.slice(0, 10).map((article) => (
                     <Card 
                       key={article.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] w-96 flex-shrink-0 rounded-none"
+                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] w-80 flex-shrink-0 rounded-none"
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
