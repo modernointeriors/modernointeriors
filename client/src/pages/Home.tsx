@@ -287,53 +287,46 @@ export default function Home() {
             </div>
           ) : (
             <>
-              {/* Scrollable Projects Grid */}
-              <ScrollableContainer>
-                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                  {featuredProjects?.slice(0, 10).map((project) => (
-                    <Card 
-                      key={project.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer w-80 flex-shrink-0"
-                      onClick={() => navigate(`/project/${project.id}`)}
-                    >
-                      <div className="relative">
-                        <img 
-                          src={Array.isArray(project.images) && project.images[0] || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
-                          alt={project.title}
-                          className="w-full h-48 object-cover"
-                          data-testid={`img-project-${project.id}`}
-                        />
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              {/* Featured Projects Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {featuredProjects?.slice(0, 4).map((project) => (
+                  <div 
+                    key={project.id} 
+                    className="group relative overflow-hidden cursor-pointer h-80 rounded-lg"
+                    onClick={() => navigate(`/project/${project.id}`)}
+                  >
+                    <img 
+                      src={Array.isArray(project.images) && project.images[0] || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      data-testid={`img-project-${project.id}`}
+                    />
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300" />
+                    
+                    {/* Content Overlay */}
+                    <div className="absolute inset-0 p-6 flex flex-col justify-between">
+                      {/* Top - Title */}
+                      <div>
+                        <h3 className="text-white text-xl font-light mb-2" data-testid={`text-title-${project.id}`}>
+                          {project.title}
+                        </h3>
+                        <p className="text-white/80 text-sm uppercase tracking-wide" data-testid={`text-category-${project.id}`}>
+                          {project.category}
+                        </p>
                       </div>
-                      <CardContent className="p-6">
-                        <h3 className="text-xl font-sans font-light mb-2 line-clamp-1" data-testid={`text-title-${project.id}`}>{project.title}</h3>
-                        <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${project.id}`}>
-                          {project.category} • {project.location}
-                        </p>
-                        <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-description-${project.id}`}>
-                          {project.description}
-                        </p>
-                        {(project.area || project.duration) && (
-                          <div className="grid grid-cols-2 gap-3 text-xs">
-                            {project.area && (
-                              <div>
-                                <h5 className="font-light mb-1">Area</h5>
-                                <p className="text-muted-foreground">{project.area}</p>
-                              </div>
-                            )}
-                            {project.duration && (
-                              <div>
-                                <h5 className="font-light mb-1">Duration</h5>
-                                <p className="text-muted-foreground">{project.duration}</p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </ScrollableContainer>
+                      
+                      {/* Bottom - Read More */}
+                      <div className="text-center">
+                        <div className="inline-block bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full">
+                          <span className="text-white text-sm font-light tracking-wide uppercase">
+                            {language === 'vi' ? 'ĐỌC THÊM' : 'READ MORE'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               
             </>
           )}
