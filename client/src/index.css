@@ -81,6 +81,18 @@
     @apply border-border;
   }
 
+  /* Remove browser dev tools outline and unwanted borders */
+  * {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove focus outlines specifically */
+  *:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
   /* Prevent scrollbar jumping and layout shift */
   html {
     scrollbar-gutter: stable;
