@@ -224,7 +224,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     resolver: zodResolver(homepageContentSchema),
     defaultValues: {
       language: language,
-      heroTitle: "MODERNO INTERIORS",
+      heroTitle: "Moderno Interiors",
       heroStudio: "STUDIO",
       heroTagline: "",
       heroArchitectureLabel: "",
@@ -1452,7 +1452,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Site Title</label>
                 <Input 
-                  defaultValue="MODERNO INTERIORS - Interior Design" 
+                  defaultValue="Moderno Interiors - Interior Design" 
                   data-testid="input-site-title"
                 />
               </div>

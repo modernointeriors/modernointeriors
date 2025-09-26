@@ -217,7 +217,7 @@ export default function Home() {
             <div className="mb-8">
               <img 
                 src="/attached_assets/logo.white.png" 
-                alt="MODERNO INTERIORS" 
+                alt="Moderno Interiors" 
                 className="h-24 md:h-32 w-auto mx-auto"
               />
             </div>

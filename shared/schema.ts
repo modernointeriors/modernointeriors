@@ -109,8 +109,8 @@ export const homepageContent = pgTable("homepage_content", {
   language: varchar("language", { length: 5 }).notNull().default("en"), // en, vi
   // Hero Section
   heroBackgroundImage: text("hero_background_image"),
-  heroTitle: text("hero_title").notNull().default("MODERNO INTERIORS"),
-  heroStudio: text("hero_studio").notNull().default("STUDIO"),
+  heroTitle: text("hero_title").notNull().default("Moderno Interiors"),
+  heroStudio: text("hero_studio").notNull().default("Design"),
   heroTagline: text("hero_tagline"),
   heroArchitectureLabel: text("hero_architecture_label"),
   heroInteriorLabel: text("hero_interior_label"),

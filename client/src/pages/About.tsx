@@ -13,7 +13,7 @@ const teamMembers = [
     name: 'Michael Chen',
     role: 'Principal Designer & Founder',
     bio: '15+ years creating luxury residential spaces with international recognition.',
-    fullBio: 'Michael founded MODERNO INTERIORS in 2015 with a vision to transform how people experience interior spaces. His work has been featured in Architectural Digest, Elle Decor, and House Beautiful. He holds a Master\'s in Interior Architecture from Parsons and has won numerous international design awards.',
+    fullBio: 'Michael founded Moderno Interiors in 2015 with a vision to transform how people experience interior spaces. His work has been featured in Architectural Digest, Elle Decor, and House Beautiful. He holds a Master\'s in Interior Architecture from Parsons and has won numerous international design awards.',
     specialties: ['Luxury Residential', 'Hotel Design', 'Color Theory'],
     experience: '15+ years',
     education: 'M.A. Interior Architecture, Parsons',
@@ -43,7 +43,7 @@ const teamMembers = [
     name: 'David Rodriguez',
     role: 'Senior Project Manager',
     bio: 'Commercial design specialist ensuring seamless project execution and client satisfaction.',
-    fullBio: 'David oversees all project timelines and client relationships, ensuring every MODERNO INTERIORS project is delivered on time and exceeds expectations. His background in project management and client services makes him an invaluable part of our team, coordinating between designers, contractors, and clients.',
+    fullBio: 'David oversees all project timelines and client relationships, ensuring every Moderno Interiors project is delivered on time and exceeds expectations. His background in project management and client services makes him an invaluable part of our team, coordinating between designers, contractors, and clients.',
     specialties: ['Project Management', 'Client Relations', 'Quality Control'],
     experience: '10+ years',
     education: 'MBA Business Management, UCLA',
@@ -108,7 +108,7 @@ export default function About() {
             <h2 className="text-3xl md:text-4xl font-sans font-light mb-8">Our Story</h2>
             <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p>
-                Founded in 2015, MODERNO INTERIORS has established itself as a premier interior design studio, 
+                Founded in 2015, Moderno Interiors has established itself as a premier interior design studio, 
                 creating extraordinary spaces that seamlessly blend functionality with artistic vision. 
                 Our award-winning team specializes in luxury residential and commercial projects worldwide.
               </p>
@@ -146,7 +146,7 @@ export default function About() {
           <div className="relative">
             <OptimizedImage
               src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-              alt="MODERNO INTERIORS design team collaborating in modern studio"
+              alt="Moderno Interiors design team collaborating in modern studio"
               width={800}
               height={600}
               wrapperClassName="w-full"
