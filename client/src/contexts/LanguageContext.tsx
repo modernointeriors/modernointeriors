@@ -38,6 +38,14 @@ const translations = {
     'common.collaborate': 'Let\'s collaborate to create an extraordinary environment that reflects your vision and elevates your lifestyle.',
     'common.startYourProject': 'Start Your Project',
     'common.viewPortfolio': 'View Portfolio',
+    'common.viewMoreProjects': 'View More Projects',
+    'common.viewMoreNews': 'View More News',
+    
+    // Featured sections
+    'featured.projectsTitle': 'Featured Projects',
+    'featured.projectsDesc': 'Discover our latest projects where innovation meets elegance.',
+    'featured.newsTitle': 'Featured News',
+    'featured.newsDesc': 'Discover the latest design trends and expert insights from our professional team.',
     
     // Featured Projects
     'featured.badge': 'Featured Project',
@@ -192,6 +200,14 @@ const translations = {
     'common.collaborate': 'Hãy cùng chúng tôi tạo nên một môi trường đặc biệt phản ánh tầm nhìn và nâng cao phong cách sống của bạn.',
     'common.startYourProject': 'Bắt Đầu Dự Án',
     'common.viewPortfolio': 'Xem Danh Mục',
+    'common.viewMoreProjects': 'Xem Thêm Dự Án',
+    'common.viewMoreNews': 'Xem Thêm Tin Tức',
+    
+    // Featured sections
+    'featured.projectsTitle': 'Dự Án Nổi Bật',
+    'featured.projectsDesc': 'Khám phá những dự án mới nhất nơi sự sáng tạo gặp gỡ vẻ đẹp tinh tế.',
+    'featured.newsTitle': 'Tin Tức Nổi Bật',
+    'featured.newsDesc': 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.',
     
     // Featured Projects
     'featured.badge': 'Dự Án Nổi Bật',

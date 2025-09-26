@@ -17,7 +17,7 @@ import type { Project, HomepageContent, Article } from "@shared/schema";
 
 export default function Home() {
   const [, navigate] = useLocation();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -240,13 +240,13 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
-                {homepageContent?.featuredBadge || 'Featured Projects'}
+                {homepageContent?.featuredBadge || t('featured.projectsTitle')}
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
                 <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
-                  {homepageContent?.featuredDescription || 'Discover our latest projects where innovation meets elegance.'}
+                  {homepageContent?.featuredDescription || t('featured.projectsDesc')}
                 </p>
               </div>
               <div className="flex-shrink-0 ml-8">
@@ -258,7 +258,7 @@ export default function Home() {
                   data-testid="button-view-more-projects"
                 >
                   <Link href="/portfolio">
-                    View More Projects <ArrowRight className="ml-2 h-4 w-4" />
+                    {t('common.viewMoreProjects')} <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </div>
@@ -344,15 +344,13 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
-                {language === 'vi' ? 'Tin tức nổi bật' : 'Featured News'}
+                {t('featured.newsTitle')}
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
                 <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
-                  {language === 'vi' 
-                    ? 'Khám phá những xu hướng thiết kế mới nhất và các bài viết chuyên sâu từ đội ngũ chuyên gia của chúng tôi.'
-                    : 'Discover the latest design trends and expert insights from our professional team.'}
+                  {t('featured.newsDesc')}
                 </p>
               </div>
               <div className="flex-shrink-0 ml-8">
@@ -364,7 +362,7 @@ export default function Home() {
                   data-testid="button-view-more-news"
                 >
                   <Link href="/blog">
-                    {language === 'vi' ? 'Xem thêm tin tức' : 'View More News'} 
+                    {t('common.viewMoreNews')} 
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
