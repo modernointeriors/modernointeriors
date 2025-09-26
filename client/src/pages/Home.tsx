@@ -757,11 +757,11 @@ export default function Home() {
               </div>
               
               {/* Submit button */}
-              <div className="flex justify-center pt-6">
+              <div className="flex justify-start pt-6">
                 <Button
                   type="submit"
                   disabled={mutation.isPending}
-                  className="bg-white text-black hover:bg-gray-100 hover:scale-105 hover:shadow-lg px-8 py-3 font-medium tracking-wide transition-all duration-300 ease-in-out"
+                  className="bg-transparent border border-white/30 text-white hover:border-white hover:bg-white/10 px-8 py-3 font-light tracking-widest uppercase transition-all duration-300 ease-in-out"
                   data-testid="button-leave-request"
                 >
                   {mutation.isPending 
