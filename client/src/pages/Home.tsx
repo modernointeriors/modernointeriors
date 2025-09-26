@@ -292,7 +292,7 @@ export default function Home() {
                 {featuredProjects?.slice(0, 4).map((project) => (
                   <div 
                     key={project.id} 
-                    className="group relative overflow-hidden cursor-pointer h-80 rounded-lg"
+                    className="group relative overflow-hidden cursor-pointer h-96"
                     onClick={() => navigate(`/project/${project.id}`)}
                   >
                     <img 
