@@ -317,21 +317,21 @@ export default function Home() {
                       
                       {/* Bottom - Project Details */}
                       {(project.area || project.duration) && (
-                        <div className="space-y-2">
-                          {project.area && (
-                            <div className="text-white/90">
-                              <span className="text-xs uppercase tracking-wide opacity-70">
-                                {language === 'vi' ? 'DIỆN TÍCH' : 'AREA'}
-                              </span>
-                              <p className="text-sm font-light">{project.area}</p>
-                            </div>
-                          )}
+                        <div className="flex justify-between items-end">
                           {project.duration && (
                             <div className="text-white/90">
                               <span className="text-xs uppercase tracking-wide opacity-70">
                                 {language === 'vi' ? 'THỜI GIAN' : 'DURATION'}
                               </span>
                               <p className="text-sm font-light">{project.duration}</p>
+                            </div>
+                          )}
+                          {project.area && (
+                            <div className="text-white/90 text-right">
+                              <span className="text-xs uppercase tracking-wide opacity-70">
+                                {language === 'vi' ? 'DIỆN TÍCH' : 'AREA'}
+                              </span>
+                              <p className="text-sm font-light">{project.area}</p>
                             </div>
                           )}
                         </div>
