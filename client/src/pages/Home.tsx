@@ -739,13 +739,12 @@ export default function Home() {
               <Button
                 type="submit"
                 disabled={quickContactMutation.isPending}
-                className="bg-primary text-black hover:bg-primary/90 hover:scale-105 hover:shadow-lg px-12 py-4 text-lg font-medium tracking-wide transition-all duration-300 ease-in-out flex items-center gap-3"
+                className="bg-white text-black hover:bg-white/90 disabled:bg-white/70 disabled:text-black/50 px-8 py-3 text-sm font-medium tracking-wider rounded-lg transition-all duration-200 ease-in-out"
                 data-testid="button-quick-contact-submit"
               >
-                <Send className="w-5 h-5" />
                 {quickContactMutation.isPending 
                   ? (language === 'vi' ? 'ĐANG GỬI...' : 'SENDING...') 
-                  : (language === 'vi' ? 'GỬI LIÊN HỆ' : 'SEND MESSAGE')
+                  : (language === 'vi' ? 'GỬI YÊU CẦU' : 'LEAVE A REQUEST')
                 }
               </Button>
             </div>
