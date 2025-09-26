@@ -736,7 +736,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="text"
-                    placeholder={language === 'vi' ? 'Họ và tên *' : 'Name *'}
+                    placeholder={language === 'vi' ? 'Họ và tên' : 'Name'}
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -746,7 +746,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="email"
-                    placeholder={language === 'vi' ? 'E-mail *' : 'E-mail *'}
+                    placeholder={language === 'vi' ? 'E-mail' : 'E-mail'}
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -760,7 +760,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="tel"
-                    placeholder={language === 'vi' ? 'Điện thoại *' : 'Phone *'}
+                    placeholder={language === 'vi' ? 'Điện thoại' : 'Phone'}
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
