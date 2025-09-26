@@ -533,7 +533,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     {statsLoading ? "..." : stats?.totalProjects || 0}
                   </p>
                 </div>
-                <Briefcase className="h-8 w-8 text-primary" />
+                <Briefcase className="h-8 w-8 text-white/70" />
               </div>
             </CardContent>
           </Card>
@@ -547,7 +547,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     {statsLoading ? "..." : stats?.activeClients || 0}
                   </p>
                 </div>
-                <Users className="h-8 w-8 text-primary" />
+                <Users className="h-8 w-8 text-white/70" />
               </div>
             </CardContent>
           </Card>
@@ -561,7 +561,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     {statsLoading ? "..." : stats?.newInquiries || 0}
                   </p>
                 </div>
-                <Mail className="h-8 w-8 text-primary" />
+                <Mail className="h-8 w-8 text-white/70" />
               </div>
             </CardContent>
           </Card>
@@ -575,7 +575,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     {statsLoading ? "..." : stats?.revenue || "$0"}
                   </p>
                 </div>
-                <TrendingUp className="h-8 w-8 text-primary" />
+                <TrendingUp className="h-8 w-8 text-white/70" />
               </div>
             </CardContent>
           </Card>
@@ -590,7 +590,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             {inquiriesLoading ? (
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between py-3 border-b border-border animate-pulse">
+                  <div key={i} className="flex items-center justify-between py-3 border-b border-white/20 animate-pulse">
                     <div className="space-y-2">
                       <div className="h-4 bg-muted rounded w-64" />
                       <div className="h-3 bg-muted rounded w-32" />
@@ -604,7 +604,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             ) : (
               <div className="space-y-4">
                 {inquiries.slice(0, 5).map((inquiry) => (
-                  <div key={inquiry.id} className="flex items-center justify-between py-3 border-b border-border">
+                  <div key={inquiry.id} className="flex items-center justify-between py-3 border-b border-white/20">
                     <div>
                       <p className="font-light">
                         New inquiry from {inquiry.firstName} {inquiry.lastName}
@@ -925,7 +925,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                       : field.value.filter((id: string) => id !== project.id);
                                     field.onChange(newValue);
                                   }}
-                                  className="rounded border-border"
+                                  className="rounded border-white/20"
                                 />
                                 <label className="text-sm">{project.title}</label>
                               </div>
@@ -975,7 +975,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <input
                       type="checkbox"
                       {...projectForm.register("featured")}
-                      className="rounded border-border"
+                      className="rounded border-white/20"
                       data-testid="checkbox-project-featured"
                     />
                     <label className="text-sm font-light">Featured Project</label>
