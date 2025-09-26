@@ -381,36 +381,33 @@ export default function Home() {
           </div>
           
           {articlesLoading ? (
-            <div className="overflow-x-auto">
-              <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Card key={i} className="overflow-hidden w-96 flex-shrink-0 rounded-none">
-                    <div className="animate-pulse bg-white/10 h-48 w-full" />
-                    <CardContent className="p-6">
-                      <div className="animate-pulse space-y-3">
-                        <div className="h-5 bg-white/10 rounded w-3/4" />
-                        <div className="h-3 bg-white/10 rounded w-1/2" />
-                        <div className="space-y-2">
-                          <div className="h-3 bg-white/10 rounded" />
-                          <div className="h-3 bg-white/10 rounded w-5/6" />
-                        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i} className="overflow-hidden h-[28rem] rounded-none">
+                  <div className="animate-pulse bg-white/10 h-48 w-full" />
+                  <CardContent className="p-6">
+                    <div className="animate-pulse space-y-3">
+                      <div className="h-5 bg-white/10 rounded w-3/4" />
+                      <div className="h-3 bg-white/10 rounded w-1/2" />
+                      <div className="space-y-2">
+                        <div className="h-3 bg-white/10 rounded" />
+                        <div className="h-3 bg-white/10 rounded w-5/6" />
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           ) : (
             <>
-              {/* Scrollable Articles Grid */}
-              <ScrollableContainer>
-                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                  {featuredArticles?.slice(0, 10).map((article) => (
-                    <Card 
-                      key={article.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer w-96 flex-shrink-0 rounded-none"
-                      onClick={() => navigate(`/blog/${article.slug}`)}
-                    >
+              {/* Featured Articles Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {featuredArticles?.slice(0, 4).map((article) => (
+                  <Card 
+                    key={article.id} 
+                    className="group overflow-hidden hover-scale cursor-pointer h-[28rem] rounded-none"
+                    onClick={() => navigate(`/blog/${article.slug}`)}
+                  >
                       <div className="relative">
                         <img 
                           src={article.featuredImage || 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600'} 
@@ -439,9 +436,8 @@ export default function Home() {
                         </p>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
-              </ScrollableContainer>
+                ))}
+              </div>
               
             </>
           )}
