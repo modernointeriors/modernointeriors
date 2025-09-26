@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { useState } from "react";
 import { Mail, Phone, Linkedin, Award, Star, Users, Calendar } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const teamMembers = [
   {
@@ -88,6 +89,7 @@ const teamMembers = [
 
 export default function About() {
   const [selectedMember, setSelectedMember] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen pt-24">
@@ -95,50 +97,45 @@ export default function About() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="mb-6" data-testid="heading-about">
-            <h1 className="text-4xl md:text-6xl font-sans font-light">About Us</h1>
+            <h1 className="text-4xl md:text-6xl font-sans font-light">{t('about.title')}</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Where architectural vision meets interior perfection. We are a team of passionate designers creating extraordinary spaces worldwide.
+            {t('about.subtitle')}
           </p>
         </div>
 
         {/* Company Story */}
         <section id="story" className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
           <div>
-            <h2 className="text-3xl md:text-4xl font-sans font-light mb-8">Our Story</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-8">{t('about.ourStory')}</h2>
             <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p>
-                Founded in 2015, Moderno Interiors has established itself as a premier interior design studio, 
-                creating extraordinary spaces that seamlessly blend functionality with artistic vision. 
-                Our award-winning team specializes in luxury residential and commercial projects worldwide.
+                {t('about.storyParagraph1')}
               </p>
               <p>
-                We believe that exceptional design has the power to transform not just spaces, but lives. 
-                Our approach combines innovative thinking with timeless elegance, resulting in interiors 
-                that are both visually stunning and perfectly suited to our clients' lifestyles.
+                {t('about.storyParagraph2')}
               </p>
               <p>
-                Every project we undertake is a testament to our commitment to excellence, attention to detail, 
-                and dedication to creating environments that inspire and elevate the human experience.
+                {t('about.storyParagraph3')}
               </p>
             </div>
             
             <div className="grid grid-cols-2 gap-8 mt-8">
               <div className="text-center">
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-projects">150+</div>
-                <div className="text-sm text-muted-foreground">Projects Completed</div>
+                <div className="text-sm text-muted-foreground">{t('about.projectsCompleted')}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-awards">25+</div>
-                <div className="text-sm text-muted-foreground">Design Awards</div>
+                <div className="text-sm text-muted-foreground">{t('about.designAwards')}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-clients">200+</div>
-                <div className="text-sm text-muted-foreground">Happy Clients</div>
+                <div className="text-sm text-muted-foreground">{t('about.happyClients')}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-light text-primary mb-2" data-testid="stats-countries">12+</div>
-                <div className="text-sm text-muted-foreground">Countries</div>
+                <div className="text-sm text-muted-foreground">{t('about.countries')}</div>
               </div>
             </div>
           </div>
@@ -162,9 +159,9 @@ export default function About() {
         {/* Our Philosophy */}
         <section id="philosophy" className="bg-card rounded-2xl p-12 mb-24">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">Our Design Philosophy</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">{t('about.philosophyHeading')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              We believe in creating spaces that tell stories, evoke emotions, and enhance the way people live and work.
+              {t('about.philosophySubtitle')}
             </p>
           </div>
           
@@ -173,9 +170,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <div className="w-8 h-8 bg-primary rounded-full" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Timeless Elegance</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.timelessElegance')}</h3>
               <p className="text-muted-foreground">
-                We create designs that transcend trends, focusing on timeless beauty and sophisticated aesthetics.
+                {t('about.timelessDesc')}
               </p>
             </div>
             
@@ -183,9 +180,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <div className="w-8 h-8 bg-primary rounded-full" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Functional Beauty</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.functionalBeauty')}</h3>
               <p className="text-muted-foreground">
-                Every element serves a purpose while contributing to the overall aesthetic harmony of the space.
+                {t('about.functionalDesc')}
               </p>
             </div>
             
@@ -193,9 +190,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <div className="w-8 h-8 bg-primary rounded-full" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Personal Expression</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.personalExpression')}</h3>
               <p className="text-muted-foreground">
-                We collaborate closely with clients to ensure each design reflects their unique personality and lifestyle.
+                {t('about.personalDesc')}
               </p>
             </div>
           </div>
@@ -204,9 +201,9 @@ export default function About() {
         {/* Team Section */}
         <section id="team" className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">Meet Our Team</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">{t('about.meetTeam')}</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Our talented team of designers, architects, and project managers brings decades of combined experience.
+              {t('about.teamDescription')}
             </p>
           </div>
           
@@ -250,7 +247,7 @@ export default function About() {
                         <div>
                           <h4 className="font-light text-sm mb-2 flex items-center">
                             <Star className="w-4 h-4 mr-2 text-primary" />
-                            Specialties
+                            {t('about.specialties')}
                           </h4>
                           <div className="flex flex-wrap gap-1">
                             {member.specialties.map((specialty, index) => (
@@ -265,14 +262,14 @@ export default function About() {
                           <div>
                             <span className="font-light flex items-center mb-1">
                               <Calendar className="w-3 h-3 mr-1 text-primary" />
-                              Experience
+                              {t('about.experience')}
                             </span>
                             <span className="text-muted-foreground">{member.experience}</span>
                           </div>
                           <div>
                             <span className="font-light flex items-center mb-1">
                               <Award className="w-3 h-3 mr-1 text-primary" />
-                              Education
+                              {t('about.education')}
                             </span>
                             <span className="text-muted-foreground">{member.education}</span>
                           </div>
@@ -281,7 +278,7 @@ export default function About() {
                         <div>
                           <h4 className="font-light text-sm mb-2 flex items-center">
                             <Award className="w-4 h-4 mr-2 text-primary" />
-                            Recent Awards
+                            {t('about.recentAwards')}
                           </h4>
                           <ul className="text-xs text-muted-foreground space-y-1">
                             {member.awards.map((award, index) => (
@@ -343,9 +340,9 @@ export default function About() {
         {/* Our Approach Section */}
         <section id="approach" className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">Our Approach</h2>
+            <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">{t('about.ourApproach')}</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Every project is unique, and our process is tailored to bring your vision to life with precision and care.
+              {t('about.approachSubtitle')}
             </p>
           </div>
 
@@ -354,9 +351,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Users className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Discovery & Consultation</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.discoveryConsultation')}</h3>
               <p className="text-muted-foreground text-sm">
-                We begin by understanding your lifestyle, preferences, and functional needs through detailed consultations.
+                {t('about.discoveryDesc')}
               </p>
             </div>
 
@@ -364,9 +361,9 @@ export default function About() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Award className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-sans font-light mb-4">Concept Development</h3>
+              <h3 className="text-xl font-sans font-light mb-4">{t('about.conceptDevelopment')}</h3>
               <p className="text-muted-foreground text-sm">
-                Our team creates detailed mood boards, 3D renderings, and design concepts tailored to your vision.
+                {t('about.conceptDesc')}
               </p>
             </div>
 
