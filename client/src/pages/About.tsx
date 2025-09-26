@@ -397,36 +397,6 @@ export default function About() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section id="contact-cta" className="text-center mb-24">
-          <Card className="bg-primary/5 border-primary/20">
-            <CardContent className="p-12">
-              <h2 className="text-3xl md:text-4xl font-sans font-light mb-6">
-                Let's Create Something Amazing Together
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Ready to transform your space? We'd love to hear about your project and discuss how we can bring your vision to life.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg"
-                  asChild
-                  data-testid="button-start-project"
-                >
-                  <Link href="/contact">Start Your Project</Link>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  asChild
-                  data-testid="button-view-work"
-                >
-                  <Link href="/portfolio">View Our Work</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
       </div>
     </div>
   );
