@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowRight, Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
 import HeroSlider from "@/components/HeroSlider";
 import ScrollableContainer from "@/components/ScrollableContainer";
 import { Progress } from "@/components/ui/progress";
+import { apiRequest } from "@/lib/queryClient";
 import type { Project, HomepageContent, Article } from "@shared/schema";
 
 export default function Home() {
   const [, navigate] = useLocation();
   const { language } = useLanguage();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
   const [step01Expanded, setStep01Expanded] = useState(false);
@@ -22,6 +28,14 @@ export default function Home() {
   const [step04Expanded, setStep04Expanded] = useState(false);
   const [step05Expanded, setStep05Expanded] = useState(false);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
+  
+  // Quick contact form state
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -56,6 +70,49 @@ export default function Home() {
     queryFn: async () => {
       const response = await fetch(`/api/articles?featured=true&language=${language}`);
       return response.json();
+    },
+  });
+
+  // Quick contact form mutation
+  const quickContactMutation = useMutation({
+    mutationFn: async (data: typeof contactForm) => {
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          projectDescription: data.message,
+          projectType: 'consultation',
+          budget: 'consultation'
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to submit inquiry');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: language === 'vi' ? 'Gửi thành công!' : 'Success!',
+        description: language === 'vi' 
+          ? 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi trong thời gian sớm nhất.'
+          : 'Thank you for contacting us. We will respond as soon as possible.',
+      });
+      setContactForm({ name: '', email: '', phone: '', message: '' });
+      queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
+    },
+    onError: () => {
+      toast({
+        title: language === 'vi' ? 'Có lỗi xảy ra' : 'Error occurred',
+        description: language === 'vi' 
+          ? 'Vui lòng thử lại sau.'
+          : 'Please try again later.',
+        variant: 'destructive',
+      });
     },
   });
 
@@ -107,6 +164,21 @@ export default function Home() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleQuickContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactForm.name || !contactForm.email || !contactForm.phone) {
+      toast({
+        title: language === 'vi' ? 'Thiếu thông tin' : 'Missing information',
+        description: language === 'vi' 
+          ? 'Vui lòng điền đầy đủ thông tin bắt buộc.'
+          : 'Please fill in all required fields.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    quickContactMutation.mutate(contactForm);
   };
 
 
@@ -592,6 +664,92 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Quick Contact Section */}
+      <section className="py-16 md:py-20 bg-black border-t border-white/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-sm font-light tracking-widest text-white/60 mb-6 uppercase">
+              {language === 'vi' ? 'LIÊN HỆ NHANH' : 'QUICK CONTACT'}
+            </h2>
+            <h3 className="text-3xl md:text-4xl font-light text-white mb-6">
+              {language === 'vi' 
+                ? 'BẮT ĐẦU DỰ ÁN CỦA BẠN NGAY HÔM NAY' 
+                : 'START YOUR PROJECT TODAY'
+              }
+            </h3>
+            <p className="text-lg text-white/70 font-light leading-relaxed">
+              {language === 'vi' 
+                ? 'Để lại thông tin liên hệ, chúng tôi sẽ tư vấn miễn phí trong vòng 24 giờ.'
+                : 'Leave your contact information and we will provide free consultation within 24 hours.'
+              }
+            </p>
+          </div>
+
+          {/* Quick Contact Form */}
+          <form onSubmit={handleQuickContactSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Input
+                  type="text"
+                  placeholder={language === 'vi' ? 'Họ và tên *' : 'Full Name *'}
+                  value={contactForm.name}
+                  onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
+                  className="bg-transparent border-0 border-b border-white/30 rounded-none px-0 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light"
+                  data-testid="input-quick-name"
+                />
+              </div>
+              <div>
+                <Input
+                  type="email"
+                  placeholder={language === 'vi' ? 'Email *' : 'Email *'}
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
+                  className="bg-transparent border-0 border-b border-white/30 rounded-none px-0 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light"
+                  data-testid="input-quick-email"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Input
+                type="tel"
+                placeholder={language === 'vi' ? 'Số điện thoại *' : 'Phone Number *'}
+                value={contactForm.phone}
+                onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
+                className="bg-transparent border-0 border-b border-white/30 rounded-none px-0 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light"
+                data-testid="input-quick-phone"
+              />
+            </div>
+            
+            <div>
+              <Textarea
+                placeholder={language === 'vi' ? 'Mô tả ngắn về dự án của bạn...' : 'Brief description of your project...'}
+                value={contactForm.message}
+                onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
+                className="bg-transparent border border-white/30 rounded-none px-4 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light min-h-[120px] resize-none"
+                data-testid="textarea-quick-message"
+              />
+            </div>
+            
+            <div className="flex justify-center pt-6">
+              <Button
+                type="submit"
+                disabled={quickContactMutation.isPending}
+                className="bg-primary text-black hover:bg-primary/90 hover:scale-105 hover:shadow-lg px-12 py-4 text-lg font-medium tracking-wide transition-all duration-300 ease-in-out flex items-center gap-3"
+                data-testid="button-quick-contact-submit"
+              >
+                <Send className="w-5 h-5" />
+                {quickContactMutation.isPending 
+                  ? (language === 'vi' ? 'ĐANG GỬI...' : 'SENDING...') 
+                  : (language === 'vi' ? 'GỬI LIÊN HỆ' : 'SEND MESSAGE')
+                }
+              </Button>
+            </div>
+          </form>
         </div>
       </section>
     </div>
