@@ -27,6 +27,7 @@ export default function Home() {
   const [step03Expanded, setStep03Expanded] = useState(false);
   const [step04Expanded, setStep04Expanded] = useState(false);
   const [step05Expanded, setStep05Expanded] = useState(false);
+  const [contactFormExpanded, setContactFormExpanded] = useState(false);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
   
   // Quick contact form state (matching Contact page)
@@ -665,16 +666,38 @@ export default function Home() {
       {/* Quick Contact Section */}
       <section className="py-24 bg-black border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
+          <div className="mb-8">
             <h1 className="text-3xl md:text-5xl font-light mb-6" data-testid="heading-questions">
               {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
             </h1>
-            <p className="text-lg text-gray-400 mb-12" data-testid="text-consultation">
+            <p className="text-lg text-gray-400 mb-8" data-testid="text-consultation">
               {language === 'vi' ? 'Để lại yêu cầu tư vấn miễn phí' : 'Leave a request for a free consultation'}
             </p>
+            
+            {/* Expand/Collapse Button */}
+            <button
+              onClick={() => setContactFormExpanded(!contactFormExpanded)}
+              className="flex items-center gap-4 text-left group cursor-pointer"
+              data-testid="button-toggle-form"
+            >
+              <div className="w-8 h-8 border border-white/30 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
+                <div className={`transition-transform duration-300 ${contactFormExpanded ? 'rotate-90' : 'rotate-0'}`}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+              <span className="text-xl font-light tracking-wide">
+                {language === 'vi' ? 'GỬI YÊU CẦU' : 'LEAVE A REQUEST'}
+              </span>
+            </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+          {/* Expandable Form */}
+          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            contactFormExpanded ? 'max-h-[800px] opacity-100 mt-8' : 'max-h-0 opacity-0'
+          }`}>
+            <form onSubmit={handleSubmit} className="max-w-3xl">
             <div className="space-y-4">
               {/* First row - Name and Email */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -750,7 +773,8 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-          </form>
+            </form>
+          </div>
         </div>
       </section>
     </div>
