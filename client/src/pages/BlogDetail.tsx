@@ -113,7 +113,7 @@ export default function BlogDetail() {
   // Update document title and meta tags for SEO
   useEffect(() => {
     if (article) {
-      document.title = article.metaTitle || `${article.title} | MODERNO INTERIORS Studio`;
+      document.title = article.metaTitle || `${article.title} | MODERNO INTERIORS Design`;
       
       // Update meta description
       const metaDescription = document.querySelector('meta[name="description"]');
@@ -163,7 +163,7 @@ export default function BlogDetail() {
 
     return () => {
       // Reset title when leaving
-      document.title = 'MODERNO INTERIORS Studio';
+      document.title = 'MODERNO INTERIORS Design';
     };
   }, [article]);
 
@@ -346,7 +346,7 @@ export default function BlogDetail() {
           <div className="text-sm text-muted-foreground">
             <span>
               {language === 'vi' ? 'Được xuất bản bởi ' : 'Published by '}
-              <span className="text-primary font-medium">MODERNO INTERIORS Studio</span>
+              <span className="text-primary font-medium">MODERNO INTERIORS Design</span>
             </span>
             <div className="mt-1">
               {formatDate(String(article.publishedAt || article.createdAt))}

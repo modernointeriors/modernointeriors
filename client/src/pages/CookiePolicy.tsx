@@ -52,7 +52,7 @@ At MODERNO INTERIORS, we use cookies to enhance your browsing experience, analyz
           title: "Contact Us",
           content: `If you have any questions about our use of cookies, please contact us:
 
-MODERNO INTERIORS STUDIO
+MODERNO INTERIORS DESIGN
 1st Floor, Sabay Building
 140B Nguyen Van Troi Street
 Phu Nhuan District, Ho Chi Minh City, Vietnam
@@ -108,7 +108,7 @@ Tại MODERNO INTERIORS, chúng tôi sử dụng cookie để nâng cao trải n
           title: "Liên Hệ Với Chúng Tôi",
           content: `Nếu bạn có bất kỳ câu hỏi nào về việc sử dụng cookie của chúng tôi, vui lòng liên hệ với chúng tôi:
 
-MODERNO INTERIORS STUDIO
+MODERNO INTERIORS DESIGN
 Lầu 1, Tòa nhà Sabay
 140B Nguyễn Văn Trỗi
 Quận Phú Nhuận, TP. Hồ Chí Minh, Việt Nam

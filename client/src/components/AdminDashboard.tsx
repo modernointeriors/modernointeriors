@@ -1452,7 +1452,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Site Title</label>
                 <Input 
-                  defaultValue="MODERNO INTERIORS - Interior Design Studio" 
+                  defaultValue="MODERNO INTERIORS - Interior Design" 
                   data-testid="input-site-title"
                 />
               </div>

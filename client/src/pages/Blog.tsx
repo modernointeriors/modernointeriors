@@ -27,10 +27,10 @@ export default function Blog() {
 
   // SEO meta tags
   useEffect(() => {
-    const title = language === 'vi' ? 'Tin tức & Blog | MODERNO INTERIORS Studio' : 'News & Blog | MODERNO INTERIORS Studio';
+    const title = language === 'vi' ? 'Tin tức & Blog | MODERNO INTERIORS Design' : 'News & Blog | MODERNO INTERIORS Design';
     const description = language === 'vi' 
-      ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ MODERNO INTERIORS Studio'
-      : 'Discover the latest design trends, helpful tips, and inspiring projects from MODERNO INTERIORS Studio';
+      ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ MODERNO INTERIORS Design'
+      : 'Discover the latest design trends, helpful tips, and inspiring projects from MODERNO INTERIORS Design';
       
     document.title = title;
     
@@ -65,7 +65,7 @@ export default function Blog() {
     
     return () => {
       // Reset title when leaving
-      document.title = 'MODERNO INTERIORS Studio';
+      document.title = 'MODERNO INTERIORS Design';
     };
   }, [language]);
 
@@ -286,8 +286,8 @@ export default function Blog() {
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {language === 'vi' 
-              ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ MODERNO INTERIORS Studio'
-              : 'Discover the latest design trends, helpful tips, and inspiring projects from MODERNO INTERIORS Studio'
+              ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ MODERNO INTERIORS Design'
+              : 'Discover the latest design trends, helpful tips, and inspiring projects from MODERNO INTERIORS Design'
             }
           </p>
         </div>

@@ -11,13 +11,13 @@ export default function TermsConditions() {
       sections: [
         {
           title: "Introduction",
-          content: `Welcome to MODERNO INTERIORS STUDIO. These Terms and Conditions ("Terms") govern your use of our website and services. By accessing our website or using our interior design services, you agree to be bound by these Terms.
+          content: `Welcome to MODERNO INTERIORS DESIGN. These Terms and Conditions ("Terms") govern your use of our website and services. By accessing our website or using our interior design services, you agree to be bound by these Terms.
 
-MODERNO INTERIORS STUDIO is an interior design and architecture firm located in Ho Chi Minh City, Vietnam, specializing in residential, commercial, and architectural design projects.`
+MODERNO INTERIORS DESIGN is an interior design and architecture firm located in Ho Chi Minh City, Vietnam, specializing in residential, commercial, and architectural design projects.`
         },
         {
           title: "Services",
-          content: `MODERNO INTERIORS STUDIO provides the following services:
+          content: `MODERNO INTERIORS DESIGN provides the following services:
 
 **Interior Design:** Complete interior design solutions for residential and commercial spaces
 **Architecture:** Architectural design and planning services
@@ -49,7 +49,7 @@ We reserve the right to suspend or terminate access to our website if these term
 • Website design and layout
 • Software and code
 
-Are the exclusive property of MODERNO INTERIORS STUDIO or used with permission. You may not reproduce, distribute, or use any content without our written consent.`
+Are the exclusive property of MODERNO INTERIORS DESIGN or used with permission. You may not reproduce, distribute, or use any content without our written consent.`
         },
         {
           title: "Project Terms",
@@ -70,7 +70,7 @@ Personal information may include contact details, project preferences, and commu
         },
         {
           title: "Limitation of Liability",
-          content: `MODERNO INTERIORS STUDIO's liability is limited to the maximum extent permitted by law. We are not liable for:
+          content: `MODERNO INTERIORS DESIGN's liability is limited to the maximum extent permitted by law. We are not liable for:
 
 • Indirect, incidental, or consequential damages
 • Loss of profits or revenue
@@ -84,7 +84,7 @@ Our total liability for any claim will not exceed the amount paid for the specif
           title: "Contact Information",
           content: `For any questions regarding these Terms and Conditions, please contact us:
 
-MODERNO INTERIORS STUDIO
+MODERNO INTERIORS DESIGN
 1st Floor, Sabay Building
 140B Nguyen Van Troi Street
 Phu Nhuan District, Ho Chi Minh City, Vietnam
@@ -101,13 +101,13 @@ These terms are governed by Vietnamese law and any disputes will be resolved in 
       sections: [
         {
           title: "Giới Thiệu",
-          content: `Chào mừng bạn đến với MODERNO INTERIORS STUDIO. Các Điều khoản và Điều kiện này ("Điều khoản") điều chỉnh việc sử dụng trang web và dịch vụ của chúng tôi. Bằng cách truy cập trang web của chúng tôi hoặc sử dụng các dịch vụ thiết kế nội thất của chúng tôi, bạn đồng ý bị ràng buộc bởi các Điều khoản này.
+          content: `Chào mừng bạn đến với MODERNO INTERIORS DESIGN. Các Điều khoản và Điều kiện này ("Điều khoản") điều chỉnh việc sử dụng trang web và dịch vụ của chúng tôi. Bằng cách truy cập trang web của chúng tôi hoặc sử dụng các dịch vụ thiết kế nội thất của chúng tôi, bạn đồng ý bị ràng buộc bởi các Điều khoản này.
 
-MODERNO INTERIORS STUDIO là một công ty thiết kế nội thất và kiến trúc có trụ sở tại Thành phố Hồ Chí Minh, Việt Nam, chuyên về các dự án thiết kế dân cư, thương mại và kiến trúc.`
+MODERNO INTERIORS DESIGN là một công ty thiết kế nội thất và kiến trúc có trụ sở tại Thành phố Hồ Chí Minh, Việt Nam, chuyên về các dự án thiết kế dân cư, thương mại và kiến trúc.`
         },
         {
           title: "Dịch Vụ",
-          content: `MODERNO INTERIORS STUDIO cung cấp các dịch vụ sau:
+          content: `MODERNO INTERIORS DESIGN cung cấp các dịch vụ sau:
 
 **Thiết Kế Nội Thất:** Giải pháp thiết kế nội thất hoàn chỉnh cho không gian dân cư và thương mại
 **Kiến Trúc:** Dịch vụ thiết kế và quy hoạch kiến trúc
@@ -139,7 +139,7 @@ Chúng tôi có quyền tạm dừng hoặc chấm dứt quyền truy cập vào
 • Thiết kế và bố cục trang web
 • Phần mềm và mã
 
-Là tài sản độc quyền của MODERNO INTERIORS STUDIO hoặc được sử dụng với sự cho phép. Bạn không được sao chép, phân phối hoặc sử dụng bất kỳ nội dung nào mà không có sự đồng ý bằng văn bản của chúng tôi.`
+Là tài sản độc quyền của MODERNO INTERIORS DESIGN hoặc được sử dụng với sự cho phép. Bạn không được sao chép, phân phối hoặc sử dụng bất kỳ nội dung nào mà không có sự đồng ý bằng văn bản của chúng tôi.`
         },
         {
           title: "Điều Khoản Dự Án",
@@ -160,7 +160,7 @@ Thông tin cá nhân có thể bao gồm chi tiết liên hệ, sở thích dự
         },
         {
           title: "Giới Hạn Trách Nhiệm",
-          content: `Trách nhiệm của MODERNO INTERIORS STUDIO được giới hạn ở mức tối đa được pháp luật cho phép. Chúng tôi không chịu trách nhiệm về:
+          content: `Trách nhiệm của MODERNO INTERIORS DESIGN được giới hạn ở mức tối đa được pháp luật cho phép. Chúng tôi không chịu trách nhiệm về:
 
 • Thiệt hại gián tiếp, ngẫu nhiên hoặc hậu quả
 • Mất lợi nhuận hoặc doanh thu
@@ -174,7 +174,7 @@ Tổng trách nhiệm của chúng tôi đối với bất kỳ khiếu nại n�
           title: "Thông Tin Liên Hệ",
           content: `Đối với bất kỳ câu hỏi nào liên quan đến các Điều khoản và Điều kiện này, vui lòng liên hệ với chúng tôi:
 
-MODERNO INTERIORS STUDIO
+MODERNO INTERIORS DESIGN
 Lầu 1, Tòa nhà Sabay
 140B Nguyễn Văn Trỗi
 Quận Phú Nhuận, TP. Hồ Chí Minh, Việt Nam

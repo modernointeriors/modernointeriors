@@ -174,7 +174,7 @@ export default function Layout({ children }: LayoutProps) {
           >
             <img 
               src="/attached_assets/logo.white.png" 
-              alt="MODERNO INTERIORS STUDIO" 
+              alt="MODERNO INTERIORS DESIGN" 
               className="h-10 w-auto hover:opacity-80 transition-opacity"
             />
           </Link>
