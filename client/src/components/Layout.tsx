@@ -160,9 +160,7 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background relative">
-      {/* Background Image */}
-      <div className="website-background"></div>
+    <div className="min-h-screen relative">
       {/* Top Header with Navigation */}
       <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
