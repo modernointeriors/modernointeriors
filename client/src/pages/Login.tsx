@@ -65,7 +65,7 @@ export default function Login() {
   return (
     <Layout>
       <div className="min-h-screen bg-black flex items-center justify-center py-24">
-        <div className="w-full max-w-lg p-6">
+        <div className="w-full max-w-md p-6">
           {/* Glass morphism card with subtle backdrop */}
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-2xl"></div>
@@ -152,7 +152,7 @@ export default function Login() {
                   <div className="pt-6">
                     <Button
                       type="submit"
-                      className="w-full bg-transparent border border-white/20 text-white hover:bg-yellow-500/90 hover:text-black hover:border-yellow-500/90 py-4 font-light tracking-widest uppercase transition-all duration-300"
+                      className="w-full bg-transparent border border-white/20 text-white hover:bg-white hover:text-black hover:border-white py-4 font-light tracking-widest uppercase transition-all duration-300"
                       disabled={isLoading}
                       data-testid="button-login"
                     >
