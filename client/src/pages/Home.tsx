@@ -29,12 +29,13 @@ export default function Home() {
   const [step05Expanded, setStep05Expanded] = useState(false);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
   
-  // Quick contact form state
-  const [contactForm, setContactForm] = useState({
+  // Quick contact form state (matching Contact page)
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    message: ''
+    address: '',
+    requirements: ''
   });
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
@@ -73,47 +74,30 @@ export default function Home() {
     },
   });
 
-  // Quick contact form mutation
-  const quickContactMutation = useMutation({
-    mutationFn: async (data: typeof contactForm) => {
-      const response = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          projectDescription: data.message,
-          projectType: 'consultation',
-          budget: 'consultation'
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to submit inquiry');
-      }
-      return response.json();
+  // Quick contact form mutation (matching Contact page)
+  const mutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest('POST', '/api/inquiries', data);
     },
     onSuccess: () => {
       toast({
-        title: language === 'vi' ? 'Gửi thành công!' : 'Success!',
+        title: language === 'vi' ? 'Gửi yêu cầu thành công' : 'Request Sent Successfully',
         description: language === 'vi' 
-          ? 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi trong thời gian sớm nhất.'
-          : 'Thank you for contacting us. We will respond as soon as possible.',
+          ? 'Chúng tôi sẽ liên hệ lại với bạn trong vòng 24 giờ.'
+          : "We'll get back to you within 24 hours."
       });
-      setContactForm({ name: '', email: '', phone: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', address: '', requirements: '' });
       queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
     },
     onError: () => {
       toast({
-        title: language === 'vi' ? 'Có lỗi xảy ra' : 'Error occurred',
+        title: language === 'vi' ? 'Lỗi' : 'Error',
         description: language === 'vi' 
-          ? 'Vui lòng thử lại sau.'
-          : 'Please try again later.',
-        variant: 'destructive',
+          ? 'Không thể gửi yêu cầu. Vui lòng thử lại.'
+          : 'Failed to send request. Please try again.',
+        variant: "destructive"
       });
-    },
+    }
   });
 
   // Controlled loading animation
@@ -166,19 +150,30 @@ export default function Home() {
     }
   };
 
-  const handleQuickContactSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!contactForm.name || !contactForm.email || !contactForm.phone) {
+    
+    if (!formData.name || !formData.email || !formData.phone) {
       toast({
-        title: language === 'vi' ? 'Thiếu thông tin' : 'Missing information',
+        title: language === 'vi' ? 'Trường bắt buộc' : 'Required Fields',
         description: language === 'vi' 
-          ? 'Vui lòng điền đầy đủ thông tin bắt buộc.'
-          : 'Please fill in all required fields.',
-        variant: 'destructive',
+          ? 'Vui lòng điền họ tên, email và số điện thoại.'
+          : 'Please fill in name, email, and phone fields.',
+        variant: 'destructive'
       });
       return;
     }
-    quickContactMutation.mutate(contactForm);
+
+    const inquiryData = {
+      firstName: formData.name.split(' ')[0] || formData.name,
+      lastName: formData.name.split(' ').slice(1).join(' ') || '',
+      email: formData.email,
+      phone: formData.phone,
+      projectType: 'consultation' as const,
+      message: `Address: ${formData.address}\n\nRequirements: ${formData.requirements}`
+    };
+
+    mutation.mutate(inquiryData);
   };
 
 
@@ -669,84 +664,91 @@ export default function Home() {
 
       {/* Quick Contact Section */}
       <section className="py-16 md:py-20 bg-black border-t border-white/10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-sm font-light tracking-widest text-white/60 mb-6 uppercase">
-              {language === 'vi' ? 'LIÊN HỆ NHANH' : 'QUICK CONTACT'}
-            </h2>
-            <h3 className="text-3xl md:text-4xl font-light text-white mb-6">
-              {language === 'vi' 
-                ? 'BẮT ĐẦU DỰ ÁN CỦA BẠN NGAY HÔM NAY' 
-                : 'START YOUR PROJECT TODAY'
-              }
-            </h3>
-            <p className="text-lg text-white/70 font-light leading-relaxed">
-              {language === 'vi' 
-                ? 'Để lại thông tin liên hệ, chúng tôi sẽ tư vấn miễn phí trong vòng 24 giờ.'
-                : 'Leave your contact information and we will provide free consultation within 24 hours.'
-              }
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-6xl font-light mb-6" data-testid="heading-questions">
+              {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
+            </h1>
+            <p className="text-xl text-gray-400 mb-8" data-testid="text-consultation">
+              {language === 'vi' ? 'Để lại yêu cầu tư vấn miễn phí' : 'Leave a request for a free consultation'}
             </p>
           </div>
 
-          {/* Quick Contact Form */}
-          <form onSubmit={handleQuickContactSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+            <div className="space-y-6">
+              {/* First row - Name and Email */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Input
+                    type="text"
+                    placeholder={language === 'vi' ? 'Họ và tên *' : 'Name *'}
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-name"
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="email"
+                    placeholder={language === 'vi' ? 'E-mail *' : 'E-mail *'}
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-email"
+                  />
+                </div>
+              </div>
+              
+              {/* Second row - Phone and Address */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Input
+                    type="tel"
+                    placeholder={language === 'vi' ? 'Điện thoại *' : 'Phone *'}
+                    value={formData.phone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-phone"
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="text"
+                    placeholder={language === 'vi' ? 'Địa chỉ' : 'Address'}
+                    value={formData.address}
+                    onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-address"
+                  />
+                </div>
+              </div>
+              
+              {/* Third row - Requirements */}
               <div>
-                <Input
-                  type="text"
-                  placeholder={language === 'vi' ? 'Họ và tên *' : 'Full Name *'}
-                  value={contactForm.name}
-                  onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-transparent border-0 border-b border-white/30 rounded-none px-0 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light"
-                  data-testid="input-quick-name"
+                <Textarea
+                  placeholder={language === 'vi' ? 'Yêu cầu / Mô tả dự án' : 'Requirements / Project Description'}
+                  value={formData.requirements}
+                  onChange={(e) => setFormData(prev => ({ ...prev, requirements: e.target.value }))}
+                  className="bg-transparent border border-gray-600 rounded-none px-4 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
+                  data-testid="textarea-requirements"
                 />
               </div>
-              <div>
-                <Input
-                  type="email"
-                  placeholder={language === 'vi' ? 'Email *' : 'Email *'}
-                  value={contactForm.email}
-                  onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-transparent border-0 border-b border-white/30 rounded-none px-0 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light"
-                  data-testid="input-quick-email"
-                />
+              
+              {/* Submit button */}
+              <div className="flex justify-center pt-6">
+                <Button
+                  type="submit"
+                  disabled={mutation.isPending}
+                  className="bg-white text-black hover:bg-gray-100 hover:scale-105 hover:shadow-lg px-8 py-3 font-medium tracking-wide transition-all duration-300 ease-in-out"
+                  data-testid="button-leave-request"
+                >
+                  {mutation.isPending 
+                    ? (language === 'vi' ? 'ĐANG GỬI...' : 'SENDING...') 
+                    : (language === 'vi' ? 'GỬI YÊU CẦU' : 'LEAVE A REQUEST')
+                  }
+                </Button>
               </div>
-            </div>
-            
-            <div>
-              <Input
-                type="tel"
-                placeholder={language === 'vi' ? 'Số điện thoại *' : 'Phone Number *'}
-                value={contactForm.phone}
-                onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                className="bg-transparent border-0 border-b border-white/30 rounded-none px-0 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light"
-                data-testid="input-quick-phone"
-              />
-            </div>
-            
-            <div>
-              <Textarea
-                placeholder={language === 'vi' ? 'Mô tả ngắn về dự án của bạn...' : 'Brief description of your project...'}
-                value={contactForm.message}
-                onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                className="bg-transparent border border-white/30 rounded-none px-4 py-4 text-white placeholder-white/50 focus:border-primary focus-visible:ring-0 text-lg font-light min-h-[120px] resize-none"
-                data-testid="textarea-quick-message"
-              />
-            </div>
-            
-            <div className="flex justify-center pt-6">
-              <Button
-                type="submit"
-                disabled={quickContactMutation.isPending}
-                className="bg-white text-black hover:bg-white/90 disabled:bg-white/70 disabled:text-black/50 px-8 py-3 text-sm font-medium tracking-wider rounded-lg transition-all duration-200 ease-in-out"
-                data-testid="button-quick-contact-submit"
-              >
-                {quickContactMutation.isPending 
-                  ? (language === 'vi' ? 'ĐANG GỬI...' : 'SENDING...') 
-                  : (language === 'vi' ? 'GỬI YÊU CẦU' : 'LEAVE A REQUEST')
-                }
-              </Button>
             </div>
           </form>
         </div>
