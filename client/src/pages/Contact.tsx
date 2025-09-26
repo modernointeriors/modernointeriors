@@ -145,7 +145,7 @@ export default function Contact() {
                   type="submit"
                   disabled={mutation.isPending}
                   variant="outline"
-                  className="bg-transparent border border-white text-white hover:bg-white hover:text-black hover:scale-105 px-8 py-3 font-medium tracking-wide transition-all duration-300 ease-in-out"
+                  className="bg-transparent border border-white text-white hover:bg-white hover:text-black hover:scale-105 px-8 py-3 font-medium tracking-wide transition-all duration-300 ease-in-out rounded-none"
                   data-testid="button-leave-request"
                 >
                   {mutation.isPending ? t('contact.form.sending') : t('contact.form.submit')}
