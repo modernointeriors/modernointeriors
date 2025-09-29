@@ -331,7 +331,7 @@ export class DatabaseStorage implements IStorage {
       ? db.select().from(partners).where(eq(partners.active, active))
       : db.select().from(partners);
     
-    return await query.orderBy(partners.order, desc(partners.createdAt));
+    return await query.orderBy(partners.order);
   }
 
   async getPartner(id: string): Promise<Partner | undefined> {
@@ -347,7 +347,7 @@ export class DatabaseStorage implements IStorage {
   async updatePartner(id: string, partner: Partial<InsertPartner>): Promise<Partner> {
     const [updatedPartner] = await db
       .update(partners)
-      .set({ ...partner, updatedAt: new Date() })
+      .set(partner)
       .where(eq(partners.id, id))
       .returning();
     return updatedPartner;
