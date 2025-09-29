@@ -13,7 +13,7 @@ import HeroSlider from "@/components/HeroSlider";
 import ScrollableContainer from "@/components/ScrollableContainer";
 import { Progress } from "@/components/ui/progress";
 import { apiRequest } from "@/lib/queryClient";
-import type { Project, HomepageContent, Article } from "@shared/schema";
+import type { Project, HomepageContent, Article, Partner } from "@shared/schema";
 
 export default function Home() {
   const [, navigate] = useLocation();
@@ -72,6 +72,14 @@ export default function Home() {
     queryKey: ['/api/articles', 'featured', language],
     queryFn: async () => {
       const response = await fetch(`/api/articles?featured=true&language=${language}`);
+      return response.json();
+    },
+  });
+
+  const { data: partners, isLoading: partnersLoading } = useQuery<Partner[]>({
+    queryKey: ['/api/partners'],
+    queryFn: async () => {
+      const response = await fetch('/api/partners?active=true');
       return response.json();
     },
   });
@@ -687,6 +695,113 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="py-24 bg-black border-t border-white/10 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-5xl font-light mb-6 text-white" data-testid="heading-partners">
+              {language === 'vi' ? 'ĐỐI TÁC CỦA CHÚNG TÔI' : 'OUR PARTNERS'}
+            </h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto" data-testid="text-partners-description">
+              {language === 'vi' 
+                ? 'Chúng tôi tự hào hợp tác với những thương hiệu uy tín hàng đầu'
+                : 'We are proud to work with leading prestigious brands'
+              }
+            </p>
+          </div>
+        </div>
+
+        {partners && partners.length > 0 && (
+          <div className="space-y-8">
+            {/* First row - scrolling right */}
+            <div className="relative">
+              <div className="flex animate-scroll-right">
+                {/* First set of partners */}
+                {partners.slice(0, Math.ceil(partners.length / 2)).map((partner) => (
+                  <div
+                    key={`first-${partner.id}`}
+                    className="flex-shrink-0 w-48 h-24 mx-6 flex items-center justify-center"
+                    data-testid={`partner-logo-row1-${partner.id}`}
+                  >
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                    />
+                  </div>
+                ))}
+                {/* Duplicate for seamless loop */}
+                {partners.slice(0, Math.ceil(partners.length / 2)).map((partner) => (
+                  <div
+                    key={`first-duplicate-${partner.id}`}
+                    className="flex-shrink-0 w-48 h-24 mx-6 flex items-center justify-center"
+                    data-testid={`partner-logo-row1-duplicate-${partner.id}`}
+                  >
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Second row - scrolling left */}
+            <div className="relative">
+              <div className="flex animate-scroll-left">
+                {/* Second set of partners */}
+                {partners.slice(Math.ceil(partners.length / 2)).map((partner) => (
+                  <div
+                    key={`second-${partner.id}`}
+                    className="flex-shrink-0 w-48 h-24 mx-6 flex items-center justify-center"
+                    data-testid={`partner-logo-row2-${partner.id}`}
+                  >
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                    />
+                  </div>
+                ))}
+                {/* Duplicate for seamless loop */}
+                {partners.slice(Math.ceil(partners.length / 2)).map((partner) => (
+                  <div
+                    key={`second-duplicate-${partner.id}`}
+                    className="flex-shrink-0 w-48 h-24 mx-6 flex items-center justify-center"
+                    data-testid={`partner-logo-row2-duplicate-${partner.id}`}
+                  >
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {partnersLoading && (
+          <div className="space-y-8">
+            {/* Loading skeleton for partners */}
+            {[1, 2].map((row) => (
+              <div key={row} className="flex justify-center">
+                <div className="flex space-x-6">
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                    <div
+                      key={i}
+                      className="w-48 h-24 bg-white/10 rounded animate-pulse"
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Quick Contact Section */}
