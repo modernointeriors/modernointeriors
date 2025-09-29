@@ -512,44 +512,44 @@ export default function Layout({ children }: LayoutProps) {
       <main className="ml-16 pb-8 md:pb-6 mb-4">{children}</main>
 
       {/* Footer - Updated with dark design matching the provided image */}
-      <footer className="ml-16 bg-black text-white pt-24 pb-8 border-t border-gray-800">
+      <footer className="ml-16 bg-black text-white pt-32 pb-12 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-20">
             {/* Corporate Office */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+              <h4 className="text-sm tracking-widest text-white mb-8 font-light uppercase">
                 {language === 'vi' ? 'VĂN PHÒNG CHÍNH' : 'CORPORATE OFFICE'}
               </h4>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 {language === 'vi' ? (
                   <>
-                    <p className="text-white/80 font-light">Lầu 1, Tòa nhà Sabay</p>
-                    <p className="text-white/80 font-light">140B Nguyễn Văn Trỗi</p>
-                    <p className="text-white/80 font-light">Quận Phú Nhuận</p>
-                    <p className="text-white/80 font-light">TP. Hồ chí Minh, Việt Nam</p>
+                    <p className="text-white/80 font-light text-sm">Lầu 1, Tòa nhà Sabay</p>
+                    <p className="text-white/80 font-light text-sm">140B Nguyễn Văn Trỗi</p>
+                    <p className="text-white/80 font-light text-sm">Quận Phú Nhuận</p>
+                    <p className="text-white/80 font-light text-sm">TP. Hồ chí Minh, Việt Nam</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-white/80 font-light">1st Floor, Sabay Building</p>
-                    <p className="text-white/80 font-light">140B Nguyen Van Troi Street</p>
-                    <p className="text-white/80 font-light">Phu Nhuan District</p>
-                    <p className="text-white/80 font-light">Ho Chi Minh City, Vietnam</p>
+                    <p className="text-white/80 font-light text-sm">1st Floor, Sabay Building</p>
+                    <p className="text-white/80 font-light text-sm">140B Nguyen Van Troi Street</p>
+                    <p className="text-white/80 font-light text-sm">Phu Nhuan District</p>
+                    <p className="text-white/80 font-light text-sm">Ho Chi Minh City, Vietnam</p>
                   </>
                 )}
-                <p className="text-white/80 font-light mt-4">094 367 9879</p>
+                <p className="text-white/80 font-light text-sm mt-6 font-medium">094 367 9879</p>
               </div>
             </div>
             
             {/* Navigation */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+              <h4 className="text-sm tracking-widest text-white mb-8 font-light uppercase">
                 {language === 'vi' ? 'ĐIỀU HƯỚNG' : 'NAVIGATION'}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 <li>
                   <Link 
                     href={`/`} 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
@@ -558,7 +558,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/blog`} 
-                    className="text-white/80 hover:text-white transition-colors font-light" 
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm" 
                     data-testid="footer-news"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
@@ -568,7 +568,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/about`} 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
@@ -577,7 +577,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/services`} 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'DỊCH VỤ' : 'SERVICES'}
@@ -586,7 +586,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/portfolio`} 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
@@ -595,7 +595,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <Link 
                     href={`/contact`} 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'LIÊN HỆ' : 'CONTACTS'}
@@ -606,14 +606,14 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Social Media */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+              <h4 className="text-sm tracking-widest text-white mb-8 font-light uppercase">
                 {language === 'vi' ? 'MẠNG XÃ HỘI' : 'SOCIAL MEDIA'}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 <li>
                   <a 
                     href="https://www.instagram.com/moderno.interiors/" 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     data-testid="footer-instagram"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -624,7 +624,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="https://www.facebook.com/moderno.interiors.design" 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     data-testid="footer-facebook"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -635,7 +635,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="https://www.tiktok.com/@moderno.interiors" 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     data-testid="footer-tiktok"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -646,7 +646,7 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a 
                     href="https://zalo.me/moderno" 
-                    className="text-white/80 hover:text-white transition-colors font-light"
+                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     data-testid="footer-zalo"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -659,28 +659,28 @@ export default function Layout({ children }: LayoutProps) {
             
             {/* Join Our News */}
             <div>
-              <h4 className="text-sm tracking-widest text-white mb-6 font-light">
+              <h4 className="text-sm tracking-widest text-white mb-8 font-light uppercase">
                 {language === 'vi' ? 'ĐĂNG KÝ TIN TỨC' : 'JOIN OUR NEWS'}
               </h4>
-              <p className="text-white/80 mb-4 font-light">
+              <p className="text-white/80 mb-6 font-light text-sm">
                 {language === 'vi' ? 'Nhận thông báo về các ưu đãi mới' : 'Receive notifications about new offers'}
               </p>
               <div className="flex">
                 <input
                   type="email"
                   placeholder={language === 'vi' ? 'Email' : 'Email'}
-                  className="bg-transparent border-0 border-b border-gray-600 text-white/80 placeholder-gray-400 focus:outline-none focus:border-white flex-grow px-0 py-2 font-light"
+                  className="bg-transparent border-0 border-b border-gray-600 text-white/80 placeholder-gray-400 focus:outline-none focus:border-white flex-grow px-0 py-3 font-light text-sm"
                   data-testid="newsletter-email"
                 />
-                <button className="ml-2 text-white/80 hover:text-white transition-colors font-light">
+                <button className="ml-3 text-white/80 hover:text-white transition-colors font-light text-base">
                   →
                 </button>
               </div>
             </div>
           </div>
           
-          <div className="mt-16 pt-8 text-center border-t border-gray-800">
-            <p className="text-white/60 text-sm font-light">
+          <div className="mt-20 pt-10 text-center border-t border-gray-800">
+            <p className="text-white/60 text-base font-light">
               © 2025 Moderno Interiors Design
             </p>
           </div>
