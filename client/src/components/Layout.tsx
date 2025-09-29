@@ -548,15 +548,6 @@ export default function Layout({ children }: LayoutProps) {
               <ul className="space-y-3">
                 <li>
                   <Link 
-                    href={`/`} 
-                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  >
-                    {language === 'vi' ? 'TRANG CHỦ' : 'HOME'}
-                  </Link>
-                </li>
-                <li>
-                  <Link 
                     href={`/blog`} 
                     className="text-white/80 hover:text-white transition-colors font-light text-sm" 
                     data-testid="footer-news"
