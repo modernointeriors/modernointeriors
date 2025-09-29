@@ -1,12 +1,13 @@
 import { 
-  users, clients, projects, inquiries, services, articles, homepageContent,
+  users, clients, projects, inquiries, services, articles, homepageContent, partners,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
   type Inquiry, type InsertInquiry,
   type Service, type InsertService,
   type Article, type InsertArticle,
-  type HomepageContent, type InsertHomepageContent
+  type HomepageContent, type InsertHomepageContent,
+  type Partner, type InsertPartner
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -62,6 +63,13 @@ export interface IStorage {
   // Homepage Content
   getHomepageContent(language?: string): Promise<HomepageContent | undefined>;
   upsertHomepageContent(content: InsertHomepageContent): Promise<HomepageContent>;
+
+  // Partners
+  getPartners(active?: boolean): Promise<Partner[]>;
+  getPartner(id: string): Promise<Partner | undefined>;
+  createPartner(partner: InsertPartner): Promise<Partner>;
+  updatePartner(id: string, partner: Partial<InsertPartner>): Promise<Partner>;
+  deletePartner(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -315,6 +323,38 @@ export class DatabaseStorage implements IStorage {
         .returning();
       return newContent;
     }
+  }
+
+  // Partners
+  async getPartners(active?: boolean): Promise<Partner[]> {
+    const query = active !== undefined
+      ? db.select().from(partners).where(eq(partners.active, active))
+      : db.select().from(partners);
+    
+    return await query.orderBy(partners.order, desc(partners.createdAt));
+  }
+
+  async getPartner(id: string): Promise<Partner | undefined> {
+    const [partner] = await db.select().from(partners).where(eq(partners.id, id));
+    return partner || undefined;
+  }
+
+  async createPartner(partner: InsertPartner): Promise<Partner> {
+    const [newPartner] = await db.insert(partners).values(partner).returning();
+    return newPartner;
+  }
+
+  async updatePartner(id: string, partner: Partial<InsertPartner>): Promise<Partner> {
+    const [updatedPartner] = await db
+      .update(partners)
+      .set({ ...partner, updatedAt: new Date() })
+      .where(eq(partners.id, id))
+      .returning();
+    return updatedPartner;
+  }
+
+  async deletePartner(id: string): Promise<void> {
+    await db.delete(partners).where(eq(partners.id, id));
   }
 }
 
