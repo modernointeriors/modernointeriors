@@ -700,16 +700,20 @@ export default function Home() {
       {/* Partners Section */}
       <section className="py-24 bg-black border-t border-white/10 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-5xl font-light mb-6 text-white" data-testid="heading-partners">
+          <div className="mb-8">
+            <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
               {language === 'vi' ? 'ĐỐI TÁC CỦA CHÚNG TÔI' : 'OUR PARTNERS'}
             </h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto" data-testid="text-partners-description">
-              {language === 'vi' 
-                ? 'Chúng tôi tự hào hợp tác với những thương hiệu uy tín hàng đầu'
-                : 'We are proud to work with leading prestigious brands'
-              }
-            </p>
+          </div>
+          <div className="flex items-start justify-between">
+            <div className="max-w-4xl">
+              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed" data-testid="text-partners-description">
+                {language === 'vi' 
+                  ? 'Chúng tôi tự hào hợp tác với những thương hiệu uy tín hàng đầu, mang đến những sản phẩm và dịch vụ chất lượng cao nhất cho khách hàng.'
+                  : 'We are proud to work with leading prestigious brands, bringing the highest quality products and services to our clients.'
+                }
+              </p>
+            </div>
           </div>
         </div>
 
