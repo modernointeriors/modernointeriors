@@ -134,6 +134,18 @@ export const homepageContent = pgTable("homepage_content", {
   uniqueLanguage: unique().on(table.language),
 }));
 
+export const partners = pgTable("partners", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  logo: text("logo").notNull(), // URL to partner logo
+  website: text("website"), // Optional partner website URL
+  description: text("description"), // Optional description
+  order: integer("order").notNull().default(0), // For display ordering
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Relations
 export const clientsRelations = relations(clients, ({ many }) => ({
   inquiries: many(inquiries),
@@ -185,6 +197,12 @@ export const insertHomepageContentSchema = createInsertSchema(homepageContent).o
   updatedAt: true,
 });
 
+export const insertPartnerSchema = createInsertSchema(partners).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -206,3 +224,6 @@ export type Article = typeof articles.$inferSelect;
 
 export type InsertHomepageContent = z.infer<typeof insertHomepageContentSchema>;
 export type HomepageContent = typeof homepageContent.$inferSelect;
+
+export type InsertPartner = z.infer<typeof insertPartnerSchema>;
+export type Partner = typeof partners.$inferSelect;
