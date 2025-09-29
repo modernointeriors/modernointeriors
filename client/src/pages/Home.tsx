@@ -10,7 +10,6 @@ import { ArrowRight, Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import HeroSlider from "@/components/HeroSlider";
-import ScrollableContainer from "@/components/ScrollableContainer";
 import { Progress } from "@/components/ui/progress";
 import { apiRequest } from "@/lib/queryClient";
 import type { Project, HomepageContent, Article, Partner } from "@shared/schema";
@@ -274,24 +273,21 @@ export default function Home() {
           </div>
           
           {isLoading ? (
-            <div className="overflow-x-auto">
-              <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none">
-                    <div className="animate-pulse bg-white/10 h-full w-full" />
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="group relative overflow-hidden cursor-pointer h-[28rem] rounded-none">
+                  <div className="animate-pulse bg-white/10 h-full w-full" />
+                </div>
+              ))}
             </div>
           ) : (
             <>
-              {/* Scrollable Projects Grid */}
-              <ScrollableContainer>
-                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                  {featuredProjects?.slice(0, 10).map((project) => (
+              {/* 5 Column Projects Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                {featuredProjects?.slice(0, 5).map((project) => (
                     <div 
                       key={project.id} 
-                      className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none"
+                      className="group relative overflow-hidden cursor-pointer h-[28rem] rounded-none"
                       onClick={() => navigate(`/project/${project.id}`)}
                     >
                     <img 
@@ -338,8 +334,7 @@ export default function Home() {
                     </div>
                   </div>
                   ))}
-                </div>
-              </ScrollableContainer>
+              </div>
               
             </>
           )}
@@ -379,34 +374,31 @@ export default function Home() {
           </div>
           
           {articlesLoading ? (
-            <div className="overflow-x-auto">
-              <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Card key={i} className="overflow-hidden h-[28rem] w-72 flex-shrink-0 rounded-none">
-                    <div className="animate-pulse bg-white/10 h-48 w-full" />
-                    <CardContent className="p-6">
-                      <div className="animate-pulse space-y-3">
-                        <div className="h-5 bg-white/10 rounded w-3/4" />
-                        <div className="h-3 bg-white/10 rounded w-1/2" />
-                        <div className="space-y-2">
-                          <div className="h-3 bg-white/10 rounded" />
-                          <div className="h-3 bg-white/10 rounded w-5/6" />
-                        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Card key={i} className="overflow-hidden h-[28rem] rounded-none">
+                  <div className="animate-pulse bg-white/10 h-48 w-full" />
+                  <CardContent className="p-6">
+                    <div className="animate-pulse space-y-3">
+                      <div className="h-5 bg-white/10 rounded w-3/4" />
+                      <div className="h-3 bg-white/10 rounded w-1/2" />
+                      <div className="space-y-2">
+                        <div className="h-3 bg-white/10 rounded" />
+                        <div className="h-3 bg-white/10 rounded w-5/6" />
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           ) : (
             <>
-              {/* Scrollable Articles Grid */}
-              <ScrollableContainer>
-                <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                  {featuredArticles?.slice(0, 10).map((article) => (
+              {/* 5 Column Articles Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                {featuredArticles?.slice(0, 5).map((article) => (
                     <Card 
                       key={article.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none"
+                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] rounded-none"
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
@@ -438,8 +430,7 @@ export default function Home() {
                       </CardContent>
                     </Card>
                   ))}
-                </div>
-              </ScrollableContainer>
+              </div>
               
             </>
           )}
