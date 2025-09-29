@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner } from "@shared/schema";
 import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -86,11 +86,21 @@ const homepageContentSchema = z.object({
   ctaSecondaryButtonText: z.string().optional(),
 });
 
+const partnerSchema = z.object({
+  name: z.string().min(1, "Partner name is required"),
+  logo: z.string().min(1, "Partner logo is required"),
+  website: z.string().optional(),
+  description: z.string().optional(),
+  order: z.number().default(0),
+  active: z.boolean().default(true),
+});
+
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
 type ArticleFormData = InsertArticle;
 type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
+type PartnerFormData = z.infer<typeof partnerSchema>;
 
 interface AdminDashboardProps {
   activeTab: string;
@@ -104,10 +114,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
   const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
   const [isArticleDialogOpen, setIsArticleDialogOpen] = useState(false);
+  const [isPartnerDialogOpen, setIsPartnerDialogOpen] = useState(false);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -145,6 +157,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await fetch(`/api/homepage-content?language=${language}`);
       return response.json();
     },
+  });
+
+  const { data: partners = [], isLoading: partnersLoading } = useQuery<Partner[]>({
+    queryKey: ['/api/partners'],
   });
 
   // Forms
@@ -241,6 +257,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       ctaDescription: "",
       ctaButtonText: "",
       ctaSecondaryButtonText: "",
+    },
+  });
+
+  const partnerForm = useForm<PartnerFormData>({
+    resolver: zodResolver(partnerSchema),
+    defaultValues: {
+      name: "",
+      logo: "",
+      website: "",
+      description: "",
+      order: 0,
+      active: true,
     },
   });
 
@@ -379,6 +407,64 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  // Partner Mutations
+  const createPartnerMutation = useMutation({
+    mutationFn: async (data: PartnerFormData) => {
+      const response = await apiRequest('POST', '/api/partners', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/partners'] });
+      toast({ title: "Partner created successfully" });
+      partnerForm.reset();
+      setIsPartnerDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating partner",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updatePartnerMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<PartnerFormData> }) => {
+      const response = await apiRequest('PUT', `/api/partners/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/partners'] });
+      toast({ title: "Partner updated successfully" });
+      setEditingPartner(null);
+      setIsPartnerDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating partner",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deletePartnerMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/partners/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/partners'] });
+      toast({ title: "Partner deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting partner",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const updateArticleMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<ArticleFormData> }) => {
       const response = await apiRequest('PUT', `/api/articles/${id}`, data);
@@ -507,6 +593,27 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await updateArticleMutation.mutateAsync({ id: editingArticle.id, data });
     } else {
       await createArticleMutation.mutateAsync(data);
+    }
+  };
+
+  const handleEditPartner = (partner: Partner) => {
+    setEditingPartner(partner);
+    partnerForm.reset({
+      name: partner.name,
+      logo: partner.logo,
+      website: partner.website || "",
+      description: partner.description || "",
+      order: partner.order,
+      active: partner.active,
+    });
+    setIsPartnerDialogOpen(true);
+  };
+
+  const onPartnerSubmit = async (data: PartnerFormData) => {
+    if (editingPartner) {
+      await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data });
+    } else {
+      await createPartnerMutation.mutateAsync(data);
     }
   };
 
@@ -1807,6 +1914,239 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             size="sm"
                             onClick={() => deleteArticleMutation.mutate(article.id)}
                             data-testid={`button-delete-article-${article.id}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (activeTab === 'partners') {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-sans font-light">Partners Management</h2>
+          <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
+            <DialogTrigger asChild>
+              <Button data-testid="button-add-partner">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Partner
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingPartner ? "Edit Partner" : "Add New Partner"}
+                </DialogTitle>
+              </DialogHeader>
+              <Form {...partnerForm}>
+                <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={partnerForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Partner Name *</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-partner-name" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={partnerForm.control}
+                      name="website"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Website</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-partner-website" placeholder="https://example.com" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={partnerForm.control}
+                    name="logo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Logo URL *</FormLabel>
+                        <FormControl>
+                          <Input {...field} data-testid="input-partner-logo" placeholder="https://example.com/logo.png" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={partnerForm.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={3} data-testid="textarea-partner-description" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={partnerForm.control}
+                      name="order"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Display Order</FormLabel>
+                          <FormControl>
+                            <Input 
+                              {...field} 
+                              type="number" 
+                              onChange={(e) => field.onChange(Number(e.target.value))}
+                              data-testid="input-partner-order" 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={partnerForm.control}
+                      name="active"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                          <FormControl>
+                            <input
+                              type="checkbox"
+                              checked={field.value}
+                              onChange={field.onChange}
+                              data-testid="checkbox-partner-active"
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>Active Partner</FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex justify-end space-x-2 pt-4">
+                    <Button type="button" variant="outline" onClick={() => setIsPartnerDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" data-testid="button-save-partner">
+                      {editingPartner ? "Update Partner" : "Add Partner"}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Partners</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {partnersLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex justify-between items-center p-4 border rounded">
+                    <div className="space-y-2">
+                      <div className="h-4 bg-muted rounded animate-pulse w-32" />
+                      <div className="h-3 bg-muted rounded animate-pulse w-24" />
+                    </div>
+                    <div className="h-8 w-16 bg-muted rounded animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Logo</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Website</TableHead>
+                    <TableHead>Order</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {partners.map((partner) => (
+                    <TableRow key={partner.id}>
+                      <TableCell>
+                        <img 
+                          src={partner.logo} 
+                          alt={partner.name}
+                          className="w-12 h-12 object-contain"
+                          data-testid={`img-partner-logo-${partner.id}`}
+                        />
+                      </TableCell>
+                      <TableCell data-testid={`text-partner-name-${partner.id}`}>
+                        {partner.name}
+                      </TableCell>
+                      <TableCell>
+                        {partner.website ? (
+                          <a 
+                            href={partner.website} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline text-sm"
+                            data-testid={`link-partner-website-${partner.id}`}
+                          >
+                            Visit Website
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell data-testid={`text-partner-order-${partner.id}`}>
+                        {partner.order}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={partner.active ? 'default' : 'secondary'}
+                          data-testid={`badge-partner-status-${partner.id}`}
+                        >
+                          {partner.active ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditPartner(partner)}
+                            data-testid={`button-edit-partner-${partner.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deletePartnerMutation.mutate(partner.id)}
+                            data-testid={`button-delete-partner-${partner.id}`}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
