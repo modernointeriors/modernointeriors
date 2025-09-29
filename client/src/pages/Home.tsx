@@ -795,16 +795,26 @@ export default function Home() {
           onMouseEnter={handleContactMouseEnter}
           onMouseLeave={handleContactMouseLeave}
         >
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-5xl font-light mb-6" data-testid="heading-questions">
-              {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
-            </h1>
-            <p className="text-lg text-gray-400 mb-8" data-testid="text-consultation">
-              {language === 'vi' ? 'Để lại yêu cầu tư vấn miễn phí' : 'Leave a request for a free consultation'}
-            </p>
+          <div className="mb-16">
+            <div className="mb-8">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
+                {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
+              </h2>
+            </div>
+            <div className="flex items-start justify-between">
+              <div className="max-w-4xl">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed" data-testid="text-consultation">
+                  {language === 'vi' 
+                    ? 'Để lại yêu cầu tư vấn miễn phí và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.'
+                    : 'Leave a request for a free consultation and we will contact you as soon as possible.'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
             
-            {/* Expand/Collapse Button */}
-            <button
+          {/* Expand/Collapse Button */}
+          <button
               onClick={() => setContactFormExpanded(!contactFormExpanded)}
               className="flex items-center gap-4 group transition-all duration-300"
               data-testid="button-toggle-form"
@@ -818,7 +828,6 @@ export default function Home() {
                 </svg>
               </div>
             </button>
-          </div>
 
           {/* Expandable Form */}
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
