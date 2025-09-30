@@ -512,7 +512,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className="ml-16 pb-8 md:pb-6 mb-4">{children}</main>
 
       {/* Footer - Updated with dark design matching the provided image */}
-      <footer className="ml-16 bg-black text-white pt-32 pb-12 border-t border-gray-800">
+      <footer className="ml-16 bg-black text-white pt-16 pb-8 border-t border-gray-800">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-20">
             {/* Corporate Office */}
