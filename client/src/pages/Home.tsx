@@ -530,27 +530,13 @@ export default function Home() {
               
               {/* Right side content */}
               <div className="text-white">
-                <div className="mb-8">
+                <div>
                   <p className="text-xl md:text-2xl font-light leading-relaxed">
                     {language === 'vi' 
                       ? 'Chúng tôi chỉ sử dụng vật liệu chất lượng cao và đồ nội thất từ các nhà sản xuất uy tín.'
                       : 'We use only high-quality materials and furniture from trusted manufacturers.'
                     }
                   </p>
-                </div>
-                
-                <div className="flex justify-end">
-                  <Button 
-                    variant="secondary" 
-                    size="lg"
-                    asChild
-                    className="bg-white text-black hover:bg-gray-100 px-8 py-4 text-lg font-medium"
-                    data-testid="button-consultation"
-                  >
-                    <Link href="/contact">
-                      • {language === 'vi' ? 'TƯ VẤN' : 'CONSULTATION'}
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </div>
