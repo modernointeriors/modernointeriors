@@ -23,6 +23,47 @@ export default function Portfolio() {
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
 
+  // Scroll animation observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target.classList.contains('project-card')) {
+              entry.target.classList.add('animate-fade-in-up');
+            } else if (entry.target.classList.contains('filter-section')) {
+              entry.target.classList.add('animate-fade-in-up');
+            } else {
+              entry.target.classList.add('animate-slide-in-left');
+            }
+          } else {
+            // Reset animations when scrolling back up
+            entry.target.classList.remove('animate-fade-in-up', 'animate-slide-in-left');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    // Observe elements
+    const observeElements = () => {
+      const animateElements = document.querySelectorAll('.scroll-animate, .project-card, .filter-section');
+      animateElements.forEach((el) => observer.observe(el));
+    };
+
+    observeElements();
+
+    // Re-observe after delays to catch dynamically loaded content
+    const timers = [500, 1000, 2000].map(delay => 
+      setTimeout(observeElements, delay)
+    );
+
+    return () => {
+      observer.disconnect();
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, []);
+
   const { data: allProjects = [], isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects', activeCategory],
     queryFn: async () => {
@@ -232,7 +273,7 @@ export default function Portfolio() {
     <div className="min-h-screen pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 scroll-animate">
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">
             {language === 'vi' ? 'DỰ ÁN' : 'PROJECT'}
           </h1>
@@ -245,7 +286,7 @@ export default function Portfolio() {
         </div>
 
         {/* Search Box with Year Filter */}
-        <div className="max-w-2xl mx-auto mb-12">
+        <div className="max-w-2xl mx-auto mb-12 filter-section">
           <div className="flex items-end gap-8 border-b border-white/30 pb-4">
             <Input
               type="text"
@@ -283,7 +324,7 @@ export default function Portfolio() {
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-8 mb-12">
+        <div className="flex flex-wrap justify-center gap-8 mb-12 filter-section">
           {categories.map((category) => (
             <button
               key={category.value}

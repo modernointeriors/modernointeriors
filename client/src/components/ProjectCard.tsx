@@ -11,7 +11,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <div 
-      className="group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none"
+      className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none"
     >
       <Link href={`/project/${project.id}`}>
         <img 
