@@ -635,7 +635,7 @@
     animation-delay: 0.75s;
   }
 
-  /* Initial hidden state for animations - force hidden */
+  /* Initial hidden state for animations */
   .scroll-animate:not(.animated),
   .project-card:not(.animated),
   .service-card:not(.animated),
@@ -644,18 +644,6 @@
   .process-step:not(.animated),
   .view-more-btn:not(.animated) {
     opacity: 0 !important;
-    visibility: hidden;
-  }
-
-  /* Ensure smooth animation start */
-  .scroll-animate.animated,
-  .project-card.animated,
-  .service-card.animated,
-  .article-card.animated,
-  .advantage-card.animated,
-  .process-step.animated,
-  .view-more-btn.animated {
-    visibility: visible;
   }
 
 }
