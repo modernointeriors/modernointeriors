@@ -31,7 +31,7 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation - cards from bottom, others from left
+  // Scroll animation - smart direction based on position
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,14 +40,25 @@ export default function Home() {
             const element = entry.target;
             element.classList.add('animated');
             
-            // News/Projects/Why Choose Us cards slide from bottom
+            // Cards slide from bottom
             if (element.classList.contains('project-card') || 
                 element.classList.contains('article-card') ||
                 element.classList.contains('advantage-card')) {
               element.classList.add('animate-fade-in-up');
-            } else {
-              // Other elements slide from left
-              element.classList.add('animate-slide-in-from-left');
+            } 
+            // Check position for titles/elements
+            else {
+              const rect = element.getBoundingClientRect();
+              const windowWidth = window.innerWidth;
+              const elementCenter = rect.left + (rect.width / 2);
+              
+              // If element is on left half, slide from left
+              // If element is on right half, slide from right
+              if (elementCenter < windowWidth / 2) {
+                element.classList.add('animate-slide-in-from-left');
+              } else {
+                element.classList.add('animate-slide-in-from-right');
+              }
             }
           }
         });
