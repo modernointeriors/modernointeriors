@@ -210,18 +210,15 @@ export default function Portfolio() {
         </div>
 
         {/* Search Box */}
-        <div className="max-w-xl mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
-            <Input
-              type="text"
-              placeholder={language === 'vi' ? 'Tìm kiếm dự án...' : 'Search projects...'}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border border-white/30 text-white placeholder-white/50 pl-12 pr-4 py-6 rounded-none focus:border-white focus-visible:ring-0 w-full"
-              data-testid="input-search"
-            />
-          </div>
+        <div className="max-w-2xl mx-auto mb-12">
+          <Input
+            type="text"
+            placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 px-0 py-4 text-lg font-light rounded-none focus:border-white focus-visible:ring-0 w-full"
+            data-testid="input-search"
+          />
         </div>
 
         {/* Category Filter */}
