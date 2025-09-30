@@ -31,65 +31,42 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation observer - run once, reset only when back to top
+  // Simple scroll animation - run once per element
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            // Mark as animated to prevent re-running
-            entry.target.classList.add('animated');
-            
-            // Check if it's a card, process step, or project/article card
-            if (entry.target.classList.contains('advantage-card') || 
-                entry.target.classList.contains('process-step') ||
-                entry.target.classList.contains('project-card') ||
-                entry.target.classList.contains('article-card')) {
-              entry.target.classList.add('animate-fade-in-up');
-            } else if (entry.target.classList.contains('view-more-btn')) {
-              entry.target.classList.add('animate-fade-in-up');
-            } else {
-              // Title animations
-              entry.target.classList.add('animate-slide-in-left');
-              const sibling = entry.target.nextElementSibling;
-              if (sibling?.classList.contains('scroll-animate')) {
-                sibling.classList.add('animate-slide-in-right');
-              }
-            }
+            entry.target.classList.add('animated', 'animate-fade-in-up');
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
     );
 
-    // Observe elements initially and on DOM changes
     const observeElements = () => {
-      const animateElements = document.querySelectorAll('.scroll-animate, .advantage-card, .process-step, .project-card, .article-card, .view-more-btn');
-      animateElements.forEach((el) => observer.observe(el));
+      const elements = document.querySelectorAll('.scroll-animate, .advantage-card, .process-step, .project-card, .article-card, .view-more-btn');
+      elements.forEach((el) => observer.observe(el));
     };
 
     observeElements();
 
-    // Re-observe after a delay to catch dynamically loaded content
-    const timers = [500, 1000, 2000].map(delay => 
-      setTimeout(observeElements, delay)
-    );
+    const timer = setTimeout(observeElements, 1000);
 
-    // Reset all animations when scrolling back to top
+    // Reset when back to top
     const handleScroll = () => {
-      if (window.scrollY < 100) {
-        const animatedElements = document.querySelectorAll('.animated');
-        animatedElements.forEach((el) => {
-          el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+      if (window.scrollY < 50) {
+        document.querySelectorAll('.animated').forEach((el) => {
+          el.classList.remove('animated', 'animate-fade-in-up');
         });
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       observer.disconnect();
-      timers.forEach(timer => clearTimeout(timer));
+      clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
