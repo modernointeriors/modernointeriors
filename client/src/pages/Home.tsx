@@ -784,35 +784,6 @@ export default function Home() {
               </p>
             </div>
           </div>
-
-          {/* CTA Section */}
-          <div className="pt-16">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <h3 className="text-2xl md:text-3xl font-light text-white">
-                {language === 'vi' ? 'Thiết Kế Tương Lai Cùng Chúng Tôi!' : 'Now Design Your Future With Us!'}
-              </h3>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/portfolio">
-                  <Button 
-                    className="bg-white/10 border border-white/30 text-white hover:bg-white/20 hover:border-white px-8 py-6 font-light tracking-widest uppercase transition-all duration-300 rounded-none group"
-                    data-testid="button-view-projects"
-                  >
-                    <span>{language === 'vi' ? 'XEM DỰ ÁN' : 'VIEW PROJECTS'}</span>
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button 
-                    className="bg-primary border border-primary text-black hover:bg-primary/90 px-8 py-6 font-light tracking-widest uppercase transition-all duration-300 rounded-none group"
-                    data-testid="button-request-consultation"
-                  >
-                    <span>{language === 'vi' ? 'TƯ VẤN NGAY' : 'REQUEST CONSULTATION'}</span>
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
