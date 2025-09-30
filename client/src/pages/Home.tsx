@@ -31,35 +31,13 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation - smart direction based on position
+  // Simple scroll animation - run once per element
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            const element = entry.target;
-            element.classList.add('animated');
-            
-            // Cards slide from bottom
-            if (element.classList.contains('project-card') || 
-                element.classList.contains('article-card') ||
-                element.classList.contains('advantage-card')) {
-              element.classList.add('animate-fade-in-up');
-            } 
-            // Check position for titles/elements
-            else {
-              const rect = element.getBoundingClientRect();
-              const windowWidth = window.innerWidth;
-              const elementCenter = rect.left + (rect.width / 2);
-              
-              // If element is on left half, slide from left
-              // If element is on right half, slide from right
-              if (elementCenter < windowWidth / 2) {
-                element.classList.add('animate-slide-in-from-left');
-              } else {
-                element.classList.add('animate-slide-in-from-right');
-              }
-            }
+            entry.target.classList.add('animated', 'animate-fade-in-up');
           }
         });
       },
@@ -79,7 +57,7 @@ export default function Home() {
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
-          el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
+          el.classList.remove('animated', 'animate-fade-in-up');
         });
       }
     };
