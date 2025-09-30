@@ -404,6 +404,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Quality Hero Section */}
+      <section className="relative h-[60vh] min-h-[500px] overflow-hidden">
+        <img 
+          src="/attached_assets/image_1759229198208.png"
+          alt="Quality Interior Design"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full">
+            <div className="text-white">
+              <p className="text-3xl md:text-4xl font-light leading-relaxed">
+                {language === 'vi' 
+                  ? 'Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và trông hoàn hảo.'
+                  : 'Each detail is selected so that the interior will serve for a long time and look impeccable.'}
+              </p>
+            </div>
+            <div className="text-white flex items-end md:items-center">
+              <p className="text-lg md:text-xl font-light">
+                {language === 'vi'
+                  ? 'Chúng tôi chỉ sử dụng vật liệu và nội thất chất lượng cao từ các nhà sản xuất đáng tin cậy.'
+                  : 'We use only high-quality materials and furniture from trusted manufacturers.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured News Section */}
       <section id="featured-news" className="py-16 bg-background">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
