@@ -661,9 +661,7 @@
 
   /* Initial hidden state for animations */
   .scroll-animate:not(.animated),
-  .project-card:not(.animated),
   .service-card:not(.animated),
-  .article-card:not(.animated),
   .advantage-card:not(.animated),
   .process-step:not(.animated),
   .view-more-btn:not(.animated) {
@@ -672,9 +670,7 @@
 
   /* Ensure smooth animation start */
   .scroll-animate.animated,
-  .project-card.animated,
   .service-card.animated,
-  .article-card.animated,
   .advantage-card.animated,
   .process-step.animated,
   .view-more-btn.animated {
