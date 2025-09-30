@@ -405,24 +405,24 @@ export default function Home() {
       </section>
 
       {/* Quality Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] overflow-hidden">
+      <section className="relative h-[70vh] min-h-[600px] overflow-hidden scroll-animate">
         <img 
-          src="/attached_assets/image_1759229198208.png"
+          src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
           alt="Quality Interior Design"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60" />
         <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full">
-            <div className="text-white">
-              <p className="text-3xl md:text-4xl font-light leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
+            <div className="text-white space-y-6 scroll-animate">
+              <p className="text-3xl md:text-5xl font-light leading-relaxed">
                 {language === 'vi' 
                   ? 'Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và trông hoàn hảo.'
                   : 'Each detail is selected so that the interior will serve for a long time and look impeccable.'}
               </p>
             </div>
-            <div className="text-white flex items-end md:items-center">
-              <p className="text-lg md:text-xl font-light">
+            <div className="text-white space-y-6 scroll-animate">
+              <p className="text-xl md:text-2xl font-light leading-relaxed">
                 {language === 'vi'
                   ? 'Chúng tôi chỉ sử dụng vật liệu và nội thất chất lượng cao từ các nhà sản xuất đáng tin cậy.'
                   : 'We use only high-quality materials and furniture from trusted manufacturers.'}
