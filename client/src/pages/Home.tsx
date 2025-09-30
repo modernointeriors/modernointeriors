@@ -519,26 +519,20 @@ export default function Home() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
               {/* Left side text */}
-              <div className="text-white">
-                <p className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed scroll-animate">
-                  {language === 'vi' 
-                    ? 'Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và luôn hoàn hảo.'
-                    : 'Each detail is selected so that the interior will serve for a long time and look impeccable.'
-                  }
-                </p>
-              </div>
+              <p className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed text-white scroll-animate">
+                {language === 'vi' 
+                  ? 'Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và luôn hoàn hảo.'
+                  : 'Each detail is selected so that the interior will serve for a long time and look impeccable.'
+                }
+              </p>
               
               {/* Right side content */}
-              <div className="text-white">
-                <div>
-                  <p className="text-xl md:text-2xl font-light leading-relaxed scroll-animate">
-                    {language === 'vi' 
-                      ? 'Chúng tôi chỉ sử dụng vật liệu chất lượng cao và đồ nội thất từ các nhà sản xuất uy tín.'
-                      : 'We use only high-quality materials and furniture from trusted manufacturers.'
-                    }
-                  </p>
-                </div>
-              </div>
+              <p className="text-xl md:text-2xl font-light leading-relaxed text-white scroll-animate">
+                {language === 'vi' 
+                  ? 'Chúng tôi chỉ sử dụng vật liệu chất lượng cao và đồ nội thất từ các nhà sản xuất uy tín.'
+                  : 'We use only high-quality materials and furniture from trusted manufacturers.'
+                }
+              </p>
             </div>
           </div>
         </div>
