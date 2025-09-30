@@ -1,18 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Eye, ArrowRight, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const categories = [
   { value: 'all', label: 'All Articles' },
-  { value: 'newest', label: 'Newest First' },
-  { value: 'oldest', label: 'Oldest First' },
   { value: 'news', label: 'News' },
   { value: 'tips', label: 'Design Tips' },
   { value: 'projects', label: 'Project Highlights' },
@@ -23,6 +21,8 @@ export default function Blog() {
   const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedYear, setSelectedYear] = useState('all');
   const articlesPerPage = 12;
 
   // SEO meta tags
@@ -70,48 +70,68 @@ export default function Blog() {
   }, [language]);
 
   const { data: allArticles = [], isLoading } = useQuery<Article[]>({
-    queryKey: ['/api/articles', activeCategory, language],
+    queryKey: ['/api/articles', language],
     queryFn: async () => {
       const params = new URLSearchParams();
       params.append('language', language);
-      if (activeCategory !== 'all' && activeCategory !== 'newest' && activeCategory !== 'oldest') {
-        params.append('category', activeCategory);
-      }
       const response = await fetch(`/api/articles?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to fetch articles');
       }
-      let articles = await response.json();
+      const articles = await response.json();
       
-      // Sort articles based on activeCategory
-      if (activeCategory === 'newest') {
-        articles.sort((a: Article, b: Article) => {
-          const dateA = new Date(a.publishedAt || a.createdAt);
-          const dateB = new Date(b.publishedAt || b.createdAt);
-          return dateB.getTime() - dateA.getTime(); // Newest first
-        });
-      } else if (activeCategory === 'oldest') {
-        articles.sort((a: Article, b: Article) => {
-          const dateA = new Date(a.publishedAt || a.createdAt);
-          const dateB = new Date(b.publishedAt || b.createdAt);
-          return dateA.getTime() - dateB.getTime(); // Oldest first
-        });
-      }
+      // Sort articles by newest first
+      articles.sort((a: Article, b: Article) => {
+        const dateA = new Date(a.publishedAt || a.createdAt);
+        const dateB = new Date(b.publishedAt || b.createdAt);
+        return dateB.getTime() - dateA.getTime();
+      });
       
       return articles;
     },
   });
 
-  // Reset to page 1 when category changes
+  // Extract unique years from articles
+  const availableYears = useMemo(() => {
+    const years = allArticles.map(article => {
+      const date = new Date(article.publishedAt || article.createdAt);
+      return date.getFullYear().toString();
+    });
+    return Array.from(new Set(years)).sort((a, b) => parseInt(b) - parseInt(a));
+  }, [allArticles]);
+
+  // Filter articles based on search, category, and year
+  const filteredArticles = useMemo(() => {
+    return allArticles.filter(article => {
+      // Search filter - search in title, excerpt, and content
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = !searchTerm || 
+        article.title.toLowerCase().includes(searchLower) ||
+        article.excerpt?.toLowerCase().includes(searchLower) ||
+        article.content?.toLowerCase().includes(searchLower) ||
+        getCategoryLabel(article.category).toLowerCase().includes(searchLower);
+
+      // Category filter
+      const matchesCategory = activeCategory === 'all' || article.category === activeCategory;
+
+      // Year filter
+      const articleYear = new Date(article.publishedAt || article.createdAt).getFullYear().toString();
+      const matchesYear = selectedYear === 'all' || articleYear === selectedYear;
+
+      return matchesSearch && matchesCategory && matchesYear;
+    });
+  }, [allArticles, searchTerm, activeCategory, selectedYear]);
+
+  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory]);
+  }, [activeCategory, searchTerm, selectedYear]);
 
   // Calculate pagination
-  const totalPages = Math.ceil(allArticles.length / articlesPerPage);
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
   const startIndex = (currentPage - 1) * articlesPerPage;
   const endIndex = startIndex + articlesPerPage;
-  const articles = allArticles.slice(startIndex, endIndex);
+  const articles = filteredArticles.slice(startIndex, endIndex);
 
   // Pagination component
   const Pagination = () => {
@@ -257,7 +277,7 @@ export default function Blog() {
   };
 
   const getCategoryLabel = (category: string) => {
-    const categoryMap = {
+    const categoryMap: Record<string, Record<string, string>> = {
       en: {
         news: 'News',
         tips: 'Design Tips',
@@ -273,7 +293,7 @@ export default function Blog() {
         general: 'Chung'
       }
     };
-    return categoryMap[language][category as keyof typeof categoryMap.en] || category;
+    return categoryMap[language]?.[category] || category;
   };
 
   return (
@@ -282,7 +302,7 @@ export default function Blog() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-blog">
-            {language === 'vi' ? 'Tin tức & Cảm hứng' : 'News & Inspiration'}
+            {language === 'vi' ? 'TIN TỨC & CẢM HỨNG' : 'NEWS & INSPIRATION'}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {language === 'vi' 
@@ -292,30 +312,65 @@ export default function Blog() {
           </p>
         </div>
 
+        {/* Search Box with Year Filter */}
+        <div className="max-w-2xl mx-auto mb-12">
+          <div className="flex items-end gap-8 border-b border-white/30 pb-4">
+            <Input
+              type="text"
+              placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-transparent border-0 text-white placeholder-white/60 px-0 py-0 text-lg font-light rounded-none focus-visible:ring-0 flex-1"
+              data-testid="input-search"
+            />
+            {availableYears.length > 0 && (
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger 
+                  className="w-[140px] bg-transparent border-0 text-white/60 text-base font-light p-0 h-auto focus:ring-0 focus:ring-offset-0 [&>svg]:text-white/60"
+                  data-testid="select-year"
+                >
+                  <SelectValue placeholder={language === 'vi' ? 'Năm' : 'Year'} />
+                </SelectTrigger>
+                <SelectContent className="bg-black border-white/30 text-white rounded-none">
+                  <SelectItem value="all" className="focus:bg-white/10 focus:text-white">
+                    {language === 'vi' ? 'Tất cả các năm' : 'All years'}
+                  </SelectItem>
+                  {availableYears.map((year) => (
+                    <SelectItem 
+                      key={year} 
+                      value={year}
+                      className="focus:bg-white/10 focus:text-white"
+                    >
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+        </div>
+
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-8 mb-12">
           {categories.map((category) => (
-            <Button
+            <button
               key={category.value}
-              variant="outline"
               onClick={() => setActiveCategory(category.value)}
-              className={`px-6 py-3 font-light border-white text-white hover:bg-white hover:text-black transition-all duration-200 rounded-none ${
+              className={`text-sm font-light tracking-widest uppercase transition-colors duration-300 ${
                 activeCategory === category.value 
-                  ? 'bg-primary border-primary text-black hover:bg-primary hover:text-black' 
-                  : 'bg-transparent'
+                  ? 'text-white' 
+                  : 'text-white/60 hover:text-white'
               }`}
               data-testid={`filter-${category.value}`}
             >
               {language === 'vi' ? {
-                'all': 'Tất cả bài viết',
-                'newest': 'Mới nhất',
-                'oldest': 'Cũ nhất',
-                'news': 'Tin tức',
-                'tips': 'Mẹo thiết kế',
-                'projects': 'Dự án nổi bật',
-                'design-trends': 'Xu hướng thiết kế'
-              }[category.value] : category.label}
-            </Button>
+                'all': 'TẤT CẢ BÀI VIẾT',
+                'news': 'TIN TỨC',
+                'tips': 'MẸO THIẾT KẾ',
+                'projects': 'DỰ ÁN NỔI BẬT',
+                'design-trends': 'XU HƯỚNG THIẾT KẾ'
+              }[category.value] : category.label.toUpperCase()}
+            </button>
           ))}
         </div>
 
@@ -402,11 +457,11 @@ export default function Blog() {
       </div>
       
       {/* Show results info */}
-      {!isLoading && allArticles.length > 0 && (
+      {!isLoading && filteredArticles.length > 0 && (
         <div className="text-center text-muted-foreground text-sm mt-8">
           {language === 'vi' 
-            ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, allArticles.length)} trong tổng số ${allArticles.length} bài viết`
-            : `Showing ${startIndex + 1}-${Math.min(endIndex, allArticles.length)} of ${allArticles.length} articles`
+            ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, filteredArticles.length)} trong tổng số ${filteredArticles.length} bài viết`
+            : `Showing ${startIndex + 1}-${Math.min(endIndex, filteredArticles.length)} of ${filteredArticles.length} articles`
           }
         </div>
       )}
