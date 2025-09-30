@@ -590,28 +590,28 @@
   }
 
   .animate-slide-in-left {
-    opacity: 0;
-    animation: slide-in-left 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0 !important;
+    animation: slide-in-left 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-slide-in-right {
-    opacity: 0;
-    animation: slide-in-right 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0 !important;
+    animation: slide-in-right 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-slide-in-from-left {
-    opacity: 0;
-    animation: slide-in-left 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0 !important;
+    animation: slide-in-left 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-slide-in-from-right {
-    opacity: 0;
-    animation: slide-in-right 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0 !important;
+    animation: slide-in-right 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-fade-in-up {
-    opacity: 0;
-    animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0 !important;
+    animation: fade-in-up 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   /* Staggered animation delays for cards */
@@ -635,7 +635,7 @@
     animation-delay: 0.75s;
   }
 
-  /* Initial hidden state for animations */
+  /* Initial hidden state for animations - force hidden */
   .scroll-animate:not(.animated),
   .project-card:not(.animated),
   .service-card:not(.animated),
@@ -643,7 +643,8 @@
   .advantage-card:not(.animated),
   .process-step:not(.animated),
   .view-more-btn:not(.animated) {
-    opacity: 0;
+    opacity: 0 !important;
+    visibility: hidden;
   }
 
   /* Ensure smooth animation start */
@@ -654,7 +655,7 @@
   .advantage-card.animated,
   .process-step.animated,
   .view-more-btn.animated {
-    opacity: 1;
+    visibility: visible;
   }
 
 }
