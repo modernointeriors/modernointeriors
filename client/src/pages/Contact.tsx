@@ -9,7 +9,7 @@ import { insertInquirySchema, type InsertInquiry } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Contact() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -145,10 +145,10 @@ export default function Contact() {
                   type="submit"
                   disabled={mutation.isPending}
                   variant="outline"
-                  className="bg-transparent border border-white text-white hover:bg-white hover:text-black hover:scale-105 px-8 py-3 font-medium tracking-wide transition-all duration-300 ease-in-out rounded-none"
+                  className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-16 py-6 font-light tracking-[0.2em] transition-all duration-300 ease-in-out rounded-none uppercase text-sm"
                   data-testid="button-leave-request"
                 >
-                  {mutation.isPending ? t('contact.form.sending') : t('contact.form.submit')}
+                  {mutation.isPending ? t('contact.form.sending') : (language === 'vi' ? 'GỬI YÊU CẦU' : 'LEAVE A REQUEST')}
                 </Button>
               </div>
             </div>
