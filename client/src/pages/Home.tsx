@@ -288,10 +288,10 @@ export default function Home() {
               </div>
               <div className="flex-shrink-0 ml-8">
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="default"
                   asChild
-                  className="rounded-none border-white hover:bg-white hover:text-black"
+                  className="rounded-none hover:bg-transparent hover:text-white/80"
                   data-testid="button-view-more-projects"
                 >
                   <Link href="/portfolio">
@@ -392,10 +392,10 @@ export default function Home() {
               </div>
               <div className="flex-shrink-0 ml-8">
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="default"
                   asChild
-                  className="rounded-none border-white hover:bg-white hover:text-black"
+                  className="rounded-none hover:bg-transparent hover:text-white/80"
                   data-testid="button-view-more-news"
                 >
                   <Link href="/blog">
