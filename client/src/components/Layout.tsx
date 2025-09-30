@@ -671,7 +671,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
           
           <div className="mt-20 pt-10 text-center border-t border-gray-800">
-            <p className="text-white/60 text-base font-light">
+            <p className="text-white/60 text-xs font-light">
               © 2025 Moderno Interiors Design
             </p>
           </div>
