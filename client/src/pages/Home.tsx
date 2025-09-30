@@ -416,7 +416,7 @@ export default function Home() {
                           className="w-full h-48 object-cover"
                           data-testid={`img-article-${article.id}`}
                         />
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
                       <CardContent className="p-6">
                         <h3 className="text-xl font-sans font-light mb-2 line-clamp-2" data-testid={`text-article-title-${article.id}`}>
