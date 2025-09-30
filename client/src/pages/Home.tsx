@@ -244,7 +244,7 @@ export default function Home() {
 
       {/* Featured Projects Section */}
       <section id="featured-projects" className="py-8 md:py-12 bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
@@ -348,7 +348,7 @@ export default function Home() {
 
       {/* Featured News Section */}
       <section id="featured-news" className="py-8 md:py-12 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
@@ -458,7 +458,7 @@ export default function Home() {
         </div>
         
         <div className="relative h-full flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
               {/* Left side text */}
               <div className="text-white">
@@ -506,7 +506,7 @@ export default function Home() {
         onMouseEnter={handleProcessSectionMouseEnter}
         onMouseLeave={handleProcessSectionMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Title */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 mb-8">
@@ -699,7 +699,7 @@ export default function Home() {
 
       {/* Partners Section */}
       <section className="py-24 bg-black border-t border-white/10 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
               {language === 'vi' ? 'ĐỐI TÁC CỦA CHÚNG TÔI' : 'OUR PARTNERS'}
@@ -791,7 +791,7 @@ export default function Home() {
       {/* Quick Contact Section */}
       <section className="py-24 bg-black border-t border-white/10">
         <div 
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8"
           onMouseEnter={handleContactMouseEnter}
           onMouseLeave={handleContactMouseLeave}
         >
