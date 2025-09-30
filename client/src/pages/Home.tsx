@@ -54,11 +54,15 @@ export default function Home() {
               }
             }
           } else {
-            // Remove animation classes when element leaves viewport (for reset on scroll back)
-            entry.target.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
-            const sibling = entry.target.nextElementSibling;
-            if (sibling?.classList.contains('scroll-animate')) {
-              sibling.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+            // Only reset for non-card elements (to avoid affecting horizontal scroll)
+            // Cards in horizontal scroll containers should keep their animation
+            if (!entry.target.classList.contains('project-card') && 
+                !entry.target.classList.contains('article-card')) {
+              entry.target.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+              const sibling = entry.target.nextElementSibling;
+              if (sibling?.classList.contains('scroll-animate')) {
+                sibling.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+              }
             }
           }
         });
