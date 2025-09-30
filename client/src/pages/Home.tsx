@@ -275,7 +275,7 @@ export default function Home() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="group relative overflow-hidden cursor-pointer h-[28rem] rounded-none">
+                <div key={i} className="group relative overflow-hidden cursor-pointer h-[36rem] rounded-none">
                   <div className="animate-pulse bg-white/10 h-full w-full" />
                 </div>
               ))}
@@ -287,7 +287,7 @@ export default function Home() {
                 {featuredProjects?.slice(0, 5).map((project) => (
                     <div 
                       key={project.id} 
-                      className="group relative overflow-hidden cursor-pointer h-[28rem] rounded-none"
+                      className="group relative overflow-hidden cursor-pointer h-[36rem] rounded-none"
                       onClick={() => navigate(`/project/${project.id}`)}
                     >
                     <img 
@@ -376,7 +376,7 @@ export default function Home() {
           {articlesLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Card key={i} className="overflow-hidden h-[28rem] rounded-none">
+                <Card key={i} className="overflow-hidden h-[36rem] rounded-none">
                   <div className="animate-pulse bg-white/10 h-48 w-full" />
                   <CardContent className="p-6">
                     <div className="animate-pulse space-y-3">
@@ -398,7 +398,7 @@ export default function Home() {
                 {featuredArticles?.slice(0, 5).map((article) => (
                     <Card 
                       key={article.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] rounded-none"
+                      className="group overflow-hidden hover-scale cursor-pointer h-[36rem] rounded-none"
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
