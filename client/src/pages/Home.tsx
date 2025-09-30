@@ -40,11 +40,11 @@ export default function Home() {
             const element = entry.target;
             element.classList.add('animated');
             
-            // Cards slide from bottom
+            // Cards drop down from top (news, portfolio, why choose us)
             if (element.classList.contains('project-card') || 
                 element.classList.contains('article-card') ||
                 element.classList.contains('advantage-card')) {
-              element.classList.add('animate-fade-in-up');
+              element.classList.add('animate-drop-down');
             }
             // Buttons and arrows from right
             else if (element.classList.contains('view-more-btn') || 
@@ -74,7 +74,7 @@ export default function Home() {
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
-          el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
+          el.classList.remove('animated', 'animate-drop-down', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
         });
       }
     };
