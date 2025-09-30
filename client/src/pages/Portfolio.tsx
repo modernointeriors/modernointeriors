@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import ProjectCard from "@/components/ProjectCard";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react';
 import type { Project } from "@shared/schema";
 
 const categories = [
@@ -16,6 +17,7 @@ const categories = [
 export default function Portfolio() {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
 
@@ -35,16 +37,27 @@ export default function Portfolio() {
     },
   });
 
-  // Reset to page 1 when category changes
+  // Reset to page 1 when category or search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory]);
+  }, [activeCategory, searchTerm]);
+
+  // Filter projects by search term
+  const filteredProjects = allProjects.filter(project => {
+    if (!searchTerm) return true;
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      project.title.toLowerCase().includes(searchLower) ||
+      project.location?.toLowerCase().includes(searchLower) ||
+      project.description?.toLowerCase().includes(searchLower)
+    );
+  });
 
   // Calculate pagination
-  const totalPages = Math.ceil(allProjects.length / projectsPerPage);
+  const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
   const startIndex = (currentPage - 1) * projectsPerPage;
   const endIndex = startIndex + projectsPerPage;
-  const projects = allProjects.slice(startIndex, endIndex);
+  const projects = filteredProjects.slice(startIndex, endIndex);
 
   // Pagination component
   const Pagination = () => {
@@ -196,6 +209,21 @@ export default function Portfolio() {
           </p>
         </div>
 
+        {/* Search Box */}
+        <div className="max-w-xl mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+            <Input
+              type="text"
+              placeholder={language === 'vi' ? 'Tìm kiếm dự án...' : 'Search projects...'}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-transparent border border-white/30 text-white placeholder-white/50 pl-12 pr-4 py-6 rounded-none focus:border-white focus-visible:ring-0 w-full"
+              data-testid="input-search"
+            />
+          </div>
+        </div>
+
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((category) => (
@@ -259,11 +287,11 @@ export default function Portfolio() {
       </div>
       
       {/* Show results info */}
-      {!isLoading && allProjects.length > 0 && (
+      {!isLoading && filteredProjects.length > 0 && (
         <div className="text-center text-muted-foreground text-sm mt-8">
           {language === 'vi' 
-            ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, allProjects.length)} trong tổng số ${allProjects.length} dự án`
-            : `Showing ${startIndex + 1}-${Math.min(endIndex, allProjects.length)} of ${allProjects.length} projects`
+            ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, filteredProjects.length)} trong tổng số ${filteredProjects.length} dự án`
+            : `Showing ${startIndex + 1}-${Math.min(endIndex, filteredProjects.length)} of ${filteredProjects.length} projects`
           }
         </div>
       )}
