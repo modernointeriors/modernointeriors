@@ -31,12 +31,15 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation observer with reset capability
+  // Scroll animation observer - run once, reset only when back to top
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+            // Mark as animated to prevent re-running
+            entry.target.classList.add('animated');
+            
             // Check if it's a card, process step, or project/article card
             if (entry.target.classList.contains('advantage-card') || 
                 entry.target.classList.contains('process-step') ||
@@ -52,13 +55,6 @@ export default function Home() {
               if (sibling?.classList.contains('scroll-animate')) {
                 sibling.classList.add('animate-slide-in-right');
               }
-            }
-          } else {
-            // Reset animation for all elements when out of viewport
-            entry.target.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
-            const sibling = entry.target.nextElementSibling;
-            if (sibling?.classList.contains('scroll-animate')) {
-              sibling.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
             }
           }
         });
@@ -79,9 +75,22 @@ export default function Home() {
       setTimeout(observeElements, delay)
     );
 
+    // Reset all animations when scrolling back to top
+    const handleScroll = () => {
+      if (window.scrollY < 100) {
+        const animatedElements = document.querySelectorAll('.animated');
+        animatedElements.forEach((el) => {
+          el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
       observer.disconnect();
       timers.forEach(timer => clearTimeout(timer));
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
   
