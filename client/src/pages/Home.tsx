@@ -217,10 +217,10 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-black">
       {/* Full Screen Loading Overlay */}
       {showLoading && (
-        <div className="fixed inset-0 bg-[#121212] text-white flex items-center justify-center z-[9999]">
+        <div className="fixed inset-0 bg-black text-white flex items-center justify-center z-[9999]">
           <div className="text-center">
             <div className="mb-8">
               <img 
@@ -300,7 +300,7 @@ export default function Home() {
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       data-testid={`img-project-${project.id}`}
                     />
-                    <div className="absolute inset-0 bg-[#121212]/40 group-hover:bg-[#121212]/20 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300" />
                     
                     {/* Content Overlay */}
                     <div className="absolute inset-0 p-6 pb-12 flex flex-col justify-between">
@@ -447,14 +447,14 @@ export default function Home() {
       </section>
 
       {/* Quality Materials Hero Section */}
-      <section className="relative h-[70vh] bg-[#121212] overflow-hidden">
+      <section className="relative h-[70vh] bg-black overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: 'url("/attached_assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg")',
           }}
         >
-          <div className="absolute inset-0 bg-[#121212]/40" />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
         
         <div className="relative h-full flex items-center">
@@ -502,7 +502,7 @@ export default function Home() {
 
       {/* Process Section */}
       <section 
-        className="py-8 md:py-12 bg-[#121212]"
+        className="py-8 md:py-12 bg-black"
         onMouseEnter={handleProcessSectionMouseEnter}
         onMouseLeave={handleProcessSectionMouseLeave}
       >
@@ -698,7 +698,7 @@ export default function Home() {
       </section>
 
       {/* Partners Section */}
-      <section className="py-24 bg-[#121212] border-t border-white/10 overflow-hidden">
+      <section className="py-24 bg-black border-t border-white/10 overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
@@ -789,7 +789,7 @@ export default function Home() {
       </section>
 
       {/* Quick Contact Section */}
-      <section className="py-24 bg-[#121212] border-t border-white/10">
+      <section className="py-24 bg-black border-t border-white/10">
         <div 
           className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8"
           onMouseEnter={handleContactMouseEnter}
