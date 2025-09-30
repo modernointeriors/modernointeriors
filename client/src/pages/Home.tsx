@@ -581,8 +581,8 @@ export default function Home() {
                   </h3>
                 </div>
                 <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
-                    step01Expanded ? 'rotate-90 text-primary' : ''
+                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                    step01Expanded ? 'rotate-90 text-white' : ''
                   }`} 
                 />
               </div>
@@ -615,8 +615,8 @@ export default function Home() {
                   </h3>
                 </div>
                 <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
-                    step02Expanded ? 'rotate-90 text-primary' : ''
+                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                    step02Expanded ? 'rotate-90 text-white' : ''
                   }`} 
                 />
               </div>
@@ -649,8 +649,8 @@ export default function Home() {
                   </h3>
                 </div>
                 <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
-                    step03Expanded ? 'rotate-90 text-primary' : ''
+                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                    step03Expanded ? 'rotate-90 text-white' : ''
                   }`} 
                 />
               </div>
@@ -683,8 +683,8 @@ export default function Home() {
                   </h3>
                 </div>
                 <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
-                    step04Expanded ? 'rotate-90 text-primary' : ''
+                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                    step04Expanded ? 'rotate-90 text-white' : ''
                   }`} 
                 />
               </div>
@@ -717,8 +717,8 @@ export default function Home() {
                   </h3>
                 </div>
                 <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-primary transition-all ${
-                    step05Expanded ? 'rotate-90 text-primary' : ''
+                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                    step05Expanded ? 'rotate-90 text-white' : ''
                   }`} 
                 />
               </div>
