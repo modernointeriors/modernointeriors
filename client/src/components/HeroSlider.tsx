@@ -55,7 +55,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   if ((!projects || projects.length === 0) && showLoading) {
     return (
       <>
-        <div className="fixed inset-0 bg-[#121212] text-white flex items-center justify-center z-[9999]">
+        <div className="fixed inset-0 bg-black text-white flex items-center justify-center z-[9999]">
           <div className="text-center">
             <div className="mb-8">
               <img 
@@ -72,14 +72,14 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
             </div>
           </div>
         </div>
-        <div className="bg-[#121212] text-white min-h-screen"></div>
+        <div className="bg-black text-white min-h-screen"></div>
       </>
     );
   }
 
   if (!projects || projects.length === 0) {
     return (
-      <div className="bg-[#121212] text-white min-h-screen flex items-center justify-center">
+      <div className="bg-black text-white min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="mb-4">
             <img 
@@ -95,7 +95,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   }
 
   return (
-    <div className="bg-[#121212] text-white h-screen">
+    <div className="bg-black text-white h-screen">
       <Swiper
         ref={swiperRef}
         modules={[Autoplay, EffectFade, Navigation]}
@@ -163,7 +163,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       target.src = getFallbackImage(project.category);
                     }}
                   />
-                  <div className="absolute inset-0 bg-[#121212]/40" style={{ zIndex: 2 }}></div>
+                  <div className="absolute inset-0 bg-black/40" style={{ zIndex: 2 }}></div>
                 </div>
                 
                 <div className="relative h-full flex flex-col justify-between z-10">

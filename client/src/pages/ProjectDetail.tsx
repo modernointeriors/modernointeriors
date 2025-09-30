@@ -107,7 +107,7 @@ export default function ProjectDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#121212]">
+      <div className="min-h-screen bg-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="animate-pulse space-y-12">
             <div className="h-8 bg-zinc-800 rounded w-1/4" />
@@ -125,7 +125,7 @@ export default function ProjectDetail() {
 
   if (error || !project) {
     return (
-      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardContent className="pt-6 text-center">
             <h2 className="text-xl font-light mb-2 text-white">

@@ -62,11 +62,11 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
                     data-testid={`img-related-article-${article.id}`}
                   />
                 ) : (
-                  <div className="w-full h-48 bg-[#121212] flex items-center justify-center">
+                  <div className="w-full h-48 bg-black flex items-center justify-center">
                     <div className="text-6xl font-sans font-light text-primary/30">N</div>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-[#121212]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </Link>
             
