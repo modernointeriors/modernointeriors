@@ -320,7 +320,7 @@ export default function Home() {
                   variant="ghost" 
                   size="default"
                   asChild
-                  className="rounded-none hover:bg-transparent hover:text-white/80 view-more-btn scroll-animate"
+                  className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300"
                   data-testid="button-view-more-projects"
                 >
                   <Link href="/portfolio">
@@ -424,7 +424,7 @@ export default function Home() {
                   variant="ghost" 
                   size="default"
                   asChild
-                  className="rounded-none hover:bg-transparent hover:text-white/80 view-more-btn scroll-animate"
+                  className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300"
                   data-testid="button-view-more-news"
                 >
                   <Link href="/blog">
