@@ -606,7 +606,8 @@
   }
 
   .animate-fade-in-up {
-    animation: fade-in-up 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: opacity, transform;
   }
 
   /* Staggered animation delays for cards */
@@ -631,9 +632,25 @@
   }
 
   /* Initial hidden state for animations */
+  .scroll-animate:not(.animated),
   .project-card:not(.animated),
-  .service-card:not(.animated) {
+  .service-card:not(.animated),
+  .article-card:not(.animated),
+  .advantage-card:not(.animated),
+  .process-step:not(.animated),
+  .view-more-btn:not(.animated) {
     opacity: 0;
+  }
+
+  /* Ensure smooth animation start */
+  .scroll-animate.animated,
+  .project-card.animated,
+  .service-card.animated,
+  .article-card.animated,
+  .advantage-card.animated,
+  .process-step.animated,
+  .view-more-btn.animated {
+    opacity: 1;
   }
 
 }
