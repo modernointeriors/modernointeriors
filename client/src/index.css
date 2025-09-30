@@ -632,6 +632,7 @@
 
   /* Initial hidden state for animations */
   .project-card:not(.animated),
+  .article-card:not(.animated),
   .filter-section:not(.animated) {
     opacity: 0;
   }
