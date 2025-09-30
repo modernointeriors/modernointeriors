@@ -65,7 +65,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#121212] text-white">
       {/* Request Section */}
       <section className="pt-60 pb-1">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

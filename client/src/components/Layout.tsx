@@ -162,7 +162,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen relative">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
+      <header className={`fixed top-0 left-16 right-0 z-50 bg-[#121212]/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
       }`}>
         <div className="flex items-center justify-between py-4 px-6">
@@ -237,7 +237,7 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Custom Overlay with Backdrop Blur - Pre-mounted for 120fps performance */}
       <div 
-        className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm"
+        className="fixed inset-0 z-30 bg-[#121212]/40 backdrop-blur-sm"
         style={{
           opacity: showSidebar ? 1 : 0,
           pointerEvents: showSidebar ? 'auto' : 'none',
@@ -264,7 +264,7 @@ export default function Layout({ children }: LayoutProps) {
       />
 
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black flex flex-col items-center justify-center">
+      <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-[#121212] flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
         <Sheet open={true} modal={false} onOpenChange={() => {
           // Keep always open to maintain DOM presence for smooth animations
@@ -336,7 +336,7 @@ export default function Layout({ children }: LayoutProps) {
           </SheetTrigger>
           <SheetContent 
             side="left" 
-            className="w-[320px] sm:w-[400px] bg-black [&>button]:hidden transform-gpu will-change-transform will-change-contents backface-visibility-hidden border-0"
+            className="w-[320px] sm:w-[400px] bg-[#121212] [&>button]:hidden transform-gpu will-change-transform will-change-contents backface-visibility-hidden border-0"
             style={{
               transition: 'transform var(--sidebar-dur) var(--ease-smooth)',
               transform: showSidebar ? 'translate3d(0, 0, 0)' : 'translate3d(-100%, 0, 0)',
@@ -512,7 +512,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className="ml-16 pb-8 md:pb-6 mb-4">{children}</main>
 
       {/* Footer - Updated with dark design matching the provided image */}
-      <footer className="ml-16 bg-black text-white pt-32 pb-12 border-t border-gray-800">
+      <footer className="ml-16 bg-[#121212] text-white pt-32 pb-12 border-t border-gray-800">
         <div className="max-w-full mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 2xl:px-24">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-20">
             {/* Corporate Office */}
