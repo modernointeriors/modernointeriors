@@ -37,10 +37,16 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-slide-in-left');
-            const sibling = entry.target.nextElementSibling;
-            if (sibling?.classList.contains('scroll-animate')) {
-              sibling.classList.add('animate-slide-in-right');
+            // Check if it's a card element
+            if (entry.target.classList.contains('advantage-card')) {
+              entry.target.classList.add('animate-fade-in-up');
+            } else {
+              // Title animations
+              entry.target.classList.add('animate-slide-in-left');
+              const sibling = entry.target.nextElementSibling;
+              if (sibling?.classList.contains('scroll-animate')) {
+                sibling.classList.add('animate-slide-in-right');
+              }
             }
           }
         });
@@ -48,7 +54,7 @@ export default function Home() {
       { threshold: 0.2 }
     );
 
-    const animateElements = document.querySelectorAll('.scroll-animate');
+    const animateElements = document.querySelectorAll('.scroll-animate, .advantage-card');
     animateElements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -736,7 +742,7 @@ export default function Home() {
           {/* Advantages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {/* Advantage 1 */}
-            <div className="group">
+            <div className="group advantage-card scroll-animate animate-delay-100">
               <div className="mb-6">
                 <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
                   <Sparkles className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
@@ -754,7 +760,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 2 */}
-            <div className="group">
+            <div className="group advantage-card scroll-animate animate-delay-200">
               <div className="mb-6">
                 <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
                   <Headset className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
@@ -772,7 +778,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 3 */}
-            <div className="group">
+            <div className="group advantage-card scroll-animate animate-delay-300">
               <div className="mb-6">
                 <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
                   <Users className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
@@ -790,7 +796,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 4 */}
-            <div className="group">
+            <div className="group advantage-card scroll-animate animate-delay-400">
               <div className="mb-6">
                 <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
                   <Store className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
