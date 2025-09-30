@@ -186,7 +186,7 @@ export default function Portfolio() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">
-            {language === 'vi' ? 'Danh mục dự án' : 'Portfolio'}
+            {language === 'vi' ? 'DỰ ÁN' : 'PROJECT'}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {language === 'vi' 
