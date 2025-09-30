@@ -47,12 +47,12 @@ export default function ScrollableContainer({ children, className = "" }: Scroll
   };
 
   return (
-    <div className="relative group">
+    <div className="relative">
       {/* Left Button */}
       {canScrollLeft && (
         <button
           onClick={scrollLeft}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-white/20 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg opacity-0 group-hover:opacity-100 flex items-center justify-center"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-white/20 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center"
           data-testid="scroll-left-button"
         >
           <ChevronLeft className="w-5 h-5 text-black" />
@@ -63,7 +63,7 @@ export default function ScrollableContainer({ children, className = "" }: Scroll
       {canScrollRight && (
         <button
           onClick={scrollRight}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-white/20 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg opacity-0 group-hover:opacity-100 flex items-center justify-center"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border border-white/20 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg flex items-center justify-center"
           data-testid="scroll-right-button"
         >
           <ChevronRight className="w-5 h-5 text-black" />
