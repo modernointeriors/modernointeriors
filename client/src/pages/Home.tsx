@@ -299,7 +299,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300" />
                     
                     {/* Content Overlay */}
-                    <div className="absolute inset-0 p-6 pb-8 flex flex-col justify-between">
+                    <div className="absolute inset-0 p-6 pb-12 flex flex-col justify-between">
                       {/* Top - Title */}
                       <div>
                         <h3 className="text-white text-xl font-light mb-2" data-testid={`text-title-${project.id}`}>
