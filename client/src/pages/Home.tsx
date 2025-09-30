@@ -300,7 +300,7 @@ export default function Home() {
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       data-testid={`img-project-${project.id}`}
                     />
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300" />
                     
                     {/* Content Overlay */}
                     <div className="absolute inset-0 p-6 pb-12 flex flex-col justify-between">
