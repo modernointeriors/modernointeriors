@@ -30,6 +30,29 @@ export default function Home() {
   const [contactFormExpanded, setContactFormExpanded] = useState(false);
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
+
+  // Scroll animation observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-slide-in-left');
+            const sibling = entry.target.nextElementSibling;
+            if (sibling?.classList.contains('scroll-animate')) {
+              sibling.classList.add('animate-slide-in-right');
+            }
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const animateElements = document.querySelectorAll('.scroll-animate');
+    animateElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
   
   // Quick contact form state (matching Contact page)
   const [formData, setFormData] = useState({
@@ -247,13 +270,13 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <div className="mb-8">
-              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
                 {homepageContent?.featuredBadge || t('featured.projectsTitle')}
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
-                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
                   {homepageContent?.featuredDescription || t('featured.projectsDesc')}
                 </p>
               </div>
@@ -351,13 +374,13 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <div className="mb-8">
-              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
                 {t('featured.newsTitle')}
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
-                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
                   {t('featured.newsDesc')}
                 </p>
               </div>
@@ -509,11 +532,11 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Title */}
           <div className="mb-16">
-            <h2 className="text-sm font-light tracking-widest text-white/60 mb-8">
+            <h2 className="text-sm font-light tracking-widest text-white/60 mb-8 scroll-animate">
               {language === 'vi' ? 'HÀNH TRÌNH KIẾN TẠO KHÔNG GIAN SỐNG CỦA BẠN' : 'THE JOURNEY TO YOUR DREAM SPACE'}
             </h2>
             <div className="max-w-4xl">
-              <p className="text-2xl md:text-3xl font-light text-white leading-relaxed">
+              <p className="text-2xl md:text-3xl font-light text-white leading-relaxed scroll-animate">
                 {language === 'vi' 
                   ? 'TỪ Ý TƯỞNG ĐẾN HIỆN THỰC, CHÚNG TÔI ĐỒNG HÀNH CÙNG BẠN QUA MỘT QUY TRÌNH 5 BƯỚC TINH GỌN, HIỆU QUẢ VÀ ĐẦY CẢM HỨNG.'
                   : 'FROM CONCEPT TO REALITY, WE GUIDE YOU THROUGH A STREAMLINED, EFFICIENT, AND INSPIRING 5-STEP PROCESS.'
@@ -702,10 +725,10 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-16">
-            <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase mb-4">
+            <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase mb-4 scroll-animate">
               {language === 'vi' ? 'LỢI THẾ CẠNH TRANH' : 'ADVANTAGES'}
             </h2>
-            <h3 className="text-3xl md:text-4xl font-light text-white">
+            <h3 className="text-3xl md:text-4xl font-light text-white scroll-animate">
               {language === 'vi' ? 'Tại sao chọn Moderno Interiors' : 'Why Choose Moderno Interiors'}
             </h3>
           </div>
@@ -791,13 +814,13 @@ export default function Home() {
       <section className="py-16 bg-black overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
-            <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
+            <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
               {language === 'vi' ? 'ĐỐI TÁC CỦA CHÚNG TÔI' : 'OUR PARTNERS'}
             </h2>
           </div>
           <div className="flex items-start justify-between">
             <div className="max-w-4xl">
-              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed" data-testid="text-partners-description">
+              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate" data-testid="text-partners-description">
                 {language === 'vi' 
                   ? 'Chúng tôi tự hào hợp tác với những thương hiệu uy tín hàng đầu, mang đến những sản phẩm và dịch vụ chất lượng cao nhất cho khách hàng.'
                   : 'We are proud to work with leading prestigious brands, bringing the highest quality products and services to our clients.'
@@ -887,13 +910,13 @@ export default function Home() {
         >
           <div className="mb-16">
             <div className="mb-8">
-              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
                 {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
-                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed" data-testid="text-consultation">
+                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate" data-testid="text-consultation">
                   {language === 'vi' 
                     ? 'Để lại yêu cầu tư vấn miễn phí và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.'
                     : 'Leave a request for a free consultation and we will contact you as soon as possible.'
