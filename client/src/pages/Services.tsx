@@ -157,10 +157,10 @@ export default function Services() {
               const IconComponent = iconMap[service.icon as keyof typeof iconMap] || Home;
               
               return (
-                <Card key={service.id} className="service-card group border-white/20 bg-transparent hover:bg-white/5 hover:border-white/40 transition-all duration-300">
+                <Card key={service.id} className="service-card group border-0 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all duration-300">
                   <CardContent className="p-8">
-                    <div className="w-16 h-16 bg-white/10 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
-                      <IconComponent className="h-8 w-8 text-white group-hover:text-white transition-all duration-300" />
+                    <div className="mb-6">
+                      <IconComponent className="h-10 w-10 text-white/80 group-hover:text-white transition-all duration-300" />
                     </div>
                     <h3 className="text-xl font-sans font-light mb-4 text-white group-hover:text-white transition-all duration-300" data-testid={`text-title-${service.id}`}>
                       {service.title}
