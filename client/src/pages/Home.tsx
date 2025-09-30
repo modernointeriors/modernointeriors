@@ -37,8 +37,8 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Check if it's a card element
-            if (entry.target.classList.contains('advantage-card')) {
+            // Check if it's a card or process step element
+            if (entry.target.classList.contains('advantage-card') || entry.target.classList.contains('process-step')) {
               entry.target.classList.add('animate-fade-in-up');
             } else {
               // Title animations
@@ -54,7 +54,7 @@ export default function Home() {
       { threshold: 0.2 }
     );
 
-    const animateElements = document.querySelectorAll('.scroll-animate, .advantage-card');
+    const animateElements = document.querySelectorAll('.scroll-animate, .advantage-card, .process-step');
     animateElements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -554,7 +554,7 @@ export default function Home() {
           {/* Process Steps */}
           <div className="space-y-8">
             {/* Step 01 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
+            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-100">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep01Expanded(!step01Expanded)}
@@ -588,7 +588,7 @@ export default function Home() {
             </div>
 
             {/* Step 02 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
+            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-200">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep02Expanded(!step02Expanded)}
@@ -622,7 +622,7 @@ export default function Home() {
             </div>
 
             {/* Step 03 - With Expandable Content */}
-            <div className="pb-8 group transition-colors cursor-pointer">
+            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-300">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep03Expanded(!step03Expanded)}
@@ -656,7 +656,7 @@ export default function Home() {
             </div>
 
             {/* Step 04 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
+            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-400">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep04Expanded(!step04Expanded)}
@@ -690,7 +690,7 @@ export default function Home() {
             </div>
 
             {/* Step 05 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
+            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-500">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setStep05Expanded(!step05Expanded)}

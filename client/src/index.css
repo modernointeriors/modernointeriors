@@ -618,6 +618,10 @@
     animation-delay: 0.4s;
   }
 
+  .animate-delay-500 {
+    animation-delay: 0.5s;
+  }
+
   /* Initial hidden state for scroll animations */
   .scroll-animate {
     opacity: 0;
