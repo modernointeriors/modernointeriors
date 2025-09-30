@@ -244,16 +244,42 @@ export default function Portfolio() {
           </p>
         </div>
 
-        {/* Search Box */}
+        {/* Search Box with Year Filter */}
         <div className="max-w-2xl mx-auto mb-12">
-          <Input
-            type="text"
-            placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 px-0 py-4 text-lg font-light rounded-none focus:border-white focus-visible:ring-0 w-full"
-            data-testid="input-search"
-          />
+          <div className="flex items-end gap-8 border-b border-white/30 pb-4">
+            <Input
+              type="text"
+              placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-transparent border-0 text-white placeholder-white/60 px-0 py-0 text-lg font-light rounded-none focus-visible:ring-0 flex-1"
+              data-testid="input-search"
+            />
+            {availableYears.length > 0 && (
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger 
+                  className="w-[140px] bg-transparent border-0 text-white/60 text-base font-light p-0 h-auto focus:ring-0 focus:ring-offset-0 [&>svg]:text-white/60"
+                  data-testid="select-year"
+                >
+                  <SelectValue placeholder={language === 'vi' ? 'Năm' : 'Year'} />
+                </SelectTrigger>
+                <SelectContent className="bg-black border-white/30 text-white rounded-none">
+                  <SelectItem value="all" className="focus:bg-white/10 focus:text-white">
+                    {language === 'vi' ? 'Tất cả các năm' : 'All years'}
+                  </SelectItem>
+                  {availableYears.map((year) => (
+                    <SelectItem 
+                      key={year} 
+                      value={year}
+                      className="focus:bg-white/10 focus:text-white"
+                    >
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
         </div>
 
         {/* Category Filter */}
@@ -279,34 +305,6 @@ export default function Portfolio() {
             </Button>
           ))}
         </div>
-
-        {/* Year Filter */}
-        {availableYears.length > 0 && (
-          <div className="flex justify-center mb-12">
-            <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger 
-                className="w-[200px] bg-transparent border border-white/30 text-white rounded-none focus:ring-0 focus:ring-offset-0"
-                data-testid="select-year"
-              >
-                <SelectValue placeholder={language === 'vi' ? 'Chọn năm' : 'Select year'} />
-              </SelectTrigger>
-              <SelectContent className="bg-black border-white/30 text-white rounded-none">
-                <SelectItem value="all" className="focus:bg-white/10 focus:text-white">
-                  {language === 'vi' ? 'Tất cả các năm' : 'All years'}
-                </SelectItem>
-                {availableYears.map((year) => (
-                  <SelectItem 
-                    key={year} 
-                    value={year}
-                    className="focus:bg-white/10 focus:text-white"
-                  >
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
 
         {/* Projects Grid */}
         {isLoading ? (
