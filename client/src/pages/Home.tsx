@@ -913,6 +913,255 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* International Network Section */}
+      <section className="py-24 bg-card border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-16">
+            <div className="mb-8">
+              <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
+                {language === 'vi' ? 'MẠNG LƯỚI TOÀN CẦU' : 'GLOBAL NETWORK'}
+              </h2>
+            </div>
+            <div>
+              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed">
+                {language === 'vi' ? 'Mạng Lưới Quốc Tế' : 'International Network'}
+              </p>
+            </div>
+          </div>
+
+          {/* World Map with Markers */}
+          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+            {/* Background map */}
+            <svg 
+              className="absolute inset-0 w-full h-full opacity-20"
+              viewBox="0 0 1000 500" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Simplified world map outline */}
+              <path 
+                d="M 100 100 L 150 80 L 180 90 L 200 85 L 220 100 L 240 95 L 260 110 L 280 100 L 300 120 L 280 140 L 260 150 L 240 145 L 220 160 L 200 155 L 180 170 L 160 165 L 140 180 L 120 175 L 100 190 Z M 350 80 L 400 70 L 450 85 L 480 80 L 510 95 L 530 90 L 550 105 L 530 120 L 510 130 L 490 125 L 470 140 L 450 135 L 430 150 L 410 145 L 390 160 L 370 155 L 350 170 Z M 600 90 L 650 85 L 680 100 L 710 95 L 740 110 L 760 105 L 780 120 L 800 115 L 820 130 L 800 145 L 780 155 L 760 150 L 740 165 L 720 160 L 700 175 L 680 170 L 660 185 L 640 180 L 620 195 L 600 190 Z M 150 250 L 180 240 L 210 255 L 230 250 L 250 265 L 270 260 L 290 275 L 270 290 L 250 300 L 230 295 L 210 310 L 190 305 L 170 320 L 150 315 Z M 350 300 L 380 295 L 410 310 L 430 305 L 450 320 L 470 315 L 490 330 L 470 345 L 450 355 L 430 350 L 410 365 L 390 360 L 370 375 L 350 370 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+              />
+            </svg>
+
+            {/* Location Markers */}
+            <div className="absolute inset-0">
+              {/* Canada */}
+              <div className="absolute" style={{ top: '20%', left: '15%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Canada
+                  </span>
+                </div>
+              </div>
+
+              {/* Mexico */}
+              <div className="absolute" style={{ top: '35%', left: '18%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Mexico
+                  </span>
+                </div>
+              </div>
+
+              {/* Bolivia */}
+              <div className="absolute" style={{ top: '65%', left: '25%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Bolivia
+                  </span>
+                </div>
+              </div>
+
+              {/* South Africa */}
+              <div className="absolute" style={{ top: '75%', left: '48%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    South Africa
+                  </span>
+                </div>
+              </div>
+
+              {/* UK */}
+              <div className="absolute" style={{ top: '22%', left: '45%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    UK
+                  </span>
+                </div>
+              </div>
+
+              {/* France */}
+              <div className="absolute" style={{ top: '28%', left: '47%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    France
+                  </span>
+                </div>
+              </div>
+
+              {/* Russia */}
+              <div className="absolute" style={{ top: '18%', left: '62%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Russia
+                  </span>
+                </div>
+              </div>
+
+              {/* UAE */}
+              <div className="absolute" style={{ top: '42%', left: '55%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    UAE
+                  </span>
+                </div>
+              </div>
+
+              {/* India */}
+              <div className="absolute" style={{ top: '45%', left: '64%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    India
+                  </span>
+                </div>
+              </div>
+
+              {/* Mongolia */}
+              <div className="absolute" style={{ top: '28%', left: '70%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Mongolia
+                  </span>
+                </div>
+              </div>
+
+              {/* China */}
+              <div className="absolute" style={{ top: '35%', left: '72%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    China
+                  </span>
+                </div>
+              </div>
+
+              {/* Vietnam - Highlighted */}
+              <div className="absolute" style={{ top: '45%', left: '75%' }}>
+                <div className="relative group">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 cursor-pointer shadow-lg">
+                    <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap font-medium">
+                    Vietnam
+                  </span>
+                </div>
+              </div>
+
+              {/* Philippines */}
+              <div className="absolute" style={{ top: '50%', left: '80%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Philippines
+                  </span>
+                </div>
+              </div>
+
+              {/* Indonesia */}
+              <div className="absolute" style={{ top: '62%', left: '77%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Indonesia
+                  </span>
+                </div>
+              </div>
+
+              {/* Australia */}
+              <div className="absolute" style={{ top: '75%', left: '85%' }}>
+                <div className="relative group">
+                  <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-300 cursor-pointer">
+                    <svg className="w-4 h-4 text-white group-hover:text-black" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                  </div>
+                  <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    Australia
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
