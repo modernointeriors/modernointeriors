@@ -31,7 +31,7 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation - cards slide from left/right alternating
+  // Scroll animation - cards from bottom, others from left
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,25 +40,14 @@ export default function Home() {
             const element = entry.target;
             element.classList.add('animated');
             
-            // Check if it's a card that should slide from sides
+            // News/Projects/Why Choose Us cards slide from bottom
             if (element.classList.contains('project-card') || 
                 element.classList.contains('article-card') ||
                 element.classList.contains('advantage-card')) {
-              
-              // Get index from parent container
-              const parent = element.parentElement;
-              if (parent) {
-                const index = Array.from(parent.children).indexOf(element);
-                // Alternate: even from left, odd from right
-                if (index % 2 === 0) {
-                  element.classList.add('animate-slide-in-from-left');
-                } else {
-                  element.classList.add('animate-slide-in-from-right');
-                }
-              }
-            } else {
-              // Other elements fade in up
               element.classList.add('animate-fade-in-up');
+            } else {
+              // Other elements slide from left
+              element.classList.add('animate-slide-in-from-left');
             }
           }
         });
