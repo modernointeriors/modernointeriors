@@ -23,7 +23,7 @@ export default function Portfolio() {
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
 
-  // Scroll animation observer - only run once
+  // Animation - only run once per card
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -31,36 +31,23 @@ export default function Portfolio() {
           if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
             // Mark as animated to prevent re-running
             entry.target.classList.add('animated');
-            
-            if (entry.target.classList.contains('project-card')) {
-              // Get the index from data attribute to determine direction
-              const index = parseInt(entry.target.getAttribute('data-index') || '0');
-              if (index % 2 === 0) {
-                entry.target.classList.add('animate-slide-in-from-left');
-              } else {
-                entry.target.classList.add('animate-slide-in-from-right');
-              }
-            } else if (entry.target.classList.contains('filter-section')) {
-              entry.target.classList.add('animate-fade-in-up');
-            } else {
-              entry.target.classList.add('animate-slide-in-left');
-            }
+            entry.target.classList.add('animate-fade-in-up');
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
     // Observe elements
     const observeElements = () => {
-      const animateElements = document.querySelectorAll('.scroll-animate, .project-card, .filter-section');
+      const animateElements = document.querySelectorAll('.project-card, .filter-section');
       animateElements.forEach((el) => observer.observe(el));
     };
 
     observeElements();
 
     // Re-observe after delays to catch dynamically loaded content
-    const timers = [500, 1000, 2000].map(delay => 
+    const timers = [500, 1000].map(delay => 
       setTimeout(observeElements, delay)
     );
 
