@@ -745,13 +745,13 @@ export default function Home() {
             <div className="group advantage-card scroll-animate animate-delay-100">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-white" />
+                  <Sparkles className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
                 </div>
               </div>
-              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+              <h4 className="text-lg font-light text-white/60 group-hover:text-white mb-4 uppercase tracking-wide transition-colors duration-300">
                 {language === 'vi' ? 'Sáng Tạo & Cá Nhân Hóa' : 'Innovation & Customization'}
               </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
+              <p className="text-white/50 group-hover:text-white/90 font-light text-sm leading-relaxed transition-colors duration-300">
                 {language === 'vi' 
                   ? 'Với hơn 200+ bằng sáng chế quốc gia và 8.000+ SKU, chúng tôi mang đến vô số lựa chọn cho không gian của bạn. Mỗi năm, hơn 300+ sản phẩm mới được ra mắt để đáp ứng xu hướng thiết kế hiện đại.'
                   : 'With over 200+ national patents and 8,000+ SKUs, we offer endless choices for your space. Each year, over 300+ new products are launched to meet modern design trends.'
@@ -763,13 +763,13 @@ export default function Home() {
             <div className="group advantage-card scroll-animate animate-delay-200">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
-                  <Headset className="w-8 h-8 text-white" />
+                  <Headset className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
                 </div>
               </div>
-              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+              <h4 className="text-lg font-light text-white/60 group-hover:text-white mb-4 uppercase tracking-wide transition-colors duration-300">
                 {language === 'vi' ? 'Dịch Vụ Trọn Gói' : 'End-to-End Customer Service'}
               </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
+              <p className="text-white/50 group-hover:text-white/90 font-light text-sm leading-relaxed transition-colors duration-300">
                 {language === 'vi' 
                   ? 'Từ thiết kế đến thi công, từ logistics đến bảo hành, chúng tôi cung cấp dịch vụ toàn diện. Hệ thống đào tạo và marketing chuyên nghiệp được tích hợp trong gói khuyến mãi thương hiệu của chúng tôi.'
                   : 'From design to construction, from logistics to warranty, we provide comprehensive services. Professional training and marketing systems are included in our brand promotion package.'
@@ -781,13 +781,13 @@ export default function Home() {
             <div className="group advantage-card scroll-animate animate-delay-300">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
-                  <Users className="w-8 h-8 text-white" />
+                  <Users className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
                 </div>
               </div>
-              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+              <h4 className="text-lg font-light text-white/60 group-hover:text-white mb-4 uppercase tracking-wide transition-colors duration-300">
                 {language === 'vi' ? 'Đội Ngũ Thiết Kế Chuyên Nghiệp' : 'Professional Design Team'}
               </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
+              <p className="text-white/50 group-hover:text-white/90 font-light text-sm leading-relaxed transition-colors duration-300">
                 {language === 'vi' 
                   ? 'Chúng tôi vinh dự được trao nhiều giải thưởng thiết kế uy tín tại Đức, Nhật Bản, Trung Quốc và khu vực châu Á-Thái Bình Dương. Đội ngũ thiết kế chuyên nghiệp sẽ mang đến giải pháp hoàn hảo cho không gian của bạn.'
                   : 'We have been honored with multiple prestigious design awards in Germany, Japan, China, and across the Asia-Pacific region. Our professional design team will provide the perfect solution for your space.'
@@ -799,13 +799,13 @@ export default function Home() {
             <div className="group advantage-card scroll-animate animate-delay-400">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
-                  <Store className="w-8 h-8 text-white" />
+                  <Store className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
                 </div>
               </div>
-              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+              <h4 className="text-lg font-light text-white/60 group-hover:text-white mb-4 uppercase tracking-wide transition-colors duration-300">
                 {language === 'vi' ? 'Showroom & Triển Lãm' : 'Showroom & Exhibition'}
               </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
+              <p className="text-white/50 group-hover:text-white/90 font-light text-sm leading-relaxed transition-colors duration-300">
                 {language === 'vi' 
                   ? 'Chúng tôi sở hữu showroom 50.000m² do công ty quản lý với hơn 300+ nhà phân phối trên toàn quốc. Đội ngũ chuyên gia thiết kế và triển lãm chuyên nghiệp đảm bảo trải nghiệm tuyệt vời cho khách hàng.'
                   : 'We have a 50,000m² company-owned flagship showroom and 300+ distributors nationwide. Our dedicated design and exhibition professionals ensure excellent customer experience.'
