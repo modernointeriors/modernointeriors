@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -85,6 +86,37 @@ export default function Services() {
   const defaultServices = getDefaultServices(t);
   const displayServices = services.length > 0 ? services : defaultServices;
 
+  // Animation - only run once per card
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+            entry.target.classList.add('animated');
+            entry.target.classList.add('animate-fade-in-up');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const observeElements = () => {
+      const animateElements = document.querySelectorAll('.service-card');
+      animateElements.forEach((el) => observer.observe(el));
+    };
+
+    observeElements();
+
+    const timers = [500, 1000].map(delay => 
+      setTimeout(observeElements, delay)
+    );
+
+    return () => {
+      observer.disconnect();
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, []);
+
   return (
     <div className="min-h-screen pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -125,22 +157,22 @@ export default function Services() {
               const IconComponent = iconMap[service.icon as keyof typeof iconMap] || Home;
               
               return (
-                <Card key={service.id} className="glass-card hover-scale">
+                <Card key={service.id} className="service-card group border-white/20 bg-transparent hover:bg-white/5 hover:border-white/40 transition-all duration-300">
                   <CardContent className="p-8">
-                    <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                      <IconComponent className="h-8 w-8 text-primary" />
+                    <div className="w-16 h-16 bg-white/10 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-6 transition-all duration-300">
+                      <IconComponent className="h-8 w-8 text-white group-hover:text-white transition-all duration-300" />
                     </div>
-                    <h3 className="text-xl font-sans font-light mb-4" data-testid={`text-title-${service.id}`}>
+                    <h3 className="text-xl font-sans font-light mb-4 text-white group-hover:text-white transition-all duration-300" data-testid={`text-title-${service.id}`}>
                       {service.title}
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed mb-6">
+                    <p className="text-white/70 group-hover:text-white/90 leading-relaxed mb-6 transition-all duration-300">
                       {service.description}
                     </p>
                     {Array.isArray(service.features) && service.features.length > 0 && (
-                      <ul className="space-y-2 text-sm text-muted-foreground">
+                      <ul className="space-y-2 text-sm text-white/60 group-hover:text-white/80 transition-all duration-300">
                         {service.features.map((feature: string, index: number) => (
                           <li key={index} className="flex items-center">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3" />
+                            <div className="w-1.5 h-1.5 bg-white rounded-full mr-3" />
                             {feature}
                           </li>
                         ))}

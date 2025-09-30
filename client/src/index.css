@@ -631,7 +631,8 @@
   }
 
   /* Initial hidden state for animations */
-  .project-card:not(.animated) {
+  .project-card:not(.animated),
+  .service-card:not(.animated) {
     opacity: 0;
   }
 
