@@ -698,7 +698,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-24 bg-black border-t border-white/10">
+      <section className="py-24 bg-black">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-16">
@@ -786,7 +786,7 @@ export default function Home() {
           </div>
 
           {/* CTA Section */}
-          <div className="border-t border-white/10 pt-16">
+          <div className="pt-16">
             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
               <h3 className="text-2xl md:text-3xl font-light text-white">
                 {language === 'vi' ? 'Thiết Kế Tương Lai Cùng Chúng Tôi!' : 'Now Design Your Future With Us!'}
@@ -817,7 +817,7 @@ export default function Home() {
       </section>
 
       {/* Partners Section */}
-      <section className="py-24 bg-black border-t border-white/10 overflow-hidden">
+      <section className="py-24 bg-black overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
@@ -908,7 +908,7 @@ export default function Home() {
       </section>
 
       {/* Quick Contact Section */}
-      <section className="py-24 bg-black border-t border-white/10">
+      <section className="py-24 bg-black">
         <div 
           className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8"
           onMouseEnter={handleContactMouseEnter}
