@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowRight, Send } from "lucide-react";
+import { ArrowRight, Send, Sparkles, Headset, Users, Store } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import HeroSlider from "@/components/HeroSlider";
@@ -691,6 +691,125 @@ export default function Home() {
                     }
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-24 bg-black border-t border-white/10">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="mb-16 text-center">
+            <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase mb-4">
+              {language === 'vi' ? 'LỢI THẾ CẠNH TRANH' : 'ADVANTAGES'}
+            </h2>
+            <h3 className="text-3xl md:text-4xl font-light text-white">
+              {language === 'vi' ? 'Tại sao chọn Moderno Interiors' : 'Why Choose Moderno Interiors'}
+            </h3>
+          </div>
+
+          {/* Advantages Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            {/* Advantage 1 */}
+            <div className="group">
+              <div className="mb-6">
+                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
+                  <Sparkles className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                </div>
+              </div>
+              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+                {language === 'vi' ? 'Sáng Tạo & Cá Nhân Hóa' : 'Innovation & Customization'}
+              </h4>
+              <p className="text-white/70 font-light text-sm leading-relaxed">
+                {language === 'vi' 
+                  ? 'Với hơn 200+ bằng sáng chế quốc gia và 8.000+ SKU, chúng tôi mang đến vô số lựa chọn cho không gian của bạn. Mỗi năm, hơn 300+ sản phẩm mới được ra mắt để đáp ứng xu hướng thiết kế hiện đại.'
+                  : 'With over 200+ national patents and 8,000+ SKUs, we offer endless choices for your space. Each year, over 300+ new products are launched to meet modern design trends.'
+                }
+              </p>
+            </div>
+
+            {/* Advantage 2 */}
+            <div className="group">
+              <div className="mb-6">
+                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
+                  <Headset className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                </div>
+              </div>
+              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+                {language === 'vi' ? 'Dịch Vụ Trọn Gói' : 'End-to-End Customer Service'}
+              </h4>
+              <p className="text-white/70 font-light text-sm leading-relaxed">
+                {language === 'vi' 
+                  ? 'Từ thiết kế đến thi công, từ logistics đến bảo hành, chúng tôi cung cấp dịch vụ toàn diện. Hệ thống đào tạo và marketing chuyên nghiệp được tích hợp trong gói khuyến mãi thương hiệu của chúng tôi.'
+                  : 'From design to construction, from logistics to warranty, we provide comprehensive services. Professional training and marketing systems are included in our brand promotion package.'
+                }
+              </p>
+            </div>
+
+            {/* Advantage 3 */}
+            <div className="group">
+              <div className="mb-6">
+                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
+                  <Users className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                </div>
+              </div>
+              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+                {language === 'vi' ? 'Đội Ngũ Thiết Kế Chuyên Nghiệp' : 'Professional Design Team'}
+              </h4>
+              <p className="text-white/70 font-light text-sm leading-relaxed">
+                {language === 'vi' 
+                  ? 'Chúng tôi vinh dự được trao nhiều giải thưởng thiết kế uy tín tại Đức, Nhật Bản, Trung Quốc và khu vực châu Á-Thái Bình Dương. Đội ngũ thiết kế chuyên nghiệp sẽ mang đến giải pháp hoàn hảo cho không gian của bạn.'
+                  : 'We have been honored with multiple prestigious design awards in Germany, Japan, China, and across the Asia-Pacific region. Our professional design team will provide the perfect solution for your space.'
+                }
+              </p>
+            </div>
+
+            {/* Advantage 4 */}
+            <div className="group">
+              <div className="mb-6">
+                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
+                  <Store className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                </div>
+              </div>
+              <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
+                {language === 'vi' ? 'Showroom & Triển Lãm' : 'Showroom & Exhibition'}
+              </h4>
+              <p className="text-white/70 font-light text-sm leading-relaxed">
+                {language === 'vi' 
+                  ? 'Chúng tôi sở hữu showroom 50.000m² do công ty quản lý với hơn 300+ nhà phân phối trên toàn quốc. Đội ngũ chuyên gia thiết kế và triển lãm chuyên nghiệp đảm bảo trải nghiệm tuyệt vời cho khách hàng.'
+                  : 'We have a 50,000m² company-owned flagship showroom and 300+ distributors nationwide. Our dedicated design and exhibition professionals ensure excellent customer experience.'
+                }
+              </p>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="border-t border-white/10 pt-16">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <h3 className="text-2xl md:text-3xl font-light text-white">
+                {language === 'vi' ? 'Thiết Kế Tương Lai Cùng Chúng Tôi!' : 'Now Design Your Future With Us!'}
+              </h3>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/portfolio">
+                  <Button 
+                    className="bg-white/10 border border-white/30 text-white hover:bg-white/20 hover:border-white px-8 py-6 font-light tracking-widest uppercase transition-all duration-300 rounded-none group"
+                    data-testid="button-view-projects"
+                  >
+                    <span>{language === 'vi' ? 'XEM DỰ ÁN' : 'VIEW PROJECTS'}</span>
+                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Link href="/contact">
+                  <Button 
+                    className="bg-primary border border-primary text-black hover:bg-primary/90 px-8 py-6 font-light tracking-widest uppercase transition-all duration-300 rounded-none group"
+                    data-testid="button-request-consultation"
+                  >
+                    <span>{language === 'vi' ? 'TƯ VẤN NGAY' : 'REQUEST CONSULTATION'}</span>
+                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
