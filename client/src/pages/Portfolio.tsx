@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProjectCard from "@/components/ProjectCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react';
@@ -18,6 +19,7 @@ export default function Portfolio() {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedYear, setSelectedYear] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
 
@@ -37,13 +39,28 @@ export default function Portfolio() {
     },
   });
 
-  // Reset to page 1 when category or search changes
+  // Reset to page 1 when category, search, or year changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory, searchTerm]);
+  }, [activeCategory, searchTerm, selectedYear]);
 
-  // Filter projects by search term
+  // Get unique years from projects
+  const availableYears = Array.from(
+    new Set(
+      allProjects
+        .map(p => p.completionYear)
+        .filter((year): year is string => !!year && year.trim() !== '')
+    )
+  ).sort((a, b) => b.localeCompare(a)); // Sort descending (newest first)
+
+  // Filter projects by search term and year
   const filteredProjects = allProjects.filter(project => {
+    // Filter by year
+    if (selectedYear !== 'all' && project.completionYear !== selectedYear) {
+      return false;
+    }
+    
+    // Filter by search term
     if (!searchTerm) return true;
     const searchLower = searchTerm.toLowerCase();
     
@@ -262,6 +279,34 @@ export default function Portfolio() {
             </Button>
           ))}
         </div>
+
+        {/* Year Filter */}
+        {availableYears.length > 0 && (
+          <div className="flex justify-center mb-12">
+            <Select value={selectedYear} onValueChange={setSelectedYear}>
+              <SelectTrigger 
+                className="w-[200px] bg-transparent border border-white/30 text-white rounded-none focus:ring-0 focus:ring-offset-0"
+                data-testid="select-year"
+              >
+                <SelectValue placeholder={language === 'vi' ? 'Chọn năm' : 'Select year'} />
+              </SelectTrigger>
+              <SelectContent className="bg-black border-white/30 text-white rounded-none">
+                <SelectItem value="all" className="focus:bg-white/10 focus:text-white">
+                  {language === 'vi' ? 'Tất cả các năm' : 'All years'}
+                </SelectItem>
+                {availableYears.map((year) => (
+                  <SelectItem 
+                    key={year} 
+                    value={year}
+                    className="focus:bg-white/10 focus:text-white"
+                  >
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         {/* Projects Grid */}
         {isLoading ? (
