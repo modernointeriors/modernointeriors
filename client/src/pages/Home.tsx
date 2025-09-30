@@ -31,14 +31,19 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation observer
+  // Scroll animation observer with reset capability
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Check if it's a card or process step element
-            if (entry.target.classList.contains('advantage-card') || entry.target.classList.contains('process-step')) {
+            // Check if it's a card, process step, or project/article card
+            if (entry.target.classList.contains('advantage-card') || 
+                entry.target.classList.contains('process-step') ||
+                entry.target.classList.contains('project-card') ||
+                entry.target.classList.contains('article-card')) {
+              entry.target.classList.add('animate-fade-in-up');
+            } else if (entry.target.classList.contains('view-more-btn')) {
               entry.target.classList.add('animate-fade-in-up');
             } else {
               // Title animations
@@ -48,16 +53,36 @@ export default function Home() {
                 sibling.classList.add('animate-slide-in-right');
               }
             }
+          } else {
+            // Remove animation classes when element leaves viewport (for reset on scroll back)
+            entry.target.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+            const sibling = entry.target.nextElementSibling;
+            if (sibling?.classList.contains('scroll-animate')) {
+              sibling.classList.remove('animate-fade-in-up', 'animate-slide-in-left', 'animate-slide-in-right');
+            }
           }
         });
       },
       { threshold: 0.2 }
     );
 
-    const animateElements = document.querySelectorAll('.scroll-animate, .advantage-card, .process-step');
-    animateElements.forEach((el) => observer.observe(el));
+    // Observe elements initially and on DOM changes
+    const observeElements = () => {
+      const animateElements = document.querySelectorAll('.scroll-animate, .advantage-card, .process-step, .project-card, .article-card, .view-more-btn');
+      animateElements.forEach((el) => observer.observe(el));
+    };
 
-    return () => observer.disconnect();
+    observeElements();
+
+    // Re-observe after a delay to catch dynamically loaded content
+    const timers = [500, 1000, 2000].map(delay => 
+      setTimeout(observeElements, delay)
+    );
+
+    return () => {
+      observer.disconnect();
+      timers.forEach(timer => clearTimeout(timer));
+    };
   }, []);
   
   // Quick contact form state (matching Contact page)
@@ -291,7 +316,7 @@ export default function Home() {
                   variant="ghost" 
                   size="default"
                   asChild
-                  className="rounded-none hover:bg-transparent hover:text-white/80"
+                  className="rounded-none hover:bg-transparent hover:text-white/80 view-more-btn scroll-animate"
                   data-testid="button-view-more-projects"
                 >
                   <Link href="/portfolio">
@@ -317,10 +342,10 @@ export default function Home() {
               {/* Scrollable Projects Grid - 5 columns visible, scroll to see up to 10 */}
               <ScrollableContainer>
                 <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                  {featuredProjects?.slice(0, 10).map((project) => (
+                  {featuredProjects?.slice(0, 10).map((project, index) => (
                     <div 
                       key={project.id} 
-                      className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none"
+                      className={`group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card scroll-animate animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
                       onClick={() => navigate(`/project/${project.id}`)}
                     >
                     <img 
@@ -395,7 +420,7 @@ export default function Home() {
                   variant="ghost" 
                   size="default"
                   asChild
-                  className="rounded-none hover:bg-transparent hover:text-white/80"
+                  className="rounded-none hover:bg-transparent hover:text-white/80 view-more-btn scroll-animate"
                   data-testid="button-view-more-news"
                 >
                   <Link href="/blog">
@@ -432,10 +457,10 @@ export default function Home() {
               {/* Scrollable Articles Grid - 5 columns visible, scroll to see up to 10 */}
               <ScrollableContainer>
                 <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-                  {featuredArticles?.slice(0, 10).map((article) => (
+                  {featuredArticles?.slice(0, 10).map((article, index) => (
                     <Card 
                       key={article.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none"
+                      className={`group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card scroll-animate animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
