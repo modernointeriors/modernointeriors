@@ -744,8 +744,8 @@ export default function Home() {
             {/* Advantage 1 */}
             <div className="group advantage-card scroll-animate animate-delay-100">
               <div className="mb-6">
-                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
-                  <Sparkles className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Sparkles className="w-8 h-8 text-white" />
                 </div>
               </div>
               <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
@@ -762,8 +762,8 @@ export default function Home() {
             {/* Advantage 2 */}
             <div className="group advantage-card scroll-animate animate-delay-200">
               <div className="mb-6">
-                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
-                  <Headset className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Headset className="w-8 h-8 text-white" />
                 </div>
               </div>
               <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
@@ -780,8 +780,8 @@ export default function Home() {
             {/* Advantage 3 */}
             <div className="group advantage-card scroll-animate animate-delay-300">
               <div className="mb-6">
-                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
-                  <Users className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Users className="w-8 h-8 text-white" />
                 </div>
               </div>
               <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
@@ -798,8 +798,8 @@ export default function Home() {
             {/* Advantage 4 */}
             <div className="group advantage-card scroll-animate animate-delay-400">
               <div className="mb-6">
-                <div className="w-16 h-16 border border-white/20 flex items-center justify-center group-hover:border-primary transition-colors duration-300">
-                  <Store className="w-8 h-8 text-white group-hover:text-primary transition-colors duration-300" />
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Store className="w-8 h-8 text-white" />
                 </div>
               </div>
               <h4 className="text-lg font-light text-white mb-4 uppercase tracking-wide">
