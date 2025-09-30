@@ -283,26 +283,25 @@ export default function Portfolio() {
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-8 mb-12">
           {categories.map((category) => (
-            <Button
+            <button
               key={category.value}
-              variant="outline"
               onClick={() => setActiveCategory(category.value)}
-              className={`px-6 py-3 font-light border-white text-white hover:bg-white hover:text-black transition-all duration-200 rounded-none ${
+              className={`text-sm font-light tracking-widest uppercase transition-colors duration-300 ${
                 activeCategory === category.value 
-                  ? 'bg-primary border-primary text-black hover:bg-primary hover:text-black' 
-                  : 'bg-transparent'
+                  ? 'text-white' 
+                  : 'text-white/60 hover:text-white'
               }`}
               data-testid={`filter-${category.value}`}
             >
               {language === 'vi' ? {
-                'all': 'Tất cả dự án',
-                'residential': 'Nhà ở',
-                'commercial': 'Thương mại', 
-                'architecture': 'Kiến trúc'
-              }[category.value] : category.label}
-            </Button>
+                'all': 'TẤT CẢ DỰ ÁN',
+                'residential': 'NHÀ Ở',
+                'commercial': 'THƯƠNG MẠI', 
+                'architecture': 'KIẾN TRÚC'
+              }[category.value] : category.label.toUpperCase()}
+            </button>
           ))}
         </div>
 
