@@ -23,22 +23,28 @@ export default function Portfolio() {
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
 
-  // Scroll animation observer
+  // Scroll animation observer - only run once
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+            // Mark as animated to prevent re-running
+            entry.target.classList.add('animated');
+            
             if (entry.target.classList.contains('project-card')) {
-              entry.target.classList.add('animate-fade-in-up');
+              // Get the index from data attribute to determine direction
+              const index = parseInt(entry.target.getAttribute('data-index') || '0');
+              if (index % 2 === 0) {
+                entry.target.classList.add('animate-slide-in-from-left');
+              } else {
+                entry.target.classList.add('animate-slide-in-from-right');
+              }
             } else if (entry.target.classList.contains('filter-section')) {
               entry.target.classList.add('animate-fade-in-up');
             } else {
               entry.target.classList.add('animate-slide-in-left');
             }
-          } else {
-            // Reset animations when scrolling back up
-            entry.target.classList.remove('animate-fade-in-up', 'animate-slide-in-left');
           }
         });
       },
@@ -375,8 +381,8 @@ export default function Portfolio() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+              {projects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
               ))}
             </div>
             <Pagination />

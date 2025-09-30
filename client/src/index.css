@@ -597,6 +597,14 @@
     animation: slide-in-right 0.8s ease-out forwards;
   }
 
+  .animate-slide-in-from-left {
+    animation: slide-in-left 0.8s ease-out forwards;
+  }
+
+  .animate-slide-in-from-right {
+    animation: slide-in-right 0.8s ease-out forwards;
+  }
+
   .animate-fade-in-up {
     animation: fade-in-up 0.6s ease-out forwards;
   }

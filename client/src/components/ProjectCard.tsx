@@ -3,15 +3,17 @@ import type { Project } from "@shared/schema";
 
 interface ProjectCardProps {
   project: Project;
+  index?: number;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const defaultImage = `https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400`;
   const projectImage = Array.isArray(project.images) && project.images[0] || defaultImage;
 
   return (
     <div 
       className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none"
+      data-index={index}
     >
       <Link href={`/project/${project.id}`}>
         <img 
