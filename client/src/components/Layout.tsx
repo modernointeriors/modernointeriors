@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { Menu, X, Globe, Search } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 
 interface LayoutProps {
@@ -44,8 +44,6 @@ export default function Layout({ children }: LayoutProps) {
   }, [showSidebar, mobileMenuOpen]);
   
   const [isScrolled, setIsScrolled] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [lastActivity, setLastActivity] = useState(Date.now());
   
   // Lock scroll during menu for smooth performance
   useEffect(() => {
@@ -54,19 +52,6 @@ export default function Layout({ children }: LayoutProps) {
   }, [showSidebar]);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
-
-  // Auto-collapse search after 5 seconds of inactivity
-  useEffect(() => {
-    if (!searchOpen) return;
-
-    const timer = setTimeout(() => {
-      if (Date.now() - lastActivity >= 5000) {
-        setSearchOpen(false);
-      }
-    }, 5000); // 5 seconds
-
-    return () => clearTimeout(timer);
-  }, [searchOpen, lastActivity]);
 
   // Animation timing constants - Ultra-Smooth (Auto-scales to 240fps on supported displays)
   const OPENING_DURATION = 900; // 0.9s for bars 1→2→3 (sync with CSS --bar-dur)
@@ -119,12 +104,6 @@ export default function Layout({ children }: LayoutProps) {
       return () => clearTimeout(timer);
     }
   }, [showSidebar, iconState]);
-
-  // Reset activity timer when user interacts with search
-  const handleSearchActivity = () => {
-    setLastActivity(Date.now());
-  };
-
 
   // Language switching without URL changes
   const handleLanguageChange = (lang: Language) => {
@@ -179,36 +158,8 @@ export default function Layout({ children }: LayoutProps) {
             />
           </Link>
           
-          {/* Right Side: Search + Language */}
+          {/* Right Side: Language */}
           <div className="flex items-center gap-4">
-            {/* Expandable Search */}
-            <div className="flex items-center">
-              {/* Search Input - expands when searchOpen is true */}
-              <div className={`overflow-hidden transition-all duration-300 ${
-                searchOpen ? 'w-64 opacity-100' : 'w-0 opacity-0'
-              }`}>
-                <input
-                  type="text"
-                  placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
-                  className="w-full bg-transparent border-0 border-b border-white/30 text-white placeholder-white/60 focus:outline-none focus:border-white/80 py-2 text-sm font-light transition-colors"
-                  data-testid="header-search"
-                  autoFocus={searchOpen}
-                  onFocus={handleSearchActivity}
-                  onChange={handleSearchActivity}
-                  onKeyDown={handleSearchActivity}
-                />
-              </div>
-              
-              {/* Search Icon Button */}
-              <button
-                onClick={() => setSearchOpen(!searchOpen)}
-                className="text-white/60 hover:text-white transition-colors p-2"
-                data-testid="search-toggle"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-            </div>
-            
             {/* Language Selector */}
             <div className="flex items-center space-x-1 text-sm">
             <button
