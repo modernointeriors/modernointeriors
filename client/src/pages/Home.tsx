@@ -31,13 +31,30 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Simple scroll animation - run once per element
+  // Scroll animation with specific directions
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            entry.target.classList.add('animated', 'animate-fade-in-up');
+            const element = entry.target;
+            element.classList.add('animated');
+            
+            // Cards slide from bottom
+            if (element.classList.contains('project-card') || 
+                element.classList.contains('article-card') ||
+                element.classList.contains('advantage-card')) {
+              element.classList.add('animate-fade-in-up');
+            }
+            // Buttons and arrows from right
+            else if (element.classList.contains('view-more-btn') || 
+                     element.tagName === 'BUTTON') {
+              element.classList.add('animate-slide-in-from-right');
+            }
+            // Titles and other elements from left
+            else {
+              element.classList.add('animate-slide-in-from-left');
+            }
           }
         });
       },
@@ -57,7 +74,7 @@ export default function Home() {
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
-          el.classList.remove('animated', 'animate-fade-in-up');
+          el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
         });
       }
     };

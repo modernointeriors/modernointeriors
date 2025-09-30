@@ -590,27 +590,27 @@
   }
 
   .animate-slide-in-left {
-    animation: slide-in-left 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slide-in-left 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     will-change: opacity, transform;
   }
 
   .animate-slide-in-right {
-    animation: slide-in-right 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slide-in-right 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     will-change: opacity, transform;
   }
 
   .animate-slide-in-from-left {
-    animation: slide-in-left 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slide-in-left 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     will-change: opacity, transform;
   }
 
   .animate-slide-in-from-right {
-    animation: slide-in-right 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slide-in-right 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     will-change: opacity, transform;
   }
 
   .animate-fade-in-up {
-    animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fade-in-up 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     will-change: opacity, transform;
   }
 
