@@ -243,7 +243,7 @@ export default function Home() {
       <HeroSlider projects={allProjects || []} />
 
       {/* Featured Projects Section */}
-      <section id="featured-projects" className="py-8 md:py-12 bg-card">
+      <section id="featured-projects" className="py-16 bg-card">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <div className="mb-8">
@@ -347,7 +347,7 @@ export default function Home() {
       </section>
 
       {/* Featured News Section */}
-      <section id="featured-news" className="py-8 md:py-12 bg-background">
+      <section id="featured-news" className="py-16 bg-background">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <div className="mb-8">
@@ -502,7 +502,7 @@ export default function Home() {
 
       {/* Process Section */}
       <section 
-        className="py-8 md:py-12 bg-black"
+        className="py-16 bg-black"
         onMouseEnter={handleProcessSectionMouseEnter}
         onMouseLeave={handleProcessSectionMouseLeave}
       >
@@ -698,7 +698,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-24 bg-black">
+      <section className="py-16 bg-black">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-16">
@@ -817,7 +817,7 @@ export default function Home() {
       </section>
 
       {/* Partners Section */}
-      <section className="py-24 bg-black overflow-hidden">
+      <section className="py-16 bg-black overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase">
@@ -908,7 +908,7 @@ export default function Home() {
       </section>
 
       {/* Quick Contact Section */}
-      <section className="py-24 bg-black">
+      <section className="py-16 bg-black">
         <div 
           className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8"
           onMouseEnter={handleContactMouseEnter}
