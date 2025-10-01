@@ -100,6 +100,64 @@ export default function Home() {
     address: '',
     requirements: ''
   });
+
+  // Typing animation for form placeholders
+  const [placeholders, setPlaceholders] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    requirements: ''
+  });
+
+  useEffect(() => {
+    const texts = {
+      name: language === 'vi' ? 'Họ và tên' : 'Name',
+      email: 'E-mail',
+      phone: language === 'vi' ? 'Điện thoại' : 'Phone',
+      address: language === 'vi' ? 'Địa chỉ' : 'Address',
+      requirements: language === 'vi' ? 'Yêu cầu / Mô tả dự án' : 'Requirements / Project Description'
+    };
+
+    const delays = {
+      name: 0,
+      email: 200,
+      phone: 400,
+      address: 600,
+      requirements: 800
+    };
+
+    const timeouts: NodeJS.Timeout[] = [];
+    const intervals: NodeJS.Timeout[] = [];
+
+    const typeText = (field: keyof typeof texts, text: string, delay: number) => {
+      const timeout = setTimeout(() => {
+        let index = 0;
+        const interval = setInterval(() => {
+          if (index <= text.length) {
+            setPlaceholders(prev => ({ ...prev, [field]: text.slice(0, index) }));
+            index++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 50);
+        intervals.push(interval);
+      }, delay);
+      timeouts.push(timeout);
+    };
+
+    typeText('name', texts.name, delays.name);
+    typeText('email', texts.email, delays.email);
+    typeText('phone', texts.phone, delays.phone);
+    typeText('address', texts.address, delays.address);
+    typeText('requirements', texts.requirements, delays.requirements);
+
+    return () => {
+      timeouts.forEach(timeout => clearTimeout(timeout));
+      intervals.forEach(interval => clearInterval(interval));
+    };
+  }, [language]);
+
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
   });
@@ -999,7 +1057,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="text"
-                    placeholder={language === 'vi' ? 'Họ và tên' : 'Name'}
+                    placeholder={placeholders.name}
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -1009,7 +1067,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="email"
-                    placeholder={language === 'vi' ? 'E-mail' : 'E-mail'}
+                    placeholder={placeholders.email}
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -1023,7 +1081,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="tel"
-                    placeholder={language === 'vi' ? 'Điện thoại' : 'Phone'}
+                    placeholder={placeholders.phone}
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -1033,7 +1091,7 @@ export default function Home() {
                 <div>
                   <Input
                     type="text"
-                    placeholder={language === 'vi' ? 'Địa chỉ' : 'Address'}
+                    placeholder={placeholders.address}
                     value={formData.address}
                     onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -1045,7 +1103,7 @@ export default function Home() {
               {/* Third row - Requirements */}
               <div>
                 <Textarea
-                  placeholder={language === 'vi' ? 'Yêu cầu / Mô tả dự án' : 'Requirements / Project Description'}
+                  placeholder={placeholders.requirements}
                   value={formData.requirements}
                   onChange={(e) => setFormData(prev => ({ ...prev, requirements: e.target.value }))}
                   className="bg-transparent border border-gray-600 rounded-none px-4 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
