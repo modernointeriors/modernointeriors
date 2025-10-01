@@ -51,7 +51,7 @@ export default function Home() {
               if (parent && element instanceof HTMLElement) {
                 const siblings = Array.from(parent.children);
                 const index = siblings.indexOf(element);
-                const delay = Math.min(index * 100, 500); // Max 500ms delay
+                const delay = Math.min(index * 80, 400); // Max 400ms delay
                 if (delay > 0) {
                   element.style.animationDelay = `${delay}ms`;
                 }
@@ -69,7 +69,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
+      { threshold: 0.05, rootMargin: '100px 0px -100px 0px' }
     );
 
     const observeElements = () => {
@@ -79,7 +79,7 @@ export default function Home() {
 
     observeElements();
 
-    const timer = setTimeout(observeElements, 800);
+    const timer = setTimeout(observeElements, 600);
 
     // Reset when back to top
     const handleScroll = () => {
