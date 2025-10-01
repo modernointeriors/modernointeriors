@@ -12,17 +12,17 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
   return (
     <div 
-      className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none"
+      className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl hover:shadow-white/10"
       data-index={index}
     >
       <Link href={`/project/${project.id}`}>
         <img 
           src={projectImage}
           alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           data-testid={`img-project-${project.id}`}
         />
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300" />
+        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-500" />
         
         {/* Content Overlay */}
         <div className="absolute inset-0 p-6 flex flex-col justify-between">
