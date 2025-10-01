@@ -46,12 +46,12 @@ export default function Home() {
                 element.classList.contains('advantage-card')) {
               element.classList.add('animate-drop-down');
               
-              // Add stagger delays based on card index
+              // Add stagger delays based on card index - reduced for faster scrolling
               const parent = element.parentElement;
               if (parent && element instanceof HTMLElement) {
                 const siblings = Array.from(parent.children);
                 const index = siblings.indexOf(element);
-                const delay = Math.min(index * 80, 400); // Max 400ms delay
+                const delay = Math.min(index * 50, 250); // Reduced: Max 250ms delay
                 if (delay > 0) {
                   element.style.animationDelay = `${delay}ms`;
                 }
@@ -69,7 +69,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.05, rootMargin: '100px 0px -100px 0px' }
+      { threshold: 0.08, rootMargin: '50px 0px -50px 0px' }
     );
 
     const observeElements = () => {
