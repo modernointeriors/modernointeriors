@@ -279,9 +279,9 @@ export default function Layout({ children }: LayoutProps) {
                   perspective: '1000px'
                 }}
               >
-                <div className="w-8 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
-                <div className="w-8 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
-                <div className="w-8 h-0.5 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-9 h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-9 h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-9 h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
               </div>
             </Button>
           </SheetTrigger>
