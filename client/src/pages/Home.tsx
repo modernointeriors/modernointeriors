@@ -40,23 +40,10 @@ export default function Home() {
             const element = entry.target;
             element.classList.add('animated');
             
-            // Cards animations based on type
+            // All cards use simple fade-in from bottom
             if (element.classList.contains('project-card') || 
-                element.classList.contains('article-card')) {
-              // Project and article cards: drop down with stagger
-              element.classList.add('animate-drop-down');
-              
-              const parent = element.parentElement;
-              if (parent && element instanceof HTMLElement) {
-                const siblings = Array.from(parent.children);
-                const index = siblings.indexOf(element);
-                const delay = Math.min(index * 50, 250);
-                if (delay > 0) {
-                  element.style.animationDelay = `${delay}ms`;
-                }
-              }
-            } else if (element.classList.contains('advantage-card')) {
-              // Advantage cards: simple fade-in from bottom, all together
+                element.classList.contains('article-card') ||
+                element.classList.contains('advantage-card')) {
               element.classList.add('animate-fade-in-up');
             }
             // Buttons and arrows from right
@@ -87,10 +74,7 @@ export default function Home() {
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
-          el.classList.remove('animated', 'animate-drop-down', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
-          if (el instanceof HTMLElement) {
-            el.style.animationDelay = '';
-          }
+          el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
         });
       }
     };
@@ -364,7 +348,7 @@ export default function Home() {
                   {featuredProjects?.slice(0, 10).map((project, index) => (
                     <div 
                       key={project.id} 
-                      className={`group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
+                      className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card"
                       onClick={() => navigate(`/project/${project.id}`)}
                     >
                     <img 
@@ -507,7 +491,7 @@ export default function Home() {
                   {featuredArticles?.slice(0, 10).map((article, index) => (
                     <Card 
                       key={article.id} 
-                      className={`group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
+                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card"
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
