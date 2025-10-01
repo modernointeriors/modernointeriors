@@ -24,6 +24,7 @@ export default function Blog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('all');
   const articlesPerPage = 12;
+  const [searchPlaceholder, setSearchPlaceholder] = useState('');
 
   // Animation - reset when back to top
   useEffect(() => {
@@ -112,6 +113,24 @@ export default function Blog() {
       // Reset title when leaving
       document.title = 'Moderno Interiors Design';
     };
+  }, [language]);
+
+  // Typing animation for search placeholder
+  useEffect(() => {
+    const text = language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?';
+    let index = 0;
+    setSearchPlaceholder('');
+    
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setSearchPlaceholder(text.slice(0, index));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 50);
+
+    return () => clearInterval(interval);
   }, [language]);
 
   const { data: allArticles = [], isLoading } = useQuery<Article[]>({
@@ -362,7 +381,7 @@ export default function Blog() {
           <div className="flex items-end gap-8 border-b border-white/30 pb-4">
             <Input
               type="text"
-              placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+              placeholder={searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-transparent border-0 text-white placeholder-white/60 px-0 py-0 text-lg font-light rounded-none focus-visible:ring-0 flex-1"

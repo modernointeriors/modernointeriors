@@ -22,6 +22,7 @@ export default function Portfolio() {
   const [selectedYear, setSelectedYear] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
+  const [searchPlaceholder, setSearchPlaceholder] = useState('');
 
   // Animation - reset when back to top, slower timing
   useEffect(() => {
@@ -67,6 +68,24 @@ export default function Portfolio() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Typing animation for search placeholder
+  useEffect(() => {
+    const text = language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?';
+    let index = 0;
+    setSearchPlaceholder('');
+    
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setSearchPlaceholder(text.slice(0, index));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, [language]);
 
   const { data: allProjects = [], isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects', activeCategory],
@@ -294,7 +313,7 @@ export default function Portfolio() {
           <div className="flex items-end gap-8 border-b border-white/30 pb-4">
             <Input
               type="text"
-              placeholder={language === 'vi' ? 'Chúng tôi có thể giúp bạn tìm gì?' : 'What can we help you find?'}
+              placeholder={searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-transparent border-0 text-white placeholder-white/60 px-0 py-0 text-lg font-light rounded-none focus-visible:ring-0 flex-1"
