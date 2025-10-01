@@ -31,6 +31,135 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
+  // Typing animation for process steps
+  const [stepTexts, setStepTexts] = useState({
+    step01: '',
+    step02: '',
+    step03: '',
+    step04: '',
+    step05: ''
+  });
+
+  // Typing animation for Step 01
+  useEffect(() => {
+    if (!step01Expanded) {
+      setStepTexts(prev => ({ ...prev, step01: '' }));
+      return;
+    }
+
+    const text = language === 'vi' 
+      ? 'Chúng tôi bắt đầu bằng việc lắng nghe và phân tích sâu nhu cầu, sở thích và ngân sách của bạn. Một buổi khảo sát thực tế tại công trình sẽ giúp chúng tôi đưa ra những tư vấn phù hợp nhất.'
+      : 'We begin by carefully listening to and analyzing your needs, preferences, and budget. An on-site survey of your property allows us to provide the most tailored advice.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setStepTexts(prev => ({ ...prev, step01: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [step01Expanded, language]);
+
+  // Typing animation for Step 02
+  useEffect(() => {
+    if (!step02Expanded) {
+      setStepTexts(prev => ({ ...prev, step02: '' }));
+      return;
+    }
+
+    const text = language === 'vi' 
+      ? 'Những ý tưởng sáng tạo được phác thảo, kết hợp cùng giải pháp công năng thông minh và thẩm mỹ tinh tế. Chúng tôi sẽ trình bày và thống nhất cùng bạn phương án thiết kế tối ưu nhất trước khi chính thức hợp tác.'
+      : 'Creative ideas are sketched out, combining intelligent functional solutions with sophisticated aesthetics. We will present and finalize the optimal design proposal with you before formalizing our partnership.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setStepTexts(prev => ({ ...prev, step02: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [step02Expanded, language]);
+
+  // Typing animation for Step 03
+  useEffect(() => {
+    if (!step03Expanded) {
+      setStepTexts(prev => ({ ...prev, step03: '' }));
+      return;
+    }
+
+    const text = language === 'vi' 
+      ? 'Không gian mơ ước của bạn sẽ được tái hiện sống động qua các bản vẽ phối cảnh 3D và moodboard vật liệu, màu sắc. Bạn sẽ thấy trước ngôi nhà của mình một cách chân thực nhất và cùng chúng tôi tinh chỉnh đến khi hoàn toàn ưng ý.'
+      : 'Your dream space is brought to life through vivid 3D renderings and mood boards showcasing materials and colors. You get to see your future home with stunning realism, and we\'ll fine-tune every detail with you until it\'s perfect.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setStepTexts(prev => ({ ...prev, step03: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [step03Expanded, language]);
+
+  // Typing animation for Step 04
+  useEffect(() => {
+    if (!step04Expanded) {
+      setStepTexts(prev => ({ ...prev, step04: '' }));
+      return;
+    }
+
+    const text = language === 'vi' 
+      ? 'Quá trình thi công được lập kế hoạch và quản lý chặt chẽ bởi đội ngũ giám sát giàu kinh nghiệm. Chúng tôi cam kết đảm bảo đúng tiến độ, tuân thủ thiết kế và thường xuyên cập nhật thông tin minh bạch đến bạn.'
+      : 'The construction process is meticulously planned and managed by our experienced supervision team. We are committed to on-time delivery, strict adherence to the design, and providing you with regular, transparent progress updates.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setStepTexts(prev => ({ ...prev, step04: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [step04Expanded, language]);
+
+  // Typing animation for Step 05
+  useEffect(() => {
+    if (!step05Expanded) {
+      setStepTexts(prev => ({ ...prev, step05: '' }));
+      return;
+    }
+
+    const text = language === 'vi' 
+      ? 'Dự án kết thúc bằng việc nghiệm thu kỹ lưỡng và bàn giao trọn vẹn. Nhưng mối quan hệ của chúng ta thì không. Với chính sách bảo hành, bảo trì uy tín, chúng tôi cam kết sẽ luôn đồng hành để đảm bảo không gian của bạn luôn hoàn hảo.'
+      : 'The project concludes with a thorough inspection and seamless handover. But our relationship doesn\'t end there. With our reliable warranty and maintenance policy, we are committed to being your long-term partner, ensuring your space remains perfect.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setStepTexts(prev => ({ ...prev, step05: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [step05Expanded, language]);
+
   // Scroll animation with specific directions and stagger delays
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -689,10 +818,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi' 
-                      ? 'Chúng tôi bắt đầu bằng việc lắng nghe và phân tích sâu nhu cầu, sở thích và ngân sách của bạn. Một buổi khảo sát thực tế tại công trình sẽ giúp chúng tôi đưa ra những tư vấn phù hợp nhất.'
-                      : 'We begin by carefully listening to and analyzing your needs, preferences, and budget. An on-site survey of your property allows us to provide the most tailored advice.'
-                    }
+                    {stepTexts.step01}
                   </p>
                 </div>
               </div>
@@ -723,10 +849,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi' 
-                      ? 'Những ý tưởng sáng tạo được phác thảo, kết hợp cùng giải pháp công năng thông minh và thẩm mỹ tinh tế. Chúng tôi sẽ trình bày và thống nhất cùng bạn phương án thiết kế tối ưu nhất trước khi chính thức hợp tác.'
-                      : 'Creative ideas are sketched out, combining intelligent functional solutions with sophisticated aesthetics. We will present and finalize the optimal design proposal with you before formalizing our partnership.'
-                    }
+                    {stepTexts.step02}
                   </p>
                 </div>
               </div>
@@ -757,10 +880,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi' 
-                      ? 'Không gian mơ ước của bạn sẽ được tái hiện sống động qua các bản vẽ phối cảnh 3D và moodboard vật liệu, màu sắc. Bạn sẽ thấy trước ngôi nhà của mình một cách chân thực nhất và cùng chúng tôi tinh chỉnh đến khi hoàn toàn ưng ý.'
-                      : 'Your dream space is brought to life through vivid 3D renderings and mood boards showcasing materials and colors. You get to see your future home with stunning realism, and we\'ll fine-tune every detail with you until it\'s perfect.'
-                    }
+                    {stepTexts.step03}
                   </p>
                 </div>
               </div>
@@ -791,10 +911,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi' 
-                      ? 'Quá trình thi công được lập kế hoạch và quản lý chặt chẽ bởi đội ngũ giám sát giàu kinh nghiệm. Chúng tôi cam kết đảm bảo đúng tiến độ, tuân thủ thiết kế và thường xuyên cập nhật thông tin minh bạch đến bạn.'
-                      : 'The construction process is meticulously planned and managed by our experienced supervision team. We are committed to on-time delivery, strict adherence to the design, and providing you with regular, transparent progress updates.'
-                    }
+                    {stepTexts.step04}
                   </p>
                 </div>
               </div>
@@ -825,10 +942,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi' 
-                      ? 'Dự án kết thúc bằng việc nghiệm thu kỹ lưỡng và bàn giao trọn vẹn. Nhưng mối quan hệ của chúng ta thì không. Với chính sách bảo hành, bảo trì uy tín, chúng tôi cam kết sẽ luôn đồng hành để đảm bảo không gian của bạn luôn hoàn hảo.'
-                      : 'The project concludes with a thorough inspection and seamless handover. But our relationship doesn\'t end there. With our reliable warranty and maintenance policy, we are committed to being your long-term partner, ensuring your space remains perfect.'
-                    }
+                    {stepTexts.step05}
                   </p>
                 </div>
               </div>
