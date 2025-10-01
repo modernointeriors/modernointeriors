@@ -111,6 +111,19 @@ export default function Home() {
   });
 
   useEffect(() => {
+    // Only run typing animation when form is expanded
+    if (!contactFormExpanded) {
+      // Reset placeholders when form is closed
+      setPlaceholders({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        requirements: ''
+      });
+      return;
+    }
+
     const texts = {
       name: language === 'vi' ? 'Họ và tên' : 'Name',
       email: 'E-mail',
@@ -156,7 +169,7 @@ export default function Home() {
       timeouts.forEach(timeout => clearTimeout(timeout));
       intervals.forEach(interval => clearInterval(interval));
     };
-  }, [language]);
+  }, [language, contactFormExpanded]);
 
   const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
