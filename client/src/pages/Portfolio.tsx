@@ -39,7 +39,7 @@ export default function Portfolio() {
     );
 
     const observeElements = () => {
-      const animateElements = document.querySelectorAll('.project-card, .filter-section');
+      const animateElements = document.querySelectorAll('.project-card');
       animateElements.forEach((el) => observer.observe(el));
     };
 
@@ -309,7 +309,7 @@ export default function Portfolio() {
         </div>
 
         {/* Search Box with Year Filter */}
-        <div className="max-w-2xl mx-auto mb-12 filter-section">
+        <div className="max-w-2xl mx-auto mb-12">
           <div className="flex items-end gap-8 border-b border-white/30 pb-4">
             <Input
               type="text"
@@ -347,7 +347,7 @@ export default function Portfolio() {
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-8 mb-12 filter-section">
+        <div className="flex flex-wrap justify-center gap-8 mb-12">
           {categories.map((category) => (
             <button
               key={category.value}
