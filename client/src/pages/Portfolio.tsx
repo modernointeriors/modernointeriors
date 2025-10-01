@@ -23,22 +23,20 @@ export default function Portfolio() {
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 12;
 
-  // Animation - only run once per card
+  // Animation - reset when back to top, slower timing
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            // Mark as animated to prevent re-running
             entry.target.classList.add('animated');
-            entry.target.classList.add('animate-fade-in-up');
+            entry.target.classList.add('animate-fade-in-up-slow');
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.06, rootMargin: '50px 0px -50px 0px' }
     );
 
-    // Observe elements
     const observeElements = () => {
       const animateElements = document.querySelectorAll('.project-card, .filter-section');
       animateElements.forEach((el) => observer.observe(el));
@@ -46,14 +44,27 @@ export default function Portfolio() {
 
     observeElements();
 
-    // Re-observe after delays to catch dynamically loaded content
-    const timers = [500, 1000].map(delay => 
-      setTimeout(observeElements, delay)
-    );
+    const timer = setTimeout(observeElements, 600);
+
+    // Reset and re-trigger animation when back to top
+    const handleScroll = () => {
+      if (window.scrollY < 50) {
+        document.querySelectorAll('.animated').forEach((el) => {
+          el.classList.remove('animated', 'animate-fade-in-up-slow');
+        });
+        // Re-trigger animations after a brief delay
+        setTimeout(() => {
+          observeElements();
+        }, 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       observer.disconnect();
-      timers.forEach(timer => clearTimeout(timer));
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -266,7 +277,7 @@ export default function Portfolio() {
     <div className="min-h-screen pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 scroll-animate">
+        <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">
             {language === 'vi' ? 'DỰ ÁN' : 'PROJECT'}
           </h1>

@@ -632,6 +632,11 @@
     will-change: opacity, transform;
   }
 
+  .animate-fade-in-up-slow {
+    animation: fade-in-up 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: opacity, transform;
+  }
+
   .animate-drop-down {
     animation: drop-down 1.2s cubic-bezier(0.34, 1, 0.64, 1) forwards;
     will-change: opacity, transform;
