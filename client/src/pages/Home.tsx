@@ -495,7 +495,7 @@ export default function Home() {
                   {featuredArticles?.slice(0, 10).map((article, index) => (
                     <Card 
                       key={article.id} 
-                      className="group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card"
+                      className="group overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card"
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
