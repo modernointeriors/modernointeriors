@@ -40,22 +40,24 @@ export default function Home() {
             const element = entry.target;
             element.classList.add('animated');
             
-            // Cards drop down from top with stagger effect
+            // Cards animations based on type
             if (element.classList.contains('project-card') || 
-                element.classList.contains('article-card') ||
-                element.classList.contains('advantage-card')) {
+                element.classList.contains('article-card')) {
+              // Project and article cards: drop down with stagger
               element.classList.add('animate-drop-down');
               
-              // Add stagger delays based on card index - reduced for faster scrolling
               const parent = element.parentElement;
               if (parent && element instanceof HTMLElement) {
                 const siblings = Array.from(parent.children);
                 const index = siblings.indexOf(element);
-                const delay = Math.min(index * 50, 250); // Reduced: Max 250ms delay
+                const delay = Math.min(index * 50, 250);
                 if (delay > 0) {
                   element.style.animationDelay = `${delay}ms`;
                 }
               }
+            } else if (element.classList.contains('advantage-card')) {
+              // Advantage cards: simple fade-in from bottom, all together
+              element.classList.add('animate-fade-in-up');
             }
             // Buttons and arrows from right
             else if (element.classList.contains('view-more-btn') || 
@@ -85,7 +87,7 @@ export default function Home() {
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
-          el.classList.remove('animated', 'animate-drop-down', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
+          el.classList.remove('animated', 'animate-drop-down', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
           if (el instanceof HTMLElement) {
             el.style.animationDelay = '';
           }
@@ -792,7 +794,7 @@ export default function Home() {
           {/* Advantages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {/* Advantage 1 */}
-            <div className="group advantage-card scroll-animate animate-delay-100">
+            <div className="group advantage-card scroll-animate">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Sparkles className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
@@ -810,7 +812,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 2 */}
-            <div className="group advantage-card scroll-animate animate-delay-200">
+            <div className="group advantage-card scroll-animate">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Headset className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
@@ -828,7 +830,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 3 */}
-            <div className="group advantage-card scroll-animate animate-delay-300">
+            <div className="group advantage-card scroll-animate">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Users className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
@@ -846,7 +848,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 4 */}
-            <div className="group advantage-card scroll-animate animate-delay-400">
+            <div className="group advantage-card scroll-animate">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Store className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
