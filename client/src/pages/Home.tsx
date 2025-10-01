@@ -362,7 +362,7 @@ export default function Home() {
                   {featuredProjects?.slice(0, 10).map((project, index) => (
                     <div 
                       key={project.id} 
-                      className={`group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card scroll-animate animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
+                      className={`group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
                       onClick={() => navigate(`/project/${project.id}`)}
                     >
                     <img 
@@ -505,7 +505,7 @@ export default function Home() {
                   {featuredArticles?.slice(0, 10).map((article, index) => (
                     <Card 
                       key={article.id} 
-                      className={`group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card scroll-animate animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
+                      className={`group overflow-hidden hover-scale cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card animate-delay-${Math.min((index % 5 + 1) * 100, 500)}`}
                       onClick={() => navigate(`/blog/${article.slug}`)}
                     >
                       <div className="relative">
