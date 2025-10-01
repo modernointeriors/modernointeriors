@@ -31,7 +31,7 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Scroll animation with specific directions
+  // Scroll animation with specific directions and stagger delays
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,11 +40,22 @@ export default function Home() {
             const element = entry.target;
             element.classList.add('animated');
             
-            // Cards drop down from top (news, portfolio, why choose us)
+            // Cards drop down from top with stagger effect
             if (element.classList.contains('project-card') || 
                 element.classList.contains('article-card') ||
                 element.classList.contains('advantage-card')) {
               element.classList.add('animate-drop-down');
+              
+              // Add stagger delays based on card index
+              const parent = element.parentElement;
+              if (parent && element instanceof HTMLElement) {
+                const siblings = Array.from(parent.children);
+                const index = siblings.indexOf(element);
+                const delay = Math.min(index * 100, 500); // Max 500ms delay
+                if (delay > 0) {
+                  element.style.animationDelay = `${delay}ms`;
+                }
+              }
             }
             // Buttons and arrows from right
             else if (element.classList.contains('view-more-btn') || 
@@ -58,7 +69,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
     );
 
     const observeElements = () => {
@@ -68,13 +79,16 @@ export default function Home() {
 
     observeElements();
 
-    const timer = setTimeout(observeElements, 1000);
+    const timer = setTimeout(observeElements, 800);
 
     // Reset when back to top
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
           el.classList.remove('animated', 'animate-drop-down', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
+          if (el instanceof HTMLElement) {
+            el.style.animationDelay = '';
+          }
         });
       }
     };
