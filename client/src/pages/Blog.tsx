@@ -25,7 +25,7 @@ export default function Blog() {
   const [selectedYear, setSelectedYear] = useState('all');
   const articlesPerPage = 12;
 
-  // Animation - only run once per card
+  // Animation - reset when back to top
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -48,9 +48,25 @@ export default function Blog() {
 
     const timer = setTimeout(observeElements, 600);
 
+    // Reset and re-trigger animation when back to top
+    const handleScroll = () => {
+      if (window.scrollY < 50) {
+        document.querySelectorAll('.animated').forEach((el) => {
+          el.classList.remove('animated', 'animate-fade-in-up');
+        });
+        // Re-trigger animations after a brief delay
+        setTimeout(() => {
+          observeElements();
+        }, 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     return () => {
       observer.disconnect();
       clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 

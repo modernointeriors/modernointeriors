@@ -70,12 +70,16 @@ export default function Home() {
 
     const timer = setTimeout(observeElements, 600);
 
-    // Reset when back to top
+    // Reset and re-trigger animation when back to top
     const handleScroll = () => {
       if (window.scrollY < 50) {
         document.querySelectorAll('.animated').forEach((el) => {
           el.classList.remove('animated', 'animate-fade-in-up', 'animate-slide-in-from-left', 'animate-slide-in-from-right');
         });
+        // Re-trigger animations after a brief delay
+        setTimeout(() => {
+          observeElements();
+        }, 100);
       }
     };
 
