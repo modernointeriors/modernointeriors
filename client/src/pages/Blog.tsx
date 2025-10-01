@@ -31,16 +31,14 @@ export default function Blog() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            // Mark as animated to prevent re-running
             entry.target.classList.add('animated');
             entry.target.classList.add('animate-fade-in-up');
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.08, rootMargin: '50px 0px -50px 0px' }
     );
 
-    // Observe elements
     const observeElements = () => {
       const animateElements = document.querySelectorAll('.article-card');
       animateElements.forEach((el) => observer.observe(el));
@@ -48,14 +46,11 @@ export default function Blog() {
 
     observeElements();
 
-    // Re-observe after delays to catch dynamically loaded content
-    const timers = [500, 1000].map(delay => 
-      setTimeout(observeElements, delay)
-    );
+    const timer = setTimeout(observeElements, 600);
 
     return () => {
       observer.disconnect();
-      timers.forEach(timer => clearTimeout(timer));
+      clearTimeout(timer);
     };
   }, []);
 
@@ -412,12 +407,13 @@ export default function Blog() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-white/10 h-48 rounded-none mb-4" />
-                <div className="space-y-2">
-                  <div className="h-4 bg-white/10 rounded w-3/4" />
+              <div key={i} className="animate-pulse h-[28rem] flex flex-col rounded-none overflow-hidden">
+                <div className="bg-white/10 h-48 w-full" />
+                <div className="p-6 flex-1 space-y-3">
+                  <div className="h-5 bg-white/10 rounded w-3/4" />
                   <div className="h-3 bg-white/10 rounded w-1/2" />
-                  <div className="h-3 bg-white/10 rounded w-2/3" />
+                  <div className="h-3 bg-white/10 rounded w-full" />
+                  <div className="h-3 bg-white/10 rounded w-5/6" />
                 </div>
               </div>
             ))}
@@ -439,7 +435,7 @@ export default function Blog() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {articles.map((article) => (
                 <Link key={article.id} href={`/blog/${article.slug}`}>
-                  <Card className="article-card group overflow-hidden hover-scale project-hover rounded-none cursor-pointer" data-testid={`card-article-${article.id}`}>
+                  <Card className="article-card group overflow-hidden hover-scale project-hover rounded-none cursor-pointer h-[28rem] flex flex-col" data-testid={`card-article-${article.id}`}>
                     <div className="relative">
                       {article.featuredImage ? (
                         <OptimizedImage
@@ -460,26 +456,16 @@ export default function Blog() {
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                     
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-sans font-light mb-2 line-clamp-1" data-testid={`text-title-${article.id}`}>
+                    <CardContent className="p-6 flex-1 flex flex-col">
+                      <h3 className="text-xl font-sans font-light mb-2 line-clamp-2" data-testid={`text-title-${article.id}`}>
                         {article.title}
                       </h3>
                       <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${article.id}`}>
                         {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
                       </p>
-                      {article.excerpt && (
-                        <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-excerpt-${article.id}`}>
-                          {article.excerpt}
-                        </p>
-                      )}
-                      {article.featured && (
-                        <div className="grid grid-cols-1 gap-3 text-xs">
-                          <div>
-                            <h5 className="font-light mb-1">FEATURED</h5>
-                            <p className="text-muted-foreground">{language === 'vi' ? 'Bài viết nổi bật' : 'Featured Article'}</p>
-                          </div>
-                        </div>
-                      )}
+                      <p className="text-foreground/80 text-sm line-clamp-3 flex-1" data-testid={`text-excerpt-${article.id}`}>
+                        {article.excerpt || 'Discover insights and trends in interior design...'}
+                      </p>
                     </CardContent>
                   </Card>
                 </Link>
