@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,63 @@ export default function Contact() {
     requirements: ''
   });
   const { toast } = useToast();
+  
+  // Typing animation for placeholders
+  const [placeholders, setPlaceholders] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    requirements: ''
+  });
+
+  useEffect(() => {
+    const texts = {
+      name: t('contact.form.name'),
+      email: t('contact.form.email'),
+      phone: t('contact.form.phone'),
+      address: t('contact.form.address'),
+      requirements: t('contact.form.requirements')
+    };
+
+    const delays = {
+      name: 0,
+      email: 200,
+      phone: 400,
+      address: 600,
+      requirements: 800
+    };
+
+    const timeouts: NodeJS.Timeout[] = [];
+    const intervals: NodeJS.Timeout[] = [];
+
+    const typeText = (field: keyof typeof texts, text: string, delay: number) => {
+      const timeout = setTimeout(() => {
+        let index = 0;
+        const interval = setInterval(() => {
+          if (index <= text.length) {
+            setPlaceholders(prev => ({ ...prev, [field]: text.slice(0, index) }));
+            index++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 50);
+        intervals.push(interval);
+      }, delay);
+      timeouts.push(timeout);
+    };
+
+    typeText('name', texts.name, delays.name);
+    typeText('email', texts.email, delays.email);
+    typeText('phone', texts.phone, delays.phone);
+    typeText('address', texts.address, delays.address);
+    typeText('requirements', texts.requirements, delays.requirements);
+
+    return () => {
+      timeouts.forEach(timeout => clearTimeout(timeout));
+      intervals.forEach(interval => clearInterval(interval));
+    };
+  }, [t]);
 
   const mutation = useMutation({
     mutationFn: async (data: InsertInquiry) => {
@@ -85,7 +142,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="text"
-                    placeholder={t('contact.form.name')}
+                    placeholder={placeholders.name}
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -95,7 +152,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="email"
-                    placeholder={t('contact.form.email')}
+                    placeholder={placeholders.email}
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -109,7 +166,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="tel"
-                    placeholder={t('contact.form.phone')}
+                    placeholder={placeholders.phone}
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -119,7 +176,7 @@ export default function Contact() {
                 <div>
                   <Input
                     type="text"
-                    placeholder={t('contact.form.address')}
+                    placeholder={placeholders.address}
                     value={formData.address}
                     onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                     className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -131,7 +188,7 @@ export default function Contact() {
               {/* Third row - Requirements */}
               <div>
                 <Textarea
-                  placeholder={t('contact.form.requirements')}
+                  placeholder={placeholders.requirements}
                   value={formData.requirements}
                   onChange={(e) => setFormData(prev => ({ ...prev, requirements: e.target.value }))}
                   className="bg-transparent border border-gray-600 rounded-none px-4 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
