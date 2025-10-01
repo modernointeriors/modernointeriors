@@ -782,7 +782,7 @@ export default function Home() {
           {/* Advantages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {/* Advantage 1 */}
-            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
+            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-105 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Sparkles className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
@@ -800,7 +800,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 2 */}
-            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
+            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-105 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Headset className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
@@ -818,7 +818,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 3 */}
-            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
+            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-105 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Users className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
@@ -836,7 +836,7 @@ export default function Home() {
             </div>
 
             {/* Advantage 4 */}
-            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
+            <div className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-105 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none">
               <div className="mb-6">
                 <div className="w-16 h-16 flex items-center justify-center">
                   <Store className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
