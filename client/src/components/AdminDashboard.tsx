@@ -1978,7 +1978,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead>Title</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Language</TableHead>
+                    <TableHead>Languages</TableHead>
                     <TableHead>Featured</TableHead>
                     <TableHead>Published</TableHead>
                     <TableHead>SEO</TableHead>
@@ -1986,60 +1986,92 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {articles.map((article) => (
-                    <TableRow key={article.id} data-testid={`row-article-${article.id}`}>
-                      <TableCell className="font-medium">{article.title}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" data-testid={`badge-category-${article.id}`}>
-                          {article.category}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={article.status === 'published' ? 'default' : 'secondary'}
-                          data-testid={`badge-status-${article.id}`}
-                        >
-                          {article.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" data-testid={`badge-language-${article.id}`}>
-                          {article.language.toUpperCase()}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {article.featured && <Badge data-testid={`badge-featured-${article.id}`}>Featured</Badge>}
-                      </TableCell>
-                      <TableCell data-testid={`text-published-${article.id}`}>
-                        {article.publishedAt ? formatDate(article.publishedAt) : '-'}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-1">
-                          {article.metaTitle && <Badge variant="outline" className="text-xs">Title</Badge>}
-                          {article.metaDescription && <Badge variant="outline" className="text-xs">Desc</Badge>}
-                          {article.metaKeywords && <Badge variant="outline" className="text-xs">Keywords</Badge>}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button
-                            variant="outline"
-                            onClick={() => handleEditArticle(article)}
-                            data-testid={`button-edit-article-${article.id}`}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            onClick={() => deleteArticleMutation.mutate(article.id)}
-                            data-testid={`button-delete-article-${article.id}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {(() => {
+                    // Group articles by slug
+                    const groupedArticles = articles.reduce((acc, article) => {
+                      if (!acc[article.slug]) {
+                        acc[article.slug] = [];
+                      }
+                      acc[article.slug].push(article);
+                      return acc;
+                    }, {} as Record<string, Article[]>);
+
+                    return Object.entries(groupedArticles).map(([slug, articleGroup]) => {
+                      const enVersion = articleGroup.find(a => a.language === 'en');
+                      const viVersion = articleGroup.find(a => a.language === 'vi');
+                      const displayArticle = enVersion || viVersion || articleGroup[0];
+                      
+                      const hasEn = !!enVersion;
+                      const hasVi = !!viVersion;
+
+                      return (
+                        <TableRow key={slug} data-testid={`row-article-${slug}`}>
+                          <TableCell className="font-medium">
+                            <div>
+                              <p>{displayArticle.title}</p>
+                              {!hasEn && <p className="text-xs text-yellow-500">Missing EN</p>}
+                              {!hasVi && <p className="text-xs text-yellow-500">Missing VI</p>}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" data-testid={`badge-category-${slug}`}>
+                              {displayArticle.category}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={displayArticle.status === 'published' ? 'default' : 'secondary'}
+                              data-testid={`badge-status-${slug}`}
+                            >
+                              {displayArticle.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-1">
+                              {hasEn && <Badge variant="outline" className="text-xs">EN</Badge>}
+                              {hasVi && <Badge variant="outline" className="text-xs">VI</Badge>}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {displayArticle.featured && <Badge data-testid={`badge-featured-${slug}`}>Featured</Badge>}
+                          </TableCell>
+                          <TableCell data-testid={`text-published-${slug}`}>
+                            {displayArticle.publishedAt ? formatDate(displayArticle.publishedAt) : '-'}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-1">
+                              {displayArticle.metaTitle && <Badge variant="outline" className="text-xs">Title</Badge>}
+                              {displayArticle.metaDescription && <Badge variant="outline" className="text-xs">Desc</Badge>}
+                              {displayArticle.metaKeywords && <Badge variant="outline" className="text-xs">Keywords</Badge>}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Button
+                                variant="outline"
+                                onClick={() => handleEditArticle(displayArticle)}
+                                data-testid={`button-edit-article-${slug}`}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                onClick={async () => {
+                                  // Delete all versions (en and vi)
+                                  for (const article of articleGroup) {
+                                    await deleteArticleMutation.mutateAsync(article.id);
+                                  }
+                                }}
+                                data-testid={`button-delete-article-${slug}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    });
+                  })()}
                 </TableBody>
               </Table>
             )}
