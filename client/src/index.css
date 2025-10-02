@@ -691,4 +691,16 @@
     scrollbar-width: none;
   }
 
+  /* Prevent white scrollbar gap when dialog opens */
+  body[data-scroll-locked] {
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Hide scrollbar completely when dialog is open */
+  body:has([data-state="open"]) {
+    overflow: hidden;
+    padding-right: 0 !important;
+  }
+
 }
