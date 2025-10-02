@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category } from "@shared/schema";
 import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -139,6 +139,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
   const [isArticleDialogOpen, setIsArticleDialogOpen] = useState(false);
   const [isPartnerDialogOpen, setIsPartnerDialogOpen] = useState(false);
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -180,6 +183,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: partners = [], isLoading: partnersLoading } = useQuery<Partner[]>({
     queryKey: ['/api/partners'],
+  });
+
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
+    queryKey: ['/api/categories'],
   });
 
   // Forms
@@ -517,6 +524,43 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     onError: (error: any) => {
       toast({
         title: "Error deleting article",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const createCategoryMutation = useMutation({
+    mutationFn: async (data: { name: string; type: string; slug: string }) => {
+      const response = await apiRequest('POST', '/api/categories', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      toast({ title: "Category created successfully" });
+      setNewCategoryName("");
+      setIsCategoryDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating category",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteCategoryMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/categories/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      toast({ title: "Category deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting category",
         description: error.message,
         variant: "destructive",
       });
@@ -861,9 +905,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category *</FormLabel>
-                        <FormControl>
-                          <Input {...field} data-testid="input-project-category" placeholder="e.g., Residential, Commercial, Architecture" />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-project-category">
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories
+                              .filter(cat => cat.type === 'project' && cat.active)
+                              .map((category) => (
+                                <SelectItem key={category.id} value={category.slug}>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -1833,9 +1890,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Category *</FormLabel>
-                            <FormControl>
-                              <Input {...field} data-testid="input-article-category" placeholder="e.g., News, Tips, Design Trends" />
-                            </FormControl>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <FormControl>
+                                <SelectTrigger data-testid="select-article-category">
+                                  <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {categories
+                                  .filter(cat => cat.type === 'article' && cat.active)
+                                  .map((category) => (
+                                    <SelectItem key={category.id} value={category.slug}>
+                                      {category.name}
+                                    </SelectItem>
+                                  ))}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -1963,6 +2033,141 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             </DialogContent>
           </Dialog>
         </div>
+
+        {/* Categories Management Section */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Quản Lý Danh Mục</CardTitle>
+              <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button data-testid="button-add-category">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Category
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Category</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium">Type</label>
+                      <Select value={newCategoryType} onValueChange={(value: "project" | "article") => setNewCategoryType(value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="article">Article Category</SelectItem>
+                          <SelectItem value="project">Project Category</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Category Name</label>
+                      <Input
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        placeholder="Enter category name"
+                        data-testid="input-category-name"
+                      />
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setIsCategoryDialogOpen(false);
+                          setNewCategoryName("");
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          if (newCategoryName.trim()) {
+                            const slug = newCategoryName
+                              .toLowerCase()
+                              .replace(/[^a-z0-9]+/g, '-')
+                              .replace(/^-+|-+$/g, '');
+                            createCategoryMutation.mutate({
+                              name: newCategoryName,
+                              type: newCategoryType,
+                              slug,
+                            });
+                          }
+                        }}
+                        disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
+                        data-testid="button-save-category"
+                      >
+                        Create Category
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-sm font-medium mb-2">Article Categories</h3>
+                <div className="space-y-2">
+                  {categories.filter(cat => cat.type === 'article' && cat.active).length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No article categories</p>
+                  ) : (
+                    categories
+                      .filter(cat => cat.type === 'article' && cat.active)
+                      .map((category) => (
+                        <div key={category.id} className="flex justify-between items-center p-2 border rounded-none">
+                          <span className="text-sm">{category.name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Delete category "${category.name}"?`)) {
+                                deleteCategoryMutation.mutate(category.id);
+                              }
+                            }}
+                            data-testid={`button-delete-category-${category.slug}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))
+                  )}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium mb-2">Project Categories</h3>
+                <div className="space-y-2">
+                  {categories.filter(cat => cat.type === 'project' && cat.active).length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No project categories</p>
+                  ) : (
+                    categories
+                      .filter(cat => cat.type === 'project' && cat.active)
+                      .map((category) => (
+                        <div key={category.id} className="flex justify-between items-center p-2 border rounded-none">
+                          <span className="text-sm">{category.name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Delete category "${category.name}"?`)) {
+                                deleteCategoryMutation.mutate(category.id);
+                              }
+                            }}
+                            data-testid={`button-delete-category-${category.slug}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader>
