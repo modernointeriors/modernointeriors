@@ -93,9 +93,18 @@
     box-shadow: none !important;
   }
 
-  /* Prevent scrollbar jumping and layout shift */
+  /* Hide scrollbar globally but keep scroll functionality */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
   html {
-    scrollbar-gutter: stable;
+    overflow-x: hidden;
   }
 
   body {
@@ -110,6 +119,7 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     position: relative;
+    overflow-x: hidden;
   }
   
   body::before {
