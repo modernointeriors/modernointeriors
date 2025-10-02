@@ -1169,7 +1169,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <TableCell className="text-right">
                         <div className="flex justify-end space-x-2">
                           <Button
-                            size="sm"
                             variant="outline"
                             onClick={() => handleEditProject(project)}
                             data-testid={`button-edit-project-${project.id}`}
@@ -1177,7 +1176,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
-                            size="sm"
                             variant="outline"
                             onClick={() => deleteProjectMutation.mutate(project.id)}
                             data-testid={`button-delete-project-${project.id}`}
@@ -1366,7 +1364,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <TableCell>{formatDate(client.createdAt)}</TableCell>
                       <TableCell className="text-right">
                         <Button
-                          size="sm"
                           variant="outline"
                           onClick={() => handleEditClient(client)}
                           data-testid={`button-edit-client-${client.id}`}
@@ -1456,7 +1453,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <TableCell className="text-right">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button size="sm" variant="outline" data-testid={`button-view-inquiry-${inquiry.id}`}>
+                            <Button variant="outline" data-testid={`button-view-inquiry-${inquiry.id}`}>
                               <Eye className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
@@ -1903,7 +1900,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <div className="flex space-x-2">
                           <Button
                             variant="outline"
-                            size="sm"
                             onClick={() => handleEditArticle(article)}
                             data-testid={`button-edit-article-${article.id}`}
                           >
@@ -1911,7 +1907,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </Button>
                           <Button
                             variant="destructive"
-                            size="sm"
                             onClick={() => deleteArticleMutation.mutate(article.id)}
                             data-testid={`button-delete-article-${article.id}`}
                           >
@@ -2136,7 +2131,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <div className="flex space-x-2">
                           <Button
                             variant="outline"
-                            size="sm"
                             onClick={() => handleEditPartner(partner)}
                             data-testid={`button-edit-partner-${partner.id}`}
                           >
@@ -2144,7 +2138,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </Button>
                           <Button
                             variant="destructive"
-                            size="sm"
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
                           >
