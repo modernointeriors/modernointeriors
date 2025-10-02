@@ -1733,7 +1733,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       control={articleForm.control}
                       name="featured"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
                           <FormControl>
                             <input
                               type="checkbox"
@@ -2032,7 +2032,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       control={partnerForm.control}
                       name="active"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
                           <FormControl>
                             <input
                               type="checkbox"
