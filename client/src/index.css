@@ -681,4 +681,14 @@
     opacity: 1;
   }
 
+  /* Hide scrollbar for dialog content */
+  .overflow-y-auto::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .overflow-y-auto {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
 }
