@@ -1667,14 +1667,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 Add Article
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-4xl max-h-[85vh] flex flex-col">
               <DialogHeader>
                 <DialogTitle>
                   {editingArticle ? "Edit Article" : "Add New Article"}
                 </DialogTitle>
               </DialogHeader>
-              <Form {...articleForm}>
-                <form onSubmit={articleForm.handleSubmit(onArticleSubmit)} className="space-y-6">
+              <div className="overflow-y-auto flex-1 px-1">
+                <Form {...articleForm}>
+                  <form onSubmit={articleForm.handleSubmit(onArticleSubmit)} className="space-y-6">
                   
                   {/* Bilingual Title */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1683,7 +1684,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tiêu Đề (English) *</FormLabel>
+                          <FormLabel>Title (English) *</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-article-title-en" placeholder="Enter English title..." />
                           </FormControl>
@@ -1697,7 +1698,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tiêu Đề (Tiếng Việt) *</FormLabel>
+                          <FormLabel>Title (Vietnamese) *</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-article-title-vi" placeholder="Nhập tiêu đề tiếng Việt..." />
                           </FormControl>
@@ -1714,7 +1715,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="excerptEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tóm Tắt (English)</FormLabel>
+                          <FormLabel>Excerpt (English)</FormLabel>
                           <FormControl>
                             <Textarea {...field} value={field.value || ''} rows={4} data-testid="textarea-article-excerpt-en" placeholder="Brief description in English..." />
                           </FormControl>
@@ -1728,7 +1729,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="excerptVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tóm Tắt (Tiếng Việt)</FormLabel>
+                          <FormLabel>Excerpt (Vietnamese)</FormLabel>
                           <FormControl>
                             <Textarea {...field} value={field.value || ''} rows={4} data-testid="textarea-article-excerpt-vi" placeholder="Mô tả ngắn bằng tiếng Việt..." />
                           </FormControl>
@@ -1745,7 +1746,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="contentEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nội Dung (English) *</FormLabel>
+                          <FormLabel>Content (English) *</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={10} data-testid="textarea-article-content-en" placeholder="Write your content in English..." />
                           </FormControl>
@@ -1759,7 +1760,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="contentVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nội Dung (Tiếng Việt) *</FormLabel>
+                          <FormLabel>Content (Vietnamese) *</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={10} data-testid="textarea-article-content-vi" placeholder="Viết nội dung bằng tiếng Việt..." />
                           </FormControl>
@@ -1771,15 +1772,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   {/* Featured Image */}
                   <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4">Hình Ảnh</h3>
+                    <h3 className="text-lg font-medium mb-4">Images</h3>
                     <FormField
                       control={articleForm.control}
                       name="featuredImage"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Ảnh Thu Nhỏ (Upload từ máy tính)</FormLabel>
+                          <FormLabel>Featured Image (Upload from computer)</FormLabel>
                           <FormControl>
-                            <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="Kéo thả ảnh thu nhỏ vào đây hoặc click để chọn file" />
+                            <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="Drag and drop image here or click to select file" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1789,7 +1790,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   {/* Common Fields */}
                   <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4">Thông Tin Chung</h3>
+                    <h3 className="text-lg font-medium mb-4">General Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <FormField
                         control={articleForm.control}
@@ -1935,8 +1936,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       {editingArticle ? "Update Article" : "Create Article"}
                     </Button>
                   </div>
-                </form>
-              </Form>
+                  </form>
+                </Form>
+              </div>
             </DialogContent>
           </Dialog>
         </div>
