@@ -3,10 +3,10 @@ import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Lock, Eye, EyeOff } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Eye, EyeOff } from 'lucide-react';
 import Layout from '@/components/Layout';
 
 export default function Login() {
@@ -17,14 +17,15 @@ export default function Login() {
   const [, navigate] = useLocation();
   const { login } = useAuth();
   const { toast } = useToast();
+  const { language } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!username || !password) {
       toast({
-        title: "Lỗi",
-        description: "Vui lòng nhập đầy đủ thông tin đăng nhập.",
+        title: language === 'vi' ? "Lỗi" : "Error",
+        description: language === 'vi' ? "Vui lòng nhập đầy đủ thông tin đăng nhập." : "Please enter all login information.",
         variant: "destructive"
       });
       return;
@@ -37,8 +38,8 @@ export default function Login() {
       
       if (success) {
         toast({
-          title: "Đăng nhập thành công",
-          description: "Chào mừng bạn trở lại!",
+          title: language === 'vi' ? "Đăng nhập thành công" : "Login Successful",
+          description: language === 'vi' ? "Chào mừng bạn trở lại!" : "Welcome back!",
         });
         // Add a small delay to ensure auth context is updated
         setTimeout(() => {
@@ -46,15 +47,15 @@ export default function Login() {
         }, 100);
       } else {
         toast({
-          title: "Đăng nhập thất bại",
-          description: "Tên đăng nhập hoặc mật khẩu không đúng.",
+          title: language === 'vi' ? "Đăng nhập thất bại" : "Login Failed",
+          description: language === 'vi' ? "Tên đăng nhập hoặc mật khẩu không đúng." : "Incorrect username or password.",
           variant: "destructive"
         });
       }
     } catch (error) {
       toast({
-        title: "Lỗi",
-        description: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+        title: language === 'vi' ? "Lỗi" : "Error",
+        description: language === 'vi' ? "Có lỗi xảy ra. Vui lòng thử lại sau." : "An error occurred. Please try again later.",
         variant: "destructive"
       });
     } finally {
@@ -86,7 +87,7 @@ export default function Login() {
                 <div className="space-y-2">
                   <div className="w-12 h-px bg-white/20 mx-auto mb-4"></div>
                   <p className="text-sm text-gray-400 font-light tracking-wide">
-                    Administration Access
+                    {language === 'vi' ? 'Quyền Truy Cập Quản Trị' : 'Administration Access'}
                   </p>
                 </div>
               </div>
@@ -98,14 +99,14 @@ export default function Login() {
                   {/* Username Field */}
                   <div className="space-y-2">
                     <Label htmlFor="username" className="text-white font-light" data-testid="label-username">
-                      Tên đăng nhập
+                      {language === 'vi' ? 'Tên đăng nhập' : 'Username'}
                     </Label>
                     <Input
                       id="username"
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Nhập tên đăng nhập"
+                      placeholder={language === 'vi' ? 'Nhập tên đăng nhập' : 'Enter username'}
                       disabled={isLoading}
                       autoComplete="username"
                       className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -116,7 +117,7 @@ export default function Login() {
                   {/* Password Field */}
                   <div className="space-y-2">
                     <Label htmlFor="password" className="text-white font-light" data-testid="label-password">
-                      Mật khẩu
+                      {language === 'vi' ? 'Mật khẩu' : 'Password'}
                     </Label>
                     <div className="relative">
                       <Input
@@ -124,7 +125,7 @@ export default function Login() {
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Nhập mật khẩu"
+                        placeholder={language === 'vi' ? 'Nhập mật khẩu' : 'Enter password'}
                         disabled={isLoading}
                         autoComplete="current-password"
                         className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 pr-10 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
@@ -137,6 +138,10 @@ export default function Login() {
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-400 hover:text-white"
                         onClick={() => setShowPassword(!showPassword)}
                         disabled={isLoading}
+                        aria-label={showPassword 
+                          ? (language === 'vi' ? 'Ẩn mật khẩu' : 'Hide password')
+                          : (language === 'vi' ? 'Hiện mật khẩu' : 'Show password')
+                        }
                         data-testid="button-toggle-password"
                       >
                         {showPassword ? (
@@ -156,7 +161,10 @@ export default function Login() {
                       disabled={isLoading}
                       data-testid="button-login"
                     >
-                      {isLoading ? "ĐANG ĐĂNG NHẬP..." : "ĐĂNG NHẬP"}
+                      {isLoading 
+                        ? (language === 'vi' ? "ĐANG ĐĂNG NHẬP..." : "LOGGING IN...") 
+                        : (language === 'vi' ? "ĐĂNG NHẬP" : "LOGIN")
+                      }
                     </Button>
                   </div>
                 </form>
