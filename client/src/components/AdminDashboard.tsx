@@ -95,10 +95,29 @@ const partnerSchema = z.object({
   active: z.boolean().default(true),
 });
 
+// Bilingual article schema for form
+const bilingualArticleSchema = z.object({
+  titleEn: z.string().min(1, "English title is required"),
+  titleVi: z.string().min(1, "Vietnamese title is required"),
+  excerptEn: z.string().optional(),
+  excerptVi: z.string().optional(),
+  contentEn: z.string().min(1, "English content is required"),
+  contentVi: z.string().min(1, "Vietnamese content is required"),
+  slug: z.string().optional(),
+  category: z.enum(["news", "tips", "projects", "design-trends"]).default("news"),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+  featured: z.boolean().default(false),
+  featuredImage: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  metaKeywords: z.string().optional(),
+});
+
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
 type ArticleFormData = InsertArticle;
+type BilingualArticleFormData = z.infer<typeof bilingualArticleSchema>;
 type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 type PartnerFormData = z.infer<typeof partnerSchema>;
 
@@ -217,19 +236,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
-  const articleForm = useForm<ArticleFormData>({
-    resolver: zodResolver(insertArticleSchema),
+  const articleForm = useForm<BilingualArticleFormData>({
+    resolver: zodResolver(bilingualArticleSchema),
     defaultValues: {
-      title: "",
+      titleEn: "",
+      titleVi: "",
+      excerptEn: "",
+      excerptVi: "",
+      contentEn: "",
+      contentVi: "",
       slug: "",
-      excerpt: "",
-      content: "",
-      featuredImage: "",
-      category: "general",
-      tags: [],
+      category: "news",
       status: "draft",
-      language: "en",
       featured: false,
+      featuredImage: "",
       metaTitle: "",
       metaDescription: "",
       metaKeywords: "",
@@ -569,18 +589,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const handleEditArticle = (article: Article) => {
     setEditingArticle(article);
+    
+    // Find both language versions by slug
+    const enVersion = articles.find(a => a.slug === article.slug && a.language === 'en');
+    const viVersion = articles.find(a => a.slug === article.slug && a.language === 'vi');
+    
     articleForm.reset({
-      title: article.title,
+      titleEn: enVersion?.title || "",
+      titleVi: viVersion?.title || "",
+      excerptEn: enVersion?.excerpt || "",
+      excerptVi: viVersion?.excerpt || "",
+      contentEn: enVersion?.content || "",
+      contentVi: viVersion?.content || "",
       slug: article.slug,
-      excerpt: article.excerpt || "",
-      content: article.content,
-      featuredImage: article.featuredImage || "",
       category: article.category as "news" | "tips" | "projects" | "design-trends",
-      tags: Array.isArray(article.tags) ? article.tags as string[] : [],
       status: article.status as "draft" | "published" | "archived",
-      language: article.language as "en" | "vi",
       featured: article.featured,
-      publishedAt: article.publishedAt ? new Date(article.publishedAt) : undefined,
+      featuredImage: article.featuredImage || "",
       metaTitle: article.metaTitle || "",
       metaDescription: article.metaDescription || "",
       metaKeywords: article.metaKeywords || "",
@@ -588,12 +613,75 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setIsArticleDialogOpen(true);
   };
 
-  const onArticleSubmit = async (data: ArticleFormData) => {
+  const onArticleSubmit = async (data: BilingualArticleFormData) => {
+    // Generate slug if not provided
+    const slug = data.slug || data.titleEn
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    // Prepare English version
+    const enArticle: InsertArticle = {
+      title: data.titleEn,
+      slug: slug,
+      excerpt: data.excerptEn,
+      content: data.contentEn,
+      featuredImage: data.featuredImage,
+      category: data.category,
+      status: data.status,
+      language: 'en',
+      featured: data.featured,
+      metaTitle: data.metaTitle,
+      metaDescription: data.metaDescription,
+      metaKeywords: data.metaKeywords,
+      tags: [],
+    };
+
+    // Prepare Vietnamese version
+    const viArticle: InsertArticle = {
+      title: data.titleVi,
+      slug: slug,
+      excerpt: data.excerptVi,
+      content: data.contentVi,
+      featuredImage: data.featuredImage,
+      category: data.category,
+      status: data.status,
+      language: 'vi',
+      featured: data.featured,
+      metaTitle: data.metaTitle,
+      metaDescription: data.metaDescription,
+      metaKeywords: data.metaKeywords,
+      tags: [],
+    };
+
     if (editingArticle) {
-      await updateArticleMutation.mutateAsync({ id: editingArticle.id, data });
+      // Find both versions
+      const enVersion = articles.find(a => a.slug === editingArticle.slug && a.language === 'en');
+      const viVersion = articles.find(a => a.slug === editingArticle.slug && a.language === 'vi');
+
+      // Update or create EN version
+      if (enVersion) {
+        await updateArticleMutation.mutateAsync({ id: enVersion.id, data: enArticle });
+      } else {
+        await createArticleMutation.mutateAsync(enArticle);
+      }
+
+      // Update or create VI version
+      if (viVersion) {
+        await updateArticleMutation.mutateAsync({ id: viVersion.id, data: viArticle });
+      } else {
+        await createArticleMutation.mutateAsync(viArticle);
+      }
     } else {
-      await createArticleMutation.mutateAsync(data);
+      // Create both versions
+      await createArticleMutation.mutateAsync(enArticle);
+      await createArticleMutation.mutateAsync(viArticle);
     }
+
+    // Reset form and close dialog
+    articleForm.reset();
+    setEditingArticle(null);
+    setIsArticleDialogOpen(false);
   };
 
   const handleEditPartner = (partner: Partner) => {
@@ -1595,16 +1683,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </DialogTitle>
               </DialogHeader>
               <Form {...articleForm}>
-                <form onSubmit={articleForm.handleSubmit(onArticleSubmit)} className="space-y-4">
+                <form onSubmit={articleForm.handleSubmit(onArticleSubmit)} className="space-y-6">
+                  
+                  {/* Bilingual Title */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={articleForm.control}
-                      name="title"
+                      name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title *</FormLabel>
+                          <FormLabel>Tiêu Đề (English) *</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-article-title" />
+                            <Input {...field} data-testid="input-article-title-en" placeholder="Enter English title..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1613,12 +1703,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={articleForm.control}
-                      name="slug"
+                      name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Slug</FormLabel>
+                          <FormLabel>Tiêu Đề (Tiếng Việt) *</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-article-slug" placeholder="auto-generated-if-empty" />
+                            <Input {...field} data-testid="input-article-title-vi" placeholder="Nhập tiêu đề tiếng Việt..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1626,54 +1716,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   </div>
 
-                  <FormField
-                    control={articleForm.control}
-                    name="excerpt"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Excerpt</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} value={field.value || ''} rows={3} data-testid="textarea-article-excerpt" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={articleForm.control}
-                    name="content"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Content *</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} rows={8} data-testid="textarea-article-content" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Bilingual Excerpt */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={articleForm.control}
-                      name="category"
+                      name="excerptEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Category *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger data-testid="select-article-category">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="news">News</SelectItem>
-                              <SelectItem value="tips">Tips</SelectItem>
-                              <SelectItem value="projects">Projects</SelectItem>
-                              <SelectItem value="design-trends">Design Trends</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <FormLabel>Tóm Tắt (English)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} value={field.value || ''} rows={4} data-testid="textarea-article-excerpt-en" placeholder="Brief description in English..." />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -1681,84 +1734,155 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={articleForm.control}
-                      name="status"
+                      name="excerptVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Status *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger data-testid="select-article-status">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="draft">Draft</SelectItem>
-                              <SelectItem value="published">Published</SelectItem>
-                              <SelectItem value="archived">Archived</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={articleForm.control}
-                      name="language"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Language *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger data-testid="select-article-language">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="en">English</SelectItem>
-                              <SelectItem value="vi">Vietnamese</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <FormLabel>Tóm Tắt (Tiếng Việt)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} value={field.value || ''} rows={4} data-testid="textarea-article-excerpt-vi" placeholder="Mô tả ngắn bằng tiếng Việt..." />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
 
+                  {/* Bilingual Content */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={articleForm.control}
-                      name="featured"
+                      name="contentEn"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
+                        <FormItem>
+                          <FormLabel>Nội Dung (English) *</FormLabel>
                           <FormControl>
-                            <input
-                              type="checkbox"
-                              checked={field.value}
-                              onChange={field.onChange}
-                              data-testid="checkbox-article-featured"
-                            />
+                            <Textarea {...field} rows={10} data-testid="textarea-article-content-en" placeholder="Write your content in English..." />
                           </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>Featured Article</FormLabel>
-                          </div>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
 
+                    <FormField
+                      control={articleForm.control}
+                      name="contentVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nội Dung (Tiếng Việt) *</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={10} data-testid="textarea-article-content-vi" placeholder="Viết nội dung bằng tiếng Việt..." />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Featured Image */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium mb-4">Hình Ảnh</h3>
                     <FormField
                       control={articleForm.control}
                       name="featuredImage"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Featured Image</FormLabel>
+                          <FormLabel>Ảnh Thu Nhỏ (Upload từ máy tính)</FormLabel>
                           <FormControl>
-                            <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="Image URL" />
+                            <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="Kéo thả ảnh thu nhỏ vào đây hoặc click để chọn file" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+                  </div>
+
+                  {/* Common Fields */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium mb-4">Thông Tin Chung</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <FormField
+                        control={articleForm.control}
+                        name="slug"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Slug</FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-article-slug" placeholder="auto-generated" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={articleForm.control}
+                        name="category"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Category *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger data-testid="select-article-category">
+                                  <SelectValue />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="news">News</SelectItem>
+                                <SelectItem value="tips">Tips</SelectItem>
+                                <SelectItem value="projects">Projects</SelectItem>
+                                <SelectItem value="design-trends">Design Trends</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={articleForm.control}
+                        name="status"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Status *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger data-testid="select-article-status">
+                                  <SelectValue />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="draft">Draft</SelectItem>
+                                <SelectItem value="published">Published</SelectItem>
+                                <SelectItem value="archived">Archived</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="mt-4">
+                      <FormField
+                        control={articleForm.control}
+                        name="featured"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
+                            <FormControl>
+                              <input
+                                type="checkbox"
+                                checked={field.value}
+                                onChange={field.onChange}
+                                data-testid="checkbox-article-featured"
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Featured Article</FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   {/* SEO Settings Section */}
