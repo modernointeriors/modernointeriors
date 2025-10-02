@@ -1,5 +1,5 @@
 import { 
-  users, clients, projects, inquiries, services, articles, homepageContent, partners,
+  users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -7,7 +7,8 @@ import {
   type Service, type InsertService,
   type Article, type InsertArticle,
   type HomepageContent, type InsertHomepageContent,
-  type Partner, type InsertPartner
+  type Partner, type InsertPartner,
+  type Category, type InsertCategory
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -70,6 +71,13 @@ export interface IStorage {
   createPartner(partner: InsertPartner): Promise<Partner>;
   updatePartner(id: string, partner: Partial<InsertPartner>): Promise<Partner>;
   deletePartner(id: string): Promise<void>;
+
+  // Categories
+  getCategories(type?: string, active?: boolean): Promise<Category[]>;
+  getCategory(id: string): Promise<Category | undefined>;
+  createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category>;
+  deleteCategory(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -355,6 +363,48 @@ export class DatabaseStorage implements IStorage {
 
   async deletePartner(id: string): Promise<void> {
     await db.delete(partners).where(eq(partners.id, id));
+  }
+
+  // Categories
+  async getCategories(type?: string, active?: boolean): Promise<Category[]> {
+    const conditions = [];
+    
+    if (type) {
+      conditions.push(eq(categories.type, type));
+    }
+    
+    if (active !== undefined) {
+      conditions.push(eq(categories.active, active));
+    }
+    
+    const query = conditions.length > 0
+      ? db.select().from(categories).where(and(...conditions))
+      : db.select().from(categories);
+    
+    return await query.orderBy(categories.order);
+  }
+
+  async getCategory(id: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category || undefined;
+  }
+
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const [newCategory] = await db.insert(categories).values(category).returning();
+    return newCategory;
+  }
+
+  async updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category> {
+    const [updatedCategory] = await db
+      .update(categories)
+      .set({ ...category, updatedAt: new Date() })
+      .where(eq(categories.id, id))
+      .returning();
+    return updatedCategory;
+  }
+
+  async deleteCategory(id: string): Promise<void> {
+    await db.delete(categories).where(eq(categories.id, id));
   }
 }
 
