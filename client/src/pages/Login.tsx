@@ -73,13 +73,13 @@ export default function Login() {
             <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-none shadow-2xl overflow-hidden">
               
               {/* Header Section */}
-              <div className="px-8 pt-12 pb-8 text-center">
+              <div className="px-8 pt-10 pb-6 text-center">
                 {/* Logo */}
-                <div className="mx-auto mb-8">
+                <div className="mx-auto mb-6">
                   <img 
                     src="/attached_assets/logo.white.png" 
                     alt="Moderno Interiors" 
-                    className="h-16 w-auto mx-auto opacity-90"
+                    className="h-12 w-auto mx-auto opacity-90"
                   />
                 </div>
                 
@@ -93,8 +93,8 @@ export default function Login() {
               </div>
               
               {/* Form Section */}
-              <div className="px-8 pb-12">
-                <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="px-8 pb-10">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   
                   {/* Username Field */}
                   <div className="space-y-2">
@@ -154,10 +154,10 @@ export default function Login() {
                   </div>
                   
                   {/* Submit Button */}
-                  <div className="pt-6">
+                  <div className="pt-4">
                     <Button
                       type="submit"
-                      className="w-full bg-transparent border border-white/20 text-white hover:bg-white hover:text-black hover:border-white py-4 font-light tracking-widest uppercase transition-all duration-300 rounded-none"
+                      className="w-full bg-transparent border border-white/30 text-white hover:border-white hover:bg-white/10 py-3 font-light tracking-widest uppercase transition-all duration-300 ease-in-out rounded-none"
                       disabled={isLoading}
                       data-testid="button-login"
                     >
