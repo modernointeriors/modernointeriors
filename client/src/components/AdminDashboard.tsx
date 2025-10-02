@@ -24,7 +24,7 @@ const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   detailedDescription: z.string().optional(),
-  category: z.enum(["residential", "commercial", "architecture"]),
+  category: z.string().min(1, "Category is required"),
   location: z.string().optional(),
   area: z.string().optional(),
   duration: z.string().optional(),
@@ -104,7 +104,7 @@ const bilingualArticleSchema = z.object({
   contentEn: z.string().min(1, "English content is required"),
   contentVi: z.string().min(1, "Vietnamese content is required"),
   slug: z.string().optional(),
-  category: z.enum(["news", "tips", "projects", "design-trends"]).default("news"),
+  category: z.string().min(1, "Category is required"),
   status: z.enum(["draft", "published", "archived"]).default("draft"),
   featured: z.boolean().default(false),
   featuredImage: z.string().optional(),
@@ -530,7 +530,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       title: project.title,
       description: project.description || "",
       detailedDescription: project.detailedDescription || "",
-      category: project.category as "residential" | "commercial" | "architecture",
+      category: project.category,
       location: project.location || "",
       area: project.area || "",
       duration: project.duration || "",
@@ -602,7 +602,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       contentEn: enVersion?.content || "",
       contentVi: viVersion?.content || "",
       slug: article.slug,
-      category: article.category as "news" | "tips" | "projects" | "design-trends",
+      category: article.category,
       status: article.status as "draft" | "published" | "archived",
       featured: article.featured,
       featuredImage: article.featuredImage || "",
@@ -861,18 +861,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger data-testid="select-project-category">
-                              <SelectValue />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="residential">Residential</SelectItem>
-                            <SelectItem value="commercial">Commercial</SelectItem>
-                            <SelectItem value="architecture">Architecture</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormControl>
+                          <Input {...field} data-testid="input-project-category" placeholder="e.g., Residential, Commercial, Architecture" />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -1820,19 +1811,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Category *</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger data-testid="select-article-category">
-                                  <SelectValue />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="news">News</SelectItem>
-                                <SelectItem value="tips">Tips</SelectItem>
-                                <SelectItem value="projects">Projects</SelectItem>
-                                <SelectItem value="design-trends">Design Trends</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormControl>
+                              <Input {...field} data-testid="input-article-category" placeholder="e.g., News, Tips, Design Trends" />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
