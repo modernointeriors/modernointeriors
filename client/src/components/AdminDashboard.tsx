@@ -1662,7 +1662,28 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <h2 className="text-2xl font-sans font-light">Articles Management</h2>
           <Dialog open={isArticleDialogOpen} onOpenChange={setIsArticleDialogOpen}>
             <DialogTrigger asChild>
-              <Button data-testid="button-add-article">
+              <Button 
+                onClick={() => {
+                  setEditingArticle(null);
+                  articleForm.reset({
+                    titleEn: "",
+                    titleVi: "",
+                    excerptEn: "",
+                    excerptVi: "",
+                    contentEn: "",
+                    contentVi: "",
+                    slug: "",
+                    category: "news",
+                    status: "draft",
+                    featured: false,
+                    featuredImage: "",
+                    metaTitle: "",
+                    metaDescription: "",
+                    metaKeywords: "",
+                  });
+                }}
+                data-testid="button-add-article"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Article
               </Button>
