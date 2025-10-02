@@ -146,6 +146,20 @@ export const partners = pgTable("partners", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+export const categories = pgTable("categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull(),
+  type: varchar("type", { length: 20 }).notNull(), // "project" or "article"
+  description: text("description"),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  uniqueSlugType: unique().on(table.slug, table.type),
+}));
+
 // Relations
 export const clientsRelations = relations(clients, ({ many }) => ({
   inquiries: many(inquiries),
@@ -203,6 +217,12 @@ export const insertPartnerSchema = createInsertSchema(partners).omit({
   updatedAt: true,
 });
 
+export const insertCategorySchema = createInsertSchema(categories).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -227,3 +247,6 @@ export type HomepageContent = typeof homepageContent.$inferSelect;
 
 export type InsertPartner = z.infer<typeof insertPartnerSchema>;
 export type Partner = typeof partners.$inferSelect;
+
+export type InsertCategory = z.infer<typeof insertCategorySchema>;
+export type Category = typeof categories.$inferSelect;
