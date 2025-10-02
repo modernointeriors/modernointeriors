@@ -68,8 +68,8 @@ export default function Login() {
         <div className="w-full max-w-md p-6">
           {/* Glass morphism card with subtle backdrop */}
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-2xl"></div>
-            <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-none"></div>
+            <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-none shadow-2xl overflow-hidden">
               
               {/* Header Section */}
               <div className="px-8 pt-12 pb-8 text-center">
@@ -152,7 +152,7 @@ export default function Login() {
                   <div className="pt-6">
                     <Button
                       type="submit"
-                      className="w-full bg-transparent border border-white/20 text-white hover:bg-white hover:text-black hover:border-white py-4 font-light tracking-widest uppercase transition-all duration-300"
+                      className="w-full bg-transparent border border-white/20 text-white hover:bg-white hover:text-black hover:border-white py-4 font-light tracking-widest uppercase transition-all duration-300 rounded-none"
                       disabled={isLoading}
                       data-testid="button-login"
                     >
