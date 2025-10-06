@@ -107,6 +107,8 @@ export const articles = pgTable("articles", {
 export const homepageContent = pgTable("homepage_content", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   language: varchar("language", { length: 5 }).notNull().default("en"), // en, vi
+  // Logo
+  logoUrl: text("logo_url"), // Main website logo URL
   // Hero Section
   heroBackgroundImage: text("hero_background_image"),
   heroTitle: text("hero_title").notNull().default("Moderno Interiors"),

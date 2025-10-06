@@ -1719,6 +1719,45 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         
         <Card>
           <CardHeader>
+            <CardTitle>Logo Settings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">Website Logo URL</label>
+                <Input 
+                  defaultValue={homepageContent?.logoUrl || ""}
+                  placeholder="Enter logo URL (e.g., /attached_assets/logo.white.png)"
+                  data-testid="input-logo-url"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Current logo: {homepageContent?.logoUrl || "Not set"}
+                </p>
+              </div>
+              {homepageContent?.logoUrl && (
+                <div className="border rounded-none p-4 bg-black/20">
+                  <p className="text-sm font-light mb-2">Logo Preview:</p>
+                  <img 
+                    src={homepageContent.logoUrl} 
+                    alt="Website Logo" 
+                    className="h-12 w-auto"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const errorMsg = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (errorMsg) errorMsg.style.display = 'block';
+                    }}
+                  />
+                  <p className="text-xs text-red-500 mt-2" style={{display: 'none'}}>
+                    Failed to load logo image
+                  </p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
             <CardTitle>Hero Section</CardTitle>
           </CardHeader>
           <CardContent>
