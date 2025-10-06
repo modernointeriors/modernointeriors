@@ -1712,6 +1712,195 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     );
   }
 
+  if (activeTab === 'homepage') {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-sans font-light">Homepage Content Management</h2>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Hero Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-light mb-2 block">Hero Title</label>
+                  <Input 
+                    defaultValue={homepageContent?.heroTitle || "Moderno Interiors"}
+                    data-testid="input-hero-title"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-light mb-2 block">Hero Studio</label>
+                  <Input 
+                    defaultValue={homepageContent?.heroStudio || "Design"}
+                    data-testid="input-hero-studio"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Hero Tagline</label>
+                <Textarea 
+                  defaultValue={homepageContent?.heroTagline || ""}
+                  rows={2}
+                  data-testid="textarea-hero-tagline"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="text-sm font-light mb-2 block">Architecture Label</label>
+                  <Input 
+                    defaultValue={homepageContent?.heroArchitectureLabel || ""}
+                    data-testid="input-hero-architecture-label"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-light mb-2 block">Interior Label</label>
+                  <Input 
+                    defaultValue={homepageContent?.heroInteriorLabel || ""}
+                    data-testid="input-hero-interior-label"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-light mb-2 block">Consultation Text</label>
+                  <Input 
+                    defaultValue={homepageContent?.heroConsultationText || ""}
+                    data-testid="input-hero-consultation-text"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Background Image URL</label>
+                <Input 
+                  defaultValue={homepageContent?.heroBackgroundImage || ""}
+                  placeholder="Enter image URL"
+                  data-testid="input-hero-background-image"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Featured Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-light mb-2 block">Featured Badge</label>
+                  <Input 
+                    defaultValue={homepageContent?.featuredBadge || ""}
+                    data-testid="input-featured-badge"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-light mb-2 block">Featured Title</label>
+                  <Input 
+                    defaultValue={homepageContent?.featuredTitle || ""}
+                    data-testid="input-featured-title"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Featured Description</label>
+                <Textarea 
+                  defaultValue={homepageContent?.featuredDescription || ""}
+                  rows={4}
+                  data-testid="textarea-featured-description"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Stats Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">Projects Label</label>
+                <Input 
+                  defaultValue={homepageContent?.statsProjectsLabel || ""}
+                  data-testid="input-stats-projects-label"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Clients Label</label>
+                <Input 
+                  defaultValue={homepageContent?.statsClientsLabel || ""}
+                  data-testid="input-stats-clients-label"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Awards Label</label>
+                <Input 
+                  defaultValue={homepageContent?.statsAwardsLabel || ""}
+                  data-testid="input-stats-awards-label"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Experience Label</label>
+                <Input 
+                  defaultValue={homepageContent?.statsExperienceLabel || ""}
+                  data-testid="input-stats-experience-label"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>CTA Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">CTA Title</label>
+                <Input 
+                  defaultValue={homepageContent?.ctaTitle || ""}
+                  data-testid="input-cta-title"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">CTA Description</label>
+                <Textarea 
+                  defaultValue={homepageContent?.ctaDescription || ""}
+                  rows={3}
+                  data-testid="textarea-cta-description"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-light mb-2 block">Primary Button Text</label>
+                  <Input 
+                    defaultValue={homepageContent?.ctaButtonText || ""}
+                    data-testid="input-cta-button-text"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-light mb-2 block">Secondary Button Text</label>
+                  <Input 
+                    defaultValue={homepageContent?.ctaSecondaryButtonText || ""}
+                    data-testid="input-cta-secondary-button-text"
+                  />
+                </div>
+              </div>
+              <div className="pt-4">
+                <Button data-testid="button-save-homepage">Save Homepage Content</Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (activeTab === 'articles') {
     return (
       <div className="space-y-6">
