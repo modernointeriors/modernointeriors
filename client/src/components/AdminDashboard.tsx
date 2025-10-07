@@ -1307,7 +1307,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
-                            variant={project.featured ? "default" : "outline"}
+                            variant="outline"
+                            className={project.featured ? "bg-yellow-500/20 border-yellow-500 text-yellow-500 hover:bg-yellow-500/30 hover:border-yellow-500" : ""}
                             onClick={() => {
                               updateProjectMutation.mutate({
                                 id: project.id,
