@@ -722,7 +722,7 @@
   input[type="tel"],
   textarea {
     border: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
     border-radius: 0 !important;
     background: transparent !important;
   }
@@ -734,9 +734,15 @@
   input[type="number"]:focus,
   input[type="tel"]:focus,
   textarea:focus {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.8) !important;
     outline: none !important;
     box-shadow: none !important;
+  }
+
+  /* Make placeholder text lighter to differentiate from filled values */
+  input::placeholder,
+  textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3) !important;
   }
 
 }
