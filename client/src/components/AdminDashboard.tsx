@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
-import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp } from "lucide-react";
+import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star } from "lucide-react";
 import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category } from "@shared/schema";
 import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -1287,12 +1287,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {projects.map((project) => (
                     <TableRow key={project.id} data-testid={`row-project-${project.id}`}>
                       <TableCell>
-                        <div>
-                          <p className="font-light">{project.title}</p>
-                          {project.featured && (
-                            <Badge variant="default" className="mt-1">Featured</Badge>
-                          )}
-                        </div>
+                        <p className="font-light">{project.title}</p>
                       </TableCell>
                       <TableCell className="capitalize">{project.category}</TableCell>
                       <TableCell>{project.location || "—"}</TableCell>
@@ -1310,6 +1305,19 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             data-testid={`button-edit-project-${project.id}`}
                           >
                             <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant={project.featured ? "default" : "outline"}
+                            onClick={() => {
+                              updateProjectMutation.mutate({
+                                id: project.id,
+                                data: { featured: !project.featured }
+                              });
+                            }}
+                            data-testid={`button-toggle-featured-${project.id}`}
+                            title={project.featured ? "Remove from featured" : "Mark as featured"}
+                          >
+                            <Star className={`h-4 w-4 ${project.featured ? 'fill-current' : ''}`} />
                           </Button>
                           <Button
                             variant="outline"
