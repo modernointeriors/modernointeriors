@@ -45,6 +45,15 @@ export default function Home() {
     step05: ''
   });
 
+  // Typing animation for FAQ
+  const [faqTexts, setFaqTexts] = useState({
+    faq01: '',
+    faq02: '',
+    faq03: '',
+    faq04: '',
+    faq05: ''
+  });
+
   // Typing animation for Step 01
   useEffect(() => {
     if (!step01Expanded) {
@@ -164,6 +173,126 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [step05Expanded, language]);
+
+  // Typing animation for FAQ 01
+  useEffect(() => {
+    if (!faq01Expanded) {
+      setFaqTexts(prev => ({ ...prev, faq01: '' }));
+      return;
+    }
+
+    const text = language === 'vi'
+      ? 'Chi phí thiết kế nội thất phụ thuộc vào diện tích, phong cách thiết kế, chất liệu sử dụng và độ phức tạp của dự án. Chúng tôi cung cấp báo giá chi tiết sau buổi khảo sát và tư vấn ban đầu, đảm bảo minh bạch và phù hợp với ngân sách của bạn.'
+      : 'Interior design costs depend on the area, design style, materials used, and project complexity. We provide a detailed quote after the initial survey and consultation, ensuring transparency and alignment with your budget.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setFaqTexts(prev => ({ ...prev, faq01: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [faq01Expanded, language]);
+
+  // Typing animation for FAQ 02
+  useEffect(() => {
+    if (!faq02Expanded) {
+      setFaqTexts(prev => ({ ...prev, faq02: '' }));
+      return;
+    }
+
+    const text = language === 'vi'
+      ? 'Thời gian thực hiện dự án thường dao động từ 2-6 tháng tùy thuộc vào quy mô và yêu cầu. Giai đoạn thiết kế mất khoảng 2-4 tuần, sau đó là thi công và hoàn thiện. Chúng tôi cam kết tiến độ rõ ràng và cập nhật thường xuyên.'
+      : 'Project completion time typically ranges from 2-6 months depending on scale and requirements. The design phase takes about 2-4 weeks, followed by construction and finishing. We commit to clear timelines and regular updates.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setFaqTexts(prev => ({ ...prev, faq02: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [faq02Expanded, language]);
+
+  // Typing animation for FAQ 03
+  useEffect(() => {
+    if (!faq03Expanded) {
+      setFaqTexts(prev => ({ ...prev, faq03: '' }));
+      return;
+    }
+
+    const text = language === 'vi'
+      ? 'Hoàn toàn có thể! Sự tham gia của bạn là rất quan trọng. Chúng tôi khuyến khích bạn chia sẻ ý tưởng, góp ý trong suốt quá trình từ khâu concept đến hoàn thiện. Mọi quyết định quan trọng đều được trao đổi và thống nhất với bạn.'
+      : 'Absolutely! Your participation is crucial. We encourage you to share ideas and feedback throughout the process from concept to completion. All important decisions are discussed and agreed upon with you.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setFaqTexts(prev => ({ ...prev, faq03: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [faq03Expanded, language]);
+
+  // Typing animation for FAQ 04
+  useEffect(() => {
+    if (!faq04Expanded) {
+      setFaqTexts(prev => ({ ...prev, faq04: '' }));
+      return;
+    }
+
+    const text = language === 'vi'
+      ? 'Có thể điều chỉnh trong giai đoạn thiết kế. Sau khi duyệt bản vẽ thi công, mọi thay đổi sẽ được đánh giá về tác động đến tiến độ và chi phí. Chúng tôi luôn cố gắng đáp ứng yêu cầu của bạn một cách hợp lý nhất.'
+      : 'Modifications are possible during the design phase. After construction drawings are approved, any changes will be assessed for impact on timeline and costs. We always strive to accommodate your requests reasonably.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setFaqTexts(prev => ({ ...prev, faq04: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [faq04Expanded, language]);
+
+  // Typing animation for FAQ 05
+  useEffect(() => {
+    if (!faq05Expanded) {
+      setFaqTexts(prev => ({ ...prev, faq05: '' }));
+      return;
+    }
+
+    const text = language === 'vi'
+      ? 'Chúng tôi cam kết bảo hành 12-24 tháng cho công trình thi công và 1-5 năm cho đồ nội thất tùy từng sản phẩm. Đội ngũ kỹ thuật sẵn sàng hỗ trợ bảo trì và sửa chữa trong thời gian bảo hành.'
+      : 'We commit to a 12-24 month warranty for construction work and 1-5 years for furniture depending on the product. Our technical team is ready to support maintenance and repairs during the warranty period.';
+
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setFaqTexts(prev => ({ ...prev, faq05: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [faq05Expanded, language]);
 
   // Scroll animation with specific directions and stagger delays
   useEffect(() => {
@@ -1307,10 +1436,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi'
-                      ? 'Chi phí thiết kế nội thất phụ thuộc vào diện tích, phong cách thiết kế, chất liệu sử dụng và độ phức tạp của dự án. Chúng tôi cung cấp báo giá chi tiết sau buổi khảo sát và tư vấn ban đầu, đảm bảo minh bạch và phù hợp với ngân sách của bạn.'
-                      : 'Interior design costs depend on the area, design style, materials used, and project complexity. We provide a detailed quote after the initial survey and consultation, ensuring transparency and alignment with your budget.'
-                    }
+                    {faqTexts.faq01}
                   </p>
                 </div>
               </div>
@@ -1340,10 +1466,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi'
-                      ? 'Thời gian thực hiện dự án thường dao động từ 2-6 tháng tùy thuộc vào quy mô và yêu cầu. Giai đoạn thiết kế mất khoảng 2-4 tuần, sau đó là thi công và hoàn thiện. Chúng tôi cam kết tiến độ rõ ràng và cập nhật thường xuyên.'
-                      : 'Project completion time typically ranges from 2-6 months depending on scale and requirements. The design phase takes about 2-4 weeks, followed by construction and finishing. We commit to clear timelines and regular updates.'
-                    }
+                    {faqTexts.faq02}
                   </p>
                 </div>
               </div>
@@ -1373,10 +1496,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi'
-                      ? 'Hoàn toàn có thể! Sự tham gia của bạn là rất quan trọng. Chúng tôi khuyến khích bạn chia sẻ ý tưởng, góp ý trong suốt quá trình từ khâu concept đến hoàn thiện. Mọi quyết định quan trọng đều được trao đổi và thống nhất với bạn.'
-                      : 'Absolutely! Your participation is crucial. We encourage you to share ideas and feedback throughout the process from concept to completion. All important decisions are discussed and agreed upon with you.'
-                    }
+                    {faqTexts.faq03}
                   </p>
                 </div>
               </div>
@@ -1406,10 +1526,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi'
-                      ? 'Có thể điều chỉnh trong giai đoạn thiết kế. Sau khi duyệt bản vẽ thi công, mọi thay đổi sẽ được đánh giá về tác động đến tiến độ và chi phí. Chúng tôi luôn cố gắng đáp ứng yêu cầu của bạn một cách hợp lý nhất.'
-                      : 'Modifications are possible during the design phase. After construction drawings are approved, any changes will be assessed for impact on timeline and costs. We always strive to accommodate your requests reasonably.'
-                    }
+                    {faqTexts.faq04}
                   </p>
                 </div>
               </div>
@@ -1439,10 +1556,7 @@ export default function Home() {
               }`}>
                 <div className="border-l-2 border-white/20 pl-8">
                   <p className="text-white/70 font-light">
-                    {language === 'vi'
-                      ? 'Chúng tôi cam kết bảo hành 12-24 tháng cho công trình thi công và 1-5 năm cho đồ nội thất tùy từng sản phẩm. Đội ngũ kỹ thuật sẵn sàng hỗ trợ bảo trì và sửa chữa trong thời gian bảo hành.'
-                      : 'We commit to a 12-24 month warranty for construction work and 1-5 years for furniture depending on the product. Our technical team is ready to support maintenance and repairs during the warranty period.'
-                    }
+                    {faqTexts.faq05}
                   </p>
                 </div>
               </div>
