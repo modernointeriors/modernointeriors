@@ -352,11 +352,11 @@ export default function Contact() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Title */}
           <div className="mb-16">
-            <h2 className="text-sm font-light tracking-widest text-white/60 mb-8 scroll-animate">
+            <h2 className="text-sm font-light tracking-widest text-white/60 mb-8">
               {language === 'vi' ? 'CÂU HỎI THƯỜNG GẶP' : 'FREQUENTLY ASKED QUESTIONS'}
             </h2>
             <div className="max-w-4xl">
-              <p className="text-2xl md:text-3xl font-light text-white leading-relaxed scroll-animate">
+              <p className="text-2xl md:text-3xl font-light text-white leading-relaxed">
                 {language === 'vi' 
                   ? 'TÌM HIỂU THÊM VỀ QUY TRÌNH THIẾT KẾ VÀ DỊCH VỤ CỦA CHÚNG TÔI.'
                   : 'LEARN MORE ABOUT OUR DESIGN PROCESS AND SERVICES.'
@@ -368,7 +368,7 @@ export default function Contact() {
           {/* FAQ Items */}
           <div className="space-y-8">
             {/* FAQ 01 */}
-            <div className="pb-8 group transition-colors cursor-pointer scroll-animate animate-delay-100">
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setFaq01Expanded(!faq01Expanded)}
@@ -398,7 +398,7 @@ export default function Contact() {
             </div>
 
             {/* FAQ 02 */}
-            <div className="pb-8 group transition-colors cursor-pointer scroll-animate animate-delay-200">
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setFaq02Expanded(!faq02Expanded)}
@@ -428,7 +428,7 @@ export default function Contact() {
             </div>
 
             {/* FAQ 03 */}
-            <div className="pb-8 group transition-colors cursor-pointer scroll-animate animate-delay-300">
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setFaq03Expanded(!faq03Expanded)}
@@ -458,7 +458,7 @@ export default function Contact() {
             </div>
 
             {/* FAQ 04 */}
-            <div className="pb-8 group transition-colors cursor-pointer scroll-animate animate-delay-400">
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setFaq04Expanded(!faq04Expanded)}
@@ -488,7 +488,7 @@ export default function Contact() {
             </div>
 
             {/* FAQ 05 */}
-            <div className="pb-8 group transition-colors cursor-pointer scroll-animate animate-delay-500">
+            <div className="pb-8 group transition-colors cursor-pointer">
               <div 
                 className="flex items-center justify-between"
                 onClick={() => setFaq05Expanded(!faq05Expanded)}
