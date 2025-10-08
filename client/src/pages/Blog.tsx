@@ -378,13 +378,13 @@ export default function Blog() {
 
         {/* Search Box with Year Filter */}
         <div className="max-w-2xl mx-auto mb-12">
-          <div className="flex items-end gap-8 border-b border-white/30 pb-4">
+          <div className="flex items-end gap-8 pb-4">
             <Input
               type="text"
               placeholder={searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border-0 text-white placeholder-white/60 px-0 py-0 text-lg font-light rounded-none focus-visible:ring-0 flex-1"
+              className="bg-transparent text-white placeholder-white/60 px-0 py-0 text-lg font-light rounded-none focus-visible:ring-0 flex-1"
               data-testid="input-search"
             />
             {availableYears.length > 0 && (
