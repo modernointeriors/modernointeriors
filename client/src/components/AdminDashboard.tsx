@@ -12,10 +12,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
-import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star } from "lucide-react";
+import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown } from "lucide-react";
 import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal } from "@shared/schema";
 import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -192,6 +194,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
+  const [referralOpen, setReferralOpen] = useState(false);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -1726,28 +1729,67 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     control={clientForm.control}
                     name="referredById"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="flex flex-col">
                         <FormLabel>Người giới thiệu (Referral)</FormLabel>
-                        <Select 
-                          onValueChange={(value) => field.onChange(value === "none" ? undefined : value)} 
-                          value={field.value || "none"}
-                        >
-                          <FormControl>
-                            <SelectTrigger data-testid="select-client-referral">
-                              <SelectValue placeholder="Chọn người giới thiệu..." />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="none">-- Không có --</SelectItem>
-                            {clients
-                              .filter(c => !editingClient || c.id !== editingClient.id)
-                              .map(client => (
-                                <SelectItem key={client.id} value={client.id}>
-                                  {client.firstName} {client.lastName} ({client.email})
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
+                        <Popover open={referralOpen} onOpenChange={setReferralOpen}>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                data-testid="select-client-referral"
+                                className="justify-between bg-black border-white/10 hover:border-white/30 hover:bg-white/10 rounded-none"
+                              >
+                                {field.value
+                                  ? (() => {
+                                      const client = clients.find((c) => c.id === field.value);
+                                      return client ? `${client.firstName} ${client.lastName} (${client.email})` : "-- Không có --";
+                                    })()
+                                  : "-- Không có --"}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[400px] p-0 bg-black/95 backdrop-blur-xl border-white/10 rounded-none">
+                            <Command className="bg-transparent">
+                              <CommandInput placeholder="Tìm kiếm người giới thiệu..." className="border-b border-white/10" />
+                              <CommandEmpty>Không tìm thấy.</CommandEmpty>
+                              <CommandGroup className="max-h-64 overflow-auto">
+                                <CommandItem
+                                  value="none"
+                                  onSelect={() => {
+                                    field.onChange(undefined);
+                                    setReferralOpen(false);
+                                  }}
+                                  className="hover:bg-white/10"
+                                >
+                                  <Check
+                                    className={`mr-2 h-4 w-4 ${!field.value ? "opacity-100" : "opacity-0"}`}
+                                  />
+                                  -- Không có --
+                                </CommandItem>
+                                {clients
+                                  .filter(c => !editingClient || c.id !== editingClient.id)
+                                  .map((client) => (
+                                    <CommandItem
+                                      key={client.id}
+                                      value={`${client.firstName} ${client.lastName} ${client.email}`}
+                                      onSelect={() => {
+                                        field.onChange(client.id);
+                                        setReferralOpen(false);
+                                      }}
+                                      className="hover:bg-white/10"
+                                    >
+                                      <Check
+                                        className={`mr-2 h-4 w-4 ${field.value === client.id ? "opacity-100" : "opacity-0"}`}
+                                      />
+                                      {client.firstName} {client.lastName} ({client.email})
+                                    </CommandItem>
+                                  ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
