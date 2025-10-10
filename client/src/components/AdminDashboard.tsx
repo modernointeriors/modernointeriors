@@ -173,7 +173,7 @@ interface AdminDashboardProps {
 export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [editingService, setEditingService] = useState<Service | null>(null);
@@ -1424,18 +1424,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-sans font-light">Client Management</h2>
+          <h2 className="text-2xl font-sans font-light">{t('crm.clientManagement')}</h2>
           <Dialog open={isClientDialogOpen} onOpenChange={setIsClientDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="button-add-client">
                 <Plus className="mr-2 h-4 w-4" />
-                Add Client
+                {t('crm.addClient')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>
-                  {editingClient ? "Edit Client" : "Add New Client"}
+                  {editingClient ? t('crm.editClient') : t('crm.addClient')}
                 </DialogTitle>
               </DialogHeader>
               <Form {...clientForm}>
@@ -1446,7 +1446,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>First Name *</FormLabel>
+                          <FormLabel>{t('crm.firstName')} *</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-client-first-name" />
                           </FormControl>
@@ -1460,7 +1460,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Last Name *</FormLabel>
+                          <FormLabel>{t('crm.lastName')} *</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-client-last-name" />
                           </FormControl>
@@ -1475,7 +1475,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email *</FormLabel>
+                        <FormLabel>{t('crm.email')} *</FormLabel>
                         <FormControl>
                           <Input {...field} type="email" data-testid="input-client-email" />
                         </FormControl>
@@ -1490,7 +1490,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone</FormLabel>
+                          <FormLabel>{t('crm.phone')}</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-client-phone" />
                           </FormControl>
@@ -1504,7 +1504,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="company"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Company</FormLabel>
+                          <FormLabel>{t('crm.company')}</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-client-company" />
                           </FormControl>
@@ -1519,7 +1519,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     name="address"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Address</FormLabel>
+                        <FormLabel>{t('crm.address')}</FormLabel>
                         <FormControl>
                           <Input {...field} data-testid="input-client-address" />
                         </FormControl>
@@ -1534,7 +1534,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="stage"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Pipeline Stage</FormLabel>
+                          <FormLabel>{t('crm.pipelineStage')}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger data-testid="select-client-stage">
@@ -1542,11 +1542,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="lead">Lead</SelectItem>
-                              <SelectItem value="prospect">Prospect</SelectItem>
-                              <SelectItem value="contract">Contract</SelectItem>
-                              <SelectItem value="delivery">Delivery</SelectItem>
-                              <SelectItem value="aftercare">Aftercare</SelectItem>
+                              <SelectItem value="lead">{t('crm.stage.lead')}</SelectItem>
+                              <SelectItem value="prospect">{t('crm.stage.prospect')}</SelectItem>
+                              <SelectItem value="contract">{t('crm.stage.contract')}</SelectItem>
+                              <SelectItem value="delivery">{t('crm.stage.delivery')}</SelectItem>
+                              <SelectItem value="aftercare">{t('crm.stage.aftercare')}</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -1559,7 +1559,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       name="tier"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Customer Tier</FormLabel>
+                          <FormLabel>{t('crm.customerTier')}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger data-testid="select-client-tier">
@@ -1567,10 +1567,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="silver">Silver</SelectItem>
-                              <SelectItem value="gold">Gold</SelectItem>
-                              <SelectItem value="platinum">Platinum</SelectItem>
-                              <SelectItem value="vip">VIP</SelectItem>
+                              <SelectItem value="silver">{t('crm.tier.silver')}</SelectItem>
+                              <SelectItem value="gold">{t('crm.tier.gold')}</SelectItem>
+                              <SelectItem value="platinum">{t('crm.tier.platinum')}</SelectItem>
+                              <SelectItem value="vip">{t('crm.tier.vip')}</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -1584,7 +1584,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     name="status"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Status</FormLabel>
+                        <FormLabel>{t('crm.status')}</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-client-status">
@@ -1592,9 +1592,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="inactive">Inactive</SelectItem>
-                            <SelectItem value="archived">Archived</SelectItem>
+                            <SelectItem value="active">{t('crm.status.active')}</SelectItem>
+                            <SelectItem value="inactive">{t('crm.status.inactive')}</SelectItem>
+                            <SelectItem value="archived">{t('crm.status.archived')}</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -1607,7 +1607,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     name="notes"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Notes</FormLabel>
+                        <FormLabel>{t('crm.notes')}</FormLabel>
                         <FormControl>
                           <Textarea {...field} rows={3} data-testid="input-client-notes" />
                         </FormControl>
@@ -1626,14 +1626,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         clientForm.reset();
                       }}
                     >
-                      Cancel
+                      {t('crm.cancel')}
                     </Button>
                     <Button 
                       type="submit"
                       disabled={createClientMutation.isPending}
                       data-testid="button-save-client"
                     >
-                      {editingClient ? "Update" : "Create"} Client
+                      {editingClient ? t('crm.update') : t('crm.create')}
                     </Button>
                   </div>
                 </form>
@@ -1668,16 +1668,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Client</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Company</TableHead>
-                      <TableHead>Address</TableHead>
-                      <TableHead>Pipeline Stage</TableHead>
-                      <TableHead>Tier</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>{t('admin.clients')}</TableHead>
+                      <TableHead>{t('crm.email')}</TableHead>
+                      <TableHead>{t('crm.phone')}</TableHead>
+                      <TableHead>{t('crm.company')}</TableHead>
+                      <TableHead>{t('crm.address')}</TableHead>
+                      <TableHead>{t('crm.pipelineStage')}</TableHead>
+                      <TableHead>{t('crm.customerTier')}</TableHead>
+                      <TableHead>{t('crm.status')}</TableHead>
+                      <TableHead>{t('crm.created')}</TableHead>
+                      <TableHead className="text-right">{t('crm.actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1706,11 +1706,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="lead">Lead</SelectItem>
-                              <SelectItem value="prospect">Prospect</SelectItem>
-                              <SelectItem value="contract">Contract</SelectItem>
-                              <SelectItem value="delivery">Delivery</SelectItem>
-                              <SelectItem value="aftercare">Aftercare</SelectItem>
+                              <SelectItem value="lead">{t('crm.stage.lead')}</SelectItem>
+                              <SelectItem value="prospect">{t('crm.stage.prospect')}</SelectItem>
+                              <SelectItem value="contract">{t('crm.stage.contract')}</SelectItem>
+                              <SelectItem value="delivery">{t('crm.stage.delivery')}</SelectItem>
+                              <SelectItem value="aftercare">{t('crm.stage.aftercare')}</SelectItem>
                             </SelectContent>
                           </Select>
                         </TableCell>
@@ -1726,10 +1726,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="silver">Silver</SelectItem>
-                              <SelectItem value="gold">Gold</SelectItem>
-                              <SelectItem value="platinum">Platinum</SelectItem>
-                              <SelectItem value="vip">VIP</SelectItem>
+                              <SelectItem value="silver">{t('crm.tier.silver')}</SelectItem>
+                              <SelectItem value="gold">{t('crm.tier.gold')}</SelectItem>
+                              <SelectItem value="platinum">{t('crm.tier.platinum')}</SelectItem>
+                              <SelectItem value="vip">{t('crm.tier.vip')}</SelectItem>
                             </SelectContent>
                           </Select>
                         </TableCell>
@@ -1745,9 +1745,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="active">Active</SelectItem>
-                              <SelectItem value="inactive">Inactive</SelectItem>
-                              <SelectItem value="archived">Archived</SelectItem>
+                              <SelectItem value="active">{t('crm.status.active')}</SelectItem>
+                              <SelectItem value="inactive">{t('crm.status.inactive')}</SelectItem>
+                              <SelectItem value="archived">{t('crm.status.archived')}</SelectItem>
                             </SelectContent>
                           </Select>
                         </TableCell>

@@ -173,6 +173,44 @@ const translations = {
     'admin.content': 'Content',
     'admin.manage': 'Manage your projects, clients, and website content',
     'admin.access': 'Admin Access',
+    
+    // CRM
+    'crm.clientManagement': 'Client Management',
+    'crm.addClient': 'Add Client',
+    'crm.editClient': 'Edit Client',
+    'crm.firstName': 'First Name',
+    'crm.lastName': 'Last Name',
+    'crm.email': 'Email',
+    'crm.phone': 'Phone',
+    'crm.company': 'Company',
+    'crm.address': 'Address',
+    'crm.pipelineStage': 'Pipeline Stage',
+    'crm.customerTier': 'Customer Tier',
+    'crm.status': 'Status',
+    'crm.notes': 'Notes',
+    'crm.created': 'Created',
+    'crm.actions': 'Actions',
+    'crm.cancel': 'Cancel',
+    'crm.update': 'Update',
+    'crm.create': 'Create',
+    
+    // Pipeline Stages
+    'crm.stage.lead': 'Lead',
+    'crm.stage.prospect': 'Prospect',
+    'crm.stage.contract': 'Contract',
+    'crm.stage.delivery': 'Delivery',
+    'crm.stage.aftercare': 'Aftercare',
+    
+    // Customer Tiers
+    'crm.tier.silver': 'Silver',
+    'crm.tier.gold': 'Gold',
+    'crm.tier.platinum': 'Platinum',
+    'crm.tier.vip': 'VIP',
+    
+    // Status
+    'crm.status.active': 'Active',
+    'crm.status.inactive': 'Inactive',
+    'crm.status.archived': 'Archived',
   },
   vi: {
     // Navigation
@@ -335,6 +373,44 @@ const translations = {
     'admin.content': 'Nội Dung',
     'admin.manage': 'Quản lý dự án, khách hàng và nội dung website của bạn',
     'admin.access': 'Quyền Quản Trị',
+    
+    // CRM
+    'crm.clientManagement': 'Quản Lý Khách Hàng',
+    'crm.addClient': 'Thêm Khách Hàng',
+    'crm.editClient': 'Sửa Khách Hàng',
+    'crm.firstName': 'Tên',
+    'crm.lastName': 'Họ',
+    'crm.email': 'Email',
+    'crm.phone': 'Số Điện Thoại',
+    'crm.company': 'Công Ty',
+    'crm.address': 'Địa Chỉ',
+    'crm.pipelineStage': 'Giai Đoạn',
+    'crm.customerTier': 'Hạng Khách Hàng',
+    'crm.status': 'Trạng Thái',
+    'crm.notes': 'Ghi Chú',
+    'crm.created': 'Ngày Tạo',
+    'crm.actions': 'Thao Tác',
+    'crm.cancel': 'Hủy',
+    'crm.update': 'Cập Nhật',
+    'crm.create': 'Tạo Mới',
+    
+    // Pipeline Stages
+    'crm.stage.lead': 'Tiềm Năng',
+    'crm.stage.prospect': 'Triển Vọng',
+    'crm.stage.contract': 'Hợp Đồng',
+    'crm.stage.delivery': 'Thực Hiện',
+    'crm.stage.aftercare': 'Chăm Sóc',
+    
+    // Customer Tiers
+    'crm.tier.silver': 'Bạc',
+    'crm.tier.gold': 'Vàng',
+    'crm.tier.platinum': 'Bạch Kim',
+    'crm.tier.vip': 'VIP',
+    
+    // Status
+    'crm.status.active': 'Hoạt Động',
+    'crm.status.inactive': 'Không Hoạt Động',
+    'crm.status.archived': 'Lưu Trữ',
   }
 };
 
