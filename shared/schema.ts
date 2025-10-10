@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer, boolean, jsonb, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, boolean, jsonb, unique, decimal } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -49,8 +49,23 @@ export const clients = pgTable("clients", {
   email: text("email").notNull(),
   phone: text("phone"),
   company: text("company"),
-  status: varchar("status", { length: 20 }).notNull().default("lead"), // lead, active, completed
+  address: text("address"),
+  // CRM Pipeline Stage
+  stage: varchar("stage", { length: 20 }).notNull().default("lead"), // lead, prospect, contract, delivery, aftercare
+  status: varchar("status", { length: 20 }).notNull().default("active"), // active, inactive, archived
+  // Customer Tier
+  tier: varchar("tier", { length: 20 }).notNull().default("silver"), // vip, silver, gold, platinum
+  // Financial tracking
+  totalSpending: decimal("total_spending", { precision: 12, scale: 2 }).notNull().default("0"),
+  orderCount: integer("order_count").notNull().default(0),
+  // Referral Program
+  referredById: varchar("referred_by_id").references(() => clients.id),
+  referralCount: integer("referral_count").notNull().default(0),
+  referralRevenue: decimal("referral_revenue", { precision: 12, scale: 2 }).notNull().default("0"),
+  referralCommission: decimal("referral_commission", { precision: 12, scale: 2 }).notNull().default("0"),
+  // Additional Info
   notes: text("notes"),
+  tags: jsonb("tags").default([]), // Array of tag strings for flexible categorization
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -162,15 +177,96 @@ export const categories = pgTable("categories", {
   uniqueSlugType: unique().on(table.slug, table.type),
 }));
 
+// CRM: Client Interactions/Activities
+export const interactions = pgTable("interactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  clientId: varchar("client_id").notNull().references(() => clients.id),
+  type: varchar("type", { length: 30 }).notNull(), // visit, meeting, site_survey, design, acceptance, call, email
+  title: text("title").notNull(),
+  description: text("description"),
+  date: timestamp("date").notNull(),
+  duration: integer("duration"), // Duration in minutes
+  location: text("location"),
+  assignedTo: text("assigned_to"), // Staff member name
+  outcome: text("outcome"), // Result or notes from interaction
+  nextAction: text("next_action"), // Follow-up action required
+  nextActionDate: timestamp("next_action_date"),
+  attachments: jsonb("attachments").default([]), // Array of file URLs
+  createdBy: varchar("created_by").references(() => users.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// CRM: Deals/Contracts
+export const deals = pgTable("deals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  clientId: varchar("client_id").notNull().references(() => clients.id),
+  projectId: varchar("project_id").references(() => projects.id),
+  title: text("title").notNull(),
+  value: decimal("value", { precision: 12, scale: 2 }).notNull(),
+  stage: varchar("stage", { length: 20 }).notNull().default("proposal"), // proposal, negotiation, contract, delivery, completed, lost
+  probability: integer("probability").notNull().default(50), // 0-100%
+  expectedCloseDate: timestamp("expected_close_date"),
+  actualCloseDate: timestamp("actual_close_date"),
+  description: text("description"),
+  terms: text("terms"), // Contract terms
+  notes: text("notes"),
+  lostReason: text("lost_reason"), // If deal is lost, why?
+  assignedTo: varchar("assigned_to").references(() => users.id),
+  createdBy: varchar("created_by").references(() => users.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Relations
-export const clientsRelations = relations(clients, ({ many }) => ({
+export const clientsRelations = relations(clients, ({ many, one }) => ({
   inquiries: many(inquiries),
+  interactions: many(interactions),
+  deals: many(deals),
+  referredBy: one(clients, {
+    fields: [clients.referredById],
+    references: [clients.id],
+    relationName: "referrals",
+  }),
+  referrals: many(clients, {
+    relationName: "referrals",
+  }),
 }));
 
 export const inquiriesRelations = relations(inquiries, ({ one }) => ({
   client: one(clients, {
     fields: [inquiries.clientId],
     references: [clients.id],
+  }),
+}));
+
+export const interactionsRelations = relations(interactions, ({ one }) => ({
+  client: one(clients, {
+    fields: [interactions.clientId],
+    references: [clients.id],
+  }),
+  createdBy: one(users, {
+    fields: [interactions.createdBy],
+    references: [users.id],
+  }),
+}));
+
+export const dealsRelations = relations(deals, ({ one }) => ({
+  client: one(clients, {
+    fields: [deals.clientId],
+    references: [clients.id],
+  }),
+  project: one(projects, {
+    fields: [deals.projectId],
+    references: [projects.id],
+  }),
+  assignedTo: one(users, {
+    fields: [deals.assignedTo],
+    references: [users.id],
+  }),
+  createdBy: one(users, {
+    fields: [deals.createdBy],
+    references: [users.id],
   }),
 }));
 
@@ -225,6 +321,18 @@ export const insertCategorySchema = createInsertSchema(categories).omit({
   updatedAt: true,
 });
 
+export const insertInteractionSchema = createInsertSchema(interactions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertDealSchema = createInsertSchema(deals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -252,3 +360,9 @@ export type Partner = typeof partners.$inferSelect;
 
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
 export type Category = typeof categories.$inferSelect;
+
+export type InsertInteraction = z.infer<typeof insertInteractionSchema>;
+export type Interaction = typeof interactions.$inferSelect;
+
+export type InsertDeal = z.infer<typeof insertDealSchema>;
+export type Deal = typeof deals.$inferSelect;
