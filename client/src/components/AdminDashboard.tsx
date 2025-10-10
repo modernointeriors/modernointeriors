@@ -239,6 +239,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     queryKey: ['/api/categories'],
   });
 
+  const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
+    queryKey: ['/api/transactions', viewingClient?.id],
+    queryFn: async () => {
+      if (!viewingClient?.id) return [];
+      const response = await fetch(`/api/transactions?clientId=${viewingClient.id}`);
+      return response.json();
+    },
+    enabled: !!viewingClient?.id,
+  });
+
   // Forms
   const projectForm = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -1867,6 +1877,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <h3 className="text-lg font-medium border-b pb-2">{t('crm.referralInfo')}</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
+                        <label className="text-sm font-medium text-muted-foreground">Được giới thiệu bởi</label>
+                        <p className="text-base mt-1">
+                          {viewingClient.referredById 
+                            ? (() => {
+                                const referrer = clients.find(c => c.id === viewingClient.referredById);
+                                return referrer ? `${referrer.firstName} ${referrer.lastName}` : "—";
+                              })()
+                            : "—"}
+                        </p>
+                      </div>
+                      <div>
                         <label className="text-sm font-medium text-muted-foreground">{t('crm.referralCount')}</label>
                         <p className="text-base mt-1">{viewingClient.referralCount || 0}</p>
                       </div>
@@ -1900,6 +1921,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </p>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Transactions */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">Lịch sử giao dịch</h3>
+                    {transactionsLoading ? (
+                      <div className="text-sm text-muted-foreground">Đang tải...</div>
+                    ) : transactions.length === 0 ? (
+                      <div className="text-sm text-muted-foreground">Chưa có giao dịch nào</div>
+                    ) : (
+                      <div className="space-y-2">
+                        {transactions.map((transaction: any) => (
+                          <div key={transaction.id} className="flex justify-between items-center p-3 border rounded-none border-white/10 hover:border-white/30 transition-colors">
+                            <div>
+                              <p className="font-medium">{transaction.description}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(transaction.transactionDate).toLocaleDateString('vi-VN')}
+                                {transaction.type && ` • ${transaction.type}`}
+                                {transaction.status && ` • ${transaction.status}`}
+                              </p>
+                            </div>
+                            <p className="font-semibold">
+                              {parseFloat(transaction.amount).toLocaleString('vi-VN')} đ
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Tags */}
