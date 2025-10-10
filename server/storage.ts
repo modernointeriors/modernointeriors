@@ -1,5 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
+  interactions, deals,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -8,7 +9,9 @@ import {
   type Article, type InsertArticle,
   type HomepageContent, type InsertHomepageContent,
   type Partner, type InsertPartner,
-  type Category, type InsertCategory
+  type Category, type InsertCategory,
+  type Interaction, type InsertInteraction,
+  type Deal, type InsertDeal
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -78,6 +81,24 @@ export interface IStorage {
   createCategory(category: InsertCategory): Promise<Category>;
   updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category>;
   deleteCategory(id: string): Promise<void>;
+
+  // CRM: Interactions
+  getInteractions(clientId?: string): Promise<Interaction[]>;
+  getInteraction(id: string): Promise<Interaction | undefined>;
+  createInteraction(interaction: InsertInteraction): Promise<Interaction>;
+  updateInteraction(id: string, interaction: Partial<InsertInteraction>): Promise<Interaction>;
+  deleteInteraction(id: string): Promise<void>;
+
+  // CRM: Deals
+  getDeals(filters?: { clientId?: string; stage?: string }): Promise<Deal[]>;
+  getDeal(id: string): Promise<Deal | undefined>;
+  createDeal(deal: InsertDeal): Promise<Deal>;
+  updateDeal(id: string, deal: Partial<InsertDeal>): Promise<Deal>;
+  deleteDeal(id: string): Promise<void>;
+
+  // CRM: Analytics & Reporting
+  getClientReferrals(clientId: string): Promise<Client[]>;
+  updateClientTier(clientId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -405,6 +426,113 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCategory(id: string): Promise<void> {
     await db.delete(categories).where(eq(categories.id, id));
+  }
+
+  // CRM: Interactions
+  async getInteractions(clientId?: string): Promise<Interaction[]> {
+    const query = clientId
+      ? db.select().from(interactions).where(eq(interactions.clientId, clientId))
+      : db.select().from(interactions);
+    
+    return await query.orderBy(desc(interactions.date));
+  }
+
+  async getInteraction(id: string): Promise<Interaction | undefined> {
+    const [interaction] = await db.select().from(interactions).where(eq(interactions.id, id));
+    return interaction || undefined;
+  }
+
+  async createInteraction(interaction: InsertInteraction): Promise<Interaction> {
+    const [newInteraction] = await db.insert(interactions).values(interaction).returning();
+    return newInteraction;
+  }
+
+  async updateInteraction(id: string, interaction: Partial<InsertInteraction>): Promise<Interaction> {
+    const [updatedInteraction] = await db
+      .update(interactions)
+      .set({ ...interaction, updatedAt: new Date() })
+      .where(eq(interactions.id, id))
+      .returning();
+    return updatedInteraction;
+  }
+
+  async deleteInteraction(id: string): Promise<void> {
+    await db.delete(interactions).where(eq(interactions.id, id));
+  }
+
+  // CRM: Deals
+  async getDeals(filters?: { clientId?: string; stage?: string }): Promise<Deal[]> {
+    const conditions = [];
+    
+    if (filters?.clientId) {
+      conditions.push(eq(deals.clientId, filters.clientId));
+    }
+    
+    if (filters?.stage) {
+      conditions.push(eq(deals.stage, filters.stage));
+    }
+    
+    const query = conditions.length > 0
+      ? db.select().from(deals).where(and(...conditions))
+      : db.select().from(deals);
+    
+    return await query.orderBy(desc(deals.createdAt));
+  }
+
+  async getDeal(id: string): Promise<Deal | undefined> {
+    const [deal] = await db.select().from(deals).where(eq(deals.id, id));
+    return deal || undefined;
+  }
+
+  async createDeal(deal: InsertDeal): Promise<Deal> {
+    const [newDeal] = await db.insert(deals).values(deal).returning();
+    return newDeal;
+  }
+
+  async updateDeal(id: string, deal: Partial<InsertDeal>): Promise<Deal> {
+    const [updatedDeal] = await db
+      .update(deals)
+      .set({ ...deal, updatedAt: new Date() })
+      .where(eq(deals.id, id))
+      .returning();
+    return updatedDeal;
+  }
+
+  async deleteDeal(id: string): Promise<void> {
+    await db.delete(deals).where(eq(deals.id, id));
+  }
+
+  // CRM: Analytics & Reporting
+  async getClientReferrals(clientId: string): Promise<Client[]> {
+    return await db.select()
+      .from(clients)
+      .where(eq(clients.referredById, clientId))
+      .orderBy(desc(clients.createdAt));
+  }
+
+  async updateClientTier(clientId: string): Promise<void> {
+    const client = await this.getClient(clientId);
+    if (!client) return;
+
+    let tier = "silver";
+    const spending = parseFloat(client.totalSpending as string);
+    
+    // Tier logic: VIP (special), Platinum (>100k), Gold (>50k), Silver (default)
+    if (spending >= 100000) {
+      tier = "platinum";
+    } else if (spending >= 50000) {
+      tier = "gold";
+    }
+    
+    // VIP status is manually assigned or based on referrals
+    if (client.referralCount >= 5 || client.tier === "vip") {
+      tier = "vip";
+    }
+
+    await db
+      .update(clients)
+      .set({ tier, updatedAt: new Date() })
+      .where(eq(clients.id, clientId));
   }
 }
 
