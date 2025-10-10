@@ -1728,14 +1728,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Người giới thiệu (Referral)</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || ""}>
+                        <Select 
+                          onValueChange={(value) => field.onChange(value === "none" ? undefined : value)} 
+                          value={field.value || "none"}
+                        >
                           <FormControl>
                             <SelectTrigger data-testid="select-client-referral">
                               <SelectValue placeholder="Chọn người giới thiệu..." />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">-- Không có --</SelectItem>
+                            <SelectItem value="none">-- Không có --</SelectItem>
                             {clients
                               .filter(c => !editingClient || c.id !== editingClient.id)
                               .map(client => (
