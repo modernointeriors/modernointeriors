@@ -1741,78 +1741,74 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-[180px]">
+                        <TableHead className="w-[160px]">
                           <div>{t('admin.clients')}</div>
-                          <div className="text-xs font-normal text-muted-foreground">{t('crm.email')}</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">{t('crm.email')}</div>
+                        </TableHead>
+                        <TableHead className="w-[120px]">
+                          <div>{t('crm.phone')}</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">{t('crm.dateOfBirth')}</div>
                         </TableHead>
                         <TableHead className="w-[130px]">
-                          <div>{t('crm.phone')}</div>
-                          <div className="text-xs font-normal text-muted-foreground">{t('crm.dateOfBirth')}</div>
-                        </TableHead>
-                        <TableHead className="w-[140px]">
                           <div>{t('crm.address')}</div>
-                          <div className="text-xs font-normal text-muted-foreground">{t('crm.company')}</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">{t('crm.company')}</div>
                         </TableHead>
-                        <TableHead className="w-[110px]">
-                          <div>{t('crm.totalSpending')}</div>
-                          <div className="text-xs font-normal text-muted-foreground">{t('crm.warrantyStatus')}</div>
-                        </TableHead>
-                        <TableHead className="w-[120px]">{t('crm.pipelineStage')}</TableHead>
+                        <TableHead className="w-[110px]">{t('crm.totalSpending')}</TableHead>
+                        <TableHead className="w-[110px]">{t('crm.warrantyStatus')}</TableHead>
+                        <TableHead className="w-[110px]">{t('crm.pipelineStage')}</TableHead>
                         <TableHead className="w-[100px]">{t('crm.customerTier')}</TableHead>
-                        <TableHead className="w-[110px]">{t('crm.status')}</TableHead>
+                        <TableHead className="w-[100px]">{t('crm.status')}</TableHead>
                         <TableHead className="w-[100px]">{t('crm.created')}</TableHead>
-                        <TableHead className="text-right w-[80px]">{t('crm.actions')}</TableHead>
+                        <TableHead className="text-right w-[70px]">{t('crm.actions')}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {clients.map((client) => (
                         <TableRow key={client.id} data-testid={`row-client-${client.id}`}>
-                          <TableCell>
+                          <TableCell className="align-middle">
                             <div className="font-light whitespace-nowrap">
                               {client.firstName} {client.lastName}
                             </div>
-                            <div className="text-xs text-muted-foreground truncate max-w-[160px]" title={client.email}>
+                            <div className="text-xs text-muted-foreground truncate max-w-[140px] mt-1" title={client.email}>
                               {client.email}
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="align-middle">
                             <div className="text-sm">{client.phone || "—"}</div>
-                            <div className="text-xs text-muted-foreground">
+                            <div className="text-xs text-muted-foreground mt-1">
                               {client.dateOfBirth ? new Date(client.dateOfBirth).toLocaleDateString('vi-VN') : "—"}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="text-sm truncate max-w-[120px]" title={client.address || ""}>
+                          <TableCell className="align-middle">
+                            <div className="text-sm truncate max-w-[110px]" title={client.address || ""}>
                               {client.address || "—"}
                             </div>
-                            <div className="text-xs text-muted-foreground truncate max-w-[120px]" title={client.company || ""}>
+                            <div className="text-xs text-muted-foreground truncate max-w-[110px] mt-1" title={client.company || ""}>
                               {client.company || "—"}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="text-sm whitespace-nowrap">
-                              {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
-                            </div>
-                            <div className="text-xs">
-                              <Select
-                                value={client.warrantyStatus || "none"}
-                                onValueChange={(value) => updateClientMutation.mutate({ 
-                                  id: client.id, 
-                                  warrantyStatus: value as "none" | "active" | "expired" 
-                                })}
-                              >
-                                <SelectTrigger className="w-full h-6 text-xs" data-testid={`select-client-warranty-${client.id}`}>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="none">{t('crm.warranty.none')}</SelectItem>
-                                  <SelectItem value="active">{t('crm.warranty.active')}</SelectItem>
-                                  <SelectItem value="expired">{t('crm.warranty.expired')}</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
+                          <TableCell className="align-middle text-sm whitespace-nowrap">
+                            {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="align-middle">
+                            <Select
+                              value={client.warrantyStatus || "none"}
+                              onValueChange={(value) => updateClientMutation.mutate({ 
+                                id: client.id, 
+                                warrantyStatus: value as "none" | "active" | "expired" 
+                              })}
+                            >
+                              <SelectTrigger className="w-full" data-testid={`select-client-warranty-${client.id}`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">{t('crm.warranty.none')}</SelectItem>
+                                <SelectItem value="active">{t('crm.warranty.active')}</SelectItem>
+                                <SelectItem value="expired">{t('crm.warranty.expired')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell className="align-middle">
                             <Select
                               value={client.stage || "lead"}
                               onValueChange={(value) => updateClientMutation.mutate({ 
@@ -1832,7 +1828,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectContent>
                             </Select>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="align-middle">
                             <Select
                               value={client.tier || "silver"}
                               onValueChange={(value) => updateClientMutation.mutate({ 
@@ -1851,7 +1847,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectContent>
                             </Select>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="align-middle">
                             <Select
                               value={client.status || "active"}
                               onValueChange={(value) => updateClientMutation.mutate({ 
@@ -1869,8 +1865,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectContent>
                             </Select>
                           </TableCell>
-                          <TableCell className="text-sm whitespace-nowrap">{formatDate(client.createdAt)}</TableCell>
-                          <TableCell className="text-right">
+                          <TableCell className="align-middle text-sm whitespace-nowrap">{formatDate(client.createdAt)}</TableCell>
+                          <TableCell className="align-middle text-right">
                             <Button
                               variant="outline"
                               size="sm"
