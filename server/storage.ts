@@ -160,18 +160,47 @@ export class DatabaseStorage implements IStorage {
     await db.delete(projects).where(eq(projects.id, id));
   }
 
+  // Helper function to auto-update warranty status if expired
+  private async checkAndUpdateWarrantyStatus(client: Client): Promise<Client> {
+    if (client.warrantyStatus === 'active' && client.warrantyExpiry) {
+      const now = new Date();
+      const expiryDate = new Date(client.warrantyExpiry);
+      
+      // If warranty has expired, auto-update to 'expired'
+      if (expiryDate < now) {
+        const [updatedClient] = await db
+          .update(clients)
+          .set({ warrantyStatus: 'expired', updatedAt: new Date() })
+          .where(eq(clients.id, client.id))
+          .returning();
+        return updatedClient;
+      }
+    }
+    return client;
+  }
+
   // Clients
   async getClients(status?: string): Promise<Client[]> {
     const query = status
       ? db.select().from(clients).where(eq(clients.status, status))
       : db.select().from(clients);
     
-    return await query.orderBy(desc(clients.createdAt));
+    const clientList = await query.orderBy(desc(clients.createdAt));
+    
+    // Check and update warranty status for all clients
+    const updatedClients = await Promise.all(
+      clientList.map(client => this.checkAndUpdateWarrantyStatus(client))
+    );
+    
+    return updatedClients;
   }
 
   async getClient(id: string): Promise<Client | undefined> {
     const [client] = await db.select().from(clients).where(eq(clients.id, id));
-    return client || undefined;
+    if (!client) return undefined;
+    
+    // Check and update warranty status
+    return await this.checkAndUpdateWarrantyStatus(client);
   }
 
   async getClientByEmail(email: string): Promise<Client | undefined> {
