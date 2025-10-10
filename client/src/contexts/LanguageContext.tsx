@@ -218,6 +218,21 @@ const translations = {
     'crm.warrantyStatus': 'Warranty Status',
     'crm.warrantyExpiry': 'Warranty Expiry',
     'crm.lastUpdated': 'Last Updated',
+    'crm.orderCount': 'Order Count',
+    'crm.referralCount': 'Referral Count',
+    'crm.referralRevenue': 'Referral Revenue',
+    'crm.referralCommission': 'Referral Commission',
+    
+    // Client View Dialog
+    'crm.clientDetails': 'Client Details',
+    'crm.basicInfo': 'Basic Information',
+    'crm.name': 'Name',
+    'crm.crmStatus': 'CRM Status',
+    'crm.financialInfo': 'Financial Information',
+    'crm.referralInfo': 'Referral Information',
+    'crm.warrantyInfo': 'Warranty Information',
+    'crm.tags': 'Tags',
+    'crm.close': 'Close',
     
     // Warranty Status
     'crm.warranty.none': 'None',
@@ -430,6 +445,21 @@ const translations = {
     'crm.warrantyStatus': 'Tình Trạng Bảo Hành',
     'crm.warrantyExpiry': 'Ngày Hết Hạn Bảo Hành',
     'crm.lastUpdated': 'Cập Nhật Lần Cuối',
+    'crm.orderCount': 'Số Đơn Hàng',
+    'crm.referralCount': 'Số Người Giới Thiệu',
+    'crm.referralRevenue': 'Doanh Thu Giới Thiệu',
+    'crm.referralCommission': 'Hoa Hồng Giới Thiệu',
+    
+    // Client View Dialog
+    'crm.clientDetails': 'Chi Tiết Khách Hàng',
+    'crm.basicInfo': 'Thông Tin Cơ Bản',
+    'crm.name': 'Họ Tên',
+    'crm.crmStatus': 'Trạng Thái CRM',
+    'crm.financialInfo': 'Thông Tin Tài Chính',
+    'crm.referralInfo': 'Thông Tin Giới Thiệu',
+    'crm.warrantyInfo': 'Thông Tin Bảo Hành',
+    'crm.tags': 'Thẻ',
+    'crm.close': 'Đóng',
     
     // Warranty Status
     'crm.warranty.none': 'Không Có',

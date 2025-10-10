@@ -182,8 +182,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
+  const [viewingClient, setViewingClient] = useState<Client | null>(null);
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
   const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
+  const [isClientViewDialogOpen, setIsClientViewDialogOpen] = useState(false);
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
   const [isArticleDialogOpen, setIsArticleDialogOpen] = useState(false);
   const [isPartnerDialogOpen, setIsPartnerDialogOpen] = useState(false);
@@ -1712,6 +1714,164 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </Form>
             </DialogContent>
           </Dialog>
+
+          {/* Client View Dialog */}
+          <Dialog open={isClientViewDialogOpen} onOpenChange={setIsClientViewDialogOpen}>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-light">
+                  {t('crm.clientDetails')}
+                </DialogTitle>
+              </DialogHeader>
+              {viewingClient && (
+                <div className="space-y-6">
+                  {/* Basic Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">{t('crm.basicInfo')}</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.name')}</label>
+                        <p className="text-base mt-1">{viewingClient.firstName} {viewingClient.lastName}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.email')}</label>
+                        <p className="text-base mt-1">{viewingClient.email}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.phone')}</label>
+                        <p className="text-base mt-1">{viewingClient.phone || "—"}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.dateOfBirth')}</label>
+                        <p className="text-base mt-1">
+                          {viewingClient.dateOfBirth ? new Date(viewingClient.dateOfBirth).toLocaleDateString('vi-VN') : "—"}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.company')}</label>
+                        <p className="text-base mt-1">{viewingClient.company || "—"}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.address')}</label>
+                        <p className="text-base mt-1">{viewingClient.address || "—"}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CRM Status */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">{t('crm.crmStatus')}</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.pipelineStage')}</label>
+                        <p className="text-base mt-1 capitalize">{t(`crm.stage.${viewingClient.stage}`)}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.customerTier')}</label>
+                        <p className="text-base mt-1 capitalize">{t(`crm.tier.${viewingClient.tier}`)}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.status')}</label>
+                        <p className="text-base mt-1 capitalize">{t(`crm.status.${viewingClient.status}`)}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.created')}</label>
+                        <p className="text-base mt-1">{formatDate(viewingClient.createdAt)}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Financial Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">{t('crm.financialInfo')}</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.totalSpending')}</label>
+                        <p className="text-base mt-1 font-semibold">
+                          {viewingClient.totalSpending ? `${parseFloat(viewingClient.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.orderCount')}</label>
+                        <p className="text-base mt-1">{viewingClient.orderCount || 0}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Referral Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">{t('crm.referralInfo')}</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.referralCount')}</label>
+                        <p className="text-base mt-1">{viewingClient.referralCount || 0}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.referralRevenue')}</label>
+                        <p className="text-base mt-1">
+                          {viewingClient.referralRevenue ? `${parseFloat(viewingClient.referralRevenue).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.referralCommission')}</label>
+                        <p className="text-base mt-1">
+                          {viewingClient.referralCommission ? `${parseFloat(viewingClient.referralCommission).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Warranty Information */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">{t('crm.warrantyInfo')}</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.warrantyStatus')}</label>
+                        <p className="text-base mt-1 capitalize">{t(`crm.warranty.${viewingClient.warrantyStatus || 'none'}`)}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">{t('crm.warrantyExpiry')}</label>
+                        <p className="text-base mt-1">
+                          {viewingClient.warrantyExpiry ? new Date(viewingClient.warrantyExpiry).toLocaleDateString('vi-VN') : "—"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tags */}
+                  {viewingClient.tags && viewingClient.tags.length > 0 && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium border-b pb-2">{t('crm.tags')}</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {viewingClient.tags.map((tag, index) => (
+                          <Badge key={index} variant="secondary">{tag}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Notes */}
+                  {viewingClient.notes && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium border-b pb-2">{t('crm.notes')}</h3>
+                      <p className="text-base whitespace-pre-wrap">{viewingClient.notes}</p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end pt-4 border-t">
+                    <Button
+                      onClick={() => {
+                        setIsClientViewDialogOpen(false);
+                        setViewingClient(null);
+                      }}
+                    >
+                      {t('crm.close')}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
 
         <Card>
@@ -1867,14 +2027,27 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </TableCell>
                           <TableCell className="align-middle text-sm whitespace-nowrap">{formatDate(client.createdAt)}</TableCell>
                           <TableCell className="align-middle text-right">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditClient(client)}
-                              data-testid={`button-edit-client-${client.id}`}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
+                            <div className="flex gap-1 justify-end">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setViewingClient(client);
+                                  setIsClientViewDialogOpen(true);
+                                }}
+                                data-testid={`button-view-client-${client.id}`}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEditClient(client)}
+                                data-testid={`button-edit-client-${client.id}`}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
