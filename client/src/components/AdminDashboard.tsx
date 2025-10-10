@@ -705,9 +705,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   };
 
   const onClientSubmit = async (data: ClientFormData) => {
+    // Auto-calculate warranty status based on expiry date
+    let warrantyStatus: "none" | "active" | "expired" = "none";
+    if (data.warrantyExpiry && data.warrantyExpiry.trim() !== "") {
+      const expiryDate = new Date(data.warrantyExpiry);
+      const now = new Date();
+      warrantyStatus = expiryDate < now ? "expired" : "active";
+    }
+
     // Clean up empty strings for optional date fields
     const cleanedData = {
       ...data,
+      warrantyStatus, // Auto-set based on expiry date
       dateOfBirth: data.dateOfBirth && data.dateOfBirth.trim() !== "" ? data.dateOfBirth : undefined,
       warrantyExpiry: data.warrantyExpiry && data.warrantyExpiry.trim() !== "" ? data.warrantyExpiry : undefined,
       phone: data.phone && data.phone.trim() !== "" ? data.phone : undefined,
@@ -1593,29 +1602,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={clientForm.control}
-                      name="warrantyStatus"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t('crm.warrantyStatus')}</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger data-testid="select-client-warranty">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="none">{t('crm.warranty.none')}</SelectItem>
-                              <SelectItem value="active">{t('crm.warranty.active')}</SelectItem>
-                              <SelectItem value="expired">{t('crm.warranty.expired')}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={clientForm.control}
                       name="warrantyExpiry"
                       render={({ field }) => (
                         <FormItem>
@@ -1627,6 +1613,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </FormItem>
                       )}
                     />
+
+                    <div className="space-y-2">
+                      <FormLabel>{t('crm.warrantyStatus')}</FormLabel>
+                      <div className="h-10 px-3 py-2 rounded-none border border-white/30 bg-white/5 flex items-center">
+                        <span className="text-sm text-white/70">
+                          {(() => {
+                            const warrantyDate = clientForm.watch('warrantyExpiry');
+                            if (!warrantyDate) return t('crm.warranty.none');
+                            const expiry = new Date(warrantyDate);
+                            const now = new Date();
+                            return expiry < now ? t('crm.warranty.expired') : t('crm.warranty.active');
+                          })()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -1978,22 +1979,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
                           </TableCell>
                           <TableCell className="align-middle">
-                            <Select
-                              value={client.warrantyStatus || "none"}
-                              onValueChange={(value) => updateClientMutation.mutate({ 
-                                id: client.id, 
-                                warrantyStatus: value as "none" | "active" | "expired" 
-                              })}
-                            >
-                              <SelectTrigger className="w-full" data-testid={`select-client-warranty-${client.id}`}>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="none">{t('crm.warranty.none')}</SelectItem>
-                                <SelectItem value="active">{t('crm.warranty.active')}</SelectItem>
-                                <SelectItem value="expired">{t('crm.warranty.expired')}</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <div className="text-sm capitalize" data-testid={`text-client-warranty-${client.id}`}>
+                              {t(`crm.warranty.${client.warrantyStatus || 'none'}`)}
+                            </div>
+                            {client.warrantyExpiry && (
+                              <div className="text-xs text-muted-foreground mt-1">
+                                {new Date(client.warrantyExpiry).toLocaleDateString('vi-VN')}
+                              </div>
+                            )}
                           </TableCell>
                           <TableCell className="align-middle">
                             <Select

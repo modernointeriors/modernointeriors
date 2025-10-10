@@ -28,6 +28,11 @@ Preferred communication style: Simple, everyday language.
 The application manages four core entities:
 - **Projects**: Portfolio items with categories (residential, commercial, architecture), images, location, and status tracking
 - **Clients**: CRM functionality with contact information, company details, and relationship status
+  - **Automatic Warranty Management**: Warranty status is automatically calculated based on warranty expiry date
+    - No expiry date set → Status: "None"
+    - Expiry date in future → Status: "Active"
+    - Expiry date passed → Status: "Expired"
+    - Backend automatically updates expired warranties when fetching client data
 - **Inquiries**: Contact form submissions with project type, budget, and message details
 - **Services**: Configurable service offerings with descriptions, features, and ordering
 - **Users**: Admin authentication system with role-based access
