@@ -1714,6 +1714,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   <FormField
                     control={clientForm.control}
+                    name="referredById"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Người giới thiệu (Referral)</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || ""}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-client-referral">
+                              <SelectValue placeholder="Chọn người giới thiệu..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="">-- Không có --</SelectItem>
+                            {clients
+                              .filter(c => !editingClient || c.id !== editingClient.id)
+                              .map(client => (
+                                <SelectItem key={client.id} value={client.id}>
+                                  {client.firstName} {client.lastName} ({client.email})
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={clientForm.control}
                     name="notes"
                     render={({ field }) => (
                       <FormItem>

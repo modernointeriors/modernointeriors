@@ -221,11 +221,27 @@ export const deals = pgTable("deals", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+// CRM: Transactions/Orders - Track client payments and orders
+export const transactions = pgTable("transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  clientId: varchar("client_id").notNull().references(() => clients.id),
+  title: text("title").notNull(), // e.g., "Sake Classic", "Thiết kế nội thất phòng khách"
+  description: text("description"), // e.g., "Sake Nguyệt", "Thi công hoàn thiện"
+  amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
+  type: varchar("type", { length: 20 }).notNull().default("payment"), // payment, refund, adjustment
+  status: varchar("status", { length: 20 }).notNull().default("completed"), // pending, completed, cancelled
+  paymentDate: timestamp("payment_date").notNull().defaultNow(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Relations
 export const clientsRelations = relations(clients, ({ many, one }) => ({
   inquiries: many(inquiries),
   interactions: many(interactions),
   deals: many(deals),
+  transactions: many(transactions),
   referredBy: one(clients, {
     fields: [clients.referredById],
     references: [clients.id],
@@ -270,6 +286,13 @@ export const dealsRelations = relations(deals, ({ one }) => ({
   createdBy: one(users, {
     fields: [deals.createdBy],
     references: [users.id],
+  }),
+}));
+
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+  client: one(clients, {
+    fields: [transactions.clientId],
+    references: [clients.id],
   }),
 }));
 
@@ -339,6 +362,12 @@ export const insertDealSchema = createInsertSchema(deals).omit({
   updatedAt: true,
 });
 
+export const insertTransactionSchema = createInsertSchema(transactions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -372,3 +401,6 @@ export type Interaction = typeof interactions.$inferSelect;
 
 export type InsertDeal = z.infer<typeof insertDealSchema>;
 export type Deal = typeof deals.$inferSelect;
+
+export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
+export type Transaction = typeof transactions.$inferSelect;
