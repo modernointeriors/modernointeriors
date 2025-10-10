@@ -52,6 +52,7 @@ const clientSchema = z.object({
   phone: z.string().optional(),
   company: z.string().optional(),
   address: z.string().optional(),
+  dateOfBirth: z.string().optional(),
   stage: z.enum(["lead", "prospect", "contract", "delivery", "aftercare"]).default("lead"),
   status: z.enum(["active", "inactive", "archived"]).default("active"),
   tier: z.enum(["vip", "silver", "gold", "platinum"]).default("silver"),
@@ -61,6 +62,8 @@ const clientSchema = z.object({
   referralCount: z.number().optional(),
   referralRevenue: z.string().optional(),
   referralCommission: z.string().optional(),
+  warrantyStatus: z.enum(["none", "active", "expired"]).default("none"),
+  warrantyExpiry: z.string().optional(),
   tags: z.array(z.string()).default([]),
   notes: z.string().optional(),
 });
@@ -1531,6 +1534,75 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={clientForm.control}
+                      name="dateOfBirth"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('crm.dateOfBirth')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="date" data-testid="input-client-dob" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={clientForm.control}
+                      name="totalSpending"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('crm.totalSpending')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" placeholder="0" data-testid="input-client-spending" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={clientForm.control}
+                      name="warrantyStatus"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('crm.warrantyStatus')}</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-client-warranty">
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="none">{t('crm.warranty.none')}</SelectItem>
+                              <SelectItem value="active">{t('crm.warranty.active')}</SelectItem>
+                              <SelectItem value="expired">{t('crm.warranty.expired')}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={clientForm.control}
+                      name="warrantyExpiry"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('crm.warrantyExpiry')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="date" data-testid="input-client-warranty-expiry" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={clientForm.control}
                       name="stage"
                       render={({ field }) => (
                         <FormItem>
@@ -1643,7 +1715,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         </div>
 
         <Card>
-          <CardContent className="p-0">
+          <CardContent className="p-0 relative">
+            <div className="absolute top-2 left-3 text-xs text-muted-foreground">
+              {t('crm.lastUpdated')}: {new Date().toLocaleString('vi-VN')}
+            </div>
             {clientsLoading ? (
               <div className="p-6">
                 <div className="space-y-4">
@@ -1673,6 +1748,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <TableHead>{t('crm.phone')}</TableHead>
                       <TableHead>{t('crm.company')}</TableHead>
                       <TableHead>{t('crm.address')}</TableHead>
+                      <TableHead>{t('crm.dateOfBirth')}</TableHead>
+                      <TableHead>{t('crm.totalSpending')}</TableHead>
+                      <TableHead>{t('crm.warrantyStatus')}</TableHead>
                       <TableHead>{t('crm.pipelineStage')}</TableHead>
                       <TableHead>{t('crm.customerTier')}</TableHead>
                       <TableHead>{t('crm.status')}</TableHead>
@@ -1693,6 +1771,30 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <TableCell className="text-sm">{client.company || "—"}</TableCell>
                         <TableCell className="text-sm max-w-[200px] truncate" title={client.address || ""}>
                           {client.address || "—"}
+                        </TableCell>
+                        <TableCell className="text-sm whitespace-nowrap">
+                          {client.dateOfBirth ? new Date(client.dateOfBirth).toLocaleDateString('vi-VN') : "—"}
+                        </TableCell>
+                        <TableCell className="text-sm whitespace-nowrap">
+                          {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </TableCell>
+                        <TableCell>
+                          <Select
+                            value={client.warrantyStatus || "none"}
+                            onValueChange={(value) => updateClientMutation.mutate({ 
+                              id: client.id, 
+                              warrantyStatus: value as "none" | "active" | "expired" 
+                            })}
+                          >
+                            <SelectTrigger className="w-28" data-testid={`select-client-warranty-${client.id}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">{t('crm.warranty.none')}</SelectItem>
+                              <SelectItem value="active">{t('crm.warranty.active')}</SelectItem>
+                              <SelectItem value="expired">{t('crm.warranty.expired')}</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </TableCell>
                         <TableCell>
                           <Select
