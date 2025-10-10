@@ -439,6 +439,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  const updateClientMutation = useMutation({
+    mutationFn: async ({ id, ...updates }: { id: string; [key: string]: any }) => {
+      const response = await apiRequest('PUT', `/api/clients/${id}`, updates);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
+      toast({ title: "Client updated successfully" });
+    },
+  });
+
   const updateInquiryMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const response = await apiRequest('PUT', `/api/inquiries/${id}`, { status });
@@ -1639,79 +1651,108 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <p className="text-muted-foreground">Add your first client to get started.</p>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Client</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Pipeline Stage</TableHead>
-                    <TableHead>Tier</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {clients.map((client) => (
-                    <TableRow key={client.id} data-testid={`row-client-${client.id}`}>
-                      <TableCell>
-                        <p className="font-light">
-                          {client.firstName} {client.lastName}
-                        </p>
-                      </TableCell>
-                      <TableCell>{client.email}</TableCell>
-                      <TableCell>{client.company || "—"}</TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={
-                            client.stage === "lead" ? "outline" :
-                            client.stage === "prospect" ? "default" :
-                            client.stage === "contract" ? "default" :
-                            client.stage === "delivery" ? "default" : "secondary"
-                          }
-                          className="capitalize"
-                        >
-                          {client.stage || "lead"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge 
-                          className={
-                            client.tier === "vip" ? "bg-purple-500/20 text-purple-300 border-purple-500/50" :
-                            client.tier === "platinum" ? "bg-blue-500/20 text-blue-300 border-blue-500/50" :
-                            client.tier === "gold" ? "bg-yellow-500/20 text-yellow-300 border-yellow-500/50" :
-                            "bg-gray-500/20 text-gray-300 border-gray-500/50"
-                          }
-                        >
-                          {client.tier?.toUpperCase() || "SILVER"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={
-                            client.status === "active" ? "default" : 
-                            client.status === "inactive" ? "outline" : "secondary"
-                          }
-                          className="capitalize"
-                        >
-                          {client.status || "active"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{formatDate(client.createdAt)}</TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          onClick={() => handleEditClient(client)}
-                          data-testid={`button-edit-client-${client.id}`}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Company</TableHead>
+                      <TableHead>Address</TableHead>
+                      <TableHead>Pipeline Stage</TableHead>
+                      <TableHead>Tier</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {clients.map((client) => (
+                      <TableRow key={client.id} data-testid={`row-client-${client.id}`}>
+                        <TableCell>
+                          <p className="font-light whitespace-nowrap">
+                            {client.firstName} {client.lastName}
+                          </p>
+                        </TableCell>
+                        <TableCell className="text-sm">{client.email}</TableCell>
+                        <TableCell className="text-sm">{client.phone || "—"}</TableCell>
+                        <TableCell className="text-sm">{client.company || "—"}</TableCell>
+                        <TableCell className="text-sm max-w-[200px] truncate" title={client.address || ""}>
+                          {client.address || "—"}
+                        </TableCell>
+                        <TableCell>
+                          <Select
+                            value={client.stage || "lead"}
+                            onValueChange={(value) => updateClientMutation.mutate({ 
+                              id: client.id, 
+                              stage: value as "lead" | "prospect" | "contract" | "delivery" | "aftercare" 
+                            })}
+                          >
+                            <SelectTrigger className="w-32" data-testid={`select-client-stage-${client.id}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="lead">Lead</SelectItem>
+                              <SelectItem value="prospect">Prospect</SelectItem>
+                              <SelectItem value="contract">Contract</SelectItem>
+                              <SelectItem value="delivery">Delivery</SelectItem>
+                              <SelectItem value="aftercare">Aftercare</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell>
+                          <Select
+                            value={client.tier || "silver"}
+                            onValueChange={(value) => updateClientMutation.mutate({ 
+                              id: client.id, 
+                              tier: value as "silver" | "gold" | "platinum" | "vip" 
+                            })}
+                          >
+                            <SelectTrigger className="w-28" data-testid={`select-client-tier-${client.id}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="silver">Silver</SelectItem>
+                              <SelectItem value="gold">Gold</SelectItem>
+                              <SelectItem value="platinum">Platinum</SelectItem>
+                              <SelectItem value="vip">VIP</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell>
+                          <Select
+                            value={client.status || "active"}
+                            onValueChange={(value) => updateClientMutation.mutate({ 
+                              id: client.id, 
+                              status: value as "active" | "inactive" | "archived" 
+                            })}
+                          >
+                            <SelectTrigger className="w-28" data-testid={`select-client-status-${client.id}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="active">Active</SelectItem>
+                              <SelectItem value="inactive">Inactive</SelectItem>
+                              <SelectItem value="archived">Archived</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="text-sm whitespace-nowrap">{formatDate(client.createdAt)}</TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleEditClient(client)}
+                            data-testid={`button-edit-client-${client.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </CardContent>
         </Card>
