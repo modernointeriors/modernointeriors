@@ -211,6 +211,18 @@ const translations = {
     'crm.status.active': 'Active',
     'crm.status.inactive': 'Inactive',
     'crm.status.archived': 'Archived',
+    
+    // Additional CRM Fields
+    'crm.dateOfBirth': 'Date of Birth',
+    'crm.totalSpending': 'Total Revenue',
+    'crm.warrantyStatus': 'Warranty Status',
+    'crm.warrantyExpiry': 'Warranty Expiry',
+    'crm.lastUpdated': 'Last Updated',
+    
+    // Warranty Status
+    'crm.warranty.none': 'None',
+    'crm.warranty.active': 'Active',
+    'crm.warranty.expired': 'Expired',
   },
   vi: {
     // Navigation
@@ -411,6 +423,18 @@ const translations = {
     'crm.status.active': 'Hoạt Động',
     'crm.status.inactive': 'Không Hoạt Động',
     'crm.status.archived': 'Lưu Trữ',
+    
+    // Additional CRM Fields
+    'crm.dateOfBirth': 'Ngày Sinh',
+    'crm.totalSpending': 'Doanh Số',
+    'crm.warrantyStatus': 'Tình Trạng Bảo Hành',
+    'crm.warrantyExpiry': 'Ngày Hết Hạn Bảo Hành',
+    'crm.lastUpdated': 'Cập Nhật Lần Cuối',
+    
+    // Warranty Status
+    'crm.warranty.none': 'Không Có',
+    'crm.warranty.active': 'Đang Bảo Hành',
+    'crm.warranty.expired': 'Hết Hạn',
   }
 };
 
