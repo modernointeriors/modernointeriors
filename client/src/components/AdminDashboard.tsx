@@ -2032,6 +2032,49 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           </Dialog>
         </div>
 
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <Card className="bg-black border-white/10 rounded-none">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Tổng khách hàng</p>
+                  <p className="text-2xl font-semibold mt-1">{clients.length}</p>
+                </div>
+                <Users className="h-8 w-8 text-muted-foreground" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-black border-white/10 rounded-none">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Tổng doanh thu</p>
+                  <p className="text-2xl font-semibold mt-1">
+                    {clients.reduce((sum, c) => sum + (parseFloat(c.totalSpending || "0")), 0).toLocaleString('vi-VN')} đ
+                  </p>
+                </div>
+                <TrendingUp className="h-8 w-8 text-muted-foreground" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-black border-white/10 rounded-none">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Tổng số lần thanh toán</p>
+                  <p className="text-2xl font-semibold mt-1">
+                    {clients.reduce((sum, c) => sum + (c.orderCount || 0), 0)}
+                  </p>
+                </div>
+                <Star className="h-8 w-8 text-muted-foreground" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         <Card>
           <CardContent className="p-0">
             {clientsLoading ? (
