@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -537,6 +537,146 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete category" });
+    }
+  });
+
+  // CRM: Interactions routes
+  app.get("/api/interactions", async (req, res) => {
+    try {
+      const { clientId } = req.query;
+      const interactions = await storage.getInteractions(clientId as string);
+      res.json(interactions);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch interactions" });
+    }
+  });
+
+  app.get("/api/interactions/:id", async (req, res) => {
+    try {
+      const interaction = await storage.getInteraction(req.params.id);
+      if (!interaction) {
+        return res.status(404).json({ message: "Interaction not found" });
+      }
+      res.json(interaction);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch interaction" });
+    }
+  });
+
+  app.post("/api/interactions", async (req, res) => {
+    try {
+      const validatedData = insertInteractionSchema.parse(req.body);
+      const interaction = await storage.createInteraction(validatedData);
+      res.status(201).json(interaction);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create interaction" });
+    }
+  });
+
+  app.put("/api/interactions/:id", async (req, res) => {
+    try {
+      const validatedData = insertInteractionSchema.partial().parse(req.body);
+      const interaction = await storage.updateInteraction(req.params.id, validatedData);
+      res.json(interaction);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update interaction" });
+    }
+  });
+
+  app.delete("/api/interactions/:id", async (req, res) => {
+    try {
+      await storage.deleteInteraction(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete interaction" });
+    }
+  });
+
+  // CRM: Deals routes
+  app.get("/api/deals", async (req, res) => {
+    try {
+      const { clientId, stage } = req.query;
+      const filters: any = {};
+      if (clientId) filters.clientId = clientId as string;
+      if (stage) filters.stage = stage as string;
+      
+      const deals = await storage.getDeals(filters);
+      res.json(deals);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch deals" });
+    }
+  });
+
+  app.get("/api/deals/:id", async (req, res) => {
+    try {
+      const deal = await storage.getDeal(req.params.id);
+      if (!deal) {
+        return res.status(404).json({ message: "Deal not found" });
+      }
+      res.json(deal);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch deal" });
+    }
+  });
+
+  app.post("/api/deals", async (req, res) => {
+    try {
+      const validatedData = insertDealSchema.parse(req.body);
+      const deal = await storage.createDeal(validatedData);
+      res.status(201).json(deal);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create deal" });
+    }
+  });
+
+  app.put("/api/deals/:id", async (req, res) => {
+    try {
+      const validatedData = insertDealSchema.partial().parse(req.body);
+      const deal = await storage.updateDeal(req.params.id, validatedData);
+      res.json(deal);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update deal" });
+    }
+  });
+
+  app.delete("/api/deals/:id", async (req, res) => {
+    try {
+      await storage.deleteDeal(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete deal" });
+    }
+  });
+
+  // CRM: Analytics routes
+  app.get("/api/clients/:id/referrals", async (req, res) => {
+    try {
+      const referrals = await storage.getClientReferrals(req.params.id);
+      res.json(referrals);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch referrals" });
+    }
+  });
+
+  app.post("/api/clients/:id/update-tier", async (req, res) => {
+    try {
+      await storage.updateClientTier(req.params.id);
+      const updatedClient = await storage.getClient(req.params.id);
+      res.json(updatedClient);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update client tier" });
     }
   });
 
