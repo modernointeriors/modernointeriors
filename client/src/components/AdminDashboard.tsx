@@ -1445,9 +1445,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-sans font-light">{t('crm.clientManagement')}</h2>
-          <Dialog open={isClientDialogOpen} onOpenChange={setIsClientDialogOpen}>
+          <Dialog open={isClientDialogOpen} onOpenChange={(open) => {
+            setIsClientDialogOpen(open);
+            if (!open) {
+              setEditingClient(null);
+              clientForm.reset();
+            }
+          }}>
             <DialogTrigger asChild>
-              <Button data-testid="button-add-client">
+              <Button 
+                onClick={() => {
+                  setEditingClient(null);
+                  clientForm.reset();
+                }}
+                data-testid="button-add-client"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 {t('crm.addClient')}
               </Button>
@@ -1468,7 +1480,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>{t('crm.firstName')} *</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-client-first-name" />
+                            <Input {...field} placeholder="Nguyễn" data-testid="input-client-first-name" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1482,7 +1494,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>{t('crm.lastName')} *</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-client-last-name" />
+                            <Input {...field} placeholder="Văn A" data-testid="input-client-last-name" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1497,7 +1509,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <FormItem>
                         <FormLabel>{t('crm.email')} *</FormLabel>
                         <FormControl>
-                          <Input {...field} type="email" data-testid="input-client-email" />
+                          <Input {...field} type="email" placeholder="email@example.com" data-testid="input-client-email" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -1512,7 +1524,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>{t('crm.phone')}</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-client-phone" />
+                            <Input {...field} placeholder="0901234567" data-testid="input-client-phone" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1526,7 +1538,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>{t('crm.company')}</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-client-company" />
+                            <Input {...field} placeholder="ABC Company" data-testid="input-client-company" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1541,7 +1553,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <FormItem>
                         <FormLabel>{t('crm.address')}</FormLabel>
                         <FormControl>
-                          <Input {...field} data-testid="input-client-address" />
+                          <Input {...field} placeholder="123 Nguyễn Huệ, Quận 1, TP.HCM" data-testid="input-client-address" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -1698,7 +1710,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <FormItem>
                         <FormLabel>{t('crm.notes')}</FormLabel>
                         <FormControl>
-                          <Textarea {...field} rows={3} data-testid="input-client-notes" />
+                          <Textarea {...field} rows={3} placeholder="Ghi chú về khách hàng..." data-testid="input-client-notes" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
