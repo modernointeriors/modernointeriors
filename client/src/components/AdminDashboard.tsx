@@ -271,7 +271,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       email: "",
       phone: "",
       company: "",
-      status: "lead",
+      address: "",
+      stage: "lead",
+      status: "active",
+      tier: "silver",
+      totalSpending: "0",
+      orderCount: 0,
+      referredById: "",
+      referralCount: 0,
+      referralRevenue: "0",
+      referralCommission: "0",
+      tags: [],
       notes: "",
     },
   });
@@ -1404,7 +1414,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </DialogTitle>
               </DialogHeader>
               <Form {...clientForm}>
-                <form onSubmit={clientForm.handleSubmit(onClientSubmit)} className="space-y-4">
+                <form onSubmit={clientForm.handleSubmit(onClientSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto px-1">
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={clientForm.control}
@@ -1449,6 +1459,101 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={clientForm.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-client-phone" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={clientForm.control}
+                      name="company"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Company</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-client-company" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormField
+                    control={clientForm.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Address</FormLabel>
+                        <FormControl>
+                          <Input {...field} data-testid="input-client-address" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={clientForm.control}
+                      name="stage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Pipeline Stage</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-client-stage">
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="lead">Lead</SelectItem>
+                              <SelectItem value="prospect">Prospect</SelectItem>
+                              <SelectItem value="contract">Contract</SelectItem>
+                              <SelectItem value="delivery">Delivery</SelectItem>
+                              <SelectItem value="aftercare">Aftercare</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={clientForm.control}
+                      name="tier"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Customer Tier</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-client-tier">
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="silver">Silver</SelectItem>
+                              <SelectItem value="gold">Gold</SelectItem>
+                              <SelectItem value="platinum">Platinum</SelectItem>
+                              <SelectItem value="vip">VIP</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <FormField
                     control={clientForm.control}
                     name="status"
@@ -1462,9 +1567,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="lead">Lead</SelectItem>
                             <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                            <SelectItem value="archived">Archived</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -1472,7 +1577,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <div className="flex justify-end space-x-2">
+                  <FormField
+                    control={clientForm.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Notes</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={3} data-testid="input-client-notes" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="flex justify-end space-x-2 pt-4 border-t">
                     <Button
                       type="button"
                       variant="outline"
@@ -1526,6 +1645,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead>Client</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Company</TableHead>
+                    <TableHead>Pipeline Stage</TableHead>
+                    <TableHead>Tier</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -1544,11 +1665,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <TableCell>
                         <Badge 
                           variant={
-                            client.status === "active" ? "default" : 
-                            client.status === "completed" ? "secondary" : "outline"
+                            client.stage === "lead" ? "outline" :
+                            client.stage === "prospect" ? "default" :
+                            client.stage === "contract" ? "default" :
+                            client.stage === "delivery" ? "default" : "secondary"
+                          }
+                          className="capitalize"
+                        >
+                          {client.stage || "lead"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge 
+                          className={
+                            client.tier === "vip" ? "bg-purple-500/20 text-purple-300 border-purple-500/50" :
+                            client.tier === "platinum" ? "bg-blue-500/20 text-blue-300 border-blue-500/50" :
+                            client.tier === "gold" ? "bg-yellow-500/20 text-yellow-300 border-yellow-500/50" :
+                            "bg-gray-500/20 text-gray-300 border-gray-500/50"
                           }
                         >
-                          {client.status}
+                          {client.tier?.toUpperCase() || "SILVER"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={
+                            client.status === "active" ? "default" : 
+                            client.status === "inactive" ? "outline" : "secondary"
+                          }
+                          className="capitalize"
+                        >
+                          {client.status || "active"}
                         </Badge>
                       </TableCell>
                       <TableCell>{formatDate(client.createdAt)}</TableCell>
