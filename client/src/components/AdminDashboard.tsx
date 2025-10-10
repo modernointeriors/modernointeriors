@@ -1924,12 +1924,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Được giới thiệu bởi</label>
                         <p className="text-base mt-1">
-                          {viewingClient.referredById 
-                            ? (() => {
-                                const referrer = clients.find(c => c.id === viewingClient.referredById);
-                                return referrer ? `${referrer.firstName} ${referrer.lastName}` : "—";
-                              })()
-                            : "—"}
+                          {(() => {
+                            if (!viewingClient.referredById) return "—";
+                            const referrer = clients.find(c => c.id === viewingClient.referredById);
+                            return referrer ? `${referrer.firstName} ${referrer.lastName}` : "—";
+                          })()}
                         </p>
                       </div>
                       <div>
@@ -1997,11 +1996,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </div>
 
                   {/* Tags */}
-                  {viewingClient.tags && viewingClient.tags.length > 0 && (
+                  {viewingClient.tags && Array.isArray(viewingClient.tags) && viewingClient.tags.length > 0 && (
                     <div className="space-y-4">
                       <h3 className="text-lg font-medium border-b pb-2">{t('crm.tags')}</h3>
                       <div className="flex flex-wrap gap-2">
-                        {viewingClient.tags.map((tag, index) => (
+                        {viewingClient.tags.map((tag: string, index: number) => (
                           <Badge key={index} variant="secondary">{tag}</Badge>
                         ))}
                       </div>
