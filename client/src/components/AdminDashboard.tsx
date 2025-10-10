@@ -672,7 +672,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       email: client.email,
       phone: client.phone || "",
       company: client.company || "",
-      status: client.status as "lead" | "active" | "completed",
+      address: client.address || "",
+      stage: client.stage as "lead" | "prospect" | "contract" | "delivery" | "aftercare",
+      status: client.status as "active" | "inactive" | "archived",
+      tier: client.tier as "silver" | "gold" | "platinum" | "vip",
+      totalSpending: client.totalSpending || "0",
+      orderCount: client.orderCount || 0,
+      referredById: client.referredById || "",
+      referralCount: client.referralCount || 0,
+      referralRevenue: client.referralRevenue || "0",
+      referralCommission: client.referralCommission || "0",
+      tags: (client.tags as string[]) || [],
       notes: client.notes || "",
     });
     setIsClientDialogOpen(true);
@@ -688,7 +698,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const onClientSubmit = async (data: ClientFormData) => {
     if (editingClient) {
-      // Update client logic would go here
+      await updateClientMutation.mutateAsync({ id: editingClient.id, ...data });
+      setEditingClient(null);
+      setIsClientDialogOpen(false);
+      clientForm.reset();
     } else {
       await createClientMutation.mutateAsync(data);
     }
