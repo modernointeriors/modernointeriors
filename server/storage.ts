@@ -1,6 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
-  interactions, deals,
+  interactions, deals, transactions,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -11,7 +11,8 @@ import {
   type Partner, type InsertPartner,
   type Category, type InsertCategory,
   type Interaction, type InsertInteraction,
-  type Deal, type InsertDeal
+  type Deal, type InsertDeal,
+  type Transaction, type InsertTransaction
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -95,6 +96,13 @@ export interface IStorage {
   createDeal(deal: InsertDeal): Promise<Deal>;
   updateDeal(id: string, deal: Partial<InsertDeal>): Promise<Deal>;
   deleteDeal(id: string): Promise<void>;
+
+  // CRM: Transactions
+  getTransactions(clientId?: string): Promise<Transaction[]>;
+  getTransaction(id: string): Promise<Transaction | undefined>;
+  createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  updateTransaction(id: string, transaction: Partial<InsertTransaction>): Promise<Transaction>;
+  deleteTransaction(id: string): Promise<void>;
 
   // CRM: Analytics & Reporting
   getClientReferrals(clientId: string): Promise<Client[]>;
@@ -529,6 +537,106 @@ export class DatabaseStorage implements IStorage {
 
   async deleteDeal(id: string): Promise<void> {
     await db.delete(deals).where(eq(deals.id, id));
+  }
+
+  // CRM: Transactions
+  async getTransactions(clientId?: string): Promise<Transaction[]> {
+    const query = clientId
+      ? db.select().from(transactions).where(eq(transactions.clientId, clientId))
+      : db.select().from(transactions);
+    
+    return await query.orderBy(desc(transactions.createdAt));
+  }
+
+  async getTransaction(id: string): Promise<Transaction | undefined> {
+    const [transaction] = await db.select().from(transactions).where(eq(transactions.id, id));
+    return transaction || undefined;
+  }
+
+  async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
+    const [newTransaction] = await db.insert(transactions).values(transaction).returning();
+    
+    // Update client totalSpending and orderCount
+    if (newTransaction.clientId) {
+      const client = await this.getClient(newTransaction.clientId);
+      if (client) {
+        const currentSpending = parseFloat(client.totalSpending as string) || 0;
+        const newSpending = currentSpending + parseFloat(newTransaction.amount);
+        const newOrderCount = (client.orderCount || 0) + 1;
+        
+        await db
+          .update(clients)
+          .set({ 
+            totalSpending: newSpending.toString(),
+            orderCount: newOrderCount,
+            updatedAt: new Date()
+          })
+          .where(eq(clients.id, newTransaction.clientId));
+        
+        // Update tier based on new spending
+        await this.updateClientTier(newTransaction.clientId);
+      }
+    }
+    
+    return newTransaction;
+  }
+
+  async updateTransaction(id: string, transaction: Partial<InsertTransaction>): Promise<Transaction> {
+    const oldTransaction = await this.getTransaction(id);
+    const [updatedTransaction] = await db
+      .update(transactions)
+      .set({ ...transaction, updatedAt: new Date() })
+      .where(eq(transactions.id, id))
+      .returning();
+    
+    // Recalculate client spending if amount changed
+    if (oldTransaction && transaction.amount !== undefined && updatedTransaction.clientId) {
+      const client = await this.getClient(updatedTransaction.clientId);
+      if (client) {
+        const oldAmount = parseFloat(oldTransaction.amount);
+        const newAmount = parseFloat(updatedTransaction.amount);
+        const currentSpending = parseFloat(client.totalSpending as string) || 0;
+        const updatedSpending = currentSpending - oldAmount + newAmount;
+        
+        await db
+          .update(clients)
+          .set({ 
+            totalSpending: updatedSpending.toString(),
+            updatedAt: new Date()
+          })
+          .where(eq(clients.id, updatedTransaction.clientId));
+        
+        await this.updateClientTier(updatedTransaction.clientId);
+      }
+    }
+    
+    return updatedTransaction;
+  }
+
+  async deleteTransaction(id: string): Promise<void> {
+    const transaction = await this.getTransaction(id);
+    
+    if (transaction && transaction.clientId) {
+      const client = await this.getClient(transaction.clientId);
+      if (client) {
+        const currentSpending = parseFloat(client.totalSpending as string) || 0;
+        const updatedSpending = currentSpending - parseFloat(transaction.amount);
+        const newOrderCount = Math.max((client.orderCount || 0) - 1, 0);
+        
+        await db
+          .update(clients)
+          .set({ 
+            totalSpending: updatedSpending.toString(),
+            orderCount: newOrderCount,
+            updatedAt: new Date()
+          })
+          .where(eq(clients.id, transaction.clientId));
+        
+        await this.updateClientTier(transaction.clientId);
+      }
+    }
+    
+    await db.delete(transactions).where(eq(transactions.id, id));
   }
 
   // CRM: Analytics & Reporting
