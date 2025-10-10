@@ -1745,13 +1745,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <div>{t('admin.clients')}</div>
                           <div className="text-xs font-normal text-muted-foreground">{t('crm.email')}</div>
                         </TableHead>
-                        <TableHead className="w-[140px]">
-                          <div>{t('crm.phone')}</div>
-                          <div className="text-xs font-normal text-muted-foreground">{t('crm.company')}</div>
-                        </TableHead>
                         <TableHead className="w-[130px]">
-                          <div>{t('crm.address')}</div>
+                          <div>{t('crm.phone')}</div>
                           <div className="text-xs font-normal text-muted-foreground">{t('crm.dateOfBirth')}</div>
+                        </TableHead>
+                        <TableHead className="w-[140px]">
+                          <div>{t('crm.address')}</div>
+                          <div className="text-xs font-normal text-muted-foreground">{t('crm.company')}</div>
                         </TableHead>
                         <TableHead className="w-[110px]">
                           <div>{t('crm.totalSpending')}</div>
@@ -1777,16 +1777,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">{client.phone || "—"}</div>
-                            <div className="text-xs text-muted-foreground truncate max-w-[120px]" title={client.company || ""}>
-                              {client.company || "—"}
+                            <div className="text-xs text-muted-foreground">
+                              {client.dateOfBirth ? new Date(client.dateOfBirth).toLocaleDateString('vi-VN') : "—"}
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="text-sm truncate max-w-[110px]" title={client.address || ""}>
+                            <div className="text-sm truncate max-w-[120px]" title={client.address || ""}>
                               {client.address || "—"}
                             </div>
-                            <div className="text-xs text-muted-foreground">
-                              {client.dateOfBirth ? new Date(client.dateOfBirth).toLocaleDateString('vi-VN') : "—"}
+                            <div className="text-xs text-muted-foreground truncate max-w-[120px]" title={client.company || ""}>
+                              {client.company || "—"}
                             </div>
                           </TableCell>
                           <TableCell>
