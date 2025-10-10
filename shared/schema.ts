@@ -50,6 +50,7 @@ export const clients = pgTable("clients", {
   phone: text("phone"),
   company: text("company"),
   address: text("address"),
+  dateOfBirth: timestamp("date_of_birth"), // Ngày tháng năm sinh
   // CRM Pipeline Stage
   stage: varchar("stage", { length: 20 }).notNull().default("lead"), // lead, prospect, contract, delivery, aftercare
   status: varchar("status", { length: 20 }).notNull().default("active"), // active, inactive, archived
@@ -63,7 +64,9 @@ export const clients = pgTable("clients", {
   referralCount: integer("referral_count").notNull().default(0),
   referralRevenue: decimal("referral_revenue", { precision: 12, scale: 2 }).notNull().default("0"),
   referralCommission: decimal("referral_commission", { precision: 12, scale: 2 }).notNull().default("0"),
-  // Additional Info
+  // Warranty & Additional Info
+  warrantyStatus: varchar("warranty_status", { length: 30 }).default("none"), // none, active, expired
+  warrantyExpiry: timestamp("warranty_expiry"), // Ngày hết hạn bảo hành
   notes: text("notes"),
   tags: jsonb("tags").default([]), // Array of tag strings for flexible categorization
   createdAt: timestamp("created_at").notNull().defaultNow(),
