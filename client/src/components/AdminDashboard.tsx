@@ -705,13 +705,25 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   };
 
   const onClientSubmit = async (data: ClientFormData) => {
+    // Clean up empty strings for optional date fields
+    const cleanedData = {
+      ...data,
+      dateOfBirth: data.dateOfBirth && data.dateOfBirth.trim() !== "" ? data.dateOfBirth : undefined,
+      warrantyExpiry: data.warrantyExpiry && data.warrantyExpiry.trim() !== "" ? data.warrantyExpiry : undefined,
+      phone: data.phone && data.phone.trim() !== "" ? data.phone : undefined,
+      company: data.company && data.company.trim() !== "" ? data.company : undefined,
+      address: data.address && data.address.trim() !== "" ? data.address : undefined,
+      referredById: data.referredById && data.referredById.trim() !== "" ? data.referredById : undefined,
+      notes: data.notes && data.notes.trim() !== "" ? data.notes : undefined,
+    };
+
     if (editingClient) {
-      await updateClientMutation.mutateAsync({ id: editingClient.id, ...data });
+      await updateClientMutation.mutateAsync({ id: editingClient.id, ...cleanedData });
       setEditingClient(null);
       setIsClientDialogOpen(false);
       clientForm.reset();
     } else {
-      await createClientMutation.mutateAsync(data);
+      await createClientMutation.mutateAsync(cleanedData);
     }
   };
 
