@@ -1717,7 +1717,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
           {/* Client View Dialog */}
           <Dialog open={isClientViewDialogOpen} onOpenChange={setIsClientViewDialogOpen}>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-black/95 backdrop-blur-xl border border-white/20">
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-black/50 backdrop-blur-xl border border-white/20">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-light">
                   {t('crm.clientDetails')}
