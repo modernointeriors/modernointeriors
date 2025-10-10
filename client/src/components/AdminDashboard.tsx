@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal } from "@shared/schema";
 import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -51,7 +51,17 @@ const clientSchema = z.object({
   email: z.string().email("Valid email is required"),
   phone: z.string().optional(),
   company: z.string().optional(),
-  status: z.enum(["lead", "active", "completed"]).default("lead"),
+  address: z.string().optional(),
+  stage: z.enum(["lead", "prospect", "contract", "delivery", "aftercare"]).default("lead"),
+  status: z.enum(["active", "inactive", "archived"]).default("active"),
+  tier: z.enum(["vip", "silver", "gold", "platinum"]).default("silver"),
+  totalSpending: z.string().optional(),
+  orderCount: z.number().optional(),
+  referredById: z.string().optional(),
+  referralCount: z.number().optional(),
+  referralRevenue: z.string().optional(),
+  referralCommission: z.string().optional(),
+  tags: z.array(z.string()).default([]),
   notes: z.string().optional(),
 });
 
@@ -95,6 +105,39 @@ const partnerSchema = z.object({
   active: z.boolean().default(true),
 });
 
+const interactionSchema = z.object({
+  clientId: z.string().min(1, "Client is required"),
+  type: z.enum(["visit", "meeting", "site_survey", "design", "acceptance", "call", "email"]),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  date: z.string().min(1, "Date is required"),
+  duration: z.number().optional(),
+  location: z.string().optional(),
+  assignedTo: z.string().optional(),
+  outcome: z.string().optional(),
+  nextAction: z.string().optional(),
+  nextActionDate: z.string().optional(),
+  attachments: z.array(z.string()).default([]),
+  createdBy: z.string().optional(),
+});
+
+const dealSchema = z.object({
+  clientId: z.string().min(1, "Client is required"),
+  projectId: z.string().optional(),
+  title: z.string().min(1, "Title is required"),
+  value: z.string().min(1, "Value is required"),
+  stage: z.enum(["proposal", "negotiation", "contract", "delivery", "completed", "lost"]).default("proposal"),
+  probability: z.number().min(0).max(100).default(50),
+  expectedCloseDate: z.string().optional(),
+  actualCloseDate: z.string().optional(),
+  description: z.string().optional(),
+  terms: z.string().optional(),
+  notes: z.string().optional(),
+  lostReason: z.string().optional(),
+  assignedTo: z.string().optional(),
+  createdBy: z.string().optional(),
+});
+
 // Bilingual article schema for form
 const bilingualArticleSchema = z.object({
   titleEn: z.string().min(1, "English title is required"),
@@ -120,6 +163,8 @@ type ArticleFormData = InsertArticle;
 type BilingualArticleFormData = z.infer<typeof bilingualArticleSchema>;
 type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 type PartnerFormData = z.infer<typeof partnerSchema>;
+type InteractionFormData = z.infer<typeof interactionSchema>;
+type DealFormData = z.infer<typeof dealSchema>;
 
 interface AdminDashboardProps {
   activeTab: string;
