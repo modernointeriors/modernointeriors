@@ -678,6 +678,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       phone: client.phone || "",
       company: client.company || "",
       address: client.address || "",
+      dateOfBirth: client.dateOfBirth || "",
       stage: client.stage as "lead" | "prospect" | "contract" | "delivery" | "aftercare",
       status: client.status as "active" | "inactive" | "archived",
       tier: client.tier as "silver" | "gold" | "platinum" | "vip",
@@ -687,6 +688,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       referralCount: client.referralCount || 0,
       referralRevenue: client.referralRevenue || "0",
       referralCommission: client.referralCommission || "0",
+      warrantyStatus: (client.warrantyStatus as "none" | "active" | "expired") || "none",
+      warrantyExpiry: client.warrantyExpiry || "",
       tags: (client.tags as string[]) || [],
       notes: client.notes || "",
     });
