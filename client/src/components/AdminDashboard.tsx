@@ -671,6 +671,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const handleEditClient = (client: Client) => {
     setEditingClient(client);
+    
+    // Format dates for input[type="date"] which expects YYYY-MM-DD
+    const formatDateForInput = (dateValue: any) => {
+      if (!dateValue) return "";
+      const date = new Date(dateValue);
+      return date.toISOString().split('T')[0];
+    };
+    
     clientForm.reset({
       firstName: client.firstName,
       lastName: client.lastName,
@@ -678,7 +686,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       phone: client.phone || "",
       company: client.company || "",
       address: client.address || "",
-      dateOfBirth: client.dateOfBirth || "",
+      dateOfBirth: formatDateForInput(client.dateOfBirth),
       stage: client.stage as "lead" | "prospect" | "contract" | "delivery" | "aftercare",
       status: client.status as "active" | "inactive" | "archived",
       tier: client.tier as "silver" | "gold" | "platinum" | "vip",
@@ -689,7 +697,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       referralRevenue: client.referralRevenue || "0",
       referralCommission: client.referralCommission || "0",
       warrantyStatus: (client.warrantyStatus as "none" | "active" | "expired") || "none",
-      warrantyExpiry: client.warrantyExpiry || "",
+      warrantyExpiry: formatDateForInput(client.warrantyExpiry),
       tags: (client.tags as string[]) || [],
       notes: client.notes || "",
     });
@@ -1577,7 +1585,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>{t('crm.dateOfBirth')}</FormLabel>
                           <FormControl>
-                            <Input {...field} type="date" data-testid="input-client-dob" />
+                            <Input {...field} type="date" maxLength={10} data-testid="input-client-dob" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1607,7 +1615,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>{t('crm.warrantyExpiry')}</FormLabel>
                           <FormControl>
-                            <Input {...field} type="date" data-testid="input-client-warranty-expiry" />
+                            <Input {...field} type="date" maxLength={10} data-testid="input-client-warranty-expiry" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
