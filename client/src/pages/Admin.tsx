@@ -44,7 +44,7 @@ export default function Admin() {
   return (
     <Layout>
       <div className="min-h-screen bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="max-w-[98%] mx-auto px-2 sm:px-4 lg:px-6 py-24">
           {/* Header Section with Glass Morphism */}
           <div className="mb-12">
             <div className="relative">
