@@ -266,6 +266,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     enabled: !!editingClient?.id,
   });
 
+  // Query for all transactions (for total revenue calculation)
+  const { data: allTransactions = [] } = useQuery<any[]>({
+    queryKey: ['/api/transactions'],
+    queryFn: async () => {
+      const response = await fetch('/api/transactions');
+      return response.json();
+    },
+  });
+
   // Forms
   const projectForm = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -687,7 +696,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', editingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
       toast({ title: "Đã thêm giao dịch thành công" });
@@ -709,7 +718,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', editingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       toast({ title: "Đã cập nhật giao dịch thành công" });
       setEditingTransaction(null);
@@ -730,7 +739,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await apiRequest('DELETE', `/api/transactions/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', editingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       toast({ title: "Đã xóa giao dịch thành công" });
     },
@@ -2332,7 +2341,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <p className="text-sm text-muted-foreground">Tổng doanh thu</p>
                   <p className="text-2xl font-semibold mt-1">
-                    {clients.reduce((sum, c) => sum + (parseFloat(c.totalSpending || "0")), 0).toLocaleString('vi-VN')} đ
+                    {allTransactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0).toLocaleString('vi-VN')} đ
                   </p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-muted-foreground" />
@@ -2346,7 +2355,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <p className="text-sm text-muted-foreground">Tổng số lần thanh toán</p>
                   <p className="text-2xl font-semibold mt-1">
-                    {clients.reduce((sum, c) => sum + (c.orderCount || 0), 0)}
+                    {allTransactions.length}
                   </p>
                 </div>
                 <Star className="h-8 w-8 text-muted-foreground" />
