@@ -146,10 +146,12 @@ const dealSchema = z.object({
 const transactionSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   amount: z.string().min(1, "Amount is required"),
-  description: z.string().min(1, "Description is required"),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
   type: z.string().optional(),
   status: z.string().optional(),
-  transactionDate: z.string().min(1, "Date is required"),
+  paymentDate: z.string().min(1, "Date is required"),
+  notes: z.string().optional(),
 });
 
 // Bilingual article schema for form
@@ -389,10 +391,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     defaultValues: {
       clientId: "",
       amount: "",
+      title: "",
       description: "",
       type: "",
       status: "",
-      transactionDate: new Date().toISOString().split('T')[0],
+      paymentDate: new Date().toISOString().split('T')[0],
+      notes: "",
     },
   });
 
@@ -971,10 +975,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     transactionForm.reset({
       clientId: transaction.clientId,
       amount: transaction.amount,
-      description: transaction.description,
+      title: transaction.title,
+      description: transaction.description || "",
       type: transaction.type || "",
       status: transaction.status || "",
-      transactionDate: transaction.transactionDate ? new Date(transaction.transactionDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      paymentDate: transaction.paymentDate ? new Date(transaction.paymentDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      notes: transaction.notes || "",
     });
     setIsTransactionDialogOpen(true);
   };
@@ -2071,10 +2077,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           transactionForm.reset({
                             clientId: viewingClient.id,
                             amount: "",
+                            title: "",
                             description: "",
                             type: "",
                             status: "",
-                            transactionDate: new Date().toISOString().split('T')[0],
+                            paymentDate: new Date().toISOString().split('T')[0],
+                            notes: "",
                           });
                           setIsTransactionDialogOpen(true);
                         }}
@@ -2095,7 +2103,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <div className="flex-1">
                               <div className="flex gap-3 items-center">
                                 <div className="px-3 py-1 bg-white/10 rounded-none">
-                                  <p className="font-medium">{transaction.description}</p>
+                                  <p className="font-medium">{transaction.title}</p>
                                 </div>
                                 <div className="px-3 py-1 bg-white/10 rounded-none">
                                   <p className="text-sm">{transaction.type || "—"}</p>
@@ -2105,16 +2113,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 </div>
                               </div>
                               <p className="text-xs text-muted-foreground mt-2">
-                                {new Date(transaction.transactionDate).toLocaleDateString('vi-VN')}
+                                {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
                                 {transaction.status && ` • ${transaction.status}`}
-                                {transaction.id && ` • ID: ${transaction.id.slice(0, 13)}`}
+                                {transaction.description && ` • ${transaction.description}`}
                               </p>
                             </div>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                if (confirm(`Xóa giao dịch "${transaction.description}"?`)) {
+                                if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
                                   deleteTransactionMutation.mutate(transaction.id);
                                 }
                               }}
@@ -2175,12 +2183,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <form onSubmit={transactionForm.handleSubmit(onTransactionSubmit)} className="space-y-4">
                   <FormField
                     control={transactionForm.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tiêu đề *</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="VD: Thanh toán đợt 1" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={transactionForm.control}
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Mô tả</FormLabel>
+                        <FormLabel>Mô tả chi tiết</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="VD: Thanh toán thiết kế nội thất" />
+                          <Input {...field} placeholder="VD: Thanh toán thiết kế nội thất phòng khách" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -2190,12 +2212,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={transactionForm.control}
-                      name="type"
+                      name="amount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Loại</FormLabel>
+                          <FormLabel>Số tiền (đ) *</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="VD: Deposit, Final" />
+                            <Input {...field} type="number" placeholder="0" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -2204,12 +2226,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={transactionForm.control}
-                      name="amount"
+                      name="type"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Số tiền (đ)</FormLabel>
+                          <FormLabel>Loại</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" placeholder="0" />
+                            <Input {...field} placeholder="payment, refund" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -2225,7 +2247,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>Trạng thái</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="VD: Completed, Pending" />
+                            <Input {...field} placeholder="completed, pending" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -2234,10 +2256,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={transactionForm.control}
-                      name="transactionDate"
+                      name="paymentDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Ngày giao dịch</FormLabel>
+                          <FormLabel>Ngày thanh toán *</FormLabel>
                           <FormControl>
                             <Input {...field} type="date" />
                           </FormControl>
@@ -2246,6 +2268,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       )}
                     />
                   </div>
+
+                  <FormField
+                    control={transactionForm.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ghi chú</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ghi chú thêm (optional)" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="flex justify-end space-x-2 pt-4">
                     <Button
