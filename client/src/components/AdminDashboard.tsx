@@ -1972,7 +1972,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <h3 className="text-lg font-medium border-b pb-2">Lịch sử giao dịch</h3>
                     {transactionsLoading ? (
                       <div className="text-sm text-muted-foreground">Đang tải...</div>
-                    ) : transactions.length === 0 ? (
+                    ) : !Array.isArray(transactions) || transactions.length === 0 ? (
                       <div className="text-sm text-muted-foreground">Chưa có giao dịch nào</div>
                     ) : (
                       <div className="space-y-2">
