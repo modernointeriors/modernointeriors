@@ -313,6 +313,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       phone: "",
       company: "",
       address: "",
+      dateOfBirth: "",
+      warrantyExpiry: "",
       stage: "lead",
       status: "active",
       tier: "silver",
