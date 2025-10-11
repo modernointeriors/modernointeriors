@@ -143,6 +143,15 @@ const dealSchema = z.object({
   createdBy: z.string().optional(),
 });
 
+const transactionSchema = z.object({
+  clientId: z.string().min(1, "Client is required"),
+  amount: z.string().min(1, "Amount is required"),
+  description: z.string().min(1, "Description is required"),
+  type: z.string().optional(),
+  status: z.string().optional(),
+  transactionDate: z.string().min(1, "Date is required"),
+});
+
 // Bilingual article schema for form
 const bilingualArticleSchema = z.object({
   titleEn: z.string().min(1, "English title is required"),
@@ -170,6 +179,7 @@ type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 type PartnerFormData = z.infer<typeof partnerSchema>;
 type InteractionFormData = z.infer<typeof interactionSchema>;
 type DealFormData = z.infer<typeof dealSchema>;
+type TransactionFormData = z.infer<typeof transactionSchema>;
 
 interface AdminDashboardProps {
   activeTab: string;
@@ -195,6 +205,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
   const [referralOpen, setReferralOpen] = useState(false);
+  const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<any | null>(null);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -369,6 +381,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       description: "",
       order: 0,
       active: true,
+    },
+  });
+
+  const transactionForm = useForm<TransactionFormData>({
+    resolver: zodResolver(transactionSchema),
+    defaultValues: {
+      clientId: "",
+      amount: "",
+      description: "",
+      type: "",
+      status: "",
+      transactionDate: new Date().toISOString().split('T')[0],
     },
   });
 
@@ -652,6 +676,69 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  // Transaction mutations
+  const createTransactionMutation = useMutation({
+    mutationFn: async (data: TransactionFormData) => {
+      const response = await apiRequest('POST', '/api/transactions', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions', viewingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
+      toast({ title: "Transaction created successfully" });
+      transactionForm.reset();
+      setIsTransactionDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating transaction",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateTransactionMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<TransactionFormData> }) => {
+      const response = await apiRequest('PUT', `/api/transactions/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions', viewingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
+      toast({ title: "Transaction updated successfully" });
+      setEditingTransaction(null);
+      transactionForm.reset();
+      setIsTransactionDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating transaction",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteTransactionMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/transactions/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions', viewingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
+      toast({ title: "Transaction deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting transaction",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   // Handlers
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
@@ -876,6 +963,27 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data });
     } else {
       await createPartnerMutation.mutateAsync(data);
+    }
+  };
+
+  const handleEditTransaction = (transaction: any) => {
+    setEditingTransaction(transaction);
+    transactionForm.reset({
+      clientId: transaction.clientId,
+      amount: transaction.amount,
+      description: transaction.description,
+      type: transaction.type || "",
+      status: transaction.status || "",
+      transactionDate: transaction.transactionDate ? new Date(transaction.transactionDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+    });
+    setIsTransactionDialogOpen(true);
+  };
+
+  const onTransactionSubmit = async (data: TransactionFormData) => {
+    if (editingTransaction) {
+      await updateTransactionMutation.mutateAsync({ id: editingTransaction.id, data });
+    } else {
+      await createTransactionMutation.mutateAsync(data);
     }
   };
 
@@ -1953,7 +2061,29 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   {/* Transactions */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium border-b pb-2">Lịch sử giao dịch</h3>
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <h3 className="text-lg font-medium">Lịch sử giao dịch</h3>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setEditingTransaction(null);
+                          transactionForm.reset({
+                            clientId: viewingClient.id,
+                            amount: "",
+                            description: "",
+                            type: "",
+                            status: "",
+                            transactionDate: new Date().toISOString().split('T')[0],
+                          });
+                          setIsTransactionDialogOpen(true);
+                        }}
+                        className="bg-green-600 hover:bg-green-700 text-white border-none rounded-none"
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Thêm giao dịch
+                      </Button>
+                    </div>
                     {transactionsLoading ? (
                       <div className="text-sm text-muted-foreground">Đang tải...</div>
                     ) : !Array.isArray(transactions) || transactions.length === 0 ? (
@@ -1961,18 +2091,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     ) : (
                       <div className="space-y-2">
                         {transactions.map((transaction: any) => (
-                          <div key={transaction.id} className="flex justify-between items-center p-3 border rounded-none border-white/10 hover:border-white/30 transition-colors">
-                            <div>
-                              <p className="font-medium">{transaction.description}</p>
-                              <p className="text-sm text-muted-foreground">
+                          <div key={transaction.id} className="flex items-center gap-3 p-3 border rounded-none border-white/10 hover:border-white/30 transition-colors bg-white/5">
+                            <div className="flex-1">
+                              <div className="flex gap-3 items-center">
+                                <div className="px-3 py-1 bg-white/10 rounded-none">
+                                  <p className="font-medium">{transaction.description}</p>
+                                </div>
+                                <div className="px-3 py-1 bg-white/10 rounded-none">
+                                  <p className="text-sm">{transaction.type || "—"}</p>
+                                </div>
+                                <div className="px-3 py-1 bg-white/10 rounded-none">
+                                  <p className="font-semibold">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</p>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-2">
                                 {new Date(transaction.transactionDate).toLocaleDateString('vi-VN')}
-                                {transaction.type && ` • ${transaction.type}`}
                                 {transaction.status && ` • ${transaction.status}`}
+                                {transaction.id && ` • ID: ${transaction.id.slice(0, 13)}`}
                               </p>
                             </div>
-                            <p className="font-semibold">
-                              {parseFloat(transaction.amount).toLocaleString('vi-VN')} đ
-                            </p>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                if (confirm(`Xóa giao dịch "${transaction.description}"?`)) {
+                                  deleteTransactionMutation.mutate(transaction.id);
+                                }
+                              }}
+                              className="text-red-500 hover:text-red-400 hover:bg-red-950/20"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         ))}
                       </div>
@@ -2011,6 +2160,114 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </div>
                 </div>
               )}
+            </DialogContent>
+          </Dialog>
+
+          {/* Transaction Dialog */}
+          <Dialog open={isTransactionDialogOpen} onOpenChange={setIsTransactionDialogOpen}>
+            <DialogContent className="max-w-md bg-black/50 backdrop-blur-xl border border-white/20">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingTransaction ? "Chỉnh sửa giao dịch" : "Thêm giao dịch mới"}
+                </DialogTitle>
+              </DialogHeader>
+              <Form {...transactionForm}>
+                <form onSubmit={transactionForm.handleSubmit(onTransactionSubmit)} className="space-y-4">
+                  <FormField
+                    control={transactionForm.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mô tả</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="VD: Thanh toán thiết kế nội thất" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={transactionForm.control}
+                      name="type"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Loại</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="VD: Deposit, Final" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={transactionForm.control}
+                      name="amount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Số tiền (đ)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" placeholder="0" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={transactionForm.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Trạng thái</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="VD: Completed, Pending" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={transactionForm.control}
+                      name="transactionDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ngày giao dịch</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="date" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex justify-end space-x-2 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setIsTransactionDialogOpen(false);
+                        setEditingTransaction(null);
+                        transactionForm.reset();
+                      }}
+                    >
+                      Hủy
+                    </Button>
+                    <Button 
+                      type="submit"
+                      disabled={createTransactionMutation.isPending || updateTransactionMutation.isPending}
+                    >
+                      {editingTransaction ? "Cập nhật" : "Thêm"}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
             </DialogContent>
           </Dialog>
         </div>
