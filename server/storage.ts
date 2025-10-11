@@ -36,6 +36,7 @@ export interface IStorage {
   getClientByEmail(email: string): Promise<Client | undefined>;
   createClient(client: InsertClient): Promise<Client>;
   updateClient(id: string, client: Partial<InsertClient>): Promise<Client>;
+  deleteClient(id: string): Promise<void>;
 
   // Inquiries
   getInquiries(status?: string): Promise<Inquiry[]>;
@@ -228,6 +229,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(clients.id, id))
       .returning();
     return updatedClient;
+  }
+
+  async deleteClient(id: string): Promise<void> {
+    await db.delete(clients).where(eq(clients.id, id));
   }
 
   // Inquiries

@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { useToast } from "@/hooks/use-toast";
@@ -505,6 +506,27 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
       toast({ title: "Client updated successfully" });
+    },
+  });
+
+  const deleteClientMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/clients/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
+      toast({ title: "Đã xóa khách hàng thành công" });
+      setIsClientDialogOpen(false);
+      setEditingClient(null);
+      clientForm.reset();
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Lỗi khi xóa khách hàng",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -1993,25 +2015,64 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <div className="flex justify-end space-x-2 pt-4 border-t">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setIsClientDialogOpen(false);
-                        setEditingClient(null);
-                        clientForm.reset();
-                      }}
-                    >
-                      {t('crm.cancel')}
-                    </Button>
-                    <Button 
-                      type="submit"
-                      disabled={createClientMutation.isPending}
-                      data-testid="button-save-client"
-                    >
-                      {editingClient ? t('crm.update') : t('crm.create')}
-                    </Button>
+                  <div className="flex justify-between pt-4 border-t">
+                    {editingClient && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="border-red-500/50 text-red-500 hover:bg-red-950/20 hover:border-red-500"
+                            data-testid="button-delete-client"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Xóa khách hàng
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-black/95 backdrop-blur-xl border border-white/20">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Xác nhận xóa khách hàng</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Bạn có chắc chắn muốn xóa khách hàng <strong>{editingClient.firstName} {editingClient.lastName}</strong>?
+                              <br />
+                              Hành động này không thể hoàn tác và sẽ xóa toàn bộ dữ liệu liên quan.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="bg-black border-white/10 hover:border-white/30 hover:bg-white/10">
+                              Hủy
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteClientMutation.mutate(editingClient.id)}
+                              className="bg-red-600 hover:bg-red-700 text-white"
+                              disabled={deleteClientMutation.isPending}
+                            >
+                              {deleteClientMutation.isPending ? "Đang xóa..." : "Xóa"}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                    <div className="flex space-x-2 ml-auto">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setIsClientDialogOpen(false);
+                          setEditingClient(null);
+                          clientForm.reset();
+                        }}
+                      >
+                        {t('crm.cancel')}
+                      </Button>
+                      <Button 
+                        type="submit"
+                        disabled={createClientMutation.isPending}
+                        data-testid="button-save-client"
+                      >
+                        {editingClient ? t('crm.update') : t('crm.create')}
+                      </Button>
+                    </div>
                   </div>
                 </form>
               </Form>
