@@ -257,13 +257,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   });
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
-    queryKey: ['/api/transactions', viewingClient?.id],
+    queryKey: ['/api/transactions', editingClient?.id],
     queryFn: async () => {
-      if (!viewingClient?.id) return [];
-      const response = await fetch(`/api/transactions?clientId=${viewingClient.id}`);
+      if (!editingClient?.id) return [];
+      const response = await fetch(`/api/transactions?clientId=${editingClient.id}`);
       return response.json();
     },
-    enabled: !!viewingClient?.id,
+    enabled: !!editingClient?.id,
   });
 
   // Forms
@@ -687,16 +687,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', viewingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions', editingClient?.id] });
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
-      toast({ title: "Transaction created successfully" });
+      toast({ title: "Đã thêm giao dịch thành công" });
       transactionForm.reset();
       setIsTransactionDialogOpen(false);
     },
     onError: (error: any) => {
       toast({
-        title: "Error creating transaction",
+        title: "Lỗi khi thêm giao dịch",
         description: error.message,
         variant: "destructive",
       });
@@ -709,16 +709,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', viewingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions', editingClient?.id] });
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
-      toast({ title: "Transaction updated successfully" });
+      toast({ title: "Đã cập nhật giao dịch thành công" });
       setEditingTransaction(null);
       transactionForm.reset();
       setIsTransactionDialogOpen(false);
     },
     onError: (error: any) => {
       toast({
-        title: "Error updating transaction",
+        title: "Lỗi khi cập nhật giao dịch",
         description: error.message,
         variant: "destructive",
       });
@@ -730,13 +730,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await apiRequest('DELETE', `/api/transactions/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', viewingClient?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/transactions', editingClient?.id] });
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
-      toast({ title: "Transaction deleted successfully" });
+      toast({ title: "Đã xóa giao dịch thành công" });
     },
     onError: (error: any) => {
       toast({
-        title: "Error deleting transaction",
+        title: "Lỗi khi xóa giao dịch",
         description: error.message,
         variant: "destructive",
       });
@@ -1907,6 +1907,82 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
+                  {/* Transaction Management - Only show when editing */}
+                  {editingClient && (
+                    <div className="border-t pt-6 mt-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-medium">Lịch sử giao dịch</h3>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingTransaction(null);
+                            transactionForm.reset({
+                              clientId: editingClient.id,
+                              amount: "",
+                              title: "",
+                              description: "",
+                              type: "",
+                              status: "",
+                              paymentDate: new Date().toISOString().split('T')[0],
+                              notes: "",
+                            });
+                            setIsTransactionDialogOpen(true);
+                          }}
+                          className="bg-green-600 hover:bg-green-700 text-white border-none rounded-none"
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Thêm giao dịch
+                        </Button>
+                      </div>
+                      
+                      {transactionsLoading ? (
+                        <div className="text-sm text-muted-foreground">Đang tải...</div>
+                      ) : !Array.isArray(transactions) || transactions.length === 0 ? (
+                        <div className="text-sm text-muted-foreground">Chưa có giao dịch nào</div>
+                      ) : (
+                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                          {transactions.map((transaction: any) => (
+                            <div key={transaction.id} className="flex items-center gap-3 p-3 border rounded-none border-white/10 hover:border-white/30 transition-colors bg-white/5">
+                              <div className="flex-1">
+                                <div className="flex gap-3 items-center">
+                                  <div className="px-3 py-1 bg-white/10 rounded-none">
+                                    <p className="font-medium">{transaction.title}</p>
+                                  </div>
+                                  <div className="px-3 py-1 bg-white/10 rounded-none">
+                                    <p className="text-sm">{transaction.type || "—"}</p>
+                                  </div>
+                                  <div className="px-3 py-1 bg-white/10 rounded-none">
+                                    <p className="font-semibold">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</p>
+                                  </div>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
+                                  {transaction.status && ` • ${transaction.status}`}
+                                  {transaction.description && ` • ${transaction.description}`}
+                                </p>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
+                                    deleteTransactionMutation.mutate(transaction.id);
+                                  }
+                                }}
+                                className="text-red-500 hover:text-red-400 hover:bg-red-950/20"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex justify-end space-x-2 pt-4 border-t">
                     <Button
                       type="button"
@@ -2063,77 +2139,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </p>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Transactions */}
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center border-b pb-2">
-                      <h3 className="text-lg font-medium">Lịch sử giao dịch</h3>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setEditingTransaction(null);
-                          transactionForm.reset({
-                            clientId: viewingClient.id,
-                            amount: "",
-                            title: "",
-                            description: "",
-                            type: "",
-                            status: "",
-                            paymentDate: new Date().toISOString().split('T')[0],
-                            notes: "",
-                          });
-                          setIsTransactionDialogOpen(true);
-                        }}
-                        className="bg-green-600 hover:bg-green-700 text-white border-none rounded-none"
-                      >
-                        <Plus className="h-4 w-4 mr-1" />
-                        Thêm giao dịch
-                      </Button>
-                    </div>
-                    {transactionsLoading ? (
-                      <div className="text-sm text-muted-foreground">Đang tải...</div>
-                    ) : !Array.isArray(transactions) || transactions.length === 0 ? (
-                      <div className="text-sm text-muted-foreground">Chưa có giao dịch nào</div>
-                    ) : (
-                      <div className="space-y-2">
-                        {transactions.map((transaction: any) => (
-                          <div key={transaction.id} className="flex items-center gap-3 p-3 border rounded-none border-white/10 hover:border-white/30 transition-colors bg-white/5">
-                            <div className="flex-1">
-                              <div className="flex gap-3 items-center">
-                                <div className="px-3 py-1 bg-white/10 rounded-none">
-                                  <p className="font-medium">{transaction.title}</p>
-                                </div>
-                                <div className="px-3 py-1 bg-white/10 rounded-none">
-                                  <p className="text-sm">{transaction.type || "—"}</p>
-                                </div>
-                                <div className="px-3 py-1 bg-white/10 rounded-none">
-                                  <p className="font-semibold">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</p>
-                                </div>
-                              </div>
-                              <p className="text-xs text-muted-foreground mt-2">
-                                {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
-                                {transaction.status && ` • ${transaction.status}`}
-                                {transaction.description && ` • ${transaction.description}`}
-                              </p>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
-                                  deleteTransactionMutation.mutate(transaction.id);
-                                }
-                              }}
-                              className="text-red-500 hover:text-red-400 hover:bg-red-950/20"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </div>
 
                   {/* Tags */}
