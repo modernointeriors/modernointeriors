@@ -1893,20 +1893,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <FormField
-                    control={clientForm.control}
-                    name="notes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('crm.notes')}</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} rows={3} placeholder="Ghi chú về khách hàng..." data-testid="input-client-notes" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   {/* Transaction Management - Only show when editing */}
                   {editingClient && (
                     <div className="border-t pt-6 mt-6">
@@ -1915,7 +1901,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <Button
                           type="button"
                           variant="outline"
-                          size="sm"
+                          size="icon"
                           onClick={() => {
                             setEditingTransaction(null);
                             transactionForm.reset({
@@ -1930,10 +1916,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             });
                             setIsTransactionDialogOpen(true);
                           }}
-                          className="bg-green-600 hover:bg-green-700 text-white border-none rounded-none"
+                          className="bg-black border-white/10 hover:border-white hover:bg-white/10 rounded-none h-8 w-8"
                         >
-                          <Plus className="h-4 w-4 mr-1" />
-                          Thêm giao dịch
+                          <Plus className="h-4 w-4" />
                         </Button>
                       </div>
                       
@@ -1982,6 +1967,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       )}
                     </div>
                   )}
+
+                  <FormField
+                    control={clientForm.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('crm.notes')}</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={3} placeholder="Ghi chú về khách hàng..." data-testid="input-client-notes" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="flex justify-end space-x-2 pt-4 border-t">
                     <Button
