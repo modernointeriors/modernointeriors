@@ -1590,35 +1590,19 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={clientForm.control}
-                      name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t('crm.dateOfBirth')}</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="date" maxLength={10} data-testid="input-client-dob" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={clientForm.control}
-                      name="totalSpending"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t('crm.totalSpending')}</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" placeholder="0" data-testid="input-client-spending" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={clientForm.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('crm.dateOfBirth')}</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="date" maxLength={10} data-testid="input-client-dob" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
