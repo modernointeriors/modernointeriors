@@ -2334,7 +2334,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormLabel>Loại</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="border-0 border-b border-white/30 rounded-none">
+                              <SelectTrigger className="border-t-0 border-l-0 border-r-0 border-b border-white/30 rounded-none">
                                 <SelectValue placeholder="Chọn loại" />
                               </SelectTrigger>
                             </FormControl>
@@ -2358,7 +2358,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormLabel>Trạng thái</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="border-0 border-b border-white/30 rounded-none">
+                              <SelectTrigger className="border-t-0 border-l-0 border-r-0 border-b border-white/30 rounded-none">
                                 <SelectValue placeholder="Chọn trạng thái" />
                               </SelectTrigger>
                             </FormControl>
