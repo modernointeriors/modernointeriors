@@ -60,6 +60,7 @@ const clientSchema = z.object({
   status: z.enum(["active", "inactive", "archived"]).default("active"),
   tier: z.enum(["vip", "silver", "gold", "platinum"]).default("silver"),
   totalSpending: z.string().optional(),
+  refundAmount: z.string().optional(),
   orderCount: z.number().optional(),
   referredById: z.string().optional(),
   referralCount: z.number().optional(),
@@ -320,6 +321,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       status: "active",
       tier: "silver",
       totalSpending: "0",
+      refundAmount: "0",
       orderCount: 0,
       referredById: "",
       referralCount: 0,
@@ -828,6 +830,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       status: client.status as "active" | "inactive" | "archived",
       tier: client.tier as "silver" | "gold" | "platinum" | "vip",
       totalSpending: client.totalSpending || "0",
+      refundAmount: client.refundAmount || "0",
       orderCount: client.orderCount || 0,
       referredById: client.referredById || "",
       referralCount: client.referralCount || 0,
@@ -2176,14 +2179,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <h3 className="text-lg font-medium border-b pb-2">{t('crm.financialInfo')}</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">{t('crm.totalSpending')}</label>
+                        <label className="text-sm font-medium text-muted-foreground">Total Revenue</label>
                         <p className="text-base mt-1 font-semibold">
                           {viewingClient.totalSpending ? `${parseFloat(viewingClient.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">{t('crm.orderCount')}</label>
+                        <label className="text-sm font-medium text-muted-foreground">Order Count</label>
                         <p className="text-base mt-1">{viewingClient.orderCount || 0}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Refund Amount</label>
+                        <p className="text-base mt-1 font-semibold text-red-500">
+                          {viewingClient.refundAmount ? `${parseFloat(viewingClient.refundAmount).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Commission</label>
+                        <p className="text-base mt-1 font-semibold text-green-500">
+                          {viewingClient.referralCommission ? `${parseFloat(viewingClient.referralCommission).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </p>
                       </div>
                     </div>
                   </div>
