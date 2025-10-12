@@ -602,6 +602,7 @@ export class DatabaseStorage implements IStorage {
     const clientTransactions = await this.getTransactions(clientId);
     
     let totalSpending = 0;
+    let refundAmount = 0;
     let orderCount = 0;
     
     for (const transaction of clientTransactions) {
@@ -613,7 +614,7 @@ export class DatabaseStorage implements IStorage {
           totalSpending += amount;
           orderCount++;
         } else if (transaction.type === "refund") {
-          totalSpending -= amount;
+          refundAmount += amount;
         }
       }
     }
@@ -622,6 +623,7 @@ export class DatabaseStorage implements IStorage {
       .update(clients)
       .set({ 
         totalSpending: totalSpending.toString(),
+        refundAmount: refundAmount.toString(),
         orderCount: orderCount,
         updatedAt: new Date()
       })
