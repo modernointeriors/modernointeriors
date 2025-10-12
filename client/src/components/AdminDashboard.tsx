@@ -1960,26 +1960,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       ) : !Array.isArray(transactions) || transactions.length === 0 ? (
                         <div className="text-sm text-white/50">Chưa có giao dịch nào</div>
                       ) : (
-                        <div className="border border-white/30 rounded-none max-h-64 overflow-y-auto bg-black">
+                        <div className="border border-white/30 rounded-none max-h-48 overflow-y-auto bg-black">
                           {transactions.map((transaction: any) => (
-                            <div key={transaction.id} className="flex items-center justify-between p-3 border-b border-white/20 last:border-b-0 hover:bg-white/5 transition-colors">
-                              <div className="flex-1 space-y-2">
+                            <div key={transaction.id} className="flex items-center justify-between px-2 py-2 border-b border-white/20 last:border-b-0 hover:bg-white/5 transition-colors">
+                              <div className="flex-1 space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <span className="font-medium text-white">{transaction.title}</span>
-                                  <span className="text-xs px-2 py-0.5 bg-white/10 text-white/70 rounded-none">{transaction.type || "—"}</span>
+                                  <span className="text-sm font-medium text-white">{transaction.title}</span>
+                                  <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">{transaction.type || "—"}</span>
                                 </div>
-                                <div className="flex items-center gap-4">
-                                  <span className="text-lg font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
-                                  <span className="text-xs text-white/50">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-sm font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
+                                  <span className="text-[10px] text-white/50">
                                     {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
                                   </span>
-                                  <span className="text-xs text-white/50">{transaction.status || "—"}</span>
+                                  <span className="text-[10px] text-white/50">{transaction.status || "—"}</span>
                                 </div>
                                 {transaction.description && (
-                                  <p className="text-xs text-white/50">{transaction.description}</p>
+                                  <p className="text-[10px] text-white/50">{transaction.description}</p>
                                 )}
                               </div>
-                              <div className="flex items-center gap-1 ml-3">
+                              <div className="flex items-center gap-0.5 ml-2">
                                 <Button
                                   type="button"
                                   variant="ghost"
@@ -1998,9 +1998,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                     });
                                     setIsTransactionDialogOpen(true);
                                   }}
-                                  className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none"
+                                  className="h-6 w-6 text-white hover:text-white hover:bg-white/20 rounded-none"
                                 >
-                                  <Pencil className="h-3.5 w-3.5" />
+                                  <Pencil className="h-3 w-3" />
                                 </Button>
                                 <Button
                                   type="button"
@@ -2011,9 +2011,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                       deleteTransactionMutation.mutate(transaction.id);
                                     }
                                   }}
-                                  className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none"
+                                  className="h-6 w-6 text-white hover:text-white hover:bg-white/20 rounded-none"
                                 >
-                                  <X className="h-3.5 w-3.5" />
+                                  <X className="h-3 w-3" />
                                 </Button>
                               </div>
                             </div>
@@ -2444,7 +2444,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <p className="text-sm text-muted-foreground">Tổng doanh thu</p>
                   <p className="text-2xl font-semibold mt-1">
-                    {allTransactions.reduce((sum, t) => sum + parseFloat(t.amount || "0"), 0).toLocaleString('vi-VN')} đ
+                    {allTransactions.reduce((sum, t) => {
+                      const amount = parseFloat(t.amount || "0");
+                      if (t.type === "payment") return sum + amount;
+                      if (t.type === "refund") return sum - amount;
+                      return sum;
+                    }, 0).toLocaleString('vi-VN')} đ
                   </p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-muted-foreground" />
