@@ -1930,7 +1930,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {editingClient && (
                     <div className="border-t border-white/30 pt-6 mt-6">
                       <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-medium uppercase tracking-wider">Lịch sử giao dịch</h3>
+                        <h3 className="text-lg font-medium">Lịch sử giao dịch</h3>
                         <Button
                           type="button"
                           variant="outline"
@@ -1960,40 +1960,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       ) : !Array.isArray(transactions) || transactions.length === 0 ? (
                         <div className="text-sm text-white/50">Chưa có giao dịch nào</div>
                       ) : (
-                        <div className="space-y-3 max-h-64 overflow-y-auto">
+                        <div className="space-y-2 max-h-64 overflow-y-auto">
                           {transactions.map((transaction: any) => (
-                            <div key={transaction.id} className="group relative flex items-center justify-between p-0 border border-white/30 hover:border-white hover:bg-white/10 transition-all duration-200 rounded-none bg-black">
-                              <div className="flex-1 flex items-center gap-3 p-3">
-                                <div className="px-3 py-1.5 bg-black border border-white/20 rounded-none min-w-[140px]">
-                                  <p className="font-medium text-white text-sm">{transaction.title}</p>
+                            <div key={transaction.id} className="flex items-center justify-between p-3 border border-white/30 hover:border-white hover:bg-white/10 transition-colors rounded-none bg-black">
+                              <div className="flex-1 space-y-1">
+                                <div className="flex items-center gap-3">
+                                  <span className="font-medium text-white">{transaction.title}</span>
+                                  <span className="text-sm text-white/70">{transaction.type || "—"}</span>
+                                  <span className="font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
                                 </div>
-                                <div className="px-3 py-1.5 bg-black border border-white/20 rounded-none min-w-[100px]">
-                                  <p className="text-sm text-white/90">{transaction.type || "—"}</p>
-                                </div>
-                                <div className="px-3 py-1.5 bg-black border border-white/20 rounded-none flex-1">
-                                  <p className="font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</p>
+                                <div className="text-xs text-white/50">
+                                  {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
+                                  {transaction.status && ` • ${transaction.status}`}
+                                  {transaction.description && ` • ${transaction.description}`}
                                 </div>
                               </div>
-                              <div className="px-4 py-3 flex items-center gap-3 border-l border-white/30">
-                                <div className="text-xs text-white/60 text-right min-w-[180px]">
-                                  <div>{new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}</div>
-                                  {transaction.status && <div className="mt-0.5">{transaction.status}</div>}
-                                  {transaction.description && <div className="mt-0.5">{transaction.description}</div>}
-                                </div>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => {
-                                    if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
-                                      deleteTransactionMutation.mutate(transaction.id);
-                                    }
-                                  }}
-                                  className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none"
-                                >
-                                  <X className="h-4 w-4" />
-                                </Button>
-                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
+                                    deleteTransactionMutation.mutate(transaction.id);
+                                  }
+                                }}
+                                className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none ml-3"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
                             </div>
                           ))}
                         </div>
@@ -2015,21 +2009,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <div className="flex justify-between pt-4 border-t">
+                  <div className="flex justify-between pt-4 border-t border-white/30">
                     {editingClient && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
                             type="button"
                             variant="outline"
-                            className="border-red-500/50 text-red-500 hover:bg-red-950/20 hover:border-red-500"
+                            size="icon"
+                            className="border-white/30 text-white hover:border-white hover:bg-white/10 rounded-none h-8 w-8"
                             data-testid="button-delete-client"
                           >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Xóa khách hàng
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent className="bg-black/95 backdrop-blur-xl border border-white/20">
+                        <AlertDialogContent className="bg-black/95 backdrop-blur-xl border border-white/20 rounded-none">
                           <AlertDialogHeader>
                             <AlertDialogTitle>Xác nhận xóa khách hàng</AlertDialogTitle>
                             <AlertDialogDescription>
@@ -2039,12 +2033,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-black border-white/10 hover:border-white/30 hover:bg-white/10">
+                            <AlertDialogCancel className="bg-black border-white/30 hover:border-white hover:bg-white/10 rounded-none">
                               Hủy
                             </AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => deleteClientMutation.mutate(editingClient.id)}
-                              className="bg-red-600 hover:bg-red-700 text-white"
+                              className="bg-red-600 hover:bg-red-700 text-white rounded-none"
                               disabled={deleteClientMutation.isPending}
                             >
                               {deleteClientMutation.isPending ? "Đang xóa..." : "Xóa"}
