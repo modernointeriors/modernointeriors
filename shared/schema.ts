@@ -229,6 +229,7 @@ export const transactions = pgTable("transactions", {
   title: text("title").notNull(), // e.g., "Sake Classic", "Thiết kế nội thất phòng khách"
   description: text("description"), // e.g., "Sake Nguyệt", "Thi công hoàn thiện"
   amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
+  commission: decimal("commission", { precision: 12, scale: 2 }).notNull().default("0"), // Commission amount for this transaction
   type: varchar("type", { length: 20 }).notNull().default("payment"), // payment, refund, adjustment
   status: varchar("status", { length: 20 }).notNull().default("completed"), // pending, completed, cancelled
   paymentDate: timestamp("payment_date").notNull().defaultNow(),

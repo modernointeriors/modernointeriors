@@ -148,6 +148,7 @@ const dealSchema = z.object({
 const transactionSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   amount: z.string().min(1, "Amount is required"),
+  commission: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   type: z.string().optional(),
@@ -405,6 +406,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     defaultValues: {
       clientId: "",
       amount: "",
+      commission: "",
       title: "",
       description: "",
       type: "",
@@ -2341,6 +2343,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       )}
                     />
 
+                    <FormField
+                      control={transactionForm.control}
+                      name="commission"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Commission (đ)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" placeholder="0" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={transactionForm.control}
                       name="type"
