@@ -18,7 +18,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
-import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown } from "lucide-react";
+import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
 import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal } from "@shared/schema";
 import { insertArticleSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -1984,15 +1984,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <Button
                                 type="button"
                                 variant="ghost"
-                                size="sm"
+                                size="icon"
                                 onClick={() => {
                                   if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
                                     deleteTransactionMutation.mutate(transaction.id);
                                   }
                                 }}
-                                className="text-red-500 hover:text-red-400 hover:bg-red-950/20"
+                                className="h-8 w-8 text-white/50 hover:text-white hover:bg-white/10 rounded-none"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <X className="h-3.5 w-3.5" />
                               </Button>
                             </div>
                           ))}
@@ -2306,9 +2306,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Loại</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="payment, refund" />
-                          </FormControl>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Chọn loại" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="payment">Payment</SelectItem>
+                              <SelectItem value="refund">Refund</SelectItem>
+                              <SelectItem value="adjustment">Adjustment</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -2322,9 +2331,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Trạng thái</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="completed, pending" />
-                          </FormControl>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Chọn trạng thái" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="completed">Completed</SelectItem>
+                              <SelectItem value="cancelled">Cancelled</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}

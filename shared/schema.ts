@@ -366,6 +366,11 @@ export const insertTransactionSchema = createInsertSchema(transactions).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  paymentDate: z.union([
+    z.string().transform((str) => new Date(str)),
+    z.date()
+  ])
 });
 
 // Types
