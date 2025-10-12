@@ -58,6 +58,7 @@ export const clients = pgTable("clients", {
   tier: varchar("tier", { length: 20 }).notNull().default("silver"), // vip, silver, gold, platinum
   // Financial tracking
   totalSpending: decimal("total_spending", { precision: 12, scale: 2 }).notNull().default("0"),
+  refundAmount: decimal("refund_amount", { precision: 12, scale: 2 }).notNull().default("0"),
   orderCount: integer("order_count").notNull().default(0),
   // Referral Program
   referredById: varchar("referred_by_id").references(() => clients.id),
