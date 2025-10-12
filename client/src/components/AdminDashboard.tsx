@@ -1960,34 +1960,62 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       ) : !Array.isArray(transactions) || transactions.length === 0 ? (
                         <div className="text-sm text-white/50">Chưa có giao dịch nào</div>
                       ) : (
-                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                        <div className="border border-white/30 rounded-none max-h-64 overflow-y-auto bg-black">
                           {transactions.map((transaction: any) => (
-                            <div key={transaction.id} className="flex items-center justify-between p-3 border border-white/30 hover:border-white hover:bg-white/10 transition-colors rounded-none bg-black">
-                              <div className="flex-1 space-y-1">
-                                <div className="flex items-center gap-3">
+                            <div key={transaction.id} className="flex items-center justify-between p-3 border-b border-white/20 last:border-b-0 hover:bg-white/5 transition-colors">
+                              <div className="flex-1 space-y-2">
+                                <div className="flex items-center gap-2">
                                   <span className="font-medium text-white">{transaction.title}</span>
-                                  <span className="text-sm text-white/70">{transaction.type || "—"}</span>
-                                  <span className="font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
+                                  <span className="text-xs px-2 py-0.5 bg-white/10 text-white/70 rounded-none">{transaction.type || "—"}</span>
                                 </div>
-                                <div className="text-xs text-white/50">
-                                  {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
-                                  {transaction.status && ` • ${transaction.status}`}
-                                  {transaction.description && ` • ${transaction.description}`}
+                                <div className="flex items-center gap-4">
+                                  <span className="text-lg font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
+                                  <span className="text-xs text-white/50">
+                                    {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
+                                  </span>
+                                  <span className="text-xs text-white/50">{transaction.status || "—"}</span>
                                 </div>
+                                {transaction.description && (
+                                  <p className="text-xs text-white/50">{transaction.description}</p>
+                                )}
                               </div>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => {
-                                  if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
-                                    deleteTransactionMutation.mutate(transaction.id);
-                                  }
-                                }}
-                                className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none ml-3"
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
+                              <div className="flex items-center gap-1 ml-3">
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => {
+                                    setEditingTransaction(transaction);
+                                    transactionForm.reset({
+                                      clientId: transaction.clientId,
+                                      amount: transaction.amount,
+                                      title: transaction.title,
+                                      description: transaction.description || "",
+                                      type: transaction.type || "",
+                                      status: transaction.status || "",
+                                      paymentDate: transaction.paymentDate ? new Date(transaction.paymentDate).toISOString().split('T')[0] : "",
+                                      notes: transaction.notes || "",
+                                    });
+                                    setIsTransactionDialogOpen(true);
+                                  }}
+                                  className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none"
+                                >
+                                  <Pencil className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => {
+                                    if (confirm(`Xóa giao dịch "${transaction.title}"?`)) {
+                                      deleteTransactionMutation.mutate(transaction.id);
+                                    }
+                                  }}
+                                  className="h-8 w-8 text-white hover:text-white hover:bg-white/20 rounded-none"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -2243,7 +2271,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
           {/* Transaction Dialog */}
           <Dialog open={isTransactionDialogOpen} onOpenChange={setIsTransactionDialogOpen}>
-            <DialogContent className="max-w-md bg-black/50 backdrop-blur-xl border border-white/20">
+            <DialogContent className="max-w-md bg-black/50 backdrop-blur-xl border border-white/20 rounded-none">
               <DialogHeader>
                 <DialogTitle>
                   {editingTransaction ? "Chỉnh sửa giao dịch" : "Thêm giao dịch mới"}
