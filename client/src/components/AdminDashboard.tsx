@@ -1966,14 +1966,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <div className="flex-1 space-y-1">
                                 <div className="flex items-center gap-2">
                                   <span className="text-sm font-medium text-white">{transaction.title}</span>
-                                  <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">{transaction.type || "—"}</span>
+                                  <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
+                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : "—"}
+                                  </span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                   <span className="text-sm font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
                                   <span className="text-[10px] text-white/50">
                                     {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
                                   </span>
-                                  <span className="text-[10px] text-white/50">{transaction.status || "—"}</span>
+                                  <span className="text-[10px] text-white/50">
+                                    {transaction.status === "pending" ? "Đang chờ" : transaction.status === "completed" ? "Hoàn thành" : transaction.status === "cancelled" ? "Đã hủy" : "—"}
+                                  </span>
                                 </div>
                                 {transaction.description && (
                                   <p className="text-[10px] text-white/50">{transaction.description}</p>
@@ -2330,13 +2334,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormLabel>Loại</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="border-0 border-b border-white/30 rounded-none">
                                 <SelectValue placeholder="Chọn loại" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="payment">Payment</SelectItem>
-                              <SelectItem value="refund">Refund</SelectItem>
+                              <SelectItem value="payment">Thanh toán</SelectItem>
+                              <SelectItem value="refund">Hoàn tiền</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -2354,14 +2358,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormLabel>Trạng thái</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="border-0 border-b border-white/30 rounded-none">
                                 <SelectValue placeholder="Chọn trạng thái" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="completed">Completed</SelectItem>
-                              <SelectItem value="cancelled">Cancelled</SelectItem>
+                              <SelectItem value="pending">Đang chờ</SelectItem>
+                              <SelectItem value="completed">Hoàn thành</SelectItem>
+                              <SelectItem value="cancelled">Đã hủy</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
