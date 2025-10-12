@@ -61,6 +61,7 @@ const clientSchema = z.object({
   tier: z.enum(["vip", "silver", "gold", "platinum"]).default("silver"),
   totalSpending: z.string().optional(),
   refundAmount: z.string().optional(),
+  commission: z.string().optional(),
   orderCount: z.number().optional(),
   referredById: z.string().optional(),
   referralCount: z.number().optional(),
@@ -323,6 +324,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       tier: "silver",
       totalSpending: "0",
       refundAmount: "0",
+      commission: "0",
       orderCount: 0,
       referredById: "",
       referralCount: 0,
@@ -833,6 +835,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       tier: client.tier as "silver" | "gold" | "platinum" | "vip",
       totalSpending: client.totalSpending || "0",
       refundAmount: client.refundAmount || "0",
+      commission: client.commission || "0",
       orderCount: client.orderCount || 0,
       referredById: client.referredById || "",
       referralCount: client.referralCount || 0,
@@ -2187,8 +2190,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">Order Count</label>
-                        <p className="text-base mt-1">{viewingClient.orderCount || 0}</p>
+                        <label className="text-sm font-medium text-muted-foreground">Commission</label>
+                        <p className="text-base mt-1 font-semibold text-green-500">
+                          {viewingClient.commission ? `${parseFloat(viewingClient.commission).toLocaleString('vi-VN')} đ` : "0 đ"}
+                        </p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Refund Amount</label>
@@ -2197,10 +2202,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">Commission</label>
-                        <p className="text-base mt-1 font-semibold text-green-500">
-                          {viewingClient.referralCommission ? `${parseFloat(viewingClient.referralCommission).toLocaleString('vi-VN')} đ` : "0 đ"}
-                        </p>
+                        <label className="text-sm font-medium text-muted-foreground">Order Count</label>
+                        <p className="text-base mt-1">{viewingClient.orderCount || 0}</p>
                       </div>
                     </div>
                   </div>

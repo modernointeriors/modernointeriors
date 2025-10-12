@@ -59,6 +59,7 @@ export const clients = pgTable("clients", {
   // Financial tracking
   totalSpending: decimal("total_spending", { precision: 12, scale: 2 }).notNull().default("0"),
   refundAmount: decimal("refund_amount", { precision: 12, scale: 2 }).notNull().default("0"),
+  commission: decimal("commission", { precision: 12, scale: 2 }).notNull().default("0"), // Total commission from transactions
   orderCount: integer("order_count").notNull().default(0),
   // Referral Program
   referredById: varchar("referred_by_id").references(() => clients.id),

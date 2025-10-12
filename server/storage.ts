@@ -603,12 +603,14 @@ export class DatabaseStorage implements IStorage {
     
     let totalSpending = 0;
     let refundAmount = 0;
+    let totalCommission = 0;
     let orderCount = 0;
     
     for (const transaction of clientTransactions) {
       // Only count completed transactions
       if (transaction.status === "completed") {
         const amount = parseFloat(transaction.amount);
+        const commission = parseFloat(transaction.commission || "0");
         
         if (transaction.type === "payment") {
           totalSpending += amount;
@@ -616,6 +618,9 @@ export class DatabaseStorage implements IStorage {
         } else if (transaction.type === "refund") {
           refundAmount += amount;
         }
+        
+        // Add commission from all completed transactions
+        totalCommission += commission;
       }
     }
     
@@ -624,6 +629,7 @@ export class DatabaseStorage implements IStorage {
       .set({ 
         totalSpending: totalSpending.toString(),
         refundAmount: refundAmount.toString(),
+        commission: totalCommission.toString(),
         orderCount: orderCount,
         updatedAt: new Date()
       })
