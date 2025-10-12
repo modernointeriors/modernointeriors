@@ -561,26 +561,9 @@ export class DatabaseStorage implements IStorage {
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
     const [newTransaction] = await db.insert(transactions).values(transaction).returning();
     
-    // Update client totalSpending and orderCount
-    if (newTransaction.clientId) {
-      const client = await this.getClient(newTransaction.clientId);
-      if (client) {
-        const currentSpending = parseFloat(client.totalSpending as string) || 0;
-        const newSpending = currentSpending + parseFloat(newTransaction.amount);
-        const newOrderCount = (client.orderCount || 0) + 1;
-        
-        await db
-          .update(clients)
-          .set({ 
-            totalSpending: newSpending.toString(),
-            orderCount: newOrderCount,
-            updatedAt: new Date()
-          })
-          .where(eq(clients.id, newTransaction.clientId));
-        
-        // Update tier based on new spending
-        await this.updateClientTier(newTransaction.clientId);
-      }
+    // Update client totalSpending and orderCount only if status is completed
+    if (newTransaction.clientId && newTransaction.status === "completed") {
+      await this.recalculateClientSpending(newTransaction.clientId);
     }
     
     return newTransaction;
@@ -594,25 +577,9 @@ export class DatabaseStorage implements IStorage {
       .where(eq(transactions.id, id))
       .returning();
     
-    // Recalculate client spending if amount changed
-    if (oldTransaction && transaction.amount !== undefined && updatedTransaction.clientId) {
-      const client = await this.getClient(updatedTransaction.clientId);
-      if (client) {
-        const oldAmount = parseFloat(oldTransaction.amount);
-        const newAmount = parseFloat(updatedTransaction.amount);
-        const currentSpending = parseFloat(client.totalSpending as string) || 0;
-        const updatedSpending = currentSpending - oldAmount + newAmount;
-        
-        await db
-          .update(clients)
-          .set({ 
-            totalSpending: updatedSpending.toString(),
-            updatedAt: new Date()
-          })
-          .where(eq(clients.id, updatedTransaction.clientId));
-        
-        await this.updateClientTier(updatedTransaction.clientId);
-      }
+    // Recalculate client spending if transaction affects it
+    if (updatedTransaction.clientId) {
+      await this.recalculateClientSpending(updatedTransaction.clientId);
     }
     
     return updatedTransaction;
@@ -620,28 +587,47 @@ export class DatabaseStorage implements IStorage {
 
   async deleteTransaction(id: string): Promise<void> {
     const transaction = await this.getTransaction(id);
+    const clientId = transaction?.clientId;
     
-    if (transaction && transaction.clientId) {
-      const client = await this.getClient(transaction.clientId);
-      if (client) {
-        const currentSpending = parseFloat(client.totalSpending as string) || 0;
-        const updatedSpending = currentSpending - parseFloat(transaction.amount);
-        const newOrderCount = Math.max((client.orderCount || 0) - 1, 0);
+    await db.delete(transactions).where(eq(transactions.id, id));
+    
+    // Recalculate client spending after deletion
+    if (clientId) {
+      await this.recalculateClientSpending(clientId);
+    }
+  }
+
+  // Helper function to recalculate client spending from completed transactions
+  private async recalculateClientSpending(clientId: string): Promise<void> {
+    const clientTransactions = await this.getTransactions(clientId);
+    
+    let totalSpending = 0;
+    let orderCount = 0;
+    
+    for (const transaction of clientTransactions) {
+      // Only count completed transactions
+      if (transaction.status === "completed") {
+        const amount = parseFloat(transaction.amount);
         
-        await db
-          .update(clients)
-          .set({ 
-            totalSpending: updatedSpending.toString(),
-            orderCount: newOrderCount,
-            updatedAt: new Date()
-          })
-          .where(eq(clients.id, transaction.clientId));
-        
-        await this.updateClientTier(transaction.clientId);
+        if (transaction.type === "payment") {
+          totalSpending += amount;
+          orderCount++;
+        } else if (transaction.type === "refund") {
+          totalSpending -= amount;
+        }
       }
     }
     
-    await db.delete(transactions).where(eq(transactions.id, id));
+    await db
+      .update(clients)
+      .set({ 
+        totalSpending: totalSpending.toString(),
+        orderCount: orderCount,
+        updatedAt: new Date()
+      })
+      .where(eq(clients.id, clientId));
+    
+    await this.updateClientTier(clientId);
   }
 
   // CRM: Analytics & Reporting

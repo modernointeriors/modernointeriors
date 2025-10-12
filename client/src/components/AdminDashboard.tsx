@@ -2337,7 +2337,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <SelectContent>
                               <SelectItem value="payment">Payment</SelectItem>
                               <SelectItem value="refund">Refund</SelectItem>
-                              <SelectItem value="adjustment">Adjustment</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -2445,6 +2444,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <p className="text-sm text-muted-foreground">Tổng doanh thu</p>
                   <p className="text-2xl font-semibold mt-1">
                     {allTransactions.reduce((sum, t) => {
+                      if (t.status !== "completed") return sum;
                       const amount = parseFloat(t.amount || "0");
                       if (t.type === "payment") return sum + amount;
                       if (t.type === "refund") return sum - amount;
