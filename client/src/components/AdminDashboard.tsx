@@ -2101,7 +2101,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => deleteClientMutation.mutate(editingClient.id)}
-                              className="bg-red-600 hover:bg-red-700 text-white rounded-none"
+                              className="bg-white hover:bg-white/90 text-black rounded-none"
                               disabled={deleteClientMutation.isPending}
                             >
                               {deleteClientMutation.isPending ? "Đang xóa..." : "Xóa"}
