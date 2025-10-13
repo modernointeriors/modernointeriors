@@ -2287,6 +2287,43 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     </div>
                   )}
 
+                  {/* Transaction History */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium border-b pb-2">Lịch sử giao dịch</h3>
+                    {viewTransactionsLoading ? (
+                      <div className="text-sm text-white/50">Đang tải...</div>
+                    ) : !Array.isArray(viewTransactions) || viewTransactions.length === 0 ? (
+                      <div className="text-sm text-white/50">Chưa có giao dịch nào</div>
+                    ) : (
+                      <div className="border border-white/30 rounded-none max-h-64 overflow-y-auto bg-black">
+                        {viewTransactions.map((transaction: any) => (
+                          <div key={transaction.id} className="flex items-center justify-between px-3 py-3 border-b border-white/20 last:border-b-0 hover:bg-white/5 transition-colors">
+                            <div className="flex-1 space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-white">{transaction.title}</span>
+                                <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
+                                  {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Commission" : "—"}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span className="text-sm font-semibold text-white">{parseFloat(transaction.amount).toLocaleString('vi-VN')} đ</span>
+                                <span className="text-[10px] text-white/50">
+                                  {new Date(transaction.paymentDate).toLocaleDateString('vi-VN')}
+                                </span>
+                                <span className="text-[10px] text-white/50">
+                                  {transaction.status === "pending" ? "Đang chờ" : transaction.status === "completed" ? "Hoàn thành" : transaction.status === "cancelled" ? "Đã hủy" : "—"}
+                                </span>
+                              </div>
+                              {transaction.description && (
+                                <p className="text-[10px] text-white/50">{transaction.description}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <div className="flex justify-end pt-4 border-t">
                     <Button
                       onClick={() => {
