@@ -149,7 +149,6 @@ const dealSchema = z.object({
 const transactionSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   amount: z.string().min(1, "Amount is required"),
-  commission: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   type: z.string().optional(),
@@ -408,7 +407,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     defaultValues: {
       clientId: "",
       amount: "",
-      commission: "",
       title: "",
       description: "",
       type: "",
@@ -1975,7 +1973,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 <div className="flex items-center gap-2">
                                   <span className="text-sm font-medium text-white">{transaction.title}</span>
                                   <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
-                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : "—"}
+                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Commission" : "—"}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -2348,22 +2346,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={transactionForm.control}
-                      name="commission"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Commission (đ)</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="number" placeholder="0" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={transactionForm.control}
                       name="type"
                       render={({ field }) => (
                         <FormItem>
@@ -2377,6 +2359,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <SelectContent>
                               <SelectItem value="payment">Thanh toán</SelectItem>
                               <SelectItem value="refund">Hoàn tiền</SelectItem>
+                              <SelectItem value="commission">Commission</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />

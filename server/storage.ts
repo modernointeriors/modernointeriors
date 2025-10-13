@@ -610,17 +610,15 @@ export class DatabaseStorage implements IStorage {
       // Only count completed transactions
       if (transaction.status === "completed") {
         const amount = parseFloat(transaction.amount);
-        const commission = parseFloat(transaction.commission || "0");
         
         if (transaction.type === "payment") {
           totalSpending += amount;
           orderCount++;
         } else if (transaction.type === "refund") {
           refundAmount += amount;
+        } else if (transaction.type === "commission") {
+          totalCommission += amount;
         }
-        
-        // Add commission from all completed transactions
-        totalCommission += commission;
       }
     }
     
