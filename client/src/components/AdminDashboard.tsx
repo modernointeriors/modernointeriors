@@ -2503,7 +2503,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <Card className="bg-black border-white/10 rounded-none">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -2532,6 +2532,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-muted-foreground" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-black border-white/10 rounded-none">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Hoa hồng chi</p>
+                  <p className="text-2xl font-semibold mt-1">
+                    {allTransactions.reduce((sum, t) => {
+                      if (t.status !== "completed" || t.type !== "commission") return sum;
+                      return sum + parseFloat(t.amount || "0");
+                    }, 0).toLocaleString('vi-VN')} đ
+                  </p>
+                </div>
+                <Briefcase className="h-8 w-8 text-muted-foreground" />
               </div>
             </CardContent>
           </Card>
