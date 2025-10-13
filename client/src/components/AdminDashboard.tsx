@@ -1713,7 +1713,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 {t('crm.addClient')}
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-black border border-white/20 rounded-none">
               <DialogHeader>
                 <DialogTitle>
                   {editingClient ? t('crm.editClient') : t('crm.addClient')}
@@ -2203,7 +2203,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
           {/* Client View Dialog */}
           <Dialog open={isClientViewDialogOpen} onOpenChange={setIsClientViewDialogOpen}>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-black/50 backdrop-blur-xl border border-white/20">
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-light">
                   {t('crm.clientDetails')}
@@ -2409,7 +2409,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
           {/* Transaction Dialog */}
           <Dialog open={isTransactionDialogOpen} onOpenChange={setIsTransactionDialogOpen}>
-            <DialogContent className="max-w-md bg-black/50 backdrop-blur-xl border border-white/20 rounded-none">
+            <DialogContent className="max-w-md bg-black border border-white/20 rounded-none">
               <DialogHeader>
                 <DialogTitle>
                   {editingTransaction ? "Chỉnh sửa giao dịch" : "Thêm giao dịch mới"}
