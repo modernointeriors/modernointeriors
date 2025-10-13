@@ -288,6 +288,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(clients.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedClients = clients.slice(startIndex, endIndex);
+
+  // Reset to page 1 when clients change
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [clients.length, currentPage, totalPages]);
+
   // Forms
   const projectForm = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
@@ -2585,8 +2602,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {clients.map((client) => (
-                        <TableRow key={client.id} data-testid={`row-client-${client.id}`} className="relative">
+                      {paginatedClients.map((client) => (
+                        <TableRow key={client.id} data-testid={`row-client-${client.id}`} className="relative h-16">
                           <TableCell className="align-middle">
                             <div className="font-light whitespace-nowrap">
                               {client.firstName} {client.lastName}
@@ -2723,10 +2740,61 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     </TableBody>
                   </Table>
                 </div>
-                <div className="p-2 text-right">
-                  <span className="text-xs text-muted-foreground">
-                    {t('crm.lastUpdated')}: {new Date().toLocaleString('vi-VN')}
-                  </span>
+                <div className="p-4 border-t border-white/10">
+                  <div className="flex items-center justify-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="text-xs"
+                    >
+                      FIRST
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="text-xs"
+                    >
+                      PREV
+                    </Button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "ghost"}
+                        size="sm"
+                        onClick={() => setCurrentPage(page)}
+                        className="text-xs min-w-[32px]"
+                      >
+                        {page}
+                      </Button>
+                    ))}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className="text-xs"
+                    >
+                      NEXT
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="text-xs"
+                    >
+                      LAST
+                    </Button>
+                  </div>
+                  <div className="text-center mt-2">
+                    <span className="text-xs text-muted-foreground">
+                      Showing {startIndex + 1}-{Math.min(endIndex, clients.length)} of {clients.length} clients
+                    </span>
+                  </div>
                 </div>
               </>
             )}
