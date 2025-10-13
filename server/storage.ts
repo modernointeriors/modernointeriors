@@ -614,6 +614,7 @@ export class DatabaseStorage implements IStorage {
     let totalSpending = 0;
     let refundAmount = 0;
     let totalCommission = 0;
+    let commissionCount = 0;
     let orderCount = 0;
     
     for (const transaction of clientTransactions) {
@@ -628,6 +629,7 @@ export class DatabaseStorage implements IStorage {
           refundAmount += amount;
         } else if (transaction.type === "commission") {
           totalCommission += amount;
+          commissionCount++;
         }
       }
     }
@@ -639,6 +641,8 @@ export class DatabaseStorage implements IStorage {
         refundAmount: refundAmount.toString(),
         commission: totalCommission.toString(),
         orderCount: orderCount,
+        referralRevenue: totalCommission.toString(),
+        referralCount: commissionCount,
         updatedAt: new Date()
       })
       .where(eq(clients.id, clientId));
