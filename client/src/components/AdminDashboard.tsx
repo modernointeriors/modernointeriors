@@ -269,6 +269,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     enabled: !!editingClient?.id,
   });
 
+  // Query transactions for viewing client
+  const { data: viewTransactions = [], isLoading: viewTransactionsLoading } = useQuery<any[]>({
+    queryKey: ['/api/transactions', viewingClient?.id],
+    queryFn: async () => {
+      if (!viewingClient?.id) return [];
+      const response = await fetch(`/api/transactions?clientId=${viewingClient.id}`);
+      return response.json();
+    },
+    enabled: !!viewingClient?.id,
+  });
+
   // Query for all transactions (for total revenue calculation)
   const { data: allTransactions = [] } = useQuery<any[]>({
     queryKey: ['/api/transactions'],
