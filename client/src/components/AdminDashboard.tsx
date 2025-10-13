@@ -2573,8 +2573,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <div>{t('crm.address')}</div>
                           <div className="text-xs font-normal text-muted-foreground mt-0.5">{t('crm.company')}</div>
                         </TableHead>
-                        <TableHead className="w-[110px]">{t('crm.totalSpending')}</TableHead>
-                        <TableHead className="w-[110px]">Commission</TableHead>
+                        <TableHead className="w-[110px]">
+                          <div>{t('crm.totalSpending')}</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">Commission</div>
+                        </TableHead>
                         <TableHead className="w-[110px]">{t('crm.warrantyStatus')}</TableHead>
                         <TableHead className="w-[110px]">{t('crm.pipelineStage')}</TableHead>
                         <TableHead className="w-[100px]">{t('crm.customerTier')}</TableHead>
@@ -2608,11 +2610,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               {client.company || "—"}
                             </div>
                           </TableCell>
-                          <TableCell className="align-middle text-sm whitespace-nowrap">
-                            {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
-                          </TableCell>
-                          <TableCell className="align-middle text-sm whitespace-nowrap">
-                            {client.commission ? `${parseFloat(client.commission).toLocaleString('vi-VN')} đ` : "0 đ"}
+                          <TableCell className="align-middle">
+                            <div className="text-sm whitespace-nowrap">
+                              {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
+                            </div>
+                            <div className="text-xs text-muted-foreground mt-1 whitespace-nowrap">
+                              {client.commission ? `${parseFloat(client.commission).toLocaleString('vi-VN')} đ` : "0 đ"}
+                            </div>
                           </TableCell>
                           <TableCell className="align-middle">
                             <div className="text-sm capitalize" data-testid={`text-client-warranty-${client.id}`}>
