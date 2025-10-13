@@ -2588,18 +2588,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       {clients.map((client) => (
                         <TableRow key={client.id} data-testid={`row-client-${client.id}`} className="relative">
                           <TableCell className="align-middle">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 min-w-0">
-                                <div className="font-light whitespace-nowrap">
-                                  {client.firstName} {client.lastName}
-                                </div>
-                                <div className="text-xs text-muted-foreground truncate max-w-[140px] mt-1" title={client.email}>
-                                  {client.email}
-                                </div>
-                              </div>
-                              <div className="text-[10px] text-muted-foreground/50 whitespace-nowrap">
-                                {formatDate(client.updatedAt || client.createdAt)}
-                              </div>
+                            <div className="font-light whitespace-nowrap">
+                              {client.firstName} {client.lastName}
+                            </div>
+                            <div className="text-xs text-muted-foreground truncate max-w-[140px] mt-1" title={client.email}>
+                              {client.email}
                             </div>
                           </TableCell>
                           <TableCell className="align-middle">
@@ -2698,26 +2691,31 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </div>
                           </TableCell>
                           <TableCell className="align-middle text-right">
-                            <div className="flex gap-1 justify-end">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setViewingClient(client);
-                                  setIsClientViewDialogOpen(true);
-                                }}
-                                data-testid={`button-view-client-${client.id}`}
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleEditClient(client)}
-                                data-testid={`button-edit-client-${client.id}`}
-                              >
-                                <Pencil className="h-4 w-4" />
-                              </Button>
+                            <div className="flex flex-col items-end gap-1">
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setViewingClient(client);
+                                    setIsClientViewDialogOpen(true);
+                                  }}
+                                  data-testid={`button-view-client-${client.id}`}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditClient(client)}
+                                  data-testid={`button-edit-client-${client.id}`}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              <div className="text-[10px] text-muted-foreground/50 whitespace-nowrap">
+                                {formatDate(client.updatedAt || client.createdAt)}
+                              </div>
                             </div>
                           </TableCell>
                         </TableRow>
