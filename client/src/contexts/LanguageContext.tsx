@@ -447,7 +447,7 @@ const translations = {
     'crm.lastUpdated': 'Cập Nhật Lần Cuối',
     'crm.orderCount': 'Số Đơn Hàng',
     'crm.referralCount': 'Số Người Giới Thiệu',
-    'crm.referralRevenue': 'Doanh Thu Giới Thiệu',
+    'crm.referralRevenue': 'Hoa hồng',
     'crm.referralCommission': 'Hoa Hồng Giới Thiệu',
     
     // Client View Dialog
