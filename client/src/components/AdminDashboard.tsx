@@ -71,8 +71,10 @@ const bilingualProjectSchema = z.object({
   featured: z.boolean().default(false),
   heroImage: z.string().optional(),
   images: z.array(z.string()).default([]),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
+  metaTitleEn: z.string().optional(),
+  metaTitleVi: z.string().optional(),
+  metaDescriptionEn: z.string().optional(),
+  metaDescriptionVi: z.string().optional(),
 });
 
 type BilingualProjectFormData = z.infer<typeof bilingualProjectSchema>;
@@ -361,9 +363,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       // Legacy fields for backward compatibility
       heroImage: "",
       images: [],
-      relatedProjects: [],
-      metaTitle: "",
-      metaDescription: "",
+      metaTitleEn: "",
+      metaTitleVi: "",
+      metaDescriptionEn: "",
+      metaDescriptionVi: "",
     },
   });
 
@@ -854,6 +857,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       descriptionVi: viVersion?.description || "",
       detailedDescriptionEn: enVersion?.detailedDescription || "",
       detailedDescriptionVi: viVersion?.detailedDescription || "",
+      metaTitleEn: enVersion?.metaTitle || "",
+      metaTitleVi: viVersion?.metaTitle || "",
+      metaDescriptionEn: enVersion?.metaDescription || "",
+      metaDescriptionVi: viVersion?.metaDescription || "",
       slug: project.slug || "",
       category: project.category,
       location: project.location || "",
@@ -941,8 +948,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       featured: data.featured,
       heroImage: data.heroImage,
       images: data.images,
-      metaTitle: data.metaTitle,
-      metaDescription: data.metaDescription,
+      metaTitle: data.metaTitleEn,
+      metaDescription: data.metaDescriptionEn,
       language: 'en' as const,
       status: 'active' as const,
     };
@@ -967,8 +974,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       featured: data.featured,
       heroImage: data.heroImage,
       images: data.images,
-      metaTitle: data.metaTitle,
-      metaDescription: data.metaDescription,
+      metaTitle: data.metaTitleVi,
+      metaDescription: data.metaDescriptionVi,
       language: 'vi' as const,
       status: 'active' as const,
     };
@@ -1673,35 +1680,71 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <div className="space-y-4">
+                  {/* Bilingual SEO Settings */}
+                  <div className="space-y-4 border-t pt-4">
                     <h4 className="text-sm font-light">SEO Settings</h4>
-                    <FormField
-                      control={projectForm.control}
-                      name="metaTitle"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Meta Title</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="SEO title for this project" data-testid="input-project-meta-title" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    
+                    {/* SEO Meta Title */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={projectForm.control}
+                        name="metaTitleEn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Title (English)</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="SEO title in English..." data-testid="input-project-meta-title-en" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={projectForm.control}
-                      name="metaDescription"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Meta Description</FormLabel>
-                          <FormControl>
-                            <Textarea {...field} rows={2} placeholder="SEO description for this project" data-testid="textarea-project-meta-description" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={projectForm.control}
+                        name="metaTitleVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Title (Vietnamese)</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="Tiêu đề SEO tiếng Việt..." data-testid="input-project-meta-title-vi" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* SEO Meta Description */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={projectForm.control}
+                        name="metaDescriptionEn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Description (English)</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={2} placeholder="SEO description in English..." data-testid="textarea-project-meta-description-en" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={projectForm.control}
+                        name="metaDescriptionVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Description (Vietnamese)</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={2} placeholder="Mô tả SEO tiếng Việt..." data-testid="textarea-project-meta-description-vi" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex items-center space-x-2">
