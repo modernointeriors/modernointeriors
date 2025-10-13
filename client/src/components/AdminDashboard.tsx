@@ -2189,13 +2189,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       </div>
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Commission</label>
-                        <p className="text-base mt-1 font-semibold text-green-500">
+                        <p className="text-base mt-1 font-semibold text-white">
                           {viewingClient.commission ? `${parseFloat(viewingClient.commission).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Refund Amount</label>
-                        <p className="text-base mt-1 font-semibold text-red-500">
+                        <p className="text-base mt-1 font-semibold text-white">
                           {viewingClient.refundAmount ? `${parseFloat(viewingClient.refundAmount).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
