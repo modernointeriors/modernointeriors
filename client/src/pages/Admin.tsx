@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, User, BarChart3, Briefcase, Users, Mail, Newspaper, Edit3, Home, Settings } from "lucide-react";
+import { LogOut, User, BarChart3, Briefcase, Users, Mail, Newspaper, Edit3, Home } from "lucide-react";
 import AdminDashboard from "@/components/AdminDashboard";
 import Layout from "@/components/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,8 +18,7 @@ function getTabs(t: (key: string) => string) {
     { id: 'inquiries', label: t('admin.inquiries'), icon: Mail },
     { id: 'articles', label: t('admin.articles'), icon: Newspaper },
     { id: 'homepage', label: 'Homepage', icon: Home },
-    { id: 'content', label: t('admin.content'), icon: Edit3 },
-    { id: 'branding', label: 'Logo & Fanpage', icon: Settings }
+    { id: 'content', label: t('admin.content'), icon: Edit3 }
   ];
 }
 
