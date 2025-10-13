@@ -1659,14 +1659,52 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             setIsClientDialogOpen(open);
             if (!open) {
               setEditingClient(null);
-              clientForm.reset();
+              clientForm.reset({
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                company: "",
+                address: "",
+                dateOfBirth: "",
+                tier: "silver",
+                stage: "lead",
+                status: "active",
+                orderCount: 0,
+                referredById: "",
+                referralCount: 0,
+                referralRevenue: "0",
+                warrantyStatus: "none",
+                warrantyExpiry: "",
+                tags: [],
+                notes: "",
+              });
             }
           }}>
             <DialogTrigger asChild>
               <Button 
                 onClick={() => {
                   setEditingClient(null);
-                  clientForm.reset();
+                  clientForm.reset({
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    phone: "",
+                    company: "",
+                    address: "",
+                    dateOfBirth: "",
+                    tier: "silver",
+                    stage: "lead",
+                    status: "active",
+                    orderCount: 0,
+                    referredById: "",
+                    referralCount: 0,
+                    referralRevenue: "0",
+                    warrantyStatus: "none",
+                    warrantyExpiry: "",
+                    tags: [],
+                    notes: "",
+                  });
                 }}
                 data-testid="button-add-client"
                 className="h-10 px-4"
