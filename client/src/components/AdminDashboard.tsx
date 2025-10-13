@@ -48,6 +48,35 @@ const projectSchema = z.object({
   metaDescription: z.string().optional(),
 });
 
+// Bilingual project schema for form
+const bilingualProjectSchema = z.object({
+  titleEn: z.string().min(1, "English title is required"),
+  titleVi: z.string().min(1, "Vietnamese title is required"),
+  descriptionEn: z.string().optional(),
+  descriptionVi: z.string().optional(),
+  detailedDescriptionEn: z.string().optional(),
+  detailedDescriptionVi: z.string().optional(),
+  slug: z.string().optional(),
+  category: z.string().min(1, "Category is required"),
+  location: z.string().optional(),
+  area: z.string().optional(),
+  duration: z.string().optional(),
+  budget: z.string().optional(),
+  style: z.string().optional(),
+  designer: z.string().optional(),
+  completionYear: z.string().optional(),
+  coverImages: z.array(z.string()).max(2, "Maximum 2 cover images allowed").default([]),
+  contentImages: z.array(z.string()).max(2, "Maximum 2 content images allowed").default([]),
+  galleryImages: z.array(z.string()).max(10, "Maximum 10 gallery images allowed").default([]),
+  featured: z.boolean().default(false),
+  heroImage: z.string().optional(),
+  images: z.array(z.string()).default([]),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+});
+
+type BilingualProjectFormData = z.infer<typeof bilingualProjectSchema>;
+
 const clientSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
@@ -306,12 +335,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   }, [clients.length, currentPage, totalPages]);
 
   // Forms
-  const projectForm = useForm<ProjectFormData>({
-    resolver: zodResolver(projectSchema),
+  const projectForm = useForm<BilingualProjectFormData>({
+    resolver: zodResolver(bilingualProjectSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      detailedDescription: "",
+      titleEn: "",
+      titleVi: "",
+      descriptionEn: "",
+      descriptionVi: "",
+      detailedDescriptionEn: "",
+      detailedDescriptionVi: "",
+      slug: "",
       category: "residential",
       location: "",
       area: "",
@@ -809,10 +842,19 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // Handlers
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
+    
+    // Find both language versions by slug
+    const enVersion = projects.find(p => p.slug === project.slug && p.language === 'en');
+    const viVersion = projects.find(p => p.slug === project.slug && p.language === 'vi');
+    
     projectForm.reset({
-      title: project.title,
-      description: project.description || "",
-      detailedDescription: project.detailedDescription || "",
+      titleEn: enVersion?.title || "",
+      titleVi: viVersion?.title || "",
+      descriptionEn: enVersion?.description || "",
+      descriptionVi: viVersion?.description || "",
+      detailedDescriptionEn: enVersion?.detailedDescription || "",
+      detailedDescriptionVi: viVersion?.detailedDescription || "",
+      slug: project.slug || "",
       category: project.category,
       location: project.location || "",
       area: project.area || "",
@@ -872,12 +914,101 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setIsClientDialogOpen(true);
   };
 
-  const onProjectSubmit = async (data: ProjectFormData) => {
+  const onProjectSubmit = async (data: BilingualProjectFormData) => {
+    // Generate slug if not provided
+    const slug = data.slug || data.titleEn
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    // Prepare English version
+    const enProject = {
+      title: data.titleEn,
+      slug: slug,
+      description: data.descriptionEn,
+      detailedDescription: data.detailedDescriptionEn,
+      category: data.category,
+      location: data.location,
+      area: data.area,
+      duration: data.duration,
+      budget: data.budget,
+      style: data.style,
+      designer: data.designer,
+      completionYear: data.completionYear,
+      coverImages: data.coverImages,
+      contentImages: data.contentImages,
+      galleryImages: data.galleryImages,
+      featured: data.featured,
+      heroImage: data.heroImage,
+      images: data.images,
+      metaTitle: data.metaTitle,
+      metaDescription: data.metaDescription,
+      language: 'en' as const,
+      status: 'active' as const,
+    };
+
+    // Prepare Vietnamese version
+    const viProject = {
+      title: data.titleVi,
+      slug: slug,
+      description: data.descriptionVi,
+      detailedDescription: data.detailedDescriptionVi,
+      category: data.category,
+      location: data.location,
+      area: data.area,
+      duration: data.duration,
+      budget: data.budget,
+      style: data.style,
+      designer: data.designer,
+      completionYear: data.completionYear,
+      coverImages: data.coverImages,
+      contentImages: data.contentImages,
+      galleryImages: data.galleryImages,
+      featured: data.featured,
+      heroImage: data.heroImage,
+      images: data.images,
+      metaTitle: data.metaTitle,
+      metaDescription: data.metaDescription,
+      language: 'vi' as const,
+      status: 'active' as const,
+    };
+
     if (editingProject) {
-      await updateProjectMutation.mutateAsync({ id: editingProject.id, data });
+      // Update both language versions
+      const promises = [
+        apiRequest(`/api/projects/${editingProject.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(editingProject.language === 'en' ? enProject : viProject),
+        }),
+      ];
+      
+      // Find and update the other language version
+      const otherLangProject = projects.find(
+        p => p.slug === editingProject.slug && p.language !== editingProject.language
+      );
+      if (otherLangProject) {
+        promises.push(
+          apiRequest(`/api/projects/${otherLangProject.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(otherLangProject.language === 'en' ? enProject : viProject),
+          })
+        );
+      }
+      
+      await Promise.all(promises);
+      queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
+      
     } else {
-      await createProjectMutation.mutateAsync(data);
+      // Create both versions
+      await Promise.all([
+        createProjectMutation.mutateAsync(enProject),
+        createProjectMutation.mutateAsync(viProject),
+      ]);
     }
+    
+    setIsProjectDialogOpen(false);
+    setEditingProject(null);
+    projectForm.reset();
   };
 
   const onClientSubmit = async (data: ClientFormData) => {
@@ -1193,19 +1324,36 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </DialogHeader>
               <Form {...projectForm}>
                 <form onSubmit={projectForm.handleSubmit(onProjectSubmit)} className="space-y-4">
-                  <FormField
-                    control={projectForm.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Project Title *</FormLabel>
-                        <FormControl>
-                          <Input {...field} data-testid="input-project-title" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Bilingual Title */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="titleEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (English) *</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-project-title-en" placeholder="Enter English title..." />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="titleVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (Vietnamese) *</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-project-title-vi" placeholder="Nhập tiêu đề tiếng Việt..." />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FormField
                     control={projectForm.control}
@@ -1264,33 +1412,67 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   </div>
 
-                  <FormField
-                    control={projectForm.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} rows={3} data-testid="textarea-project-description" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Bilingual Description */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="descriptionEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (English)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} data-testid="textarea-project-description-en" placeholder="Enter English description..." />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={projectForm.control}
-                    name="detailedDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Detailed Description</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} rows={5} placeholder="Rich detailed content for project page..." data-testid="textarea-project-detailed-description" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={projectForm.control}
+                      name="descriptionVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} data-testid="textarea-project-description-vi" placeholder="Nhập mô tả tiếng Việt..." />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Detailed Description */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="detailedDescriptionEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Detailed Description (English)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={5} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="detailedDescriptionVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Detailed Description (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={5} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
