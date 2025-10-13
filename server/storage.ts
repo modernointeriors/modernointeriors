@@ -196,9 +196,19 @@ export class DatabaseStorage implements IStorage {
     
     const clientList = await query.orderBy(desc(clients.createdAt));
     
-    // Check and update warranty status for all clients
+    // Check and update warranty status for all clients, and recalculate spending
     const updatedClients = await Promise.all(
-      clientList.map(client => this.checkAndUpdateWarrantyStatus(client))
+      clientList.map(async (client) => {
+        // Update warranty status
+        const warrantyUpdated = await this.checkAndUpdateWarrantyStatus(client);
+        
+        // Recalculate spending to ensure it's up to date
+        await this.recalculateClientSpending(warrantyUpdated.id);
+        
+        // Fetch updated client with recalculated values
+        const [refreshed] = await db.select().from(clients).where(eq(clients.id, warrantyUpdated.id));
+        return refreshed;
+      })
     );
     
     return updatedClients;
