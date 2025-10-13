@@ -65,7 +65,6 @@ export const clients = pgTable("clients", {
   referredById: varchar("referred_by_id").references(() => clients.id),
   referralCount: integer("referral_count").notNull().default(0),
   referralRevenue: decimal("referral_revenue", { precision: 12, scale: 2 }).notNull().default("0"),
-  referralCommission: decimal("referral_commission", { precision: 12, scale: 2 }).notNull().default("0"),
   // Warranty & Additional Info
   warrantyStatus: varchar("warranty_status", { length: 30 }).default("none"), // none, active, expired
   warrantyExpiry: timestamp("warranty_expiry"), // Ngày hết hạn bảo hành

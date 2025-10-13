@@ -66,7 +66,6 @@ const clientSchema = z.object({
   referredById: z.string().optional(),
   referralCount: z.number().optional(),
   referralRevenue: z.string().optional(),
-  referralCommission: z.string().optional(),
   warrantyStatus: z.enum(["none", "active", "expired"]).default("none"),
   warrantyExpiry: z.string().optional(),
   tags: z.array(z.string()).default([]),
@@ -339,7 +338,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       referredById: "",
       referralCount: 0,
       referralRevenue: "0",
-      referralCommission: "0",
       tags: [],
       notes: "",
     },
@@ -849,7 +847,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       referredById: client.referredById || "",
       referralCount: client.referralCount || 0,
       referralRevenue: client.referralRevenue || "0",
-      referralCommission: client.referralCommission || "0",
       warrantyStatus: (client.warrantyStatus as "none" | "active" | "expired") || "none",
       warrantyExpiry: formatDateForInput(client.warrantyExpiry),
       tags: (client.tags as string[]) || [],
@@ -2239,12 +2236,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <label className="text-sm font-medium text-muted-foreground">{t('crm.referralRevenue')}</label>
                         <p className="text-base mt-1">
                           {viewingClient.referralRevenue ? `${parseFloat(viewingClient.referralRevenue).toLocaleString('vi-VN')} đ` : "0 đ"}
-                        </p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">{t('crm.referralCommission')}</label>
-                        <p className="text-base mt-1">
-                          {viewingClient.referralCommission ? `${parseFloat(viewingClient.referralCommission).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
                     </div>
