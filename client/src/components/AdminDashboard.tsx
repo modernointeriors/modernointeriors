@@ -2577,10 +2577,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <div>{t('crm.totalSpending')}</div>
                           <div className="text-xs font-normal text-muted-foreground mt-0.5">Commission</div>
                         </TableHead>
-                        <TableHead className="w-[110px]">{t('crm.warrantyStatus')}</TableHead>
-                        <TableHead className="w-[110px]">{t('crm.pipelineStage')}</TableHead>
-                        <TableHead className="w-[100px]">{t('crm.customerTier')}</TableHead>
-                        <TableHead className="w-[100px]">{t('crm.status')}</TableHead>
+                        <TableHead className="w-[110px] text-center">{t('crm.warrantyStatus')}</TableHead>
+                        <TableHead className="w-[110px] text-center">{t('crm.pipelineStage')}</TableHead>
+                        <TableHead className="w-[100px] text-center">{t('crm.customerTier')}</TableHead>
+                        <TableHead className="w-[100px] text-center">{t('crm.status')}</TableHead>
                         <TableHead className="text-right w-[70px]">{t('crm.actions')}</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -2624,7 +2624,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               {client.commission ? `${parseFloat(client.commission).toLocaleString('vi-VN')} đ` : "0 đ"}
                             </div>
                           </TableCell>
-                          <TableCell className="align-middle">
+                          <TableCell className="align-middle text-center">
                             <div className="text-sm capitalize" data-testid={`text-client-warranty-${client.id}`}>
                               {t(`crm.warranty.${client.warrantyStatus || 'none'}`)}
                             </div>
@@ -2634,62 +2634,68 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </div>
                             )}
                           </TableCell>
-                          <TableCell className="align-middle">
-                            <Select
-                              value={client.stage || "lead"}
-                              onValueChange={(value) => updateClientMutation.mutate({ 
-                                id: client.id, 
-                                stage: value as "lead" | "prospect" | "contract" | "delivery" | "aftercare" 
-                              })}
-                            >
-                              <SelectTrigger className="w-full" data-testid={`select-client-stage-${client.id}`}>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="lead">{t('crm.stage.lead')}</SelectItem>
-                                <SelectItem value="prospect">{t('crm.stage.prospect')}</SelectItem>
-                                <SelectItem value="contract">{t('crm.stage.contract')}</SelectItem>
-                                <SelectItem value="delivery">{t('crm.stage.delivery')}</SelectItem>
-                                <SelectItem value="aftercare">{t('crm.stage.aftercare')}</SelectItem>
-                              </SelectContent>
-                            </Select>
+                          <TableCell className="align-middle text-center">
+                            <div className="inline-block w-full">
+                              <Select
+                                value={client.stage || "lead"}
+                                onValueChange={(value) => updateClientMutation.mutate({ 
+                                  id: client.id, 
+                                  stage: value as "lead" | "prospect" | "contract" | "delivery" | "aftercare" 
+                                })}
+                              >
+                                <SelectTrigger className="w-full" data-testid={`select-client-stage-${client.id}`}>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="lead">{t('crm.stage.lead')}</SelectItem>
+                                  <SelectItem value="prospect">{t('crm.stage.prospect')}</SelectItem>
+                                  <SelectItem value="contract">{t('crm.stage.contract')}</SelectItem>
+                                  <SelectItem value="delivery">{t('crm.stage.delivery')}</SelectItem>
+                                  <SelectItem value="aftercare">{t('crm.stage.aftercare')}</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </TableCell>
-                          <TableCell className="align-middle">
-                            <Select
-                              value={client.tier || "silver"}
-                              onValueChange={(value) => updateClientMutation.mutate({ 
-                                id: client.id, 
-                                tier: value as "silver" | "gold" | "platinum" | "vip" 
-                              })}
-                            >
-                              <SelectTrigger className="w-full" data-testid={`select-client-tier-${client.id}`}>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="silver">{t('crm.tier.silver')}</SelectItem>
-                                <SelectItem value="gold">{t('crm.tier.gold')}</SelectItem>
-                                <SelectItem value="platinum">{t('crm.tier.platinum')}</SelectItem>
-                                <SelectItem value="vip">{t('crm.tier.vip')}</SelectItem>
-                              </SelectContent>
-                            </Select>
+                          <TableCell className="align-middle text-center">
+                            <div className="inline-block w-full">
+                              <Select
+                                value={client.tier || "silver"}
+                                onValueChange={(value) => updateClientMutation.mutate({ 
+                                  id: client.id, 
+                                  tier: value as "silver" | "gold" | "platinum" | "vip" 
+                                })}
+                              >
+                                <SelectTrigger className="w-full" data-testid={`select-client-tier-${client.id}`}>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="silver">{t('crm.tier.silver')}</SelectItem>
+                                  <SelectItem value="gold">{t('crm.tier.gold')}</SelectItem>
+                                  <SelectItem value="platinum">{t('crm.tier.platinum')}</SelectItem>
+                                  <SelectItem value="vip">{t('crm.tier.vip')}</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </TableCell>
-                          <TableCell className="align-middle">
-                            <Select
-                              value={client.status || "active"}
-                              onValueChange={(value) => updateClientMutation.mutate({ 
-                                id: client.id, 
-                                status: value as "active" | "inactive" | "archived" 
-                              })}
-                            >
-                              <SelectTrigger className="w-full" data-testid={`select-client-status-${client.id}`}>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="active">{t('crm.status.active')}</SelectItem>
-                                <SelectItem value="inactive">{t('crm.status.inactive')}</SelectItem>
-                                <SelectItem value="archived">{t('crm.status.archived')}</SelectItem>
-                              </SelectContent>
-                            </Select>
+                          <TableCell className="align-middle text-center">
+                            <div className="inline-block w-full">
+                              <Select
+                                value={client.status || "active"}
+                                onValueChange={(value) => updateClientMutation.mutate({ 
+                                  id: client.id, 
+                                  status: value as "active" | "inactive" | "archived" 
+                                })}
+                              >
+                                <SelectTrigger className="w-full" data-testid={`select-client-status-${client.id}`}>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="active">{t('crm.status.active')}</SelectItem>
+                                  <SelectItem value="inactive">{t('crm.status.inactive')}</SelectItem>
+                                  <SelectItem value="archived">{t('crm.status.archived')}</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </TableCell>
                           <TableCell className="align-middle text-right">
                             <div className="flex gap-1 justify-end">
