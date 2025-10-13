@@ -1180,7 +1180,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <h2 className="text-2xl font-sans font-light">Projects Management</h2>
           <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
             <DialogTrigger asChild>
-              <Button data-testid="button-add-project">
+              <Button data-testid="button-add-project" className="h-10 px-4">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Project
               </Button>
@@ -1541,6 +1541,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         setEditingProject(null);
                         projectForm.reset();
                       }}
+                      className="h-10 px-4"
                     >
                       Cancel
                     </Button>
@@ -1548,6 +1549,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       type="submit"
                       disabled={createProjectMutation.isPending || updateProjectMutation.isPending}
                       data-testid="button-save-project"
+                      className="h-10 px-4"
                     >
                       {editingProject ? "Update" : "Create"} Project
                     </Button>
@@ -1667,6 +1669,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   clientForm.reset();
                 }}
                 data-testid="button-add-client"
+                className="h-10 px-4"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 {t('crm.addClient')}
@@ -2096,12 +2099,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-black border-white/30 hover:border-white hover:bg-white/10 rounded-none">
+                            <AlertDialogCancel className="bg-black border-white/30 hover:border-white hover:bg-white/10 rounded-none h-10 px-4">
                               Hủy
                             </AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => deleteClientMutation.mutate(editingClient.id)}
-                              className="bg-white hover:bg-white/90 text-black rounded-none"
+                              className="bg-white hover:bg-white/90 text-black rounded-none h-10 px-4"
                               disabled={deleteClientMutation.isPending}
                             >
                               {deleteClientMutation.isPending ? "Đang xóa..." : "Xóa"}
@@ -2119,6 +2122,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           setEditingClient(null);
                           clientForm.reset();
                         }}
+                        className="h-10 px-4"
                       >
                         {t('crm.cancel')}
                       </Button>
@@ -2126,6 +2130,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         type="submit"
                         disabled={createClientMutation.isPending}
                         data-testid="button-save-client"
+                        className="h-10 px-4"
                       >
                         {editingClient ? t('crm.update') : t('crm.create')}
                       </Button>
@@ -2338,6 +2343,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         setIsClientViewDialogOpen(false);
                         setViewingClient(null);
                       }}
+                      className="h-10 px-4"
                     >
                       {t('crm.close')}
                     </Button>
@@ -2486,12 +2492,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         setEditingTransaction(null);
                         transactionForm.reset();
                       }}
+                      className="h-10 px-4"
                     >
                       Hủy
                     </Button>
                     <Button 
                       type="submit"
                       disabled={createTransactionMutation.isPending || updateTransactionMutation.isPending}
+                      className="h-10 px-4"
                     >
                       {editingTransaction ? "Cập nhật" : "Thêm"}
                     </Button>
