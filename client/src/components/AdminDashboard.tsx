@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
@@ -71,6 +72,7 @@ const bilingualProjectSchema = z.object({
   featured: z.boolean().default(false),
   heroImage: z.string().optional(),
   images: z.array(z.string()).default([]),
+  relatedProjects: z.array(z.string()).default([]),
   metaTitleEn: z.string().optional(),
   metaTitleVi: z.string().optional(),
   metaDescriptionEn: z.string().optional(),
@@ -363,6 +365,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       // Legacy fields for backward compatibility
       heroImage: "",
       images: [],
+      relatedProjects: [],
       metaTitleEn: "",
       metaTitleVi: "",
       metaDescriptionEn: "",
@@ -878,9 +881,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       // Legacy fields for backward compatibility
       heroImage: project.heroImage || "",
       images: Array.isArray(project.images) ? project.images : [],
-      relatedProjects: Array.isArray(project.relatedProjects) ? project.relatedProjects as string[] : [],
-      metaTitle: project.metaTitle || "",
-      metaDescription: project.metaDescription || "",
+      relatedProjects: Array.isArray(project.relatedProjects) ? project.relatedProjects : [],
     });
     setIsProjectDialogOpen(true);
   };
@@ -948,6 +949,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       featured: data.featured,
       heroImage: data.heroImage,
       images: data.images,
+      relatedProjects: data.relatedProjects,
       metaTitle: data.metaTitleEn,
       metaDescription: data.metaDescriptionEn,
       language: 'en' as const,
@@ -974,6 +976,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       featured: data.featured,
       heroImage: data.heroImage,
       images: data.images,
+      relatedProjects: data.relatedProjects,
       metaTitle: data.metaTitleVi,
       metaDescription: data.metaDescriptionVi,
       language: 'vi' as const,
@@ -1652,7 +1655,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Related Projects</FormLabel>
-                        <FormControl>
+                        <ScrollArea className="h-48 rounded-none border border-white/20 p-4">
                           <div className="space-y-2">
                             {projects.filter(p => p.id !== editingProject?.id).map((project) => (
                               <div key={project.id} className="flex items-center space-x-2">
@@ -1665,7 +1668,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                       : field.value.filter((id: string) => id !== project.id);
                                     field.onChange(newValue);
                                   }}
-                                  className="rounded border-white/20"
+                                  className="rounded-none border-white/20"
                                 />
                                 <label className="text-sm">{project.title}</label>
                               </div>
@@ -1674,7 +1677,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <p className="text-sm text-muted-foreground">No other projects available</p>
                             )}
                           </div>
-                        </FormControl>
+                        </ScrollArea>
                         <FormMessage />
                       </FormItem>
                     )}
