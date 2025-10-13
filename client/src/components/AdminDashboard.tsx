@@ -244,6 +244,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [referralOpen, setReferralOpen] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<any | null>(null);
+  
+  // Branding state
+  const [brandingData, setBrandingData] = useState({
+    logoUrl: typeof window !== 'undefined' ? localStorage.getItem('branding_logo') || '' : '',
+    facebookUrl: typeof window !== 'undefined' ? localStorage.getItem('branding_facebook') || '' : '',
+    instagramUrl: typeof window !== 'undefined' ? localStorage.getItem('branding_instagram') || '' : '',
+    linkedinUrl: typeof window !== 'undefined' ? localStorage.getItem('branding_linkedin') || '' : '',
+    zaloUrl: typeof window !== 'undefined' ? localStorage.getItem('branding_zalo') || '' : '',
+    email: typeof window !== 'undefined' ? localStorage.getItem('branding_email') || '' : '',
+    phone: typeof window !== 'undefined' ? localStorage.getItem('branding_phone') || '' : '',
+  });
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -4340,6 +4351,129 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </TableBody>
               </Table>
             )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const handleSaveBranding = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('branding_logo', brandingData.logoUrl);
+      localStorage.setItem('branding_facebook', brandingData.facebookUrl);
+      localStorage.setItem('branding_instagram', brandingData.instagramUrl);
+      localStorage.setItem('branding_linkedin', brandingData.linkedinUrl);
+      localStorage.setItem('branding_zalo', brandingData.zaloUrl);
+      localStorage.setItem('branding_email', brandingData.email);
+      localStorage.setItem('branding_phone', brandingData.phone);
+    }
+    
+    toast({
+      title: "Đã lưu thành công",
+      description: "Thông tin logo và fanpage đã được cập nhật.",
+    });
+  };
+
+  if (activeTab === 'branding') {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Logo Management</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="text-sm font-light mb-2 block">Logo URL</label>
+              <Input
+                value={brandingData.logoUrl}
+                onChange={(e) => setBrandingData({ ...brandingData, logoUrl: e.target.value })}
+                placeholder="https://example.com/logo.png"
+                data-testid="input-logo-url"
+              />
+              {brandingData.logoUrl && (
+                <div className="mt-4">
+                  <p className="text-sm font-light mb-2">Logo Preview:</p>
+                  <img src={brandingData.logoUrl} alt="Logo" className="h-16 object-contain" />
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Social Media & Contact</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="text-sm font-light mb-2 block">Facebook URL</label>
+              <Input
+                value={brandingData.facebookUrl}
+                onChange={(e) => setBrandingData({ ...brandingData, facebookUrl: e.target.value })}
+                placeholder="https://facebook.com/yourpage"
+                data-testid="input-facebook-url"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-light mb-2 block">Instagram URL</label>
+              <Input
+                value={brandingData.instagramUrl}
+                onChange={(e) => setBrandingData({ ...brandingData, instagramUrl: e.target.value })}
+                placeholder="https://instagram.com/yourpage"
+                data-testid="input-instagram-url"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-light mb-2 block">LinkedIn URL</label>
+              <Input
+                value={brandingData.linkedinUrl}
+                onChange={(e) => setBrandingData({ ...brandingData, linkedinUrl: e.target.value })}
+                placeholder="https://linkedin.com/company/yourcompany"
+                data-testid="input-linkedin-url"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-light mb-2 block">Zalo URL</label>
+              <Input
+                value={brandingData.zaloUrl}
+                onChange={(e) => setBrandingData({ ...brandingData, zaloUrl: e.target.value })}
+                placeholder="https://zalo.me/yourpage"
+                data-testid="input-zalo-url"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-light mb-2 block">Email</label>
+              <Input
+                type="email"
+                value={brandingData.email}
+                onChange={(e) => setBrandingData({ ...brandingData, email: e.target.value })}
+                placeholder="contact@yourcompany.com"
+                data-testid="input-contact-email"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-light mb-2 block">Phone Number</label>
+              <Input
+                type="tel"
+                value={brandingData.phone}
+                onChange={(e) => setBrandingData({ ...brandingData, phone: e.target.value })}
+                placeholder="+84 123 456 789"
+                data-testid="input-contact-phone"
+              />
+            </div>
+
+            <Button 
+              onClick={handleSaveBranding} 
+              className="h-10 px-4"
+              data-testid="button-save-branding"
+            >
+              Save Changes
+            </Button>
           </CardContent>
         </Card>
       </div>
