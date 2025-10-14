@@ -25,7 +25,7 @@ Preferred communication style: Simple, everyday language.
 - **Development Integration**: Custom Vite middleware for seamless full-stack development
 
 ## Data Model
-The application manages four core entities:
+The application manages five core entities:
 - **Projects**: Portfolio items with categories (residential, commercial, architecture), images, location, and status tracking
 - **Clients**: CRM functionality with contact information, company details, and relationship status
   - **Automatic Warranty Management**: Warranty status is automatically calculated based on warranty expiry date
@@ -35,6 +35,12 @@ The application manages four core entities:
     - Backend automatically updates expired warranties when fetching client data
 - **Inquiries**: Contact form submissions with project type, budget, and message details
 - **Services**: Configurable service offerings with descriptions, features, and ordering
+- **FAQs**: Frequently asked questions with multilingual support
+  - Page-specific filtering (home, contact, etc.)
+  - Language variants (EN/VI) with automatic language-aware display
+  - Ordering and active/inactive status control
+  - Fully integrated with admin dashboard for CRUD operations
+  - Dynamic rendering on homepage with real-time updates
 - **Users**: Admin authentication system with role-based access
 
 ## Component Architecture
