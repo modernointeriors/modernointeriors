@@ -4450,7 +4450,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead className="text-white/70">Icon</TableHead>
                     <TableHead className="text-white/70">Title (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
-                    <TableHead className="text-white/70">Status</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -4471,11 +4470,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </div>
                         </TableCell>
                         <TableCell className="text-white/70">{advantage.order}</TableCell>
-                        <TableCell>
-                          <Badge variant={advantage.active ? "default" : "secondary"}>
-                            {advantage.active ? "Active" : "Inactive"}
-                          </Badge>
-                        </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
                             <Button
