@@ -367,7 +367,7 @@ export default function Home() {
       } else {
         clearInterval(interval);
       }
-    }, 20);
+    }, 10);
 
     return () => clearInterval(interval);
   }, [expandedFaqIndex, faqs]);
