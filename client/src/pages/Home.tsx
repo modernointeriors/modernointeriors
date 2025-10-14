@@ -449,7 +449,7 @@ export default function Home() {
   const { data: partners, isLoading: partnersLoading } = useQuery<Partner[]>({
     queryKey: ["/api/partners"],
     queryFn: async () => {
-      const response = await fetch("/api/partners?active=true");
+      const response = await fetch("/api/partners");
       if (!response.ok) return [];
       return response.json();
     },
@@ -1265,8 +1265,8 @@ export default function Home() {
                           data-testid={`partner-logo-row1-${partner.id}`}
                         >
                           <img
-                            src={partner.logoData || partner.logo || ""}
-                            alt={partner.name}
+                            src={partner.logo}
+                            alt={`Partner ${partner.displayOrder}`}
                             className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
                           />
                         </div>
@@ -1291,8 +1291,8 @@ export default function Home() {
                           data-testid={`partner-logo-row2-${partner.id}`}
                         >
                           <img
-                            src={partner.logoData || partner.logo || ""}
-                            alt={partner.name}
+                            src={partner.logo}
+                            alt={`Partner ${partner.displayOrder}`}
                             className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
                           />
                         </div>

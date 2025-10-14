@@ -499,12 +499,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const partnerForm = useForm<PartnerFormData>({
     resolver: zodResolver(partnerSchema),
     defaultValues: {
-      name: "",
       logo: "",
-      website: "",
-      description: "",
-      order: 0,
-      active: true,
+      displayOrder: 1,
     },
   });
 
