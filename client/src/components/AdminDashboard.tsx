@@ -3888,7 +3888,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             data-testid="input-partner-logo-file"
                           />
                           <p className="text-xs text-muted-foreground mt-2">
-                            Định dạng: PNG, JPG • Giới hạn: 10MB
+                            Định dạng: PNG, JPG • Giới hạn: 10MB • Khuyến nghị: 500x200px
                           </p>
                           {partnerLogoPreview && (
                             <div className="mt-4">
@@ -4836,7 +4836,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         data-testid="input-partner-logo-file"
                       />
                       <p className="text-xs text-muted-foreground mt-2">
-                        Định dạng: PNG, JPG • Giới hạn: 10MB
+                        Định dạng: PNG, JPG • Giới hạn: 10MB • Khuyến nghị: 500x200px
                       </p>
                       {partnerLogoPreview && (
                         <div className="mt-4">
