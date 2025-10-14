@@ -335,9 +335,9 @@ export default function Home() {
   });
 
   const { data: faqs = [], isLoading: faqsLoading, error: faqsError } = useQuery<any[]>({
-    queryKey: ['/api/faqs', 'home', language],
+    queryKey: ['/api/faqs', language],
     queryFn: async () => {
-      const response = await fetch(`/api/faqs?page=home&language=${language}`);
+      const response = await fetch(`/api/faqs?language=${language}`);
       if (!response.ok) throw new Error('Failed to fetch FAQs');
       return response.json();
     },

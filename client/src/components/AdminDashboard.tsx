@@ -1328,7 +1328,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setPartnerLogoPreview('');
   };
 
-  const handleEditFaq = (group: { en: Faq | null, vi: Faq | null, page: string, order: number }) => {
+  const handleEditFaq = (group: { en: Faq | null, vi: Faq | null, order: number }) => {
     // Set the EN version as editingFaq to track which pair we're editing
     setEditingFaq(group.en || group.vi);
     faqForm.reset({
@@ -1336,7 +1336,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       questionVi: group.vi?.question || "",
       answerEn: group.en?.answer || "",
       answerVi: group.vi?.answer || "",
-      page: group.page,
+      page: 'home',
       order: group.order,
     });
     setIsFaqDialogOpen(true);
@@ -4186,29 +4186,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={faqForm.control}
-                          name="page"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Page *</FormLabel>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger data-testid="select-faq-page">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="home">Home</SelectItem>
-                                  <SelectItem value="contact">Contact</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
+                      <div className="grid grid-cols-1 gap-4">
                         <FormField
                           control={faqForm.control}
                           name="order"
@@ -4250,18 +4228,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-white/70">Question (EN / VI)</TableHead>
-                    <TableHead className="text-white/70">Page</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(() => {
-                    // Group FAQs by page and order
+                    // Group FAQs by order only (not page)
                     const groupedFaqs = faqs.reduce((acc, faq) => {
-                      const key = `${faq.page}-${faq.order}`;
+                      const key = `${faq.order}`;
                       if (!acc[key]) {
-                        acc[key] = { en: null, vi: null, page: faq.page, order: faq.order };
+                        acc[key] = { en: null, vi: null, order: faq.order };
                       }
                       if (faq.language === 'en') {
                         acc[key].en = faq;
@@ -4269,7 +4246,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         acc[key].vi = faq;
                       }
                       return acc;
-                    }, {} as Record<string, { en: Faq | null, vi: Faq | null, page: string, order: number }>);
+                    }, {} as Record<string, { en: Faq | null, vi: Faq | null, order: number }>);
 
                     return Object.values(groupedFaqs)
                       .sort((a, b) => a.order - b.order)
@@ -4296,7 +4273,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 )}
                               </div>
                             </TableCell>
-                            <TableCell className="text-white/70 capitalize">{displayFaq.page}</TableCell>
                             <TableCell className="text-white/70">{displayFaq.order}</TableCell>
                             <TableCell>
                               <Button
