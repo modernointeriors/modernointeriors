@@ -4206,7 +4206,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead className="text-white/70">Question (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Page</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
-                    <TableHead className="text-white/70">Status</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -4254,33 +4253,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <TableCell className="text-white/70 capitalize">{displayFaq.page}</TableCell>
                             <TableCell className="text-white/70">{displayFaq.order}</TableCell>
                             <TableCell>
-                              <Badge 
-                                variant={displayFaq.active ? "default" : "secondary"}
-                                data-testid={`badge-faq-status-${index}`}
+                              <Button
+                                variant="outline"
+                                onClick={() => displayFaq && handleEditFaq(displayFaq)}
+                                data-testid={`button-edit-faq-${index}`}
                               >
-                                {displayFaq.active ? 'Active' : 'Inactive'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex space-x-2">
-                                <Button
-                                  variant="outline"
-                                  onClick={() => displayFaq && handleEditFaq(displayFaq)}
-                                  data-testid={`button-edit-faq-${index}`}
-                                >
-                                  <Pencil className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="destructive"
-                                  onClick={() => {
-                                    if (enFaq) deleteFaqMutation.mutate(enFaq.id);
-                                    if (viFaq) deleteFaqMutation.mutate(viFaq.id);
-                                  }}
-                                  data-testid={`button-delete-faq-${index}`}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
+                                <Pencil className="h-4 w-4" />
+                              </Button>
                             </TableCell>
                           </TableRow>
                         );
