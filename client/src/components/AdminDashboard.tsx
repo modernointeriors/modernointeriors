@@ -144,10 +144,6 @@ const homepageContentSchema = z.object({
 const partnerSchema = z.object({
   name: z.string().min(1, "Partner name is required"),
   logo: z.string().optional(), // Optional because we can use logoData instead
-  website: z.string().optional(),
-  description: z.string().optional(),
-  order: z.number().default(0),
-  active: z.boolean().default(true),
 });
 
 const faqSchema = z.object({
@@ -508,10 +504,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     defaultValues: {
       name: "",
       logo: "",
-      website: "",
-      description: "",
-      order: 0,
-      active: true,
     },
   });
 
@@ -1296,10 +1288,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     partnerForm.reset({
       name: partner.name,
       logo: partner.logo || "",
-      website: partner.website || "",
-      description: partner.description || "",
-      order: partner.order,
-      active: partner.active,
     });
     // Set logo preview if partner has logoData
     if (partner.logoData) {
@@ -3849,10 +3837,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     partnerForm.reset({
                       name: "",
                       logo: "",
-                      website: "",
-                      description: "",
-                      order: 0,
-                      active: true,
                     });
                     setPartnerLogoPreview('');
                   }} data-testid="button-add-partner">
@@ -3867,57 +3851,41 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     </DialogTitle>
                   </DialogHeader>
                   <Form {...partnerForm}>
-                    <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={partnerForm.control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Partner Name *</FormLabel>
-                              <FormControl>
-                                <Input {...field} data-testid="input-partner-name" />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={partnerForm.control}
-                          name="website"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Website</FormLabel>
-                              <FormControl>
-                                <Input {...field} data-testid="input-partner-website" placeholder="https://example.com" />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                    <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-6">
+                      <FormField
+                        control={partnerForm.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Partner Name *</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="Enter partner name" data-testid="input-partner-name" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
                       {/* Partner Logo Upload */}
                       <div className="space-y-4">
                         <div>
-                          <label className="text-sm font-medium">Upload Logo (JPG, PNG, max 5MB)</label>
+                          <label className="text-sm font-medium mb-2 block">Upload Logo (PNG, JPG only)</label>
                           <input
                             type="file"
                             accept=".jpg,.jpeg,.png"
                             onChange={handlePartnerLogoFileChange}
-                            className="block w-full mt-2 text-sm text-foreground
+                            className="block w-full text-sm text-foreground
                               file:mr-4 file:py-2 file:px-4
                               file:rounded-none file:border-0
                               file:text-sm file:font-medium
                               file:bg-primary file:text-primary-foreground
-                              hover:file:bg-primary/90"
+                              hover:file:bg-primary/90 cursor-pointer"
                             data-testid="input-partner-logo-file"
                           />
                           {partnerLogoPreview && (
                             <div className="mt-4">
                               <p className="text-sm font-medium mb-2">Preview:</p>
-                              <div className="border rounded-none p-4 bg-muted">
+                              <div className="border rounded p-4 bg-muted flex items-center justify-center">
                                 <img src={partnerLogoPreview} alt="Partner Logo Preview" className="h-24 object-contain" />
                               </div>
                             </div>
@@ -3941,64 +3909,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <FormItem>
                               <FormLabel>Logo URL</FormLabel>
                               <FormControl>
-                                <Input {...field} data-testid="input-partner-logo" placeholder="https://example.com/logo.png" />
+                                <Input {...field} placeholder="https://example.com/logo.png" data-testid="input-partner-logo" />
                               </FormControl>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <FormField
-                        control={partnerForm.control}
-                        name="description"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                              <Textarea {...field} rows={3} data-testid="textarea-partner-description" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={partnerForm.control}
-                          name="order"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Display Order</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  {...field} 
-                                  type="number" 
-                                  onChange={(e) => field.onChange(Number(e.target.value))}
-                                  data-testid="input-partner-order" 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={partnerForm.control}
-                          name="active"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
-                              <FormControl>
-                                <input
-                                  type="checkbox"
-                                  checked={field.value}
-                                  onChange={field.onChange}
-                                  data-testid="checkbox-partner-active"
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel>Active Partner</FormLabel>
-                              </div>
                             </FormItem>
                           )}
                         />
@@ -4007,6 +3920,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <Button 
                         type="submit" 
                         disabled={createPartnerMutation.isPending || updatePartnerMutation.isPending}
+                        className="w-full"
                         data-testid="button-submit-partner"
                       >
                         {editingPartner ? "Update Partner" : "Add Partner"}
@@ -4024,48 +3938,32 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Logo</TableHead>
+                    <TableHead className="text-white/70 w-24">Logo</TableHead>
                     <TableHead className="text-white/70">Name</TableHead>
-                    <TableHead className="text-white/70">Website</TableHead>
-                    <TableHead className="text-white/70">Order</TableHead>
-                    <TableHead className="text-white/70">Status</TableHead>
-                    <TableHead className="text-white/70">Actions</TableHead>
+                    <TableHead className="text-white/70 w-32">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {partners.map((partner) => (
                     <TableRow key={partner.id}>
                       <TableCell>
-                        <img 
-                          src={partner.logoData || partner.logo || ''} 
-                          alt={partner.name}
-                          className="w-12 h-12 object-contain"
-                          data-testid={`img-partner-logo-${partner.id}`}
-                        />
+                        <div className="w-16 h-16 flex items-center justify-center bg-white/5 rounded p-2">
+                          <img 
+                            src={partner.logoData || partner.logo || ''} 
+                            alt={partner.name}
+                            className="max-w-full max-h-full object-contain"
+                            data-testid={`img-partner-logo-${partner.id}`}
+                          />
+                        </div>
                       </TableCell>
-                      <TableCell className="text-white" data-testid={`text-partner-name-${partner.id}`}>
+                      <TableCell className="text-white font-light" data-testid={`text-partner-name-${partner.id}`}>
                         {partner.name}
-                      </TableCell>
-                      <TableCell className="text-white/70">
-                        {partner.website ? (
-                          <a href={partner.website} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
-                            {partner.website}
-                          </a>
-                        ) : '-'}
-                      </TableCell>
-                      <TableCell className="text-white/70">{partner.order}</TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={partner.active ? "default" : "secondary"}
-                          data-testid={`badge-partner-status-${partner.id}`}
-                        >
-                          {partner.active ? 'Active' : 'Inactive'}
-                        </Badge>
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-2">
                           <Button
                             variant="outline"
+                            size="sm"
                             onClick={() => handleEditPartner(partner)}
                             data-testid={`button-edit-partner-${partner.id}`}
                           >
@@ -4073,6 +3971,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </Button>
                           <Button
                             variant="destructive"
+                            size="sm"
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
                           >
@@ -4897,57 +4796,41 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </DialogTitle>
               </DialogHeader>
               <Form {...partnerForm}>
-                <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={partnerForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Partner Name *</FormLabel>
-                          <FormControl>
-                            <Input {...field} data-testid="input-partner-name" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={partnerForm.control}
-                      name="website"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Website</FormLabel>
-                          <FormControl>
-                            <Input {...field} data-testid="input-partner-website" placeholder="https://example.com" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-6">
+                  <FormField
+                    control={partnerForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Partner Name *</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter partner name" data-testid="input-partner-name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   {/* Partner Logo Upload */}
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium">Upload Logo (JPG, PNG, max 5MB)</label>
+                      <label className="text-sm font-medium mb-2 block">Upload Logo (PNG, JPG only)</label>
                       <input
                         type="file"
                         accept=".jpg,.jpeg,.png"
                         onChange={handlePartnerLogoFileChange}
-                        className="block w-full mt-2 text-sm text-foreground
+                        className="block w-full text-sm text-foreground
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-none file:border-0
                           file:text-sm file:font-medium
                           file:bg-primary file:text-primary-foreground
-                          hover:file:bg-primary/90"
+                          hover:file:bg-primary/90 cursor-pointer"
                         data-testid="input-partner-logo-file"
                       />
                       {partnerLogoPreview && (
                         <div className="mt-4">
                           <p className="text-sm font-medium mb-2">Preview:</p>
-                          <div className="border rounded-none p-4 bg-muted">
+                          <div className="border rounded p-4 bg-muted flex items-center justify-center">
                             <img src={partnerLogoPreview} alt="Partner Logo Preview" className="h-24 object-contain" />
                           </div>
                         </div>
@@ -4971,7 +4854,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <FormItem>
                           <FormLabel>Logo URL</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-partner-logo" placeholder="https://example.com/logo.png" />
+                            <Input {...field} placeholder="https://example.com/logo.png" data-testid="input-partner-logo" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -4979,69 +4862,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   </div>
 
-                  <FormField
-                    control={partnerForm.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} rows={3} data-testid="textarea-partner-description" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={partnerForm.control}
-                      name="order"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Display Order</FormLabel>
-                          <FormControl>
-                            <Input 
-                              {...field} 
-                              type="number" 
-                              onChange={(e) => field.onChange(Number(e.target.value))}
-                              data-testid="input-partner-order" 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={partnerForm.control}
-                      name="active"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
-                          <FormControl>
-                            <input
-                              type="checkbox"
-                              checked={field.value}
-                              onChange={field.onChange}
-                              data-testid="checkbox-partner-active"
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>Active Partner</FormLabel>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="flex justify-end space-x-2 pt-4">
-                    <Button type="button" variant="outline" onClick={() => setIsPartnerDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit" data-testid="button-save-partner">
-                      {editingPartner ? "Update Partner" : "Add Partner"}
-                    </Button>
-                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={createPartnerMutation.isPending || updatePartnerMutation.isPending}
+                    className="w-full"
+                    data-testid="button-submit-partner"
+                  >
+                    {editingPartner ? "Update Partner" : "Add Partner"}
+                  </Button>
                 </form>
               </Form>
             </DialogContent>
@@ -5069,58 +4897,32 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Logo</TableHead>
+                    <TableHead className="w-24">Logo</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Website</TableHead>
-                    <TableHead>Order</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
+                    <TableHead className="w-32">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {partners.map((partner) => (
                     <TableRow key={partner.id}>
                       <TableCell>
-                        <img 
-                          src={partner.logoData || partner.logo || ''} 
-                          alt={partner.name}
-                          className="w-12 h-12 object-contain"
-                          data-testid={`img-partner-logo-${partner.id}`}
-                        />
+                        <div className="w-16 h-16 flex items-center justify-center bg-muted rounded p-2">
+                          <img 
+                            src={partner.logoData || partner.logo || ''} 
+                            alt={partner.name}
+                            className="max-w-full max-h-full object-contain"
+                            data-testid={`img-partner-logo-${partner.id}`}
+                          />
+                        </div>
                       </TableCell>
-                      <TableCell data-testid={`text-partner-name-${partner.id}`}>
+                      <TableCell className="font-light" data-testid={`text-partner-name-${partner.id}`}>
                         {partner.name}
-                      </TableCell>
-                      <TableCell>
-                        {partner.website ? (
-                          <a 
-                            href={partner.website} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline text-sm"
-                            data-testid={`link-partner-website-${partner.id}`}
-                          >
-                            Visit Website
-                          </a>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
-                      <TableCell data-testid={`text-partner-order-${partner.id}`}>
-                        {partner.order}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={partner.active ? 'default' : 'secondary'}
-                          data-testid={`badge-partner-status-${partner.id}`}
-                        >
-                          {partner.active ? 'Active' : 'Inactive'}
-                        </Badge>
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-2">
                           <Button
                             variant="outline"
+                            size="sm"
                             onClick={() => handleEditPartner(partner)}
                             data-testid={`button-edit-partner-${partner.id}`}
                           >
@@ -5128,6 +4930,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </Button>
                           <Button
                             variant="destructive"
+                            size="sm"
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
                           >
