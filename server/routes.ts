@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -851,6 +851,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete FAQ" });
+    }
+  });
+
+  // Advantages routes (Why Choose Us)
+  app.get("/api/advantages", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const advantages = await storage.getAdvantages(filters);
+      res.json(advantages);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch advantages" });
+    }
+  });
+
+  app.get("/api/advantages/:id", async (req, res) => {
+    try {
+      const advantage = await storage.getAdvantage(req.params.id);
+      if (!advantage) {
+        return res.status(404).json({ message: "Advantage not found" });
+      }
+      res.json(advantage);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch advantage" });
+    }
+  });
+
+  app.post("/api/advantages", async (req, res) => {
+    try {
+      const validatedData = insertAdvantageSchema.parse(req.body);
+      const advantage = await storage.createAdvantage(validatedData);
+      res.status(201).json(advantage);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create advantage" });
+    }
+  });
+
+  app.put("/api/advantages/:id", async (req, res) => {
+    try {
+      const validatedData = insertAdvantageSchema.partial().parse(req.body);
+      const advantage = await storage.updateAdvantage(req.params.id, validatedData);
+      res.json(advantage);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update advantage" });
+    }
+  });
+
+  app.delete("/api/advantages/:id", async (req, res) => {
+    try {
+      await storage.deleteAdvantage(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete advantage" });
     }
   });
 
