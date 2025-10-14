@@ -1,6 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
-  interactions, deals, transactions, settings, faqs,
+  interactions, deals, transactions, settings, faqs, advantages,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -14,7 +14,8 @@ import {
   type Deal, type InsertDeal,
   type Transaction, type InsertTransaction,
   type Settings, type InsertSettings,
-  type Faq, type InsertFaq
+  type Faq, type InsertFaq,
+  type Advantage, type InsertAdvantage
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -121,6 +122,13 @@ export interface IStorage {
   createFaq(faq: InsertFaq): Promise<Faq>;
   updateFaq(id: string, faq: Partial<InsertFaq>): Promise<Faq>;
   deleteFaq(id: string): Promise<void>;
+
+  // Advantages (Why Choose Us)
+  getAdvantages(filters?: { active?: boolean }): Promise<Advantage[]>;
+  getAdvantage(id: string): Promise<Advantage | undefined>;
+  createAdvantage(advantage: InsertAdvantage): Promise<Advantage>;
+  updateAdvantage(id: string, advantage: Partial<InsertAdvantage>): Promise<Advantage>;
+  deleteAdvantage(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -756,6 +764,41 @@ export class DatabaseStorage implements IStorage {
 
   async deleteFaq(id: string): Promise<void> {
     await db.delete(faqs).where(eq(faqs.id, id));
+  }
+
+  // Advantages (Why Choose Us)
+  async getAdvantages(filters?: { active?: boolean }): Promise<Advantage[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(advantages.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(advantages).where(and(...conditions))
+      : db.select().from(advantages);
+
+    return await query.orderBy(advantages.order);
+  }
+
+  async getAdvantage(id: string): Promise<Advantage | undefined> {
+    const [advantage] = await db.select().from(advantages).where(eq(advantages.id, id));
+    return advantage || undefined;
+  }
+
+  async createAdvantage(advantage: InsertAdvantage): Promise<Advantage> {
+    const [created] = await db.insert(advantages).values(advantage).returning();
+    return created;
+  }
+
+  async updateAdvantage(id: string, advantage: Partial<InsertAdvantage>): Promise<Advantage> {
+    const [updated] = await db
+      .update(advantages)
+      .set({ ...advantage, updatedAt: new Date() })
+      .where(eq(advantages.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAdvantage(id: string): Promise<void> {
+    await db.delete(advantages).where(eq(advantages.id, id));
   }
 }
 

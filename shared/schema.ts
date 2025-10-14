@@ -464,3 +464,26 @@ export const insertFaqSchema = createInsertSchema(faqs).omit({
 
 export type InsertFaq = z.infer<typeof insertFaqSchema>;
 export type Faq = typeof faqs.$inferSelect;
+
+// Advantages table (Why Choose Us section)
+export const advantages = pgTable("advantages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  icon: text("icon").notNull(), // Lucide icon name (e.g., "Sparkles", "Headset")
+  titleEn: text("title_en").notNull(),
+  titleVi: text("title_vi").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionVi: text("description_vi").notNull(),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertAdvantageSchema = createInsertSchema(advantages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertAdvantage = z.infer<typeof insertAdvantageSchema>;
+export type Advantage = typeof advantages.$inferSelect;
