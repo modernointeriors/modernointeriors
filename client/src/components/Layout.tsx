@@ -36,6 +36,11 @@ export default function Layout({ children }: LayoutProps) {
     setMobileMenuOpen(false);
     setShowSidebar(false);
   }, []); // Run once on mount
+
+  // Scroll to top when location changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
   
   // Reset icon rotation when sidebar closes
   useEffect(() => {
