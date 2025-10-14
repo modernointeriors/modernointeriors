@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Menu, X, Globe } from "lucide-react";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -52,6 +53,13 @@ export default function Layout({ children }: LayoutProps) {
   }, [showSidebar]);
   const { language, setLanguage, t } = useLanguage();
   const navigation = getNavigation(t);
+
+  // Fetch logo settings
+  const { data: settings } = useQuery<{ logoData?: string; logoUrl?: string }>({
+    queryKey: ['/api/settings'],
+  });
+
+  const logoSrc = settings?.logoData || settings?.logoUrl || '/attached_assets/logo.white.png';
 
   // Animation timing constants - Ultra-Smooth (Auto-scales to 240fps on supported displays)
   const OPENING_DURATION = 900; // 0.9s for bars 1→2→3 (sync with CSS --bar-dur)
@@ -152,7 +160,7 @@ export default function Layout({ children }: LayoutProps) {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <img 
-              src="/attached_assets/logo.white.png" 
+              src={logoSrc} 
               alt="MODERNO INTERIORS DESIGN" 
               className="h-10 w-auto hover:opacity-80 transition-opacity"
             />
@@ -337,7 +345,7 @@ export default function Layout({ children }: LayoutProps) {
                   className="cursor-pointer inline-block"
                 >
                   <img 
-                    src="/attached_assets/logo.white.png" 
+                    src={logoSrc} 
                     alt="Moderno Interiors" 
                     className="h-12 w-auto hover:opacity-80 transition-opacity"
                   />

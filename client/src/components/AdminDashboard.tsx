@@ -4416,19 +4416,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <CardTitle className="text-white">Logo Management</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Current Logo */}
-            {(settings?.logoData || settings?.logoUrl) && (
-              <div>
-                <label className="text-sm font-light mb-2 block text-white/70">Current Logo</label>
-                <div className="border border-white/10 rounded-none p-4 bg-white/5">
-                  <img 
-                    src={settings.logoData || settings.logoUrl} 
-                    alt="Current Logo" 
-                    className="h-24 object-contain"
-                  />
-                </div>
+            {/* Current Logo Display */}
+            <div>
+              <label className="text-sm font-light mb-2 block text-white/70">Logo hiện tại đang sử dụng</label>
+              <div className="border border-white/10 rounded-none p-4 bg-white/5">
+                <img 
+                  src={settings?.logoData || settings?.logoUrl || '/attached_assets/logo.white.png'} 
+                  alt="Current Logo" 
+                  className="h-24 object-contain"
+                  data-testid="img-current-logo"
+                />
               </div>
-            )}
+              <p className="text-xs text-white/50 mt-2">
+                {settings?.logoData ? '📤 Uploaded file' : settings?.logoUrl ? '🔗 External URL' : '⚙️ Default logo'}
+              </p>
+            </div>
 
             {/* Upload New Logo */}
             <div>
