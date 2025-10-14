@@ -72,8 +72,8 @@ export interface IStorage {
   getHomepageContent(language?: string): Promise<HomepageContent | undefined>;
   upsertHomepageContent(content: InsertHomepageContent): Promise<HomepageContent>;
 
-  // Partners (max 20)
-  getPartners(): Promise<Partner[]>;
+  // Partners
+  getPartners(active?: boolean): Promise<Partner[]>;
   getPartner(id: string): Promise<Partner | undefined>;
   createPartner(partner: InsertPartner): Promise<Partner>;
   updatePartner(id: string, partner: Partial<InsertPartner>): Promise<Partner>;
@@ -419,9 +419,13 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  // Partners (max 20)
-  async getPartners(): Promise<Partner[]> {
-    return await db.select().from(partners).orderBy(partners.displayOrder);
+  // Partners
+  async getPartners(active?: boolean): Promise<Partner[]> {
+    const query = active !== undefined
+      ? db.select().from(partners).where(eq(partners.active, active))
+      : db.select().from(partners);
+    
+    return await query.orderBy(partners.order);
   }
 
   async getPartner(id: string): Promise<Partner | undefined> {
@@ -430,12 +434,6 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createPartner(partner: InsertPartner): Promise<Partner> {
-    // Check if we already have 20 partners
-    const existingPartners = await this.getPartners();
-    if (existingPartners.length >= 20) {
-      throw new Error('Maximum number of partners (20) reached');
-    }
-    
     const [newPartner] = await db.insert(partners).values(partner).returning();
     return newPartner;
   }
@@ -443,7 +441,7 @@ export class DatabaseStorage implements IStorage {
   async updatePartner(id: string, partner: Partial<InsertPartner>): Promise<Partner> {
     const [updatedPartner] = await db
       .update(partners)
-      .set({ ...partner, updatedAt: new Date() })
+      .set(partner)
       .where(eq(partners.id, id))
       .returning();
     return updatedPartner;

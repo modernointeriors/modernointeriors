@@ -165,8 +165,13 @@ export const homepageContent = pgTable("homepage_content", {
 
 export const partners = pgTable("partners", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  logo: text("logo").notNull(), // URL to partner logo
-  displayOrder: integer("display_order").notNull().default(0), // Display order (1-20)
+  name: text("name").notNull(),
+  logo: text("logo"), // URL to partner logo
+  logoData: text("logo_data"), // Base64 encoded logo file
+  website: text("website"), // Optional partner website URL
+  description: text("description"), // Optional description
+  order: integer("order").notNull().default(0), // For display ordering
+  active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
