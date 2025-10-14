@@ -430,11 +430,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Partners routes
+  // Partners routes (max 20 partners)
   app.get("/api/partners", async (req, res) => {
     try {
-      const { active } = req.query;
-      const partners = await storage.getPartners(active === 'true' ? true : active === 'false' ? false : undefined);
+      const partners = await storage.getPartners();
       res.json(partners);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch partners" });
@@ -461,6 +460,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      if (error instanceof Error && error.message.includes('Maximum number of partners')) {
+        return res.status(400).json({ message: error.message });
       }
       res.status(500).json({ message: "Failed to create partner" });
     }
