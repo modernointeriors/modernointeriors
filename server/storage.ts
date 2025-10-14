@@ -1,6 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
-  interactions, deals, transactions,
+  interactions, deals, transactions, settings,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -12,7 +12,8 @@ import {
   type Category, type InsertCategory,
   type Interaction, type InsertInteraction,
   type Deal, type InsertDeal,
-  type Transaction, type InsertTransaction
+  type Transaction, type InsertTransaction,
+  type Settings, type InsertSettings
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -108,6 +109,10 @@ export interface IStorage {
   // CRM: Analytics & Reporting
   getClientReferrals(clientId: string): Promise<Client[]>;
   updateClientTier(clientId: string): Promise<void>;
+
+  // Settings/Branding
+  getSettings(): Promise<Settings | undefined>;
+  upsertSettings(settings: InsertSettings): Promise<Settings>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -681,6 +686,31 @@ export class DatabaseStorage implements IStorage {
       .update(clients)
       .set({ tier, updatedAt: new Date() })
       .where(eq(clients.id, clientId));
+  }
+
+  // Settings/Branding
+  async getSettings(): Promise<Settings | undefined> {
+    const [setting] = await db.select().from(settings).limit(1);
+    return setting || undefined;
+  }
+
+  async upsertSettings(insertSettings: InsertSettings): Promise<Settings> {
+    const existing = await this.getSettings();
+    
+    if (existing) {
+      const [updated] = await db
+        .update(settings)
+        .set({ ...insertSettings, updatedAt: new Date() })
+        .where(eq(settings.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(settings)
+        .values(insertSettings)
+        .returning();
+      return created;
+    }
   }
 }
 
