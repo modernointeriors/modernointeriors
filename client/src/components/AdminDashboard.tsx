@@ -20,8 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal } from "@shared/schema";
-import { insertArticleSchema } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq } from "@shared/schema";
+import { insertArticleSchema, insertFaqSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const projectSchema = z.object({
@@ -145,6 +145,15 @@ const partnerSchema = z.object({
   active: z.boolean().default(true),
 });
 
+const faqSchema = z.object({
+  question: z.string().min(1, "Question is required"),
+  answer: z.string().min(1, "Answer is required"),
+  page: z.string().min(1, "Page is required"), // "home" or "contact"
+  language: z.string().default("en"),
+  order: z.number().default(0),
+  active: z.boolean().default(true),
+});
+
 const interactionSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   type: z.enum(["visit", "meeting", "site_survey", "design", "acceptance", "call", "email"]),
@@ -214,6 +223,7 @@ type ArticleFormData = InsertArticle;
 type BilingualArticleFormData = z.infer<typeof bilingualArticleSchema>;
 type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 type PartnerFormData = z.infer<typeof partnerSchema>;
+type FaqFormData = z.infer<typeof faqSchema>;
 type InteractionFormData = z.infer<typeof interactionSchema>;
 type DealFormData = z.infer<typeof dealSchema>;
 type TransactionFormData = z.infer<typeof transactionSchema>;
@@ -253,6 +263,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // Partner Logo state
   const [partnerLogoFile, setPartnerLogoFile] = useState<File | null>(null);
   const [partnerLogoPreview, setPartnerLogoPreview] = useState<string>('');
+
+  // FAQ state
+  const [isFaqDialogOpen, setIsFaqDialogOpen] = useState(false);
+  const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -298,6 +312,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
+  });
+
+  const { data: faqs = [], isLoading: faqsLoading } = useQuery<Faq[]>({
+    queryKey: ['/api/faqs'],
   });
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
@@ -492,6 +510,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       status: "",
       paymentDate: new Date().toISOString().split('T')[0],
       notes: "",
+    },
+  });
+
+  const faqForm = useForm<FaqFormData>({
+    resolver: zodResolver(faqSchema),
+    defaultValues: {
+      question: "",
+      answer: "",
+      page: "home",
+      language: "en",
+      order: 0,
+      active: true,
     },
   });
 
@@ -715,6 +745,63 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     onError: (error: any) => {
       toast({
         title: "Error deleting partner",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const createFaqMutation = useMutation({
+    mutationFn: async (data: FaqFormData) => {
+      const response = await apiRequest('POST', '/api/faqs', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/faqs'] });
+      toast({ title: "FAQ created successfully" });
+      faqForm.reset();
+      setIsFaqDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating FAQ",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateFaqMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<FaqFormData> }) => {
+      const response = await apiRequest('PUT', `/api/faqs/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/faqs'] });
+      toast({ title: "FAQ updated successfully" });
+      setEditingFaq(null);
+      setIsFaqDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating FAQ",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteFaqMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/faqs/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/faqs'] });
+      toast({ title: "FAQ deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting FAQ",
         description: error.message,
         variant: "destructive",
       });
@@ -1224,6 +1311,27 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     // Reset file states
     setPartnerLogoFile(null);
     setPartnerLogoPreview('');
+  };
+
+  const handleEditFaq = (faq: Faq) => {
+    setEditingFaq(faq);
+    faqForm.reset({
+      question: faq.question,
+      answer: faq.answer,
+      page: faq.page,
+      language: faq.language,
+      order: faq.order,
+      active: faq.active,
+    });
+    setIsFaqDialogOpen(true);
+  };
+
+  const onFaqSubmit = async (data: FaqFormData) => {
+    if (editingFaq) {
+      await updateFaqMutation.mutateAsync({ id: editingFaq.id, data });
+    } else {
+      await createFaqMutation.mutateAsync(data);
+    }
   };
 
   const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -3871,6 +3979,220 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             variant="destructive"
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* FAQ Management Section */}
+        <Card className="bg-black border-white/10">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-white">FAQ Management</CardTitle>
+              <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={() => {
+                    setEditingFaq(null);
+                    faqForm.reset({
+                      question: "",
+                      answer: "",
+                      page: "home",
+                      language: "en",
+                      order: 0,
+                      active: true,
+                    });
+                  }} data-testid="button-add-faq">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add FAQ
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingFaq ? "Edit FAQ" : "Add New FAQ"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <Form {...faqForm}>
+                    <form onSubmit={faqForm.handleSubmit(onFaqSubmit)} className="space-y-4">
+                      <FormField
+                        control={faqForm.control}
+                        name="question"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Question *</FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-faq-question" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={faqForm.control}
+                        name="answer"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Answer *</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={4} data-testid="textarea-faq-answer" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={faqForm.control}
+                          name="page"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Page *</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger data-testid="select-faq-page">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="home">Home</SelectItem>
+                                  <SelectItem value="contact">Contact</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={faqForm.control}
+                          name="language"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Language *</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger data-testid="select-faq-language">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="en">English</SelectItem>
+                                  <SelectItem value="vi">Vietnamese</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={faqForm.control}
+                          name="order"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Display Order</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field} 
+                                  type="number" 
+                                  onChange={(e) => field.onChange(Number(e.target.value))}
+                                  data-testid="input-faq-order" 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={faqForm.control}
+                        name="active"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
+                            <FormControl>
+                              <input
+                                type="checkbox"
+                                checked={field.value}
+                                onChange={field.onChange}
+                                data-testid="checkbox-faq-active"
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Active FAQ</FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <Button 
+                        type="submit" 
+                        disabled={createFaqMutation.isPending || updateFaqMutation.isPending}
+                        data-testid="button-submit-faq"
+                      >
+                        {editingFaq ? "Update FAQ" : "Add FAQ"}
+                      </Button>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {faqsLoading ? (
+              <div className="text-white/70">Loading FAQs...</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-white/70">Question</TableHead>
+                    <TableHead className="text-white/70">Page</TableHead>
+                    <TableHead className="text-white/70">Language</TableHead>
+                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Status</TableHead>
+                    <TableHead className="text-white/70">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {faqs.map((faq) => (
+                    <TableRow key={faq.id}>
+                      <TableCell className="text-white max-w-md truncate" data-testid={`text-faq-question-${faq.id}`}>
+                        {faq.question}
+                      </TableCell>
+                      <TableCell className="text-white/70 capitalize">{faq.page}</TableCell>
+                      <TableCell className="text-white/70 uppercase">{faq.language}</TableCell>
+                      <TableCell className="text-white/70">{faq.order}</TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={faq.active ? "default" : "secondary"}
+                          data-testid={`badge-faq-status-${faq.id}`}
+                        >
+                          {faq.active ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleEditFaq(faq)}
+                            data-testid={`button-edit-faq-${faq.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={() => deleteFaqMutation.mutate(faq.id)}
+                            data-testid={`button-delete-faq-${faq.id}`}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

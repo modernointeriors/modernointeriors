@@ -1,6 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
-  interactions, deals, transactions, settings,
+  interactions, deals, transactions, settings, faqs,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -13,7 +13,8 @@ import {
   type Interaction, type InsertInteraction,
   type Deal, type InsertDeal,
   type Transaction, type InsertTransaction,
-  type Settings, type InsertSettings
+  type Settings, type InsertSettings,
+  type Faq, type InsertFaq
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -113,6 +114,13 @@ export interface IStorage {
   // Settings/Branding
   getSettings(): Promise<Settings | undefined>;
   upsertSettings(settings: InsertSettings): Promise<Settings>;
+
+  // FAQs
+  getFaqs(filters?: { page?: string; language?: string; active?: boolean }): Promise<Faq[]>;
+  getFaq(id: string): Promise<Faq | undefined>;
+  createFaq(faq: InsertFaq): Promise<Faq>;
+  updateFaq(id: string, faq: Partial<InsertFaq>): Promise<Faq>;
+  deleteFaq(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -711,6 +719,43 @@ export class DatabaseStorage implements IStorage {
         .returning();
       return created;
     }
+  }
+
+  // FAQs
+  async getFaqs(filters?: { page?: string; language?: string; active?: boolean }): Promise<Faq[]> {
+    const conditions = [];
+    if (filters?.page) conditions.push(eq(faqs.page, filters.page));
+    if (filters?.language) conditions.push(eq(faqs.language, filters.language));
+    if (filters?.active !== undefined) conditions.push(eq(faqs.active, filters.active));
+
+    const query = conditions.length > 0 
+      ? db.select().from(faqs).where(and(...conditions))
+      : db.select().from(faqs);
+
+    return await query.orderBy(faqs.order);
+  }
+
+  async getFaq(id: string): Promise<Faq | undefined> {
+    const [faq] = await db.select().from(faqs).where(eq(faqs.id, id));
+    return faq || undefined;
+  }
+
+  async createFaq(faq: InsertFaq): Promise<Faq> {
+    const [created] = await db.insert(faqs).values(faq).returning();
+    return created;
+  }
+
+  async updateFaq(id: string, faq: Partial<InsertFaq>): Promise<Faq> {
+    const [updated] = await db
+      .update(faqs)
+      .set({ ...faq, updatedAt: new Date() })
+      .where(eq(faqs.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteFaq(id: string): Promise<void> {
+    await db.delete(faqs).where(eq(faqs.id, id));
   }
 }
 
