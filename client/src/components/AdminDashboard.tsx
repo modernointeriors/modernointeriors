@@ -221,6 +221,16 @@ const bilingualArticleSchema = z.object({
   metaKeywords: z.string().optional(),
 });
 
+// Bilingual FAQ schema for form
+const bilingualFaqSchema = z.object({
+  questionEn: z.string().min(1, "English question is required"),
+  questionVi: z.string().min(1, "Vietnamese question is required"),
+  answerEn: z.string().min(1, "English answer is required"),
+  answerVi: z.string().min(1, "Vietnamese answer is required"),
+  page: z.string().min(1, "Page is required"),
+  order: z.number(),
+});
+
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
@@ -229,6 +239,7 @@ type BilingualArticleFormData = z.infer<typeof bilingualArticleSchema>;
 type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 type PartnerFormData = z.infer<typeof partnerSchema>;
 type FaqFormData = z.infer<typeof faqSchema>;
+type BilingualFaqFormData = z.infer<typeof bilingualFaqSchema>;
 type InteractionFormData = z.infer<typeof interactionSchema>;
 type DealFormData = z.infer<typeof dealSchema>;
 type TransactionFormData = z.infer<typeof transactionSchema>;
@@ -518,15 +529,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
-  const faqForm = useForm<FaqFormData>({
-    resolver: zodResolver(faqSchema),
+  const faqForm = useForm<BilingualFaqFormData>({
+    resolver: zodResolver(bilingualFaqSchema),
     defaultValues: {
-      question: "",
-      answer: "",
+      questionEn: "",
+      questionVi: "",
+      answerEn: "",
+      answerVi: "",
       page: "home",
-      language: "en",
       order: 0,
-      active: true,
     },
   });
 
@@ -1317,25 +1328,68 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setPartnerLogoPreview('');
   };
 
-  const handleEditFaq = (faq: Faq) => {
-    setEditingFaq(faq);
+  const handleEditFaq = (group: { en: Faq | null, vi: Faq | null, page: string, order: number }) => {
+    // Set the EN version as editingFaq to track which pair we're editing
+    setEditingFaq(group.en || group.vi);
     faqForm.reset({
-      question: faq.question,
-      answer: faq.answer,
-      page: faq.page,
-      language: faq.language,
-      order: faq.order,
-      active: faq.active,
+      questionEn: group.en?.question || "",
+      questionVi: group.vi?.question || "",
+      answerEn: group.en?.answer || "",
+      answerVi: group.vi?.answer || "",
+      page: group.page,
+      order: group.order,
     });
     setIsFaqDialogOpen(true);
   };
 
-  const onFaqSubmit = async (data: FaqFormData) => {
+  const onFaqSubmit = async (data: BilingualFaqFormData) => {
+    const enData = {
+      question: data.questionEn,
+      answer: data.answerEn,
+      page: data.page,
+      language: 'en' as const,
+      order: data.order,
+      active: true,
+    };
+
+    const viData = {
+      question: data.questionVi,
+      answer: data.answerVi,
+      page: data.page,
+      language: 'vi' as const,
+      order: data.order,
+      active: true,
+    };
+
     if (editingFaq) {
-      await updateFaqMutation.mutateAsync({ id: editingFaq.id, data });
+      // Find both EN and VI versions to update
+      const enFaq = faqs.find(f => f.order === data.order && f.page === data.page && f.language === 'en');
+      const viFaq = faqs.find(f => f.order === data.order && f.page === data.page && f.language === 'vi');
+
+      const promises = [];
+      if (enFaq) {
+        promises.push(updateFaqMutation.mutateAsync({ id: enFaq.id, data: enData }));
+      } else {
+        promises.push(createFaqMutation.mutateAsync(enData));
+      }
+
+      if (viFaq) {
+        promises.push(updateFaqMutation.mutateAsync({ id: viFaq.id, data: viData }));
+      } else {
+        promises.push(createFaqMutation.mutateAsync(viData));
+      }
+
+      await Promise.all(promises);
     } else {
-      await createFaqMutation.mutateAsync(data);
+      // Create both versions
+      await Promise.all([
+        createFaqMutation.mutateAsync(enData),
+        createFaqMutation.mutateAsync(viData),
+      ]);
     }
+    
+    setEditingFaq(null);
+    setIsFaqDialogOpen(false);
   };
 
   const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -4045,10 +4099,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     onClick={() => {
                       setEditingFaq(null);
                       faqForm.reset({
-                        question: "",
-                        answer: "",
+                        questionEn: "",
+                        questionVi: "",
+                        answerEn: "",
+                        answerVi: "",
                         page: "home",
-                        language: "en",
                         order: 0,
                       });
                     }} 
@@ -4067,35 +4122,71 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </DialogHeader>
                   <Form {...faqForm}>
                     <form onSubmit={faqForm.handleSubmit(onFaqSubmit)} className="space-y-4">
-                      <FormField
-                        control={faqForm.control}
-                        name="question"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Question *</FormLabel>
-                            <FormControl>
-                              <Input {...field} data-testid="input-faq-question" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="space-y-4">
+                        <div className="border rounded-md p-4 space-y-4">
+                          <h3 className="font-medium text-sm text-muted-foreground">English Version</h3>
+                          <FormField
+                            control={faqForm.control}
+                            name="questionEn"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Question (EN) *</FormLabel>
+                                <FormControl>
+                                  <Input {...field} data-testid="input-faq-question-en" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={faqForm.control}
-                        name="answer"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Answer *</FormLabel>
-                            <FormControl>
-                              <Textarea {...field} rows={4} data-testid="textarea-faq-answer" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          <FormField
+                            control={faqForm.control}
+                            name="answerEn"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Answer (EN) *</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} rows={4} data-testid="textarea-faq-answer-en" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="border rounded-md p-4 space-y-4">
+                          <h3 className="font-medium text-sm text-muted-foreground">Vietnamese Version</h3>
+                          <FormField
+                            control={faqForm.control}
+                            name="questionVi"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Question (VI) *</FormLabel>
+                                <FormControl>
+                                  <Input {...field} data-testid="input-faq-question-vi" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={faqForm.control}
+                            name="answerVi"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Answer (VI) *</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} rows={4} data-testid="textarea-faq-answer-vi" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
                           control={faqForm.control}
                           name="page"
@@ -4111,28 +4202,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 <SelectContent>
                                   <SelectItem value="home">Home</SelectItem>
                                   <SelectItem value="contact">Contact</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={faqForm.control}
-                          name="language"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Language *</FormLabel>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger data-testid="select-faq-language">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="en">English</SelectItem>
-                                  <SelectItem value="vi">Vietnamese</SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -4232,7 +4301,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <TableCell>
                               <Button
                                 variant="outline"
-                                onClick={() => displayFaq && handleEditFaq(displayFaq)}
+                                onClick={() => handleEditFaq(group)}
                                 data-testid={`button-edit-faq-${index}`}
                               >
                                 <Pencil className="h-4 w-4" />
