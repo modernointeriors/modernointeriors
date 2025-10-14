@@ -356,7 +356,7 @@ export default function Home() {
     queryKey: ['/api/partners'],
     queryFn: async () => {
       const response = await fetch('/api/partners?active=true');
-      if (!response.ok) throw new Error('Failed fetch, not 2xx response');
+      if (!response.ok) return [];
       return response.json();
     },
   });
