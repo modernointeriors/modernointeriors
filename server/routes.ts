@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -913,6 +913,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete advantage" });
+    }
+  });
+
+  // Journey Steps routes
+  app.get("/api/journey-steps", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const journeySteps = await storage.getJourneySteps(filters);
+      res.json(journeySteps);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch journey steps" });
+    }
+  });
+
+  app.get("/api/journey-steps/:id", async (req, res) => {
+    try {
+      const journeyStep = await storage.getJourneyStep(req.params.id);
+      if (!journeyStep) {
+        return res.status(404).json({ message: "Journey step not found" });
+      }
+      res.json(journeyStep);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch journey step" });
+    }
+  });
+
+  app.post("/api/journey-steps", async (req, res) => {
+    try {
+      const validatedData = insertJourneyStepSchema.parse(req.body);
+      const journeyStep = await storage.createJourneyStep(validatedData);
+      res.status(201).json(journeyStep);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create journey step" });
+    }
+  });
+
+  app.patch("/api/journey-steps/:id", async (req, res) => {
+    try {
+      const validatedData = insertJourneyStepSchema.partial().parse(req.body);
+      const journeyStep = await storage.updateJourneyStep(req.params.id, validatedData);
+      res.json(journeyStep);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update journey step" });
+    }
+  });
+
+  app.delete("/api/journey-steps/:id", async (req, res) => {
+    try {
+      await storage.deleteJourneyStep(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete journey step" });
     }
   });
 

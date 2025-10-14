@@ -1,6 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
-  interactions, deals, transactions, settings, faqs, advantages,
+  interactions, deals, transactions, settings, faqs, advantages, journeySteps,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -15,7 +15,8 @@ import {
   type Transaction, type InsertTransaction,
   type Settings, type InsertSettings,
   type Faq, type InsertFaq,
-  type Advantage, type InsertAdvantage
+  type Advantage, type InsertAdvantage,
+  type JourneyStep, type InsertJourneyStep
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -129,6 +130,13 @@ export interface IStorage {
   createAdvantage(advantage: InsertAdvantage): Promise<Advantage>;
   updateAdvantage(id: string, advantage: Partial<InsertAdvantage>): Promise<Advantage>;
   deleteAdvantage(id: string): Promise<void>;
+
+  // Journey Steps (Design Process)
+  getJourneySteps(filters?: { active?: boolean }): Promise<JourneyStep[]>;
+  getJourneyStep(id: string): Promise<JourneyStep | undefined>;
+  createJourneyStep(journeyStep: InsertJourneyStep): Promise<JourneyStep>;
+  updateJourneyStep(id: string, journeyStep: Partial<InsertJourneyStep>): Promise<JourneyStep>;
+  deleteJourneyStep(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -799,6 +807,41 @@ export class DatabaseStorage implements IStorage {
 
   async deleteAdvantage(id: string): Promise<void> {
     await db.delete(advantages).where(eq(advantages.id, id));
+  }
+
+  // Journey Steps
+  async getJourneySteps(filters?: { active?: boolean }): Promise<JourneyStep[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(journeySteps.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(journeySteps).where(and(...conditions))
+      : db.select().from(journeySteps);
+
+    return await query.orderBy(journeySteps.order);
+  }
+
+  async getJourneyStep(id: string): Promise<JourneyStep | undefined> {
+    const [journeyStep] = await db.select().from(journeySteps).where(eq(journeySteps.id, id));
+    return journeyStep || undefined;
+  }
+
+  async createJourneyStep(journeyStep: InsertJourneyStep): Promise<JourneyStep> {
+    const [created] = await db.insert(journeySteps).values(journeyStep).returning();
+    return created;
+  }
+
+  async updateJourneyStep(id: string, journeyStep: Partial<InsertJourneyStep>): Promise<JourneyStep> {
+    const [updated] = await db
+      .update(journeySteps)
+      .set({ ...journeyStep, updatedAt: new Date() })
+      .where(eq(journeySteps.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteJourneyStep(id: string): Promise<void> {
+    await db.delete(journeySteps).where(eq(journeySteps.id, id));
   }
 }
 
