@@ -460,11 +460,7 @@ export default function Home() {
   const handleProcessSectionMouseLeave = () => {
     const timer = setTimeout(() => {
       // Close all expanded steps
-      setStep01Expanded(false);
-      setStep02Expanded(false);
-      setStep03Expanded(false);
-      setStep04Expanded(false);
-      setStep05Expanded(false);
+      setExpandedSteps([]);
     }, 4000); // 4 seconds after mouse leaves entire section
     setProcessSectionHoverTimer(timer);
   };
