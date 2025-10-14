@@ -227,6 +227,17 @@ const bilingualFaqSchema = z.object({
   order: z.number(),
 });
 
+// Advantage schema for form
+const advantageSchema = z.object({
+  icon: z.string().min(1, "Icon is required"),
+  titleEn: z.string().min(1, "English title is required"),
+  titleVi: z.string().min(1, "Vietnamese title is required"),
+  descriptionEn: z.string().min(1, "English description is required"),
+  descriptionVi: z.string().min(1, "Vietnamese description is required"),
+  order: z.number().default(0),
+  active: z.boolean().default(true),
+});
+
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
@@ -236,6 +247,7 @@ type HomepageContentFormData = z.infer<typeof homepageContentSchema>;
 type PartnerFormData = z.infer<typeof partnerSchema>;
 type FaqFormData = z.infer<typeof faqSchema>;
 type BilingualFaqFormData = z.infer<typeof bilingualFaqSchema>;
+type AdvantageFormData = z.infer<typeof advantageSchema>;
 type InteractionFormData = z.infer<typeof interactionSchema>;
 type DealFormData = z.infer<typeof dealSchema>;
 type TransactionFormData = z.infer<typeof transactionSchema>;
@@ -279,6 +291,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // FAQ state
   const [isFaqDialogOpen, setIsFaqDialogOpen] = useState(false);
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
+  const [isAdvantageDialogOpen, setIsAdvantageDialogOpen] = useState(false);
+  const [editingAdvantage, setEditingAdvantage] = useState<any | null>(null);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -328,6 +342,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: faqs = [], isLoading: faqsLoading } = useQuery<Faq[]>({
     queryKey: ['/api/faqs'],
+  });
+
+  const { data: advantages = [], isLoading: advantagesLoading } = useQuery<any[]>({
+    queryKey: ['/api/advantages'],
   });
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
@@ -530,6 +548,19 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       answerVi: "",
       page: "home",
       order: 0,
+    },
+  });
+
+  const advantageForm = useForm<AdvantageFormData>({
+    resolver: zodResolver(advantageSchema),
+    defaultValues: {
+      icon: "",
+      titleEn: "",
+      titleVi: "",
+      descriptionEn: "",
+      descriptionVi: "",
+      order: 0,
+      active: true,
     },
   });
 
@@ -815,6 +846,63 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     onError: (error: any) => {
       toast({
         title: "Error deleting FAQ",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const createAdvantageMutation = useMutation({
+    mutationFn: async (data: AdvantageFormData) => {
+      const response = await apiRequest('POST', '/api/advantages', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/advantages'] });
+      toast({ title: "Advantage created successfully" });
+      advantageForm.reset();
+      setIsAdvantageDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating advantage",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateAdvantageMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<AdvantageFormData> }) => {
+      const response = await apiRequest('PUT', `/api/advantages/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/advantages'] });
+      toast({ title: "Advantage updated successfully" });
+      setEditingAdvantage(null);
+      setIsAdvantageDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating advantage",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteAdvantageMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/advantages/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/advantages'] });
+      toast({ title: "Advantage deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting advantage",
         description: error.message,
         variant: "destructive",
       });
@@ -1378,6 +1466,31 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     
     setEditingFaq(null);
     setIsFaqDialogOpen(false);
+  };
+
+  const handleEditAdvantage = (advantage: any) => {
+    setEditingAdvantage(advantage);
+    advantageForm.reset({
+      icon: advantage.icon || "",
+      titleEn: advantage.titleEn || "",
+      titleVi: advantage.titleVi || "",
+      descriptionEn: advantage.descriptionEn || "",
+      descriptionVi: advantage.descriptionVi || "",
+      order: advantage.order || 0,
+      active: advantage.active !== undefined ? advantage.active : true,
+    });
+    setIsAdvantageDialogOpen(true);
+  };
+
+  const onAdvantageSubmit = async (data: AdvantageFormData) => {
+    if (editingAdvantage) {
+      await updateAdvantageMutation.mutateAsync({ id: editingAdvantage.id, data });
+    } else {
+      await createAdvantageMutation.mutateAsync(data);
+    }
+    
+    setEditingAdvantage(null);
+    setIsAdvantageDialogOpen(false);
   };
 
   const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -4194,6 +4307,239 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         );
                       });
                   })()}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Advantages Management Section */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Advantages Management (Why Choose Us)</CardTitle>
+              <Dialog open={isAdvantageDialogOpen} onOpenChange={(open) => {
+                setIsAdvantageDialogOpen(open);
+                if (!open) {
+                  setEditingAdvantage(null);
+                  advantageForm.reset();
+                }
+              }}>
+                <DialogTrigger asChild>
+                  <Button data-testid="button-add-advantage">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Advantage
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{editingAdvantage ? "Edit Advantage" : "Add New Advantage"}</DialogTitle>
+                  </DialogHeader>
+                  <Form {...advantageForm}>
+                    <form onSubmit={advantageForm.handleSubmit(onAdvantageSubmit)} className="space-y-4">
+                      <FormField
+                        control={advantageForm.control}
+                        name="icon"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Lucide Icon Name *</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="e.g. Sparkles, Headset, Users, Store" data-testid="input-advantage-icon" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-4">
+                          <FormField
+                            control={advantageForm.control}
+                            name="titleEn"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Title (EN) *</FormLabel>
+                                <FormControl>
+                                  <Input {...field} data-testid="input-advantage-title-en" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={advantageForm.control}
+                            name="descriptionEn"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Description (EN) *</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} rows={3} data-testid="textarea-advantage-description-en" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <div className="space-y-4">
+                          <FormField
+                            control={advantageForm.control}
+                            name="titleVi"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Title (VI) *</FormLabel>
+                                <FormControl>
+                                  <Input {...field} data-testid="input-advantage-title-vi" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={advantageForm.control}
+                            name="descriptionVi"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Description (VI) *</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} rows={3} data-testid="textarea-advantage-description-vi" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={advantageForm.control}
+                          name="order"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Display Order</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field} 
+                                  type="number" 
+                                  onChange={(e) => field.onChange(Number(e.target.value))}
+                                  data-testid="input-advantage-order" 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={advantageForm.control}
+                          name="active"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                              <div className="space-y-0.5">
+                                <FormLabel>Active</FormLabel>
+                              </div>
+                              <FormControl>
+                                <input
+                                  type="checkbox"
+                                  checked={field.value}
+                                  onChange={field.onChange}
+                                  data-testid="checkbox-advantage-active"
+                                  className="h-4 w-4"
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <Button 
+                        type="submit" 
+                        disabled={createAdvantageMutation.isPending || updateAdvantageMutation.isPending}
+                        data-testid="button-submit-advantage"
+                      >
+                        {editingAdvantage ? "Update Advantage" : "Add Advantage"}
+                      </Button>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {advantagesLoading ? (
+              <div className="text-white/70">Loading advantages...</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-white/70">Icon</TableHead>
+                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
+                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Status</TableHead>
+                    <TableHead className="text-white/70">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {advantages
+                    .sort((a, b) => a.order - b.order)
+                    .map((advantage, index) => (
+                      <TableRow key={advantage.id}>
+                        <TableCell className="text-white">{advantage.icon}</TableCell>
+                        <TableCell className="text-white max-w-md" data-testid={`text-advantage-${index}`}>
+                          <div className="space-y-1">
+                            <div className="truncate">
+                              <span className="text-white/50 text-xs uppercase">EN:</span> {advantage.titleEn}
+                            </div>
+                            <div className="truncate">
+                              <span className="text-white/50 text-xs uppercase">VI:</span> {advantage.titleVi}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-white/70">{advantage.order}</TableCell>
+                        <TableCell>
+                          <Badge variant={advantage.active ? "default" : "secondary"}>
+                            {advantage.active ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              onClick={() => handleEditAdvantage(advantage)}
+                              data-testid={`button-edit-advantage-${index}`}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="outline" data-testid={`button-delete-advantage-${index}`}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Advantage?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This will permanently delete "{advantage.titleEn}". This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteAdvantageMutation.mutate(advantage.id)}
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             )}
