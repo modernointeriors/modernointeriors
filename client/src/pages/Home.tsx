@@ -31,6 +31,7 @@ export default function Home() {
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
   const [processSectionHoverTimer, setProcessSectionHoverTimer] = useState<NodeJS.Timeout | null>(null);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState<number | null>(null);
+  const [faqAnswerTexts, setFaqAnswerTexts] = useState<Record<string, string>>({});
 
   // Typing animation for process steps
   const [stepTexts, setStepTexts] = useState({
@@ -342,6 +343,34 @@ export default function Home() {
       return response.json();
     },
   });
+
+  // Typing animation for FAQ answers
+  useEffect(() => {
+    if (expandedFaqIndex === null) {
+      // Clear all FAQ texts when none is expanded
+      setFaqAnswerTexts({});
+      return;
+    }
+
+    const currentFaq = faqs[expandedFaqIndex];
+    if (!currentFaq) return;
+
+    // Clear previous text before starting new animation
+    setFaqAnswerTexts(prev => ({ ...prev, [currentFaq.id]: '' }));
+
+    const text = currentFaq.answer || '';
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setFaqAnswerTexts(prev => ({ ...prev, [currentFaq.id]: text.slice(0, index) }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [expandedFaqIndex, faqs]);
 
   const { data: featuredArticles, isLoading: articlesLoading } = useQuery<Article[]>({
     queryKey: ['/api/articles', 'featured', language],
@@ -1330,7 +1359,7 @@ export default function Home() {
                   }`}>
                     <div className="border-l-2 border-white/20 pl-8">
                       <p className="text-white/70 font-light">
-                        {faq.answer}
+                        {faqAnswerTexts[faq.id] || ''}
                       </p>
                     </div>
                   </div>
