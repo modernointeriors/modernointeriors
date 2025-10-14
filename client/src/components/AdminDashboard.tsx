@@ -4203,51 +4203,89 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Question</TableHead>
+                    <TableHead className="text-white/70">Question (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Page</TableHead>
-                    <TableHead className="text-white/70">Language</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
                     <TableHead className="text-white/70">Status</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {faqs.map((faq) => (
-                    <TableRow key={faq.id}>
-                      <TableCell className="text-white max-w-md truncate" data-testid={`text-faq-question-${faq.id}`}>
-                        {faq.question}
-                      </TableCell>
-                      <TableCell className="text-white/70 capitalize">{faq.page}</TableCell>
-                      <TableCell className="text-white/70 uppercase">{faq.language}</TableCell>
-                      <TableCell className="text-white/70">{faq.order}</TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={faq.active ? "default" : "secondary"}
-                          data-testid={`badge-faq-status-${faq.id}`}
-                        >
-                          {faq.active ? 'Active' : 'Inactive'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button
-                            variant="outline"
-                            onClick={() => handleEditFaq(faq)}
-                            data-testid={`button-edit-faq-${faq.id}`}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            onClick={() => deleteFaqMutation.mutate(faq.id)}
-                            data-testid={`button-delete-faq-${faq.id}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {(() => {
+                    // Group FAQs by page and order
+                    const groupedFaqs = faqs.reduce((acc, faq) => {
+                      const key = `${faq.page}-${faq.order}`;
+                      if (!acc[key]) {
+                        acc[key] = { en: null, vi: null, page: faq.page, order: faq.order };
+                      }
+                      if (faq.language === 'en') {
+                        acc[key].en = faq;
+                      } else {
+                        acc[key].vi = faq;
+                      }
+                      return acc;
+                    }, {} as Record<string, { en: Faq | null, vi: Faq | null, page: string, order: number }>);
+
+                    return Object.values(groupedFaqs)
+                      .sort((a, b) => a.order - b.order)
+                      .map((group, index) => {
+                        const enFaq = group.en;
+                        const viFaq = group.vi;
+                        const displayFaq = enFaq || viFaq;
+                        
+                        if (!displayFaq) return null;
+                        
+                        return (
+                          <TableRow key={`group-${index}`}>
+                            <TableCell className="text-white max-w-md" data-testid={`text-faq-group-${index}`}>
+                              <div className="space-y-2">
+                                {enFaq && (
+                                  <div className="truncate">
+                                    <span className="text-white/50 text-xs uppercase">EN:</span> {enFaq.question}
+                                  </div>
+                                )}
+                                {viFaq && (
+                                  <div className="truncate">
+                                    <span className="text-white/50 text-xs uppercase">VI:</span> {viFaq.question}
+                                  </div>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-white/70 capitalize">{displayFaq.page}</TableCell>
+                            <TableCell className="text-white/70">{displayFaq.order}</TableCell>
+                            <TableCell>
+                              <Badge 
+                                variant={displayFaq.active ? "default" : "secondary"}
+                                data-testid={`badge-faq-status-${index}`}
+                              >
+                                {displayFaq.active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex space-x-2">
+                                <Button
+                                  variant="outline"
+                                  onClick={() => displayFaq && handleEditFaq(displayFaq)}
+                                  data-testid={`button-edit-faq-${index}`}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  onClick={() => {
+                                    if (enFaq) deleteFaqMutation.mutate(enFaq.id);
+                                    if (viFaq) deleteFaqMutation.mutate(viFaq.id);
+                                  }}
+                                  data-testid={`button-delete-faq-${index}`}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      });
+                  })()}
                 </TableBody>
               </Table>
             )}
