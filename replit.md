@@ -41,6 +41,11 @@ The application manages five core entities:
   - Ordering and active/inactive status control
   - Fully integrated with admin dashboard for CRUD operations
   - Dynamic rendering on homepage with real-time updates
+- **Partners**: Simplified logo showcase with maximum 20 partners
+  - Only logo URL and display order (1-20) fields
+  - Storage layer enforces 20-partner maximum limit
+  - Homepage displays partners in dual scrolling rows sorted by display order
+  - Admin dashboard provides logo upload and ordering management
 - **Users**: Admin authentication system with role-based access
 
 ## Component Architecture
