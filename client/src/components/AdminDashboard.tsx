@@ -4047,19 +4047,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <CardTitle className="text-white">FAQ Management</CardTitle>
               <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button onClick={() => {
-                    setEditingFaq(null);
-                    faqForm.reset({
-                      question: "",
-                      answer: "",
-                      page: "home",
-                      language: "en",
-                      order: 0,
-                      active: true,
-                    });
-                  }} data-testid="button-add-faq">
+                  <Button 
+                    onClick={() => {
+                      setEditingFaq(null);
+                      faqForm.reset({
+                        question: "",
+                        answer: "",
+                        page: "home",
+                        language: "en",
+                        order: 0,
+                      });
+                    }} 
+                    disabled={faqs.length >= 10}
+                    data-testid="button-add-faq"
+                  >
                     <Plus className="mr-2 h-4 w-4" />
-                    Add FAQ
+                    Add FAQ {faqs.length >= 10 ? '(Max 5 reached)' : ''}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl">
@@ -4162,26 +4165,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           )}
                         />
                       </div>
-
-                      <FormField
-                        control={faqForm.control}
-                        name="active"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
-                            <FormControl>
-                              <input
-                                type="checkbox"
-                                checked={field.value}
-                                onChange={field.onChange}
-                                data-testid="checkbox-faq-active"
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Active FAQ</FormLabel>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
 
                       <Button 
                         type="submit" 
