@@ -128,8 +128,6 @@ export const articles = pgTable("articles", {
 export const homepageContent = pgTable("homepage_content", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   language: varchar("language", { length: 5 }).notNull().default("en"), // en, vi
-  // Logo
-  logoUrl: text("logo_url"), // Main website logo URL
   // Hero Section
   heroBackgroundImage: text("hero_background_image"),
   heroTitle: text("hero_title").notNull().default("Moderno Interiors"),
@@ -147,6 +145,14 @@ export const homepageContent = pgTable("homepage_content", {
   statsClientsLabel: text("stats_clients_label"),
   statsAwardsLabel: text("stats_awards_label"),
   statsExperienceLabel: text("stats_experience_label"),
+  // Process/Journey Section
+  journeyTitle: text("journey_title"),
+  journeyDescription: text("journey_description"),
+  // Advantages Section
+  advantagesTitle: text("advantages_title"),
+  advantagesSubtitle: text("advantages_subtitle"),
+  // FAQ Section Header
+  faqSectionTitle: text("faq_section_title"),
   // CTA Section
   ctaTitle: text("cta_title"),
   ctaDescription: text("cta_description"),

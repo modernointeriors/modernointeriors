@@ -3523,45 +3523,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         
         <Card>
           <CardHeader>
-            <CardTitle>Logo Settings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-light mb-2 block">Website Logo URL</label>
-                <Input 
-                  defaultValue={homepageContent?.logoUrl || ""}
-                  placeholder="Enter logo URL (e.g., /attached_assets/logo.white.png)"
-                  data-testid="input-logo-url"
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Current logo: {homepageContent?.logoUrl || "Not set"}
-                </p>
-              </div>
-              {homepageContent?.logoUrl && (
-                <div className="border rounded-none p-4 bg-black/20">
-                  <p className="text-sm font-light mb-2">Logo Preview:</p>
-                  <img 
-                    src={homepageContent.logoUrl} 
-                    alt="Website Logo" 
-                    className="h-12 w-auto"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const errorMsg = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (errorMsg) errorMsg.style.display = 'block';
-                    }}
-                  />
-                  <p className="text-xs text-red-500 mt-2" style={{display: 'none'}}>
-                    Failed to load logo image
-                  </p>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
             <CardTitle>Hero Section</CardTitle>
           </CardHeader>
           <CardContent>
@@ -3691,6 +3652,77 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <Input 
                   defaultValue={homepageContent?.statsExperienceLabel || ""}
                   data-testid="input-stats-experience-label"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Journey/Process Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">Journey Title</label>
+                <Input 
+                  defaultValue={homepageContent?.journeyTitle || ""}
+                  placeholder="e.g., THE JOURNEY TO YOUR DREAM SPACE"
+                  data-testid="input-journey-title"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Journey Description</label>
+                <Textarea 
+                  defaultValue={homepageContent?.journeyDescription || ""}
+                  rows={3}
+                  placeholder="Description for the journey/process section"
+                  data-testid="textarea-journey-description"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Advantages Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">Advantages Title</label>
+                <Input 
+                  defaultValue={homepageContent?.advantagesTitle || ""}
+                  placeholder="e.g., ADVANTAGES"
+                  data-testid="input-advantages-title"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Advantages Subtitle</label>
+                <Input 
+                  defaultValue={homepageContent?.advantagesSubtitle || ""}
+                  placeholder="e.g., Why Choose Moderno Interiors"
+                  data-testid="input-advantages-subtitle"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>FAQ Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">FAQ Section Title</label>
+                <Input 
+                  defaultValue={homepageContent?.faqSectionTitle || ""}
+                  placeholder="e.g., HAVE ANY QUESTIONS?"
+                  data-testid="input-faq-section-title"
                 />
               </div>
             </div>
