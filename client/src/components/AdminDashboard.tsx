@@ -20,8 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq } from "@shared/schema";
-import { insertArticleSchema, insertFaqSchema } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep } from "@shared/schema";
+import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const projectSchema = z.object({
@@ -238,6 +238,17 @@ const advantageSchema = z.object({
   active: z.boolean().default(true),
 });
 
+// Journey Step schema for form
+const journeyStepSchema = z.object({
+  stepNumber: z.number().min(1, "Step number is required"),
+  titleEn: z.string().min(1, "English title is required"),
+  titleVi: z.string().min(1, "Vietnamese title is required"),
+  descriptionEn: z.string().min(1, "English description is required"),
+  descriptionVi: z.string().min(1, "Vietnamese description is required"),
+  order: z.number().default(0),
+  active: z.boolean().default(true),
+});
+
 type ProjectFormData = z.infer<typeof projectSchema>;
 type ClientFormData = z.infer<typeof clientSchema>;
 type ServiceFormData = z.infer<typeof serviceSchema>;
@@ -248,6 +259,7 @@ type PartnerFormData = z.infer<typeof partnerSchema>;
 type FaqFormData = z.infer<typeof faqSchema>;
 type BilingualFaqFormData = z.infer<typeof bilingualFaqSchema>;
 type AdvantageFormData = z.infer<typeof advantageSchema>;
+type JourneyStepFormData = z.infer<typeof journeyStepSchema>;
 type InteractionFormData = z.infer<typeof interactionSchema>;
 type DealFormData = z.infer<typeof dealSchema>;
 type TransactionFormData = z.infer<typeof transactionSchema>;
@@ -293,6 +305,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
   const [isAdvantageDialogOpen, setIsAdvantageDialogOpen] = useState(false);
   const [editingAdvantage, setEditingAdvantage] = useState<any | null>(null);
+  
+  // Journey Step state
+  const [isJourneyStepDialogOpen, setIsJourneyStepDialogOpen] = useState(false);
+  const [editingJourneyStep, setEditingJourneyStep] = useState<JourneyStep | null>(null);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -346,6 +362,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: advantages = [], isLoading: advantagesLoading } = useQuery<any[]>({
     queryKey: ['/api/advantages'],
+  });
+
+  const { data: journeySteps = [], isLoading: journeyStepsLoading } = useQuery<JourneyStep[]>({
+    queryKey: ['/api/journey-steps'],
   });
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
@@ -555,6 +575,19 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     resolver: zodResolver(advantageSchema),
     defaultValues: {
       icon: "",
+      titleEn: "",
+      titleVi: "",
+      descriptionEn: "",
+      descriptionVi: "",
+      order: 0,
+      active: true,
+    },
+  });
+
+  const journeyStepForm = useForm<JourneyStepFormData>({
+    resolver: zodResolver(journeyStepSchema),
+    defaultValues: {
+      stepNumber: 1,
       titleEn: "",
       titleVi: "",
       descriptionEn: "",
@@ -903,6 +936,63 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     onError: (error: any) => {
       toast({
         title: "Error deleting advantage",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const createJourneyStepMutation = useMutation({
+    mutationFn: async (data: JourneyStepFormData) => {
+      const response = await apiRequest('POST', '/api/journey-steps', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/journey-steps'] });
+      toast({ title: "Journey step created successfully" });
+      journeyStepForm.reset();
+      setIsJourneyStepDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating journey step",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateJourneyStepMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<JourneyStepFormData> }) => {
+      const response = await apiRequest('PATCH', `/api/journey-steps/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/journey-steps'] });
+      toast({ title: "Journey step updated successfully" });
+      setEditingJourneyStep(null);
+      setIsJourneyStepDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating journey step",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteJourneyStepMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/journey-steps/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/journey-steps'] });
+      toast({ title: "Journey step deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting journey step",
         description: error.message,
         variant: "destructive",
       });
@@ -1491,6 +1581,31 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     
     setEditingAdvantage(null);
     setIsAdvantageDialogOpen(false);
+  };
+
+  const handleEditJourneyStep = (journeyStep: JourneyStep) => {
+    setEditingJourneyStep(journeyStep);
+    journeyStepForm.reset({
+      stepNumber: journeyStep.stepNumber || 1,
+      titleEn: journeyStep.titleEn || "",
+      titleVi: journeyStep.titleVi || "",
+      descriptionEn: journeyStep.descriptionEn || "",
+      descriptionVi: journeyStep.descriptionVi || "",
+      order: journeyStep.order || 0,
+      active: journeyStep.active !== undefined ? journeyStep.active : true,
+    });
+    setIsJourneyStepDialogOpen(true);
+  };
+
+  const onJourneyStepSubmit = async (data: JourneyStepFormData) => {
+    if (editingJourneyStep) {
+      await updateJourneyStepMutation.mutateAsync({ id: editingJourneyStep.id, data });
+    } else {
+      await createJourneyStepMutation.mutateAsync(data);
+    }
+    
+    setEditingJourneyStep(null);
+    setIsJourneyStepDialogOpen(false);
   };
 
   const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -4496,6 +4611,231 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                                   <AlertDialogAction
                                     onClick={() => deleteAdvantageMutation.mutate(advantage.id)}
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Journey Steps Management Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Journey Steps Management (Design Process)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Dialog open={isJourneyStepDialogOpen} onOpenChange={(open) => {
+              setIsJourneyStepDialogOpen(open);
+              if (!open) {
+                setEditingJourneyStep(null);
+                journeyStepForm.reset();
+              }
+            }}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{editingJourneyStep ? "Edit Journey Step" : "Add New Journey Step"}</DialogTitle>
+                  </DialogHeader>
+                  <Form {...journeyStepForm}>
+                    <form onSubmit={journeyStepForm.handleSubmit(onJourneyStepSubmit)} className="space-y-4">
+                      <FormField
+                        control={journeyStepForm.control}
+                        name="stepNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Step Number *</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field} 
+                                type="number" 
+                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                data-testid="input-journey-step-number" 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-4">
+                          <FormField
+                            control={journeyStepForm.control}
+                            name="titleEn"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Title (EN) *</FormLabel>
+                                <FormControl>
+                                  <Input {...field} data-testid="input-journey-step-title-en" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={journeyStepForm.control}
+                            name="descriptionEn"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Description (EN) *</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} rows={3} data-testid="textarea-journey-step-description-en" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <div className="space-y-4">
+                          <FormField
+                            control={journeyStepForm.control}
+                            name="titleVi"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Title (VI) *</FormLabel>
+                                <FormControl>
+                                  <Input {...field} data-testid="input-journey-step-title-vi" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={journeyStepForm.control}
+                            name="descriptionVi"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Description (VI) *</FormLabel>
+                                <FormControl>
+                                  <Textarea {...field} rows={3} data-testid="textarea-journey-step-description-vi" />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={journeyStepForm.control}
+                          name="order"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Display Order</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field} 
+                                  type="number" 
+                                  onChange={(e) => field.onChange(Number(e.target.value))}
+                                  data-testid="input-journey-step-order" 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={journeyStepForm.control}
+                          name="active"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                              <div className="space-y-0.5">
+                                <FormLabel>Active</FormLabel>
+                              </div>
+                              <FormControl>
+                                <input
+                                  type="checkbox"
+                                  checked={field.value}
+                                  onChange={field.onChange}
+                                  data-testid="checkbox-journey-step-active"
+                                  className="h-4 w-4"
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <Button 
+                        type="submit" 
+                        disabled={createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending}
+                        data-testid="button-submit-journey-step"
+                      >
+                        {editingJourneyStep ? "Update Journey Step" : "Add Journey Step"}
+                      </Button>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+
+            {journeyStepsLoading ? (
+              <div className="text-white/70">Loading journey steps...</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-white/70">Step #</TableHead>
+                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
+                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {journeySteps
+                    .sort((a, b) => a.order - b.order)
+                    .map((journeyStep, index) => (
+                      <TableRow key={journeyStep.id}>
+                        <TableCell className="text-white">{journeyStep.stepNumber}</TableCell>
+                        <TableCell className="text-white max-w-md" data-testid={`text-journey-step-${index}`}>
+                          <div className="space-y-1">
+                            <div className="truncate">
+                              <span className="text-white/50 text-xs uppercase">EN:</span> {journeyStep.titleEn}
+                            </div>
+                            <div className="truncate">
+                              <span className="text-white/50 text-xs uppercase">VI:</span> {journeyStep.titleVi}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-white/70">{journeyStep.order}</TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              onClick={() => handleEditJourneyStep(journeyStep)}
+                              data-testid={`button-edit-journey-step-${index}`}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="outline" data-testid={`button-delete-journey-step-${index}`}>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Journey Step?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This will permanently delete step "{journeyStep.titleEn}". This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteJourneyStepMutation.mutate(journeyStep.id)}
                                   >
                                     Delete
                                   </AlertDialogAction>
