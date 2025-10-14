@@ -186,7 +186,7 @@ export default function Contact() {
             <h1 className="text-3xl md:text-5xl font-light mb-4" data-testid="heading-questions">
               {t('contact.title')}
             </h1>
-            <p className="text-lg text-gray-400 mb-6" data-testid="text-consultation">
+            <p className="text-lg text-white mb-6" data-testid="text-consultation">
               {t('contact.subtitle')}
             </p>
           </div>
