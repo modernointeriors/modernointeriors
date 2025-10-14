@@ -337,7 +337,7 @@ export default function Home() {
   const { data: faqs = [] } = useQuery<any[]>({
     queryKey: ['/api/faqs', 'home', language],
     queryFn: async () => {
-      const response = await fetch(`/api/faqs?page=home&language=${language}&active=true`);
+      const response = await fetch(`/api/faqs?page=home&language=${language}`);
       if (!response.ok) throw new Error('Failed to fetch FAQs');
       return response.json();
     },
