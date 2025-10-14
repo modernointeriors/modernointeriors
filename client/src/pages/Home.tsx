@@ -968,7 +968,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-16 bg-black">
+      <section className="py-8 bg-black">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-16">
