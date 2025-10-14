@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { insertInquirySchema, type InsertInquiry } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowRight } from "lucide-react";
@@ -19,11 +19,7 @@ export default function Contact() {
     requirements: ''
   });
   const { toast } = useToast();
-  const [faq01Expanded, setFaq01Expanded] = useState(false);
-  const [faq02Expanded, setFaq02Expanded] = useState(false);
-  const [faq03Expanded, setFaq03Expanded] = useState(false);
-  const [faq04Expanded, setFaq04Expanded] = useState(false);
-  const [faq05Expanded, setFaq05Expanded] = useState(false);
+  const [expandedFaqIndex, setExpandedFaqIndex] = useState<number | null>(null);
   
   // Typing animation for placeholders
   const [placeholders, setPlaceholders] = useState({
@@ -34,14 +30,8 @@ export default function Contact() {
     requirements: ''
   });
 
-  // Typing animation for FAQ
-  const [faqTexts, setFaqTexts] = useState({
-    faq01: '',
-    faq02: '',
-    faq03: '',
-    faq04: '',
-    faq05: ''
-  });
+  // Typing animation for FAQ answers
+  const [faqAnswerTexts, setFaqAnswerTexts] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const texts = {
@@ -91,125 +81,56 @@ export default function Contact() {
     };
   }, [t]);
 
-  // Typing animation for FAQ 01
+  // Fetch FAQs from database
+  const {
+    data: faqs = [],
+    isLoading: faqsLoading,
+    error: faqsError,
+  } = useQuery<any[]>({
+    queryKey: ["/api/faqs", language],
+    queryFn: async () => {
+      const response = await fetch(`/api/faqs?language=${language}`);
+      if (!response.ok) throw new Error("Failed to fetch FAQs");
+      return response.json();
+    },
+    placeholderData: (previousData) => previousData,
+  });
+
+  // Reset FAQ expansion when language changes
   useEffect(() => {
-    if (!faq01Expanded) {
-      setFaqTexts(prev => ({ ...prev, faq01: '' }));
+    setExpandedFaqIndex(null);
+    setFaqAnswerTexts({});
+  }, [language]);
+
+  // Typing animation for FAQ answers
+  useEffect(() => {
+    if (expandedFaqIndex === null || !faqs || faqs.length === 0) {
       return;
     }
 
-    const text = language === 'vi'
-      ? 'Chi phí thiết kế nội thất phụ thuộc vào diện tích, phong cách thiết kế, chất liệu sử dụng và độ phức tạp của dự án. Chúng tôi cung cấp báo giá chi tiết sau buổi khảo sát và tư vấn ban đầu, đảm bảo minh bạch và phù hợp với ngân sách của bạn.'
-      : 'Interior design costs depend on the area, design style, materials used, and project complexity. We provide a detailed quote after the initial survey and consultation, ensuring transparency and alignment with your budget.';
+    const currentFaq = faqs[expandedFaqIndex];
+    if (!currentFaq) return;
 
+    const text = currentFaq.answer || "";
     let index = 0;
+    
+    // Start with empty text
+    setFaqAnswerTexts((prev) => ({ ...prev, [currentFaq.id]: "" }));
+    
     const interval = setInterval(() => {
       if (index <= text.length) {
-        setFaqTexts(prev => ({ ...prev, faq01: text.slice(0, index) }));
+        setFaqAnswerTexts((prev) => ({
+          ...prev,
+          [currentFaq.id]: text.slice(0, index),
+        }));
         index++;
       } else {
         clearInterval(interval);
       }
-    }, 20);
+    }, 10);
 
     return () => clearInterval(interval);
-  }, [faq01Expanded, language]);
-
-  // Typing animation for FAQ 02
-  useEffect(() => {
-    if (!faq02Expanded) {
-      setFaqTexts(prev => ({ ...prev, faq02: '' }));
-      return;
-    }
-
-    const text = language === 'vi'
-      ? 'Thời gian thực hiện dự án thường dao động từ 2-6 tháng tùy thuộc vào quy mô và yêu cầu. Giai đoạn thiết kế mất khoảng 2-4 tuần, sau đó là thi công và hoàn thiện. Chúng tôi cam kết tiến độ rõ ràng và cập nhật thường xuyên.'
-      : 'Project completion time typically ranges from 2-6 months depending on scale and requirements. The design phase takes about 2-4 weeks, followed by construction and finishing. We commit to clear timelines and regular updates.';
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setFaqTexts(prev => ({ ...prev, faq02: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [faq02Expanded, language]);
-
-  // Typing animation for FAQ 03
-  useEffect(() => {
-    if (!faq03Expanded) {
-      setFaqTexts(prev => ({ ...prev, faq03: '' }));
-      return;
-    }
-
-    const text = language === 'vi'
-      ? 'Hoàn toàn có thể! Sự tham gia của bạn là rất quan trọng. Chúng tôi khuyến khích bạn chia sẻ ý tưởng, góp ý trong suốt quá trình từ khâu concept đến hoàn thiện. Mọi quyết định quan trọng đều được trao đổi và thống nhất với bạn.'
-      : 'Absolutely! Your participation is crucial. We encourage you to share ideas and feedback throughout the process from concept to completion. All important decisions are discussed and agreed upon with you.';
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setFaqTexts(prev => ({ ...prev, faq03: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [faq03Expanded, language]);
-
-  // Typing animation for FAQ 04
-  useEffect(() => {
-    if (!faq04Expanded) {
-      setFaqTexts(prev => ({ ...prev, faq04: '' }));
-      return;
-    }
-
-    const text = language === 'vi'
-      ? 'Có thể điều chỉnh trong giai đoạn thiết kế. Sau khi duyệt bản vẽ thi công, mọi thay đổi sẽ được đánh giá về tác động đến tiến độ và chi phí. Chúng tôi luôn cố gắng đáp ứng yêu cầu của bạn một cách hợp lý nhất.'
-      : 'Modifications are possible during the design phase. After construction drawings are approved, any changes will be assessed for impact on timeline and costs. We always strive to accommodate your requests reasonably.';
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setFaqTexts(prev => ({ ...prev, faq04: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [faq04Expanded, language]);
-
-  // Typing animation for FAQ 05
-  useEffect(() => {
-    if (!faq05Expanded) {
-      setFaqTexts(prev => ({ ...prev, faq05: '' }));
-      return;
-    }
-
-    const text = language === 'vi'
-      ? 'Chúng tôi cam kết bảo hành 12-24 tháng cho công trình thi công và 1-5 năm cho đồ nội thất tùy từng sản phẩm. Đội ngũ kỹ thuật sẵn sàng hỗ trợ bảo trì và sửa chữa trong thời gian bảo hành.'
-      : 'We commit to a 12-24 month warranty for construction work and 1-5 years for furniture depending on the product. Our technical team is ready to support maintenance and repairs during the warranty period.';
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setFaqTexts(prev => ({ ...prev, faq05: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [faq05Expanded, language]);
+  }, [expandedFaqIndex]);
 
   const mutation = useMutation({
     mutationFn: async (data: InsertInquiry) => {
@@ -367,155 +288,64 @@ export default function Contact() {
 
           {/* FAQ Items */}
           <div className="space-y-8">
-            {/* FAQ 01 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
-              <div 
-                className="flex items-center justify-between"
-                onClick={() => setFaq01Expanded(!faq01Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[01]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Chi phí thiết kế nội thất được tính như thế nào?' : 'How is the interior design cost calculated?'}
-                  </h3>
-                </div>
-                <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    faq01Expanded ? 'rotate-90 text-white' : ''
-                  }`} 
-                />
+            {faqsLoading ? (
+              <div className="text-white/50 text-center py-8">
+                Loading FAQs...
               </div>
-              
-              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                faq01Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
-              }`}>
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">
-                    {faqTexts.faq01}
-                  </p>
-                </div>
+            ) : faqsError ? (
+              <div className="text-red-500 text-center py-8">
+                Error loading FAQs
               </div>
-            </div>
+            ) : faqs.length === 0 ? (
+              <div className="text-white/50 text-center py-8">
+                No FAQs available
+              </div>
+            ) : (
+              faqs.map((faq, index) => (
+                <div
+                  key={faq.id}
+                  className="pb-8 group transition-colors cursor-pointer"
+                  data-testid={`faq-item-${index + 1}`}
+                >
+                  <div
+                    className="flex items-center justify-between"
+                    onClick={() =>
+                      setExpandedFaqIndex(
+                        expandedFaqIndex === index ? null : index,
+                      )
+                    }
+                  >
+                    <div className="flex items-center gap-8">
+                      <span className="text-white/40 font-light text-lg">
+                        [{String(index + 1).padStart(2, "0")}]
+                      </span>
+                      <h3 className="text-xl md:text-2xl font-light text-white">
+                        {faq.question}
+                      </h3>
+                    </div>
+                    <ArrowRight
+                      className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                        expandedFaqIndex === index ? "rotate-90 text-white" : ""
+                      }`}
+                    />
+                  </div>
 
-            {/* FAQ 02 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
-              <div 
-                className="flex items-center justify-between"
-                onClick={() => setFaq02Expanded(!faq02Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[02]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Thời gian hoàn thành một dự án là bao lâu?' : 'How long does it take to complete a project?'}
-                  </h3>
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                      expandedFaqIndex === index
+                        ? "max-h-96 opacity-100 mt-8"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="border-l-2 border-white/20 pl-8">
+                      <p className="text-white/70 font-light">
+                        {faqAnswerTexts[faq.id] || ""}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    faq02Expanded ? 'rotate-90 text-white' : ''
-                  }`} 
-                />
-              </div>
-              
-              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                faq02Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
-              }`}>
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">
-                    {faqTexts.faq02}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 03 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
-              <div 
-                className="flex items-center justify-between"
-                onClick={() => setFaq03Expanded(!faq03Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[03]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Tôi có thể tham gia vào quá trình thiết kế không?' : 'Can I participate in the design process?'}
-                  </h3>
-                </div>
-                <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    faq03Expanded ? 'rotate-90 text-white' : ''
-                  }`} 
-                />
-              </div>
-              
-              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                faq03Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
-              }`}>
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">
-                    {faqTexts.faq03}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 04 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
-              <div 
-                className="flex items-center justify-between"
-                onClick={() => setFaq04Expanded(!faq04Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[04]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Có thể sửa đổi thiết kế sau khi đã duyệt không?' : 'Can the design be modified after approval?'}
-                  </h3>
-                </div>
-                <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    faq04Expanded ? 'rotate-90 text-white' : ''
-                  }`} 
-                />
-              </div>
-              
-              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                faq04Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
-              }`}>
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">
-                    {faqTexts.faq04}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ 05 */}
-            <div className="pb-8 group transition-colors cursor-pointer">
-              <div 
-                className="flex items-center justify-between"
-                onClick={() => setFaq05Expanded(!faq05Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[05]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === 'vi' ? 'Chúng tôi có bảo hành sau khi hoàn thành không?' : 'Do you provide warranty after completion?'}
-                  </h3>
-                </div>
-                <ArrowRight 
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    faq05Expanded ? 'rotate-90 text-white' : ''
-                  }`} 
-                />
-              </div>
-              
-              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                faq05Expanded ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
-              }`}>
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">
-                    {faqTexts.faq05}
-                  </p>
-                </div>
-              </div>
-            </div>
+              ))
+            )}
           </div>
         </div>
       </section>
