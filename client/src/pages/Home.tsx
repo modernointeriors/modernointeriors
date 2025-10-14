@@ -917,14 +917,14 @@ export default function Home() {
           {/* Section Title */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 mb-8 scroll-animate">
-              {language === 'vi' ? 'HÀNH TRÌNH KIẾN TẠO KHÔNG GIAN SỐNG CỦA BẠN' : 'THE JOURNEY TO YOUR DREAM SPACE'}
+              {homepageContent?.journeyTitle || (language === 'vi' ? 'HÀNH TRÌNH KIẾN TẠO KHÔNG GIAN SỐNG CỦA BẠN' : 'THE JOURNEY TO YOUR DREAM SPACE')}
             </h2>
             <div className="max-w-4xl">
               <p className="text-2xl md:text-3xl font-light text-white leading-relaxed scroll-animate">
-                {language === 'vi' 
+                {homepageContent?.journeyDescription || (language === 'vi' 
                   ? 'TỪ Ý TƯỞNG ĐẾN HIỆN THỰC, CHÚNG TÔI ĐỒNG HÀNH CÙNG BẠN QUA MỘT QUY TRÌNH 5 BƯỚC TINH GỌN, HIỆU QUẢ VÀ ĐẦY CẢM HỨNG.'
                   : 'FROM CONCEPT TO REALITY, WE GUIDE YOU THROUGH A STREAMLINED, EFFICIENT, AND INSPIRING 5-STEP PROCESS.'
-                }
+                )}
               </p>
             </div>
           </div>
@@ -1095,10 +1095,10 @@ export default function Home() {
           {/* Section Header */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase mb-4 scroll-animate">
-              {language === 'vi' ? 'LỢI THẾ CẠNH TRANH' : 'ADVANTAGES'}
+              {homepageContent?.advantagesTitle || (language === 'vi' ? 'LỢI THẾ CẠNH TRANH' : 'ADVANTAGES')}
             </h2>
             <h3 className="text-3xl md:text-4xl font-light text-white scroll-animate">
-              {language === 'vi' ? 'Tại sao chọn Moderno Interiors' : 'Why Choose Moderno Interiors'}
+              {homepageContent?.advantagesSubtitle || (language === 'vi' ? 'Tại sao chọn Moderno Interiors' : 'Why Choose Moderno Interiors')}
             </h3>
           </div>
 
@@ -1280,7 +1280,7 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-                {language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?'}
+                {homepageContent?.faqSectionTitle || (language === 'vi' ? 'CÓ THẮC MẮC GÌ KHÔNG?' : 'HAVE ANY QUESTIONS?')}
               </h2>
             </div>
             <div className="flex items-start justify-between">

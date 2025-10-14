@@ -130,6 +130,11 @@ const homepageContentSchema = z.object({
   statsClientsLabel: z.string().optional(),
   statsAwardsLabel: z.string().optional(),
   statsExperienceLabel: z.string().optional(),
+  journeyTitle: z.string().optional(),
+  journeyDescription: z.string().optional(),
+  advantagesTitle: z.string().optional(),
+  advantagesSubtitle: z.string().optional(),
+  faqSectionTitle: z.string().optional(),
   ctaTitle: z.string().optional(),
   ctaDescription: z.string().optional(),
   ctaButtonText: z.string().optional(),
@@ -542,6 +547,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         statsClientsLabel: homepageContent.statsClientsLabel || undefined,
         statsAwardsLabel: homepageContent.statsAwardsLabel || undefined,
         statsExperienceLabel: homepageContent.statsExperienceLabel || undefined,
+        journeyTitle: homepageContent.journeyTitle || undefined,
+        journeyDescription: homepageContent.journeyDescription || undefined,
+        advantagesTitle: homepageContent.advantagesTitle || undefined,
+        advantagesSubtitle: homepageContent.advantagesSubtitle || undefined,
+        faqSectionTitle: homepageContent.faqSectionTitle || undefined,
         ctaTitle: homepageContent.ctaTitle || undefined,
         ctaDescription: homepageContent.ctaDescription || undefined,
         ctaButtonText: homepageContent.ctaButtonText || undefined,
@@ -3531,14 +3541,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <label className="text-sm font-light mb-2 block">Hero Title</label>
                   <Input 
-                    defaultValue={homepageContent?.heroTitle || "Moderno Interiors"}
+                    {...homepageContentForm.register("heroTitle")}
                     data-testid="input-hero-title"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-light mb-2 block">Hero Studio</label>
                   <Input 
-                    defaultValue={homepageContent?.heroStudio || "Design"}
+                    {...homepageContentForm.register("heroStudio")}
                     data-testid="input-hero-studio"
                   />
                 </div>
@@ -3546,7 +3556,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Hero Tagline</label>
                 <Textarea 
-                  defaultValue={homepageContent?.heroTagline || ""}
+                  {...homepageContentForm.register("heroTagline")}
                   rows={2}
                   data-testid="textarea-hero-tagline"
                 />
@@ -3555,21 +3565,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <label className="text-sm font-light mb-2 block">Architecture Label</label>
                   <Input 
-                    defaultValue={homepageContent?.heroArchitectureLabel || ""}
+                    {...homepageContentForm.register("heroArchitectureLabel")}
                     data-testid="input-hero-architecture-label"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-light mb-2 block">Interior Label</label>
                   <Input 
-                    defaultValue={homepageContent?.heroInteriorLabel || ""}
+                    {...homepageContentForm.register("heroInteriorLabel")}
                     data-testid="input-hero-interior-label"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-light mb-2 block">Consultation Text</label>
                   <Input 
-                    defaultValue={homepageContent?.heroConsultationText || ""}
+                    {...homepageContentForm.register("heroConsultationText")}
                     data-testid="input-hero-consultation-text"
                   />
                 </div>
@@ -3577,7 +3587,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Background Image URL</label>
                 <Input 
-                  defaultValue={homepageContent?.heroBackgroundImage || ""}
+                  {...homepageContentForm.register("heroBackgroundImage")}
                   placeholder="Enter image URL"
                   data-testid="input-hero-background-image"
                 />
@@ -3596,14 +3606,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <label className="text-sm font-light mb-2 block">Featured Badge</label>
                   <Input 
-                    defaultValue={homepageContent?.featuredBadge || ""}
+                    {...homepageContentForm.register("featuredBadge")}
                     data-testid="input-featured-badge"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-light mb-2 block">Featured Title</label>
                   <Input 
-                    defaultValue={homepageContent?.featuredTitle || ""}
+                    {...homepageContentForm.register("featuredTitle")}
                     data-testid="input-featured-title"
                   />
                 </div>
@@ -3611,7 +3621,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Featured Description</label>
                 <Textarea 
-                  defaultValue={homepageContent?.featuredDescription || ""}
+                  {...homepageContentForm.register("featuredDescription")}
                   rows={4}
                   data-testid="textarea-featured-description"
                 />
@@ -3629,28 +3639,28 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Projects Label</label>
                 <Input 
-                  defaultValue={homepageContent?.statsProjectsLabel || ""}
+                  {...homepageContentForm.register("statsProjectsLabel")}
                   data-testid="input-stats-projects-label"
                 />
               </div>
               <div>
                 <label className="text-sm font-light mb-2 block">Clients Label</label>
                 <Input 
-                  defaultValue={homepageContent?.statsClientsLabel || ""}
+                  {...homepageContentForm.register("statsClientsLabel")}
                   data-testid="input-stats-clients-label"
                 />
               </div>
               <div>
                 <label className="text-sm font-light mb-2 block">Awards Label</label>
                 <Input 
-                  defaultValue={homepageContent?.statsAwardsLabel || ""}
+                  {...homepageContentForm.register("statsAwardsLabel")}
                   data-testid="input-stats-awards-label"
                 />
               </div>
               <div>
                 <label className="text-sm font-light mb-2 block">Experience Label</label>
                 <Input 
-                  defaultValue={homepageContent?.statsExperienceLabel || ""}
+                  {...homepageContentForm.register("statsExperienceLabel")}
                   data-testid="input-stats-experience-label"
                 />
               </div>
@@ -3667,7 +3677,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Journey Title</label>
                 <Input 
-                  defaultValue={homepageContent?.journeyTitle || ""}
+                  {...homepageContentForm.register("journeyTitle")}
                   placeholder="e.g., THE JOURNEY TO YOUR DREAM SPACE"
                   data-testid="input-journey-title"
                 />
@@ -3675,7 +3685,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Journey Description</label>
                 <Textarea 
-                  defaultValue={homepageContent?.journeyDescription || ""}
+                  {...homepageContentForm.register("journeyDescription")}
                   rows={3}
                   placeholder="Description for the journey/process section"
                   data-testid="textarea-journey-description"
@@ -3694,7 +3704,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Advantages Title</label>
                 <Input 
-                  defaultValue={homepageContent?.advantagesTitle || ""}
+                  {...homepageContentForm.register("advantagesTitle")}
                   placeholder="e.g., ADVANTAGES"
                   data-testid="input-advantages-title"
                 />
@@ -3702,7 +3712,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">Advantages Subtitle</label>
                 <Input 
-                  defaultValue={homepageContent?.advantagesSubtitle || ""}
+                  {...homepageContentForm.register("advantagesSubtitle")}
                   placeholder="e.g., Why Choose Moderno Interiors"
                   data-testid="input-advantages-subtitle"
                 />
@@ -3720,7 +3730,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">FAQ Section Title</label>
                 <Input 
-                  defaultValue={homepageContent?.faqSectionTitle || ""}
+                  {...homepageContentForm.register("faqSectionTitle")}
                   placeholder="e.g., HAVE ANY QUESTIONS?"
                   data-testid="input-faq-section-title"
                 />
@@ -3738,14 +3748,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <label className="text-sm font-light mb-2 block">CTA Title</label>
                 <Input 
-                  defaultValue={homepageContent?.ctaTitle || ""}
+                  {...homepageContentForm.register("ctaTitle")}
                   data-testid="input-cta-title"
                 />
               </div>
               <div>
                 <label className="text-sm font-light mb-2 block">CTA Description</label>
                 <Textarea 
-                  defaultValue={homepageContent?.ctaDescription || ""}
+                  {...homepageContentForm.register("ctaDescription")}
                   rows={3}
                   data-testid="textarea-cta-description"
                 />
@@ -3754,20 +3764,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <div>
                   <label className="text-sm font-light mb-2 block">Primary Button Text</label>
                   <Input 
-                    defaultValue={homepageContent?.ctaButtonText || ""}
+                    {...homepageContentForm.register("ctaButtonText")}
                     data-testid="input-cta-button-text"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-light mb-2 block">Secondary Button Text</label>
                   <Input 
-                    defaultValue={homepageContent?.ctaSecondaryButtonText || ""}
+                    {...homepageContentForm.register("ctaSecondaryButtonText")}
                     data-testid="input-cta-secondary-button-text"
                   />
                 </div>
               </div>
               <div className="pt-4">
-                <Button data-testid="button-save-homepage">Save Homepage Content</Button>
+                <Button 
+                  onClick={homepageContentForm.handleSubmit(onHomepageContentSubmit)}
+                  disabled={updateHomepageContentMutation.isPending}
+                  data-testid="button-save-homepage"
+                >
+                  {updateHomepageContentMutation.isPending ? "Saving..." : "Save Homepage Content"}
+                </Button>
               </div>
             </div>
           </CardContent>
