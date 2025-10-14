@@ -25,6 +25,7 @@ import type {
   HomepageContent,
   Article,
   Partner,
+  JourneyStep,
 } from "@shared/schema";
 
 export default function Home() {
@@ -34,11 +35,7 @@ export default function Home() {
   const queryClient = useQueryClient();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
-  const [step01Expanded, setStep01Expanded] = useState(false);
-  const [step02Expanded, setStep02Expanded] = useState(false);
-  const [step03Expanded, setStep03Expanded] = useState(false);
-  const [step04Expanded, setStep04Expanded] = useState(false);
-  const [step05Expanded, setStep05Expanded] = useState(false);
+  const [expandedSteps, setExpandedSteps] = useState<number[]>([]);
   const [contactFormExpanded, setContactFormExpanded] = useState(false);
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(
     null,
@@ -49,140 +46,16 @@ export default function Home() {
   const [faqAnswerTexts, setFaqAnswerTexts] = useState<Record<string, string>>(
     {},
   );
+  const [stepDescriptionTexts, setStepDescriptionTexts] = useState<Record<string, string>>({});
 
-  // Typing animation for process steps
-  const [stepTexts, setStepTexts] = useState({
-    step01: "",
-    step02: "",
-    step03: "",
-    step04: "",
-    step05: "",
-  });
-
-  // Typing animation for Step 01
-  useEffect(() => {
-    if (!step01Expanded) {
-      setStepTexts((prev) => ({ ...prev, step01: "" }));
-      return;
-    }
-
-    const text =
-      language === "vi"
-        ? "Chúng tôi bắt đầu bằng việc lắng nghe và phân tích sâu nhu cầu, sở thích và ngân sách của bạn. Một buổi khảo sát thực tế tại công trình sẽ giúp chúng tôi đưa ra những tư vấn phù hợp nhất."
-        : "We begin by carefully listening to and analyzing your needs, preferences, and budget. An on-site survey of your property allows us to provide the most tailored advice.";
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setStepTexts((prev) => ({ ...prev, step01: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [step01Expanded, language]);
-
-  // Typing animation for Step 02
-  useEffect(() => {
-    if (!step02Expanded) {
-      setStepTexts((prev) => ({ ...prev, step02: "" }));
-      return;
-    }
-
-    const text =
-      language === "vi"
-        ? "Những ý tưởng sáng tạo được phác thảo, kết hợp cùng giải pháp công năng thông minh và thẩm mỹ tinh tế. Chúng tôi sẽ trình bày và thống nhất cùng bạn phương án thiết kế tối ưu nhất trước khi chính thức hợp tác."
-        : "Creative ideas are sketched out, combining intelligent functional solutions with sophisticated aesthetics. We will present and finalize the optimal design proposal with you before formalizing our partnership.";
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setStepTexts((prev) => ({ ...prev, step02: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [step02Expanded, language]);
-
-  // Typing animation for Step 03
-  useEffect(() => {
-    if (!step03Expanded) {
-      setStepTexts((prev) => ({ ...prev, step03: "" }));
-      return;
-    }
-
-    const text =
-      language === "vi"
-        ? "Không gian mơ ước của bạn sẽ được tái hiện sống động qua các bản vẽ phối cảnh 3D và moodboard vật liệu, màu sắc. Bạn sẽ thấy trước ngôi nhà của mình một cách chân thực nhất và cùng chúng tôi tinh chỉnh đến khi hoàn toàn ưng ý."
-        : "Your dream space is brought to life through vivid 3D renderings and mood boards showcasing materials and colors. You get to see your future home with stunning realism, and we'll fine-tune every detail with you until it's perfect.";
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setStepTexts((prev) => ({ ...prev, step03: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [step03Expanded, language]);
-
-  // Typing animation for Step 04
-  useEffect(() => {
-    if (!step04Expanded) {
-      setStepTexts((prev) => ({ ...prev, step04: "" }));
-      return;
-    }
-
-    const text =
-      language === "vi"
-        ? "Quá trình thi công được lập kế hoạch và quản lý chặt chẽ bởi đội ngũ giám sát giàu kinh nghiệm. Chúng tôi cam kết đảm bảo đúng tiến độ, tuân thủ thiết kế và thường xuyên cập nhật thông tin minh bạch đến bạn."
-        : "The construction process is meticulously planned and managed by our experienced supervision team. We are committed to on-time delivery, strict adherence to the design, and providing you with regular, transparent progress updates.";
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setStepTexts((prev) => ({ ...prev, step04: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [step04Expanded, language]);
-
-  // Typing animation for Step 05
-  useEffect(() => {
-    if (!step05Expanded) {
-      setStepTexts((prev) => ({ ...prev, step05: "" }));
-      return;
-    }
-
-    const text =
-      language === "vi"
-        ? "Dự án kết thúc bằng việc nghiệm thu kỹ lưỡng và bàn giao trọn vẹn. Nhưng mối quan hệ của chúng ta thì không. Với chính sách bảo hành, bảo trì uy tín, chúng tôi cam kết sẽ luôn đồng hành để đảm bảo không gian của bạn luôn hoàn hảo."
-        : "The project concludes with a thorough inspection and seamless handover. But our relationship doesn't end there. With our reliable warranty and maintenance policy, we are committed to being your long-term partner, ensuring your space remains perfect.";
-
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setStepTexts((prev) => ({ ...prev, step05: text.slice(0, index) }));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [step05Expanded, language]);
+  // Helper function to toggle step expansion
+  const toggleStep = (stepNumber: number) => {
+    setExpandedSteps(prev => 
+      prev.includes(stepNumber) 
+        ? prev.filter(n => n !== stepNumber)
+        : [...prev, stepNumber]
+    );
+  };
 
   // Scroll animation with specific directions and stagger delays
   useEffect(() => {
@@ -463,6 +336,53 @@ export default function Home() {
       return response.json();
     },
   });
+
+  const { data: journeySteps, isLoading: journeyStepsLoading } = useQuery<JourneyStep[]>({
+    queryKey: ["/api/journey-steps"],
+    queryFn: async () => {
+      const response = await fetch("/api/journey-steps?active=true");
+      if (!response.ok) return [];
+      return response.json();
+    },
+  });
+
+  // Typing animation for journey step descriptions
+  useEffect(() => {
+    const expandedStepNumbers = expandedSteps;
+    if (expandedStepNumbers.length === 0 || !journeySteps || journeySteps.length === 0) {
+      return;
+    }
+
+    const intervals: NodeJS.Timeout[] = [];
+
+    expandedStepNumbers.forEach(stepNumber => {
+      const step = journeySteps.find(s => s.stepNumber === stepNumber);
+      if (!step) return;
+
+      const text = language === "vi" ? step.descriptionVi : step.descriptionEn;
+      let index = 0;
+      
+      setStepDescriptionTexts((prev) => ({ ...prev, [step.id]: "" }));
+      
+      const interval = setInterval(() => {
+        if (index <= text.length) {
+          setStepDescriptionTexts((prev) => ({
+            ...prev,
+            [step.id]: text.slice(0, index),
+          }));
+          index++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 20);
+      
+      intervals.push(interval);
+    });
+
+    return () => {
+      intervals.forEach((interval) => clearInterval(interval));
+    };
+  }, [expandedSteps, journeySteps, language]);
 
   // Quick contact form mutation (matching Contact page)
   const mutation = useMutation({
@@ -959,180 +879,66 @@ export default function Home() {
 
           {/* Process Steps */}
           <div className="space-y-8">
-            {/* Step 01 */}
-            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-100">
-              <div
-                className="flex items-center justify-between"
-                onClick={() => setStep01Expanded(!step01Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[01]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === "vi"
-                      ? "KHỞI ĐẦU & THẤU HIỂU"
-                      : "DISCOVERY & UNDERSTANDING"}
-                  </h3>
+            {journeyStepsLoading ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="pb-8 animate-pulse">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-8">
+                      <div className="w-12 h-6 bg-white/10 rounded" />
+                      <div className="w-64 h-8 bg-white/10 rounded" />
+                    </div>
+                    <div className="w-5 h-5 bg-white/10 rounded" />
+                  </div>
                 </div>
-                <ArrowRight
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    step01Expanded ? "rotate-90 text-white" : ""
-                  }`}
-                />
-              </div>
+              ))
+            ) : journeySteps && journeySteps.length > 0 ? (
+              journeySteps
+                .sort((a, b) => a.stepNumber - b.stepNumber)
+                .map((step, index) => {
+                  const isExpanded = expandedSteps.includes(step.stepNumber);
+                  const stepNumberPadded = step.stepNumber.toString().padStart(2, '0');
+                  const title = language === 'vi' ? step.titleVi : step.titleEn;
+                  const description = stepDescriptionTexts[step.id] || '';
 
-              {/* Expandable Content */}
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  step01Expanded
-                    ? "max-h-96 opacity-100 mt-8"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">{stepTexts.step01}</p>
-                </div>
-              </div>
-            </div>
+                  return (
+                    <div 
+                      key={step.id} 
+                      className={`pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-${(index + 1) * 100}`}
+                      data-testid={`journey-step-${step.stepNumber}`}
+                    >
+                      <div
+                        className="flex items-center justify-between"
+                        onClick={() => toggleStep(step.stepNumber)}
+                      >
+                        <div className="flex items-center gap-8">
+                          <span className="text-white/40 font-light text-lg">[{stepNumberPadded}]</span>
+                          <h3 className="text-xl md:text-2xl font-light text-white">
+                            {title}
+                          </h3>
+                        </div>
+                        <ArrowRight
+                          className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                            isExpanded ? "rotate-90 text-white" : ""
+                          }`}
+                        />
+                      </div>
 
-            {/* Step 02 */}
-            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-200">
-              <div
-                className="flex items-center justify-between"
-                onClick={() => setStep02Expanded(!step02Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[02]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === "vi"
-                      ? "ĐỊNH HÌNH PHONG CÁCH"
-                      : "STYLE & CONCEPT DEVELOPMENT"}
-                  </h3>
-                </div>
-                <ArrowRight
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    step02Expanded ? "rotate-90 text-white" : ""
-                  }`}
-                />
-              </div>
-
-              {/* Expandable Content */}
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  step02Expanded
-                    ? "max-h-96 opacity-100 mt-8"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">{stepTexts.step02}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 03 - With Expandable Content */}
-            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-300">
-              <div
-                className="flex items-center justify-between"
-                onClick={() => setStep03Expanded(!step03Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[03]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === "vi"
-                      ? "TRỰC QUAN HÓA KHÔNG GIAN"
-                      : "VISUALIZING THE SPACE"}
-                  </h3>
-                </div>
-                <ArrowRight
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    step03Expanded ? "rotate-90 text-white" : ""
-                  }`}
-                />
-              </div>
-
-              {/* Expandable Content */}
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  step03Expanded
-                    ? "max-h-96 opacity-100 mt-8"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">{stepTexts.step03}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 04 */}
-            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-400">
-              <div
-                className="flex items-center justify-between"
-                onClick={() => setStep04Expanded(!step04Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[04]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === "vi"
-                      ? "HIỆN THỰC HÓA CHUYÊN NGHIỆP"
-                      : "PROFESSIONAL EXECUTION"}
-                  </h3>
-                </div>
-                <ArrowRight
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    step04Expanded ? "rotate-90 text-white" : ""
-                  }`}
-                />
-              </div>
-
-              {/* Expandable Content */}
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  step04Expanded
-                    ? "max-h-96 opacity-100 mt-8"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">{stepTexts.step04}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 05 */}
-            <div className="pb-8 group transition-colors cursor-pointer process-step scroll-animate animate-delay-500">
-              <div
-                className="flex items-center justify-between"
-                onClick={() => setStep05Expanded(!step05Expanded)}
-              >
-                <div className="flex items-center gap-8">
-                  <span className="text-white/40 font-light text-lg">[05]</span>
-                  <h3 className="text-xl md:text-2xl font-light text-white">
-                    {language === "vi"
-                      ? "BÀN GIAO & ĐỒNG HÀNH DÀI LÂU"
-                      : "HANDOVER & LONG-TERM PARTNERSHIP"}
-                  </h3>
-                </div>
-                <ArrowRight
-                  className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                    step05Expanded ? "rotate-90 text-white" : ""
-                  }`}
-                />
-              </div>
-
-              {/* Expandable Content */}
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  step05Expanded
-                    ? "max-h-96 opacity-100 mt-8"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="border-l-2 border-white/20 pl-8">
-                  <p className="text-white/70 font-light">{stepTexts.step05}</p>
-                </div>
-              </div>
-            </div>
+                      {/* Expandable Content */}
+                      <div
+                        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                          isExpanded
+                            ? "max-h-96 opacity-100 mt-8"
+                            : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <div className="border-l-2 border-white/20 pl-8">
+                          <p className="text-white/70 font-light">{description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+            ) : null}
           </div>
         </div>
       </section>
