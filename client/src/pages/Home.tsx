@@ -396,6 +396,12 @@ export default function Home() {
     },
   });
 
+  // Reset FAQ expansion when language changes
+  useEffect(() => {
+    setExpandedFaqIndex(null);
+    setFaqAnswerTexts({});
+  }, [language]);
+
   // Typing animation for FAQ answers
   useEffect(() => {
     if (expandedFaqIndex === null || !faqs || faqs.length === 0) {
