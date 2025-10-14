@@ -244,6 +244,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [referralOpen, setReferralOpen] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<any | null>(null);
+  
+  // Logo Management state
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string>('');
+  const [logoUrl, setLogoUrl] = useState('');
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -319,6 +324,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await fetch('/api/transactions');
       return response.json();
     },
+  });
+
+  // Settings/Logo query
+  const { data: settings, isLoading: settingsLoading } = useQuery<any>({
+    queryKey: ['/api/settings'],
   });
 
   // Pagination state
@@ -845,6 +855,27 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  // Logo settings mutation
+  const updateSettingsMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest('PUT', '/api/settings', data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/settings'] });
+      toast({
+        title: "Success",
+        description: "Logo settings updated successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update logo settings",
+        variant: "destructive"
+      });
+    }
+  });
+
   // Handlers
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
@@ -1172,6 +1203,36 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data });
     } else {
       await createPartnerMutation.mutateAsync(data);
+    }
+  };
+
+  const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "Error",
+          description: "File size must be less than 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setLogoFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setLogoPreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveLogo = () => {
+    if (logoPreview) {
+      updateSettingsMutation.mutate({ logoData: logoPreview });
+    } else if (logoUrl) {
+      updateSettingsMutation.mutate({ logoUrl: logoUrl });
     }
   };
 
@@ -4340,6 +4401,90 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </TableBody>
               </Table>
             )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Logo Management Tab
+  if (activeTab === 'logo') {
+    return (
+      <div className="space-y-6">
+        <Card className="bg-black border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white">Logo Management</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Current Logo */}
+            {(settings?.logoData || settings?.logoUrl) && (
+              <div>
+                <label className="text-sm font-light mb-2 block text-white/70">Current Logo</label>
+                <div className="border border-white/10 rounded-none p-4 bg-white/5">
+                  <img 
+                    src={settings.logoData || settings.logoUrl} 
+                    alt="Current Logo" 
+                    className="h-24 object-contain"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Upload New Logo */}
+            <div>
+              <label className="text-sm font-light mb-2 block text-white/70">Upload Logo (JPG, PNG, max 5MB)</label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={handleLogoFileChange}
+                className="block w-full text-sm text-white/70
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-none file:border-0
+                  file:text-sm file:font-light
+                  file:bg-white/10 file:text-white
+                  hover:file:bg-white/20
+                  file:h-10"
+                data-testid="input-logo-file"
+              />
+              {logoPreview && (
+                <div className="mt-4">
+                  <p className="text-sm font-light mb-2 text-white/70">Preview:</p>
+                  <div className="border border-white/10 rounded-none p-4 bg-white/5">
+                    <img src={logoPreview} alt="Logo Preview" className="h-24 object-contain" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Or Use URL */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-white/10" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-black px-2 text-white/50">Or use URL</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-light mb-2 block text-white/70">Logo URL</label>
+              <Input
+                value={logoUrl}
+                onChange={(e) => setLogoUrl(e.target.value)}
+                placeholder="https://example.com/logo.png"
+                className="bg-black border-white/20 text-white h-10"
+                data-testid="input-logo-url"
+              />
+            </div>
+
+            <Button 
+              onClick={handleSaveLogo}
+              disabled={updateSettingsMutation.isPending || (!logoPreview && !logoUrl)}
+              className="h-10 px-4"
+              data-testid="button-save-logo"
+            >
+              {updateSettingsMutation.isPending ? 'Saving...' : 'Save Logo'}
+            </Button>
           </CardContent>
         </Card>
       </div>
