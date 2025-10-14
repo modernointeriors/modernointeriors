@@ -334,7 +334,7 @@ export default function Home() {
     },
   });
 
-  const { data: faqs = [] } = useQuery<any[]>({
+  const { data: faqs = [], isLoading: faqsLoading, error: faqsError } = useQuery<any[]>({
     queryKey: ['/api/faqs', 'home', language],
     queryFn: async () => {
       const response = await fetch(`/api/faqs?page=home&language=${language}`);
@@ -1294,41 +1294,49 @@ export default function Home() {
 
           {/* FAQ Items */}
           <div className="space-y-8">
-            {faqs.map((faq, index) => (
-              <div 
-                key={faq.id} 
-                className="pb-8 group transition-colors cursor-pointer scroll-animate" 
-                style={{ animationDelay: `${index * 100}ms` }}
-                data-testid={`faq-item-${index + 1}`}
-              >
+            {faqsLoading ? (
+              <div className="text-white/50 text-center py-8">Loading FAQs...</div>
+            ) : faqsError ? (
+              <div className="text-red-500 text-center py-8">Error loading FAQs</div>
+            ) : faqs.length === 0 ? (
+              <div className="text-white/50 text-center py-8">No FAQs available</div>
+            ) : (
+              faqs.map((faq, index) => (
                 <div 
-                  className="flex items-center justify-between"
-                  onClick={() => setExpandedFaqIndex(expandedFaqIndex === index ? null : index)}
+                  key={faq.id} 
+                  className="pb-8 group transition-colors cursor-pointer scroll-animate" 
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  data-testid={`faq-item-${index + 1}`}
                 >
-                  <div className="flex items-center gap-8">
-                    <span className="text-white/40 font-light text-lg">[{String(index + 1).padStart(2, '0')}]</span>
-                    <h3 className="text-xl md:text-2xl font-light text-white">
-                      {faq.question}
-                    </h3>
+                  <div 
+                    className="flex items-center justify-between"
+                    onClick={() => setExpandedFaqIndex(expandedFaqIndex === index ? null : index)}
+                  >
+                    <div className="flex items-center gap-8">
+                      <span className="text-white/40 font-light text-lg">[{String(index + 1).padStart(2, '0')}]</span>
+                      <h3 className="text-xl md:text-2xl font-light text-white">
+                        {faq.question}
+                      </h3>
+                    </div>
+                    <ArrowRight 
+                      className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
+                        expandedFaqIndex === index ? 'rotate-90 text-white' : ''
+                      }`} 
+                    />
                   </div>
-                  <ArrowRight 
-                    className={`w-5 h-5 text-white/40 group-hover:text-white transition-all ${
-                      expandedFaqIndex === index ? 'rotate-90 text-white' : ''
-                    }`} 
-                  />
-                </div>
-                
-                <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  expandedFaqIndex === index ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
-                }`}>
-                  <div className="border-l-2 border-white/20 pl-8">
-                    <p className="text-white/70 font-light">
-                      {faq.answer}
-                    </p>
+                  
+                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    expandedFaqIndex === index ? 'max-h-96 opacity-100 mt-8' : 'max-h-0 opacity-0'
+                  }`}>
+                    <div className="border-l-2 border-white/20 pl-8">
+                      <p className="text-white/70 font-light">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>
