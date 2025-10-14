@@ -4111,29 +4111,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         {/* FAQ Management Section */}
         <Card className="bg-black border-white/10">
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="text-white">FAQ Management</CardTitle>
-              <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    onClick={() => {
-                      setEditingFaq(null);
-                      faqForm.reset({
-                        questionEn: "",
-                        questionVi: "",
-                        answerEn: "",
-                        answerVi: "",
-                        page: "home",
-                        order: 0,
-                      });
-                    }} 
-                    disabled={faqs.length >= 10}
-                    data-testid="button-add-faq"
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add FAQ {faqs.length >= 10 ? '(Max 5 reached)' : ''}
-                  </Button>
-                </DialogTrigger>
+            <CardTitle className="text-white">FAQ Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>
@@ -4238,9 +4219,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </Form>
                 </DialogContent>
               </Dialog>
-            </div>
-          </CardHeader>
-          <CardContent>
+
             {faqsLoading ? (
               <div className="text-white/70">Loading FAQs...</div>
             ) : (
@@ -4316,21 +4295,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         {/* Advantages Management Section */}
         <Card>
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Advantages Management (Why Choose Us)</CardTitle>
-              <Dialog open={isAdvantageDialogOpen} onOpenChange={(open) => {
-                setIsAdvantageDialogOpen(open);
-                if (!open) {
-                  setEditingAdvantage(null);
-                  advantageForm.reset();
-                }
-              }}>
-                <DialogTrigger asChild>
-                  <Button data-testid="button-add-advantage">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Advantage
-                  </Button>
-                </DialogTrigger>
+            <CardTitle>Advantages Management (Why Choose Us)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Dialog open={isAdvantageDialogOpen} onOpenChange={(open) => {
+              setIsAdvantageDialogOpen(open);
+              if (!open) {
+                setEditingAdvantage(null);
+                advantageForm.reset();
+              }
+            }}>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>{editingAdvantage ? "Edit Advantage" : "Add New Advantage"}</DialogTitle>
@@ -4466,9 +4440,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </Form>
                 </DialogContent>
               </Dialog>
-            </div>
-          </CardHeader>
-          <CardContent>
+
             {advantagesLoading ? (
               <div className="text-white/70">Loading advantages...</div>
             ) : (
