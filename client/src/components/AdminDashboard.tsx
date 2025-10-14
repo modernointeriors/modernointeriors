@@ -3632,6 +3632,257 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             </div>
           </CardContent>
         </Card>
+
+        {/* Partners Management Section */}
+        <Card className="bg-black border-white/10">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-white">Partners Management</CardTitle>
+              <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={() => {
+                    setEditingPartner(null);
+                    partnerForm.reset({
+                      name: "",
+                      logo: "",
+                      website: "",
+                      description: "",
+                      order: 0,
+                      active: true,
+                    });
+                    setPartnerLogoPreview('');
+                  }} data-testid="button-add-partner">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Partner
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingPartner ? "Edit Partner" : "Add New Partner"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <Form {...partnerForm}>
+                    <form onSubmit={partnerForm.handleSubmit(onPartnerSubmit)} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={partnerForm.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Partner Name *</FormLabel>
+                              <FormControl>
+                                <Input {...field} data-testid="input-partner-name" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={partnerForm.control}
+                          name="website"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Website</FormLabel>
+                              <FormControl>
+                                <Input {...field} data-testid="input-partner-website" placeholder="https://example.com" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Partner Logo Upload */}
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm font-medium">Upload Logo (JPG, PNG, max 5MB)</label>
+                          <input
+                            type="file"
+                            accept=".jpg,.jpeg,.png"
+                            onChange={handlePartnerLogoFileChange}
+                            className="block w-full mt-2 text-sm text-foreground
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-none file:border-0
+                              file:text-sm file:font-medium
+                              file:bg-primary file:text-primary-foreground
+                              hover:file:bg-primary/90"
+                            data-testid="input-partner-logo-file"
+                          />
+                          {partnerLogoPreview && (
+                            <div className="mt-4">
+                              <p className="text-sm font-medium mb-2">Preview:</p>
+                              <div className="border rounded-none p-4 bg-muted">
+                                <img src={partnerLogoPreview} alt="Partner Logo Preview" className="h-24 object-contain" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Or Use URL */}
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t" />
+                          </div>
+                          <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                          </div>
+                        </div>
+
+                        <FormField
+                          control={partnerForm.control}
+                          name="logo"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Logo URL</FormLabel>
+                              <FormControl>
+                                <Input {...field} data-testid="input-partner-logo" placeholder="https://example.com/logo.png" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={partnerForm.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Description</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={3} data-testid="textarea-partner-description" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={partnerForm.control}
+                          name="order"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Display Order</FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field} 
+                                  type="number" 
+                                  onChange={(e) => field.onChange(Number(e.target.value))}
+                                  data-testid="input-partner-order" 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={partnerForm.control}
+                          name="active"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
+                              <FormControl>
+                                <input
+                                  type="checkbox"
+                                  checked={field.value}
+                                  onChange={field.onChange}
+                                  data-testid="checkbox-partner-active"
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Active Partner</FormLabel>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <Button 
+                        type="submit" 
+                        disabled={createPartnerMutation.isPending || updatePartnerMutation.isPending}
+                        data-testid="button-submit-partner"
+                      >
+                        {editingPartner ? "Update Partner" : "Add Partner"}
+                      </Button>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {partnersLoading ? (
+              <div className="text-white/70">Loading partners...</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-white/70">Logo</TableHead>
+                    <TableHead className="text-white/70">Name</TableHead>
+                    <TableHead className="text-white/70">Website</TableHead>
+                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Status</TableHead>
+                    <TableHead className="text-white/70">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {partners.map((partner) => (
+                    <TableRow key={partner.id}>
+                      <TableCell>
+                        <img 
+                          src={partner.logoData || partner.logo || ''} 
+                          alt={partner.name}
+                          className="w-12 h-12 object-contain"
+                          data-testid={`img-partner-logo-${partner.id}`}
+                        />
+                      </TableCell>
+                      <TableCell className="text-white" data-testid={`text-partner-name-${partner.id}`}>
+                        {partner.name}
+                      </TableCell>
+                      <TableCell className="text-white/70">
+                        {partner.website ? (
+                          <a href={partner.website} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+                            {partner.website}
+                          </a>
+                        ) : '-'}
+                      </TableCell>
+                      <TableCell className="text-white/70">{partner.order}</TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={partner.active ? "default" : "secondary"}
+                          data-testid={`badge-partner-status-${partner.id}`}
+                        >
+                          {partner.active ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleEditPartner(partner)}
+                            data-testid={`button-edit-partner-${partner.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={() => deletePartnerMutation.mutate(partner.id)}
+                            data-testid={`button-delete-partner-${partner.id}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
       </div>
     );
   }
