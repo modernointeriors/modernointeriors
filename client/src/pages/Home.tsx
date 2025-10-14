@@ -1214,7 +1214,7 @@ export default function Home() {
                         data-testid={`partner-logo-row1-${partner.id}`}
                       >
                         <img
-                          src={partner.logo}
+                          src={partner.logoData || partner.logo || ''}
                           alt={partner.name}
                           className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
                         />
@@ -1238,7 +1238,7 @@ export default function Home() {
                         data-testid={`partner-logo-row2-${partner.id}`}
                       >
                         <img
-                          src={partner.logo}
+                          src={partner.logoData || partner.logo || ''}
                           alt={partner.name}
                           className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
                         />

@@ -138,7 +138,7 @@ const homepageContentSchema = z.object({
 
 const partnerSchema = z.object({
   name: z.string().min(1, "Partner name is required"),
-  logo: z.string().min(1, "Partner logo is required"),
+  logo: z.string().optional(), // Optional because we can use logoData instead
   website: z.string().optional(),
   description: z.string().optional(),
   order: z.number().default(0),
@@ -249,6 +249,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');
   const [logoUrl, setLogoUrl] = useState('');
+  
+  // Partner Logo state
+  const [partnerLogoFile, setPartnerLogoFile] = useState<File | null>(null);
+  const [partnerLogoPreview, setPartnerLogoPreview] = useState<string>('');
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -1189,21 +1193,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setEditingPartner(partner);
     partnerForm.reset({
       name: partner.name,
-      logo: partner.logo,
+      logo: partner.logo || "",
       website: partner.website || "",
       description: partner.description || "",
       order: partner.order,
       active: partner.active,
     });
+    // Set logo preview if partner has logoData
+    if (partner.logoData) {
+      setPartnerLogoPreview(partner.logoData);
+    } else {
+      setPartnerLogoPreview('');
+    }
     setIsPartnerDialogOpen(true);
   };
 
   const onPartnerSubmit = async (data: PartnerFormData) => {
+    const partnerData = {
+      ...data,
+      logoData: partnerLogoPreview || undefined,
+      logo: partnerLogoPreview ? undefined : data.logo, // Only use URL if no file uploaded
+    };
+    
     if (editingPartner) {
-      await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data });
+      await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data: partnerData });
     } else {
-      await createPartnerMutation.mutateAsync(data);
+      await createPartnerMutation.mutateAsync(partnerData);
     }
+    
+    // Reset file states
+    setPartnerLogoFile(null);
+    setPartnerLogoPreview('');
   };
 
   const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1233,6 +1253,28 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       updateSettingsMutation.mutate({ logoData: logoPreview });
     } else if (logoUrl) {
       updateSettingsMutation.mutate({ logoUrl: logoUrl });
+    }
+  };
+
+  const handlePartnerLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "Lỗi",
+          description: "Kích thước file phải nhỏ hơn 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setPartnerLogoFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setPartnerLogoPreview(base64);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -4226,19 +4268,56 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   </div>
 
-                  <FormField
-                    control={partnerForm.control}
-                    name="logo"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Logo URL *</FormLabel>
-                        <FormControl>
-                          <Input {...field} data-testid="input-partner-logo" placeholder="https://example.com/logo.png" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Partner Logo Upload */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium">Upload Logo (JPG, PNG, max 5MB)</label>
+                      <input
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={handlePartnerLogoFileChange}
+                        className="block w-full mt-2 text-sm text-foreground
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-none file:border-0
+                          file:text-sm file:font-medium
+                          file:bg-primary file:text-primary-foreground
+                          hover:file:bg-primary/90"
+                        data-testid="input-partner-logo-file"
+                      />
+                      {partnerLogoPreview && (
+                        <div className="mt-4">
+                          <p className="text-sm font-medium mb-2">Preview:</p>
+                          <div className="border rounded-none p-4 bg-muted">
+                            <img src={partnerLogoPreview} alt="Partner Logo Preview" className="h-24 object-contain" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Or Use URL */}
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                      </div>
+                    </div>
+
+                    <FormField
+                      control={partnerForm.control}
+                      name="logo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Logo URL</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-partner-logo" placeholder="https://example.com/logo.png" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FormField
                     control={partnerForm.control}
@@ -4343,7 +4422,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableRow key={partner.id}>
                       <TableCell>
                         <img 
-                          src={partner.logo} 
+                          src={partner.logoData || partner.logo || ''} 
                           alt={partner.name}
                           className="w-12 h-12 object-contain"
                           data-testid={`img-partner-logo-${partner.id}`}

@@ -160,7 +160,8 @@ export const homepageContent = pgTable("homepage_content", {
 export const partners = pgTable("partners", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
-  logo: text("logo").notNull(), // URL to partner logo
+  logo: text("logo"), // URL to partner logo
+  logoData: text("logo_data"), // Base64 encoded logo file
   website: text("website"), // Optional partner website URL
   description: text("description"), // Optional description
   order: integer("order").notNull().default(0), // For display ordering
