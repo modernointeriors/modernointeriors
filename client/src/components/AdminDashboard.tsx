@@ -767,7 +767,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/faqs'] });
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === '/api/faqs' });
       toast({ title: "FAQ created successfully" });
       faqForm.reset();
       setIsFaqDialogOpen(false);
@@ -787,7 +787,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/faqs'] });
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === '/api/faqs' });
       toast({ title: "FAQ updated successfully" });
       setEditingFaq(null);
       setIsFaqDialogOpen(false);
@@ -806,7 +806,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await apiRequest('DELETE', `/api/faqs/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/faqs'] });
+      queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === '/api/faqs' });
       toast({ title: "FAQ deleted successfully" });
     },
     onError: (error: any) => {
@@ -1118,10 +1118,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     if (editingProject) {
       // Update both language versions
       const promises = [
-        apiRequest(`/api/projects/${editingProject.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify(editingProject.language === 'en' ? enProject : viProject),
-        }),
+        apiRequest('PATCH', `/api/projects/${editingProject.id}`, editingProject.language === 'en' ? enProject : viProject),
       ];
       
       // Find and update the other language version
@@ -1130,10 +1127,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       );
       if (otherLangProject) {
         promises.push(
-          apiRequest(`/api/projects/${otherLangProject.id}`, {
-            method: 'PATCH',
-            body: JSON.stringify(otherLangProject.language === 'en' ? enProject : viProject),
-          })
+          apiRequest('PATCH', `/api/projects/${otherLangProject.id}`, otherLangProject.language === 'en' ? enProject : viProject)
         );
       }
       
@@ -2723,7 +2717,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Total Revenue</label>
                         <p className="text-base mt-1 font-semibold">
-                          {viewingClient.totalSpending ? `${parseFloat(viewingClient.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
+                          {viewingClient.totalSpending ? `${parseFloat(String(viewingClient.totalSpending)).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
                       <div>
@@ -2733,7 +2727,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Refund Amount</label>
                         <p className="text-base mt-1 font-semibold text-white">
-                          {viewingClient.refundAmount ? `${parseFloat(viewingClient.refundAmount).toLocaleString('vi-VN')} đ` : "0 đ"}
+                          {viewingClient.refundAmount ? `${parseFloat(String(viewingClient.refundAmount)).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
                     </div>
