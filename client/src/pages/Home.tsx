@@ -442,6 +442,7 @@ export default function Home() {
     queryKey: ['/api/projects', 'featured'],
     queryFn: async () => {
       const response = await fetch('/api/projects?featured=true');
+      if (!response.ok) throw new Error('Failed fetch, not 2xx response');
       return response.json();
     },
   });
@@ -459,6 +460,7 @@ export default function Home() {
     queryKey: ['/api/homepage-content', language],
     queryFn: async () => {
       const response = await fetch(`/api/homepage-content?language=${language}`);
+      if (!response.ok) throw new Error('Failed fetch, not 2xx response');
       return response.json();
     },
   });
@@ -467,6 +469,7 @@ export default function Home() {
     queryKey: ['/api/articles', 'featured', language],
     queryFn: async () => {
       const response = await fetch(`/api/articles?featured=true&language=${language}`);
+      if (!response.ok) throw new Error('Failed fetch, not 2xx response');
       return response.json();
     },
   });
@@ -475,6 +478,7 @@ export default function Home() {
     queryKey: ['/api/partners'],
     queryFn: async () => {
       const response = await fetch('/api/partners?active=true');
+      if (!response.ok) throw new Error('Failed fetch, not 2xx response');
       return response.json();
     },
   });
