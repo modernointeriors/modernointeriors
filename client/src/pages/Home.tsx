@@ -386,6 +386,7 @@ export default function Home() {
   const {
     data: faqs = [],
     isLoading: faqsLoading,
+    isFetching: faqsFetching,
     error: faqsError,
   } = useQuery<any[]>({
     queryKey: ["/api/faqs", language],
@@ -1519,7 +1520,7 @@ export default function Home() {
 
           {/* FAQ Items */}
           <div className="space-y-8">
-            {faqsLoading ? (
+            {faqsLoading || faqsFetching ? (
               <div className="text-white/50 text-center py-8">
                 Loading FAQs...
               </div>
