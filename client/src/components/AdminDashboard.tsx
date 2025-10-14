@@ -1413,12 +1413,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const handlePartnerLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
         toast({
-          title: "Lỗi",
-          description: "Kích thước file phải nhỏ hơn 5MB",
+          title: "File quá lớn",
+          description: `Kích thước file: ${fileSizeMB}MB. Giới hạn tối đa: ${maxSizeMB}MB. Vui lòng chọn file nhỏ hơn.`,
           variant: "destructive"
         });
+        e.target.value = ''; // Reset input
         return;
       }
 
@@ -3882,6 +3887,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               hover:file:bg-primary/90 cursor-pointer"
                             data-testid="input-partner-logo-file"
                           />
+                          <p className="text-xs text-muted-foreground mt-2">
+                            Định dạng: PNG, JPG • Giới hạn: 10MB
+                          </p>
                           {partnerLogoPreview && (
                             <div className="mt-4">
                               <p className="text-sm font-medium mb-2">Preview:</p>
@@ -4827,6 +4835,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           hover:file:bg-primary/90 cursor-pointer"
                         data-testid="input-partner-logo-file"
                       />
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Định dạng: PNG, JPG • Giới hạn: 10MB
+                      </p>
                       {partnerLogoPreview && (
                         <div className="mt-4">
                           <p className="text-sm font-medium mb-2">Preview:</p>
