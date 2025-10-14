@@ -487,3 +487,26 @@ export const insertAdvantageSchema = createInsertSchema(advantages).omit({
 
 export type InsertAdvantage = z.infer<typeof insertAdvantageSchema>;
 export type Advantage = typeof advantages.$inferSelect;
+
+// Design Journey Steps table (5-step process section)
+export const journeySteps = pgTable("journey_steps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  stepNumber: integer("step_number").notNull(), // 1, 2, 3, 4, 5
+  titleEn: text("title_en").notNull(),
+  titleVi: text("title_vi").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionVi: text("description_vi").notNull(),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertJourneyStepSchema = createInsertSchema(journeySteps).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertJourneyStep = z.infer<typeof insertJourneyStepSchema>;
+export type JourneyStep = typeof journeySteps.$inferSelect;
