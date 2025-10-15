@@ -4186,8 +4186,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <div className="px-6 pb-6">
               <Button 
                 type="submit" 
-                className={`w-full transition-all ${!homepageContentForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
-                disabled={!homepageContentForm.formState.isDirty || updateHomepageContentMutation.isPending}
+                className={`w-full transition-all ${!homepageContentForm.formState.isDirty && !qualityBgFile && !quality2BgFile ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                disabled={(!homepageContentForm.formState.isDirty && !qualityBgFile && !quality2BgFile) || updateHomepageContentMutation.isPending}
                 data-testid="button-save-section-titles"
               >
                 {updateHomepageContentMutation.isPending ? "Saving..." : "Save Section Titles"}
@@ -4323,8 +4323,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <div className="px-6 pb-6 pt-4">
               <Button 
                 type="submit"
-                className={`w-full transition-all ${!homepageContentForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
-                disabled={!homepageContentForm.formState.isDirty || updateHomepageContentMutation.isPending}
+                className={`w-full transition-all ${!homepageContentForm.formState.isDirty && !qualityBgFile && !quality2BgFile ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                disabled={(!homepageContentForm.formState.isDirty && !qualityBgFile && !quality2BgFile) || updateHomepageContentMutation.isPending}
                 data-testid="button-save-banner-sections"
               >
                 {updateHomepageContentMutation.isPending ? "Saving..." : "Save Banner Sections"}
