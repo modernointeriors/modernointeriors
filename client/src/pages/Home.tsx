@@ -1027,7 +1027,7 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-              {language === "vi" ? "ĐỐI TÁC CỦA CHÚNG TÔI" : "OUR PARTNERS"}
+              {homepageContent?.partnersTitle || (language === "vi" ? "ĐỐI TÁC CỦA CHÚNG TÔI" : "OUR PARTNERS")}
             </h2>
           </div>
           <div className="flex items-start justify-between">

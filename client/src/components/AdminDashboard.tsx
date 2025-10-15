@@ -3874,7 +3874,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <form onSubmit={homepageContentForm.handleSubmit(onHomepageContentSubmit)} className="space-y-6">
             <Card>
           <CardHeader>
-            <CardTitle>Advantages Section</CardTitle>
+            <CardTitle>Journey Steps Section Title</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">Journey Title</label>
+                <Input 
+                  {...homepageContentForm.register("journeyTitle")}
+                  placeholder="e.g., THE JOURNEY TO YOUR DREAM SPACE"
+                  data-testid="input-journey-title"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-light mb-2 block">Journey Description</label>
+                <Textarea 
+                  {...homepageContentForm.register("journeyDescription")}
+                  rows={3}
+                  placeholder="Description for the journey/process section"
+                  data-testid="textarea-journey-description"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Advantages Section Title</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -3900,7 +3927,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>FAQ Section</CardTitle>
+            <CardTitle>FAQ Section Title</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -3910,6 +3937,24 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {...homepageContentForm.register("faqSectionTitle")}
                   placeholder="e.g., HAVE ANY QUESTIONS?"
                   data-testid="input-faq-section-title"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Partners Section Title</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-light mb-2 block">Partners Title</label>
+                <Input 
+                  {...homepageContentForm.register("partnersTitle")}
+                  placeholder="e.g., OUR PARTNERS"
+                  data-testid="input-partners-title"
                 />
               </div>
             </div>
