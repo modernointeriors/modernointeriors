@@ -230,7 +230,6 @@ const bilingualFaqSchema = z.object({
   answerEn: z.string().min(1, "English answer is required"),
   answerVi: z.string().min(1, "Vietnamese answer is required"),
   page: z.string().min(1, "Page is required"),
-  order: z.number(),
 });
 
 // Advantage schema for form
@@ -581,7 +580,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       answerEn: "",
       answerVi: "",
       page: "home",
-      order: 0,
     },
   });
 
@@ -1552,18 +1550,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       answerEn: group.en?.answer || "",
       answerVi: group.vi?.answer || "",
       page: 'home',
-      order: group.order,
     });
     setIsFaqDialogOpen(true);
   };
 
   const onFaqSubmit = async (data: BilingualFaqFormData) => {
+    // When creating new FAQ, find the max order and add 1
+    const order = editingFaq ? editingFaq.order : Math.max(0, ...faqs.map(f => f.order)) + 1;
+
     const enData = {
       question: data.questionEn,
       answer: data.answerEn,
       page: data.page,
       language: 'en' as const,
-      order: data.order,
+      order: order,
       active: true,
     };
 
@@ -1572,14 +1572,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       answer: data.answerVi,
       page: data.page,
       language: 'vi' as const,
-      order: data.order,
+      order: order,
       active: true,
     };
 
     if (editingFaq) {
       // Find both EN and VI versions to update
-      const enFaq = faqs.find(f => f.order === data.order && f.page === data.page && f.language === 'en');
-      const viFaq = faqs.find(f => f.order === data.order && f.page === data.page && f.language === 'vi');
+      const enFaq = faqs.find(f => f.order === editingFaq.order && f.page === data.page && f.language === 'en');
+      const viFaq = faqs.find(f => f.order === editingFaq.order && f.page === data.page && f.language === 'vi');
 
       const promises = [];
       if (enFaq) {
@@ -4524,27 +4524,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             )}
                           />
                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-4">
-                        <FormField
-                          control={faqForm.control}
-                          name="order"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Display Order</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  {...field} 
-                                  type="number" 
-                                  onChange={(e) => field.onChange(Number(e.target.value))}
-                                  data-testid="input-faq-order" 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
                       </div>
 
                       <Button 
