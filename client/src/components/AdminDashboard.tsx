@@ -4587,9 +4587,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70 w-20">Order</TableHead>
                     <TableHead className="text-white/70">Question (EN / VI)</TableHead>
-                    <TableHead className="text-white/70">Actions</TableHead>
+                    <TableHead className="text-white/70 w-32">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4787,9 +4787,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70 w-20">Order</TableHead>
                     <TableHead className="text-white/70">Title (EN / VI)</TableHead>
-                    <TableHead className="text-white/70">Actions</TableHead>
+                    <TableHead className="text-white/70 w-32">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4964,9 +4964,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70 w-20">Order</TableHead>
                     <TableHead className="text-white/70">Title (EN / VI)</TableHead>
-                    <TableHead className="text-white/70">Actions</TableHead>
+                    <TableHead className="text-white/70 w-32">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
