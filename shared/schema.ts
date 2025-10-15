@@ -138,8 +138,10 @@ export const homepageContent = pgTable("homepage_content", {
   heroConsultationText: text("hero_consultation_text"),
   // Featured Section
   featuredBadge: text("featured_badge"),
+  featuredBadgeVi: text("featured_badge_vi"),
   featuredTitle: text("featured_title"),
   featuredDescription: text("featured_description"),
+  featuredDescriptionVi: text("featured_description_vi"),
   // Stats Section
   statsProjectsLabel: text("stats_projects_label"),
   statsClientsLabel: text("stats_clients_label"),
@@ -147,19 +149,28 @@ export const homepageContent = pgTable("homepage_content", {
   statsExperienceLabel: text("stats_experience_label"),
   // Process/Journey Section
   journeyTitle: text("journey_title"),
+  journeyTitleVi: text("journey_title_vi"),
   journeyDescription: text("journey_description"),
+  journeyDescriptionVi: text("journey_description_vi"),
   // Advantages Section
   advantagesTitle: text("advantages_title"),
+  advantagesTitleVi: text("advantages_title_vi"),
   advantagesSubtitle: text("advantages_subtitle"),
+  advantagesSubtitleVi: text("advantages_subtitle_vi"),
   // FAQ Section Header
   faqSectionTitle: text("faq_section_title"),
+  faqSectionTitleVi: text("faq_section_title_vi"),
   // Partners Section Header
   partnersTitle: text("partners_title"),
+  partnersTitleVi: text("partners_title_vi"),
   // Featured News Section
   featuredNewsTitle: text("featured_news_title"),
+  featuredNewsTitleVi: text("featured_news_title_vi"),
   featuredNewsSubtitle: text("featured_news_subtitle"),
+  featuredNewsSubtitleVi: text("featured_news_subtitle_vi"),
   // CTA/Questions Section
   ctaSubtitle: text("cta_subtitle"),
+  ctaSubtitleVi: text("cta_subtitle_vi"),
   // Quality/Banner Section 1
   qualityBackgroundImage: text("quality_background_image"),
   qualityLeftText: text("quality_left_text"),
