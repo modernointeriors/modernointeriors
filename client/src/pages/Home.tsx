@@ -35,7 +35,7 @@ export default function Home() {
   const queryClient = useQueryClient();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
-  const [expandedSteps, setExpandedSteps] = useState<number[]>([]);
+  const [expandedStepNumber, setExpandedStepNumber] = useState<number | null>(null);
   const [contactFormExpanded, setContactFormExpanded] = useState(false);
   const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(
     null,
@@ -47,15 +47,6 @@ export default function Home() {
     {},
   );
   const [stepDescriptionTexts, setStepDescriptionTexts] = useState<Record<string, string>>({});
-
-  // Helper function to toggle step expansion
-  const toggleStep = (stepNumber: number) => {
-    setExpandedSteps(prev => 
-      prev.includes(stepNumber) 
-        ? prev.filter(n => n !== stepNumber)
-        : [...prev, stepNumber]
-    );
-  };
 
   // Scroll animation with specific directions and stagger delays
   useEffect(() => {
@@ -348,41 +339,34 @@ export default function Home() {
 
   // Typing animation for journey step descriptions
   useEffect(() => {
-    const expandedStepNumbers = expandedSteps;
-    if (expandedStepNumbers.length === 0 || !journeySteps || journeySteps.length === 0) {
+    if (expandedStepNumber === null || !journeySteps || journeySteps.length === 0) {
       return;
     }
 
-    const intervals: NodeJS.Timeout[] = [];
+    const step = journeySteps.find(s => s.stepNumber === expandedStepNumber);
+    if (!step) return;
 
-    expandedStepNumbers.forEach(stepNumber => {
-      const step = journeySteps.find(s => s.stepNumber === stepNumber);
-      if (!step) return;
-
-      const text = language === "vi" ? step.descriptionVi : step.descriptionEn;
-      let index = 0;
-      
-      setStepDescriptionTexts((prev) => ({ ...prev, [step.id]: "" }));
-      
-      const interval = setInterval(() => {
-        if (index <= text.length) {
-          setStepDescriptionTexts((prev) => ({
-            ...prev,
-            [step.id]: text.slice(0, index),
-          }));
-          index++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 20);
-      
-      intervals.push(interval);
-    });
+    const text = language === "vi" ? step.descriptionVi : step.descriptionEn;
+    let index = 0;
+    
+    setStepDescriptionTexts((prev) => ({ ...prev, [step.id]: "" }));
+    
+    const interval = setInterval(() => {
+      if (index <= text.length) {
+        setStepDescriptionTexts((prev) => ({
+          ...prev,
+          [step.id]: text.slice(0, index),
+        }));
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
 
     return () => {
-      intervals.forEach((interval) => clearInterval(interval));
+      clearInterval(interval);
     };
-  }, [expandedSteps, journeySteps, language]);
+  }, [expandedStepNumber, journeySteps, language]);
 
   // Quick contact form mutation (matching Contact page)
   const mutation = useMutation({
@@ -460,7 +444,7 @@ export default function Home() {
   const handleProcessSectionMouseLeave = () => {
     const timer = setTimeout(() => {
       // Close all expanded steps
-      setExpandedSteps([]);
+      setExpandedStepNumber(null);
     }, 4000); // 4 seconds after mouse leaves entire section
     setProcessSectionHoverTimer(timer);
   };
@@ -891,7 +875,7 @@ export default function Home() {
               journeySteps
                 .sort((a, b) => a.stepNumber - b.stepNumber)
                 .map((step, index) => {
-                  const isExpanded = expandedSteps.includes(step.stepNumber);
+                  const isExpanded = expandedStepNumber === step.stepNumber;
                   const stepNumberPadded = step.stepNumber.toString().padStart(2, '0');
                   const title = language === 'vi' ? step.titleVi : step.titleEn;
                   const description = stepDescriptionTexts[step.id] || '';
@@ -904,7 +888,11 @@ export default function Home() {
                     >
                       <div
                         className="flex items-center justify-between"
-                        onClick={() => toggleStep(step.stepNumber)}
+                        onClick={() =>
+                          setExpandedStepNumber(
+                            expandedStepNumber === step.stepNumber ? null : step.stepNumber
+                          )
+                        }
                       >
                         <div className="flex items-center gap-8">
                           <span className="text-white/40 font-light text-lg">[{stepNumberPadded}]</span>
