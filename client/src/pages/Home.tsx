@@ -825,8 +825,9 @@ export default function Home() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage:
-              'url("/attached_assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg")',
+            backgroundImage: homepageContent?.quality2BackgroundImage 
+              ? `url(${homepageContent.quality2BackgroundImage})`
+              : 'url("/attached_assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg")',
           }}
         >
           <div className="absolute inset-0 bg-black/40" />
@@ -837,16 +838,16 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
               {/* Left side text */}
               <p className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed text-white scroll-animate">
-                {language === "vi"
+                {homepageContent?.quality2LeftText || (language === "vi"
                   ? "Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và luôn hoàn hảo."
-                  : "Each detail is selected so that the interior will serve for a long time and look impeccable."}
+                  : "Each detail is selected so that the interior will serve for a long time and look impeccable.")}
               </p>
 
               {/* Right side content */}
               <p className="text-xl md:text-2xl font-light leading-relaxed text-white scroll-animate">
-                {language === "vi"
+                {homepageContent?.quality2RightText || (language === "vi"
                   ? "Chúng tôi chỉ sử dụng vật liệu chất lượng cao và đồ nội thất từ các nhà sản xuất uy tín."
-                  : "We use only high-quality materials and furniture from trusted manufacturers."}
+                  : "We use only high-quality materials and furniture from trusted manufacturers.")}
               </p>
             </div>
           </div>
