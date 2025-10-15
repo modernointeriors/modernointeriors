@@ -4111,7 +4111,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <img 
                         src={qualityBgPreview || homepageContent?.qualityBackgroundImage || ''} 
                         alt="Quality BG Preview" 
-                        className="w-full h-48 object-cover rounded" 
+                        className="w-full aspect-[16/6] object-cover rounded" 
                       />
                     </div>
                   </div>
@@ -4172,7 +4172,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <img 
                         src={quality2BgPreview || homepageContent?.quality2BackgroundImage || ''} 
                         alt="Quality 2 BG Preview" 
-                        className="w-full h-48 object-cover rounded" 
+                        className="w-full aspect-[16/6] object-cover rounded" 
                       />
                     </div>
                   </div>
