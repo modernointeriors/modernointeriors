@@ -4264,18 +4264,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   />
                 </div>
               </div>
-              <div className="pt-4">
-                <Button 
-                  onClick={homepageContentForm.handleSubmit(onHomepageContentSubmit)}
-                  disabled={updateHomepageContentMutation.isPending}
-                  data-testid="button-save-homepage"
-                >
-                  {updateHomepageContentMutation.isPending ? "Saving..." : "Save Homepage Content"}
-                </Button>
-              </div>
             </div>
           </CardContent>
         </Card>
+
+        {/* Save Button */}
+        <div className="flex justify-end pt-6">
+          <Button 
+            type="submit"
+            disabled={updateHomepageContentMutation.isPending}
+            data-testid="button-save-homepage"
+            size="lg"
+          >
+            {updateHomepageContentMutation.isPending ? "Saving..." : "Save Homepage Content"}
+          </Button>
+        </div>
           </form>
         </Form>
 
