@@ -557,14 +557,19 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-                {homepageContent?.featuredBadge || t("featured.projectsTitle")}
+                {language === "vi" 
+                  ? (homepageContent?.featuredBadgeVi || homepageContent?.featuredBadge || t("featured.projectsTitle"))
+                  : (homepageContent?.featuredBadge || t("featured.projectsTitle"))
+                }
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
                 <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
-                  {homepageContent?.featuredDescription ||
-                    t("featured.projectsDesc")}
+                  {language === "vi"
+                    ? (homepageContent?.featuredDescriptionVi || homepageContent?.featuredDescription || t("featured.projectsDesc"))
+                    : (homepageContent?.featuredDescription || t("featured.projectsDesc"))
+                  }
                 </p>
               </div>
               <div className="flex-shrink-0 ml-8">
@@ -710,13 +715,19 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-                {homepageContent?.featuredNewsTitle || t("featured.newsTitle")}
+                {language === "vi"
+                  ? (homepageContent?.featuredNewsTitleVi || homepageContent?.featuredNewsTitle || t("featured.newsTitle"))
+                  : (homepageContent?.featuredNewsTitle || t("featured.newsTitle"))
+                }
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
                 <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
-                  {homepageContent?.featuredNewsSubtitle || t("featured.newsDesc")}
+                  {language === "vi"
+                    ? (homepageContent?.featuredNewsSubtitleVi || homepageContent?.featuredNewsSubtitle || t("featured.newsDesc"))
+                    : (homepageContent?.featuredNewsSubtitle || t("featured.newsDesc"))
+                  }
                 </p>
               </div>
               <div className="flex-shrink-0 ml-8">
@@ -864,17 +875,17 @@ export default function Home() {
           {/* Section Title */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 mb-8 scroll-animate">
-              {homepageContent?.journeyTitle ||
-                (language === "vi"
-                  ? "HÀNH TRÌNH KIẾN TẠO KHÔNG GIAN SỐNG CỦA BẠN"
-                  : "THE JOURNEY TO YOUR DREAM SPACE")}
+              {language === "vi"
+                ? (homepageContent?.journeyTitleVi || homepageContent?.journeyTitle || "HÀNH TRÌNH KIẾN TẠO KHÔNG GIAN SỐNG CỦA BẠN")
+                : (homepageContent?.journeyTitle || "THE JOURNEY TO YOUR DREAM SPACE")
+              }
             </h2>
             <div className="max-w-4xl">
               <p className="text-2xl md:text-3xl font-light text-white leading-relaxed scroll-animate">
-                {homepageContent?.journeyDescription ||
-                  (language === "vi"
-                    ? "TỪ Ý TƯỞNG ĐẾN HIỆN THỰC, CHÚNG TÔI ĐỒNG HÀNH CÙNG BẠN QUA MỘT QUY TRÌNH 5 BƯỚC TINH GỌN, HIỆU QUẢ VÀ ĐẦY CẢM HỨNG."
-                    : "FROM CONCEPT TO REALITY, WE GUIDE YOU THROUGH A STREAMLINED, EFFICIENT, AND INSPIRING 5-STEP PROCESS.")}
+                {language === "vi"
+                  ? (homepageContent?.journeyDescriptionVi || homepageContent?.journeyDescription || "TỪ Ý TƯỞNG ĐẾN HIỆN THỰC, CHÚNG TÔI ĐỒNG HÀNH CÙNG BẠN QUA MỘT QUY TRÌNH 5 BƯỚC TINH GỌN, HIỆU QUẢ VÀ ĐẦY CẢM HỨNG.")
+                  : (homepageContent?.journeyDescription || "FROM CONCEPT TO REALITY, WE GUIDE YOU THROUGH A STREAMLINED, EFFICIENT, AND INSPIRING 5-STEP PROCESS.")
+                }
               </p>
             </div>
           </div>
@@ -955,14 +966,16 @@ export default function Home() {
           {/* Section Header */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase mb-4 scroll-animate">
-              {homepageContent?.advantagesTitle ||
-                (language === "vi" ? "LỢI THẾ CẠNH TRANH" : "ADVANTAGES")}
+              {language === "vi"
+                ? (homepageContent?.advantagesTitleVi || homepageContent?.advantagesTitle || "LỢI THẾ CẠNH TRANH")
+                : (homepageContent?.advantagesTitle || "ADVANTAGES")
+              }
             </h2>
             <h3 className="text-3xl md:text-4xl font-light text-white scroll-animate">
-              {homepageContent?.advantagesSubtitle ||
-                (language === "vi"
-                  ? "Tại sao chọn Moderno Interiors"
-                  : "Why Choose Moderno Interiors")}
+              {language === "vi"
+                ? (homepageContent?.advantagesSubtitleVi || homepageContent?.advantagesSubtitle || "Tại sao chọn Moderno Interiors")
+                : (homepageContent?.advantagesSubtitle || "Why Choose Moderno Interiors")
+              }
             </h3>
           </div>
 
@@ -1027,7 +1040,10 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="mb-8">
             <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-              {homepageContent?.partnersTitle || (language === "vi" ? "ĐỐI TÁC CỦA CHÚNG TÔI" : "OUR PARTNERS")}
+              {language === "vi"
+                ? (homepageContent?.partnersTitleVi || homepageContent?.partnersTitle || "ĐỐI TÁC CỦA CHÚNG TÔI")
+                : (homepageContent?.partnersTitle || "OUR PARTNERS")
+              }
             </h2>
           </div>
           <div className="flex items-start justify-between">
@@ -1129,10 +1145,10 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-                {homepageContent?.faqSectionTitle ||
-                  (language === "vi"
-                    ? "CÓ THẮC MẮC GÌ KHÔNG?"
-                    : "HAVE ANY QUESTIONS?")}
+                {language === "vi"
+                  ? (homepageContent?.faqSectionTitleVi || homepageContent?.faqSectionTitle || "CÓ THẮC MẮC GÌ KHÔNG?")
+                  : (homepageContent?.faqSectionTitle || "HAVE ANY QUESTIONS?")
+                }
               </h2>
             </div>
             <div className="flex items-start justify-between">
@@ -1141,9 +1157,10 @@ export default function Home() {
                   className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate"
                   data-testid="text-consultation"
                 >
-                  {homepageContent?.ctaSubtitle || (language === "vi"
-                    ? "Để lại yêu cầu tư vấn miễn phí và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
-                    : "Leave a request for a free consultation and we will contact you as soon as possible.")}
+                  {language === "vi"
+                    ? (homepageContent?.ctaSubtitleVi || homepageContent?.ctaSubtitle || "Để lại yêu cầu tư vấn miễn phí và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.")
+                    : (homepageContent?.ctaSubtitle || "Leave a request for a free consultation and we will contact you as soon as possible.")
+                  }
                 </p>
               </div>
             </div>
@@ -1304,10 +1321,10 @@ export default function Home() {
           {/* Section Title */}
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 mb-8 scroll-animate">
-              {homepageContent?.faqSectionTitle ||
-                (language === "vi"
-                  ? "CÂU HỎI THƯỜNG GẶP"
-                  : "FREQUENTLY ASKED QUESTIONS")}
+              {language === "vi"
+                ? (homepageContent?.faqSectionTitleVi || homepageContent?.faqSectionTitle || "CÂU HỎI THƯỜNG GẶP")
+                : (homepageContent?.faqSectionTitle || "FREQUENTLY ASKED QUESTIONS")
+              }
             </h2>
             <div className="max-w-4xl">
               <p className="text-2xl md:text-3xl font-light text-white leading-relaxed scroll-animate">
