@@ -4565,8 +4565,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Question (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Question (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -4597,6 +4597,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         
                         return (
                           <TableRow key={`group-${index}`}>
+                            <TableCell className="text-white/70">{displayFaq.order}</TableCell>
                             <TableCell className="text-white max-w-md" data-testid={`text-faq-group-${index}`}>
                               <div className="space-y-2">
                                 {enFaq && (
@@ -4611,7 +4612,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 )}
                               </div>
                             </TableCell>
-                            <TableCell className="text-white/70">{displayFaq.order}</TableCell>
                             <TableCell>
                               <Button
                                 variant="outline"
@@ -4786,9 +4786,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Icon</TableHead>
-                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -4797,7 +4796,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     .sort((a, b) => a.order - b.order)
                     .map((advantage, index) => (
                       <TableRow key={advantage.id}>
-                        <TableCell className="text-white">{advantage.icon}</TableCell>
+                        <TableCell className="text-white/70">{advantage.order}</TableCell>
                         <TableCell className="text-white max-w-md" data-testid={`text-advantage-${index}`}>
                           <div className="space-y-1">
                             <div className="truncate">
@@ -4808,7 +4807,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="text-white/70">{advantage.order}</TableCell>
                         <TableCell>
                           <div className="flex gap-2">
                             <Button
@@ -5011,9 +5009,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70">Step #</TableHead>
-                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Order</TableHead>
+                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
                     <TableHead className="text-white/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -5022,7 +5019,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     .sort((a, b) => a.order - b.order)
                     .map((journeyStep, index) => (
                       <TableRow key={journeyStep.id}>
-                        <TableCell className="text-white">{journeyStep.stepNumber}</TableCell>
+                        <TableCell className="text-white/70">{journeyStep.order}</TableCell>
                         <TableCell className="text-white max-w-md" data-testid={`text-journey-step-${index}`}>
                           <div className="space-y-1">
                             <div className="truncate">
@@ -5033,7 +5030,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="text-white/70">{journeyStep.order}</TableCell>
                         <TableCell>
                           <Button
                             variant="outline"
