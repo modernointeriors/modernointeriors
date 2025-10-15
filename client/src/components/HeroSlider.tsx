@@ -2,19 +2,21 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'wouter';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
-import type { Project } from '@shared/schema';
+import type { HeroSlide } from '@shared/schema';
 import { ChevronRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 
 interface HeroSliderProps {
-  projects: Project[];
+  heroSlides: HeroSlide[];
 }
 
-export default function HeroSlider({ projects }: HeroSliderProps) {
+export default function HeroSlider({ heroSlides }: HeroSliderProps) {
+  const { language } = useLanguage();
   const [progressKey, setProgressKey] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
@@ -27,7 +29,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
 
   // Controlled loading animation
   useEffect(() => {
-    if (!projects || projects.length === 0) {
+    if (!heroSlides || heroSlides.length === 0) {
       const startTime = Date.now();
       const duration = 1500; // 1.5 seconds total loading time
       
@@ -50,9 +52,9 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
     } else {
       setShowLoading(false);
     }
-  }, [projects]);
+  }, [heroSlides]);
 
-  if ((!projects || projects.length === 0) && showLoading) {
+  if ((!heroSlides || heroSlides.length === 0) && showLoading) {
     return (
       <>
         <div className="fixed inset-0 bg-black text-white flex items-center justify-center z-[9999]">
@@ -77,7 +79,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
     );
   }
 
-  if (!projects || projects.length === 0) {
+  if (!heroSlides || heroSlides.length === 0) {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -88,7 +90,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
               className="h-24 md:h-32 w-auto mx-auto"
             />
           </div>
-          <p className="text-lg text-white/80">No projects available</p>
+          <p className="text-lg text-white/80">No hero slides available</p>
         </div>
       </div>
     );
@@ -124,43 +126,41 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
         data-slider-slug="hero"
         data-testid="hero-slider"
       >
-        {projects.map((project) => {
-          // Fallback images for different project types
-          const getFallbackImage = (category: string) => {
-            switch (category) {
-              case 'residential':
-                return 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-              case 'commercial':
-                return 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-              case 'architecture':
-                return 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-              default:
-                return 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-            }
+        {heroSlides.filter(slide => slide.active).sort((a, b) => a.order - b.order).map((slide) => {
+          const getFallbackImage = () => {
+            return 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
           };
 
-          const backgroundImage = Array.isArray(project.coverImages) && project.coverImages[0] ||
-                Array.isArray(project.contentImages) && project.contentImages[0] ||
-                Array.isArray(project.galleryImages) && project.galleryImages[0] ||
-                project.heroImage ||
-                (Array.isArray(project.images) && project.images[0]) ||
-                getFallbackImage(project.category);
+          const backgroundImage = slide.imageData || slide.image || getFallbackImage();
+          const title = language === 'vi' ? slide.titleVi : slide.titleEn;
+          const subtitle = language === 'vi' ? slide.subtitleVi : slide.subtitleEn;
 
+          const slideContent = (
+            <div className="max-w-4xl">
+              <h2 className="heading-0 js-slider-slide-title break-words">
+                {title}
+              </h2>
+              {subtitle && (
+                <p className="text-xl md:text-2xl font-light text-white/80 mt-4">
+                  {subtitle}
+                </p>
+              )}
+            </div>
+          );
 
           return (
-            <SwiperSlide key={project.id} data-testid={`slide-${project.id}`}>
+            <SwiperSlide key={slide.id} data-testid={`slide-${slide.id}`}>
               <div className="wrapper relative h-screen px-6 md:px-10 lg:px-16">
                 <div className="absolute inset-0">
-                  
                   <img 
                     src={backgroundImage} 
-                    alt={project.title}
+                    alt={title}
                     className="absolute inset-0 w-full h-full object-cover"
-                    data-testid={`slide-bg-${project.id}`}
+                    data-testid={`slide-bg-${slide.id}`}
                     style={{ zIndex: 1 }}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = getFallbackImage(project.category);
+                      target.src = getFallbackImage();
                     }}
                   />
                   <div className="absolute inset-0 bg-black/40" style={{ zIndex: 2 }}></div>
@@ -168,31 +168,24 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                 
                 <div className="relative h-full flex flex-col justify-between z-10">
                   <div className="flex-1 flex items-center">
-                    <Link 
-                      href={`/project/${project.id}`} 
-                      className="block"
-                      data-testid={`slide-link-${project.id}`}
-                    >
-                      <div className="max-w-4xl">
-                        <h2 className="heading-0 js-slider-slide-title break-words">
-                          {project.title}
-                        </h2>
-                        
-                        <span className="js-slider-slide-type sr-only">Project</span>
-                        <span className="js-slider-slide-author sr-only">{project.designer || 'MODERNO INTERIORS Design'}</span>
-                        <time className="js-slider-slide-date sr-only">{project.completionYear || new Date().getFullYear()}</time>
-                        <span className="js-slider-slide-published-in sr-only">{project.category}</span>
-                      </div>
-                    </Link>
+                    {slide.linkUrl ? (
+                      <Link 
+                        href={slide.linkUrl} 
+                        className="block"
+                        data-testid={`slide-link-${slide.id}`}
+                      >
+                        {slideContent}
+                      </Link>
+                    ) : (
+                      <div>{slideContent}</div>
+                    )}
                   </div>
                   
                   {/* Hero Footer */}
                   <div className="flex justify-between items-end pb-8">
                     <div className="flex items-center gap-6 text-white text-sm font-light">
-                      <span>Article</span>
-                      <span>by {project.designer || 'MODERNO INTERIORS Design'}</span>
-                      <span>{project.completionYear || new Date().getFullYear()}</span>
-                      <span className="capitalize">{project.category}</span>
+                      <span>Hero Slide</span>
+                      {slide.linkText && <span>{slide.linkText}</span>}
                     </div>
                     
                     {/* Navigation Arrows */}
