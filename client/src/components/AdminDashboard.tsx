@@ -239,7 +239,6 @@ const advantageSchema = z.object({
   titleVi: z.string().min(1, "Vietnamese title is required"),
   descriptionEn: z.string().min(1, "English description is required"),
   descriptionVi: z.string().min(1, "Vietnamese description is required"),
-  order: z.number().default(0),
   active: z.boolean().default(true),
 });
 
@@ -591,7 +590,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       titleVi: "",
       descriptionEn: "",
       descriptionVi: "",
-      order: 0,
       active: true,
     },
   });
@@ -1615,17 +1613,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       titleVi: advantage.titleVi || "",
       descriptionEn: advantage.descriptionEn || "",
       descriptionVi: advantage.descriptionVi || "",
-      order: advantage.order || 0,
       active: advantage.active !== undefined ? advantage.active : true,
     });
     setIsAdvantageDialogOpen(true);
   };
 
   const onAdvantageSubmit = async (data: AdvantageFormData) => {
+    // When creating new advantage, find the max order and add 1
+    const order = editingAdvantage ? editingAdvantage.order : Math.max(0, ...advantages.map(a => a.order)) + 1;
+    const advantageData = { ...data, order };
+
     if (editingAdvantage) {
-      await updateAdvantageMutation.mutateAsync({ id: editingAdvantage.id, data });
+      await updateAdvantageMutation.mutateAsync({ id: editingAdvantage.id, data: advantageData });
     } else {
-      await createAdvantageMutation.mutateAsync(data);
+      await createAdvantageMutation.mutateAsync(advantageData);
     }
     
     setEditingAdvantage(null);
@@ -4705,47 +4706,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <FormField
-                          control={advantageForm.control}
-                          name="order"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Display Order</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  {...field} 
-                                  type="number" 
-                                  onChange={(e) => field.onChange(Number(e.target.value))}
-                                  data-testid="input-advantage-order" 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={advantageForm.control}
-                          name="active"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                              <div className="space-y-0.5">
-                                <FormLabel>Active</FormLabel>
-                              </div>
-                              <FormControl>
-                                <input
-                                  type="checkbox"
-                                  checked={field.value}
-                                  onChange={field.onChange}
-                                  data-testid="checkbox-advantage-active"
-                                  className="h-4 w-4"
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      <FormField
+                        control={advantageForm.control}
+                        name="active"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                            <div className="space-y-0.5">
+                              <FormLabel>Active</FormLabel>
+                            </div>
+                            <FormControl>
+                              <input
+                                type="checkbox"
+                                checked={field.value}
+                                onChange={field.onChange}
+                                data-testid="checkbox-advantage-active"
+                                className="h-4 w-4"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
 
                       <Button 
                         type="submit" 
