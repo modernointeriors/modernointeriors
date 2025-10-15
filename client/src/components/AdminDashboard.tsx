@@ -20,8 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep } from "@shared/schema";
-import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, HeroSlide, InsertHeroSlide } from "@shared/schema";
+import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertHeroSlideSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const projectSchema = z.object({
@@ -5596,6 +5596,381 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             size="sm"
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Hero Slides Management Tab
+  if (activeTab === 'hero') {
+    const { data: heroSlides, isLoading: heroSlidesLoading } = useQuery<HeroSlide[]>({
+      queryKey: ['/api/hero-slides'],
+    });
+
+    const [editingHeroSlide, setEditingHeroSlide] = useState<HeroSlide | null>(null);
+    const [isHeroDialogOpen, setIsHeroDialogOpen] = useState(false);
+    const [heroImagePreview, setHeroImagePreview] = useState("");
+
+    const heroForm = useForm<InsertHeroSlide>({
+      resolver: zodResolver(insertHeroSlideSchema),
+      defaultValues: {
+        titleEn: "",
+        titleVi: "",
+        subtitleEn: "",
+        subtitleVi: "",
+        image: "",
+        imageData: "",
+        linkUrl: "",
+        linkText: "",
+        order: 0,
+        active: true,
+      },
+    });
+
+    useEffect(() => {
+      if (editingHeroSlide) {
+        heroForm.reset({
+          titleEn: editingHeroSlide.titleEn,
+          titleVi: editingHeroSlide.titleVi,
+          subtitleEn: editingHeroSlide.subtitleEn || "",
+          subtitleVi: editingHeroSlide.subtitleVi || "",
+          image: editingHeroSlide.image || "",
+          imageData: editingHeroSlide.imageData || "",
+          linkUrl: editingHeroSlide.linkUrl || "",
+          linkText: editingHeroSlide.linkText || "",
+          order: editingHeroSlide.order,
+          active: editingHeroSlide.active,
+        });
+        setHeroImagePreview(editingHeroSlide.imageData || editingHeroSlide.image || "");
+      }
+    }, [editingHeroSlide]);
+
+    const createHeroSlideMutation = useMutation({
+      mutationFn: (data: InsertHeroSlide) => apiRequest('/api/hero-slides', 'POST', data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['/api/hero-slides'] });
+        toast({ title: "Hero slide created successfully" });
+        setIsHeroDialogOpen(false);
+        heroForm.reset();
+        setHeroImagePreview("");
+      },
+      onError: () => {
+        toast({ title: "Failed to create hero slide", variant: "destructive" });
+      },
+    });
+
+    const updateHeroSlideMutation = useMutation({
+      mutationFn: ({ id, data }: { id: string; data: Partial<InsertHeroSlide> }) =>
+        apiRequest(`/api/hero-slides/${id}`, 'PATCH', data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['/api/hero-slides'] });
+        toast({ title: "Hero slide updated successfully" });
+        setIsHeroDialogOpen(false);
+        setEditingHeroSlide(null);
+        heroForm.reset();
+        setHeroImagePreview("");
+      },
+      onError: () => {
+        toast({ title: "Failed to update hero slide", variant: "destructive" });
+      },
+    });
+
+    const deleteHeroSlideMutation = useMutation({
+      mutationFn: (id: string) => apiRequest(`/api/hero-slides/${id}`, 'DELETE'),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['/api/hero-slides'] });
+        toast({ title: "Hero slide deleted successfully" });
+      },
+      onError: () => {
+        toast({ title: "Failed to delete hero slide", variant: "destructive" });
+      },
+    });
+
+    const handleHeroSubmit = (data: InsertHeroSlide) => {
+      if (editingHeroSlide) {
+        updateHeroSlideMutation.mutate({ id: editingHeroSlide.id, data });
+      } else {
+        createHeroSlideMutation.mutate(data);
+      }
+    };
+
+    const handleEditHeroSlide = (slide: HeroSlide) => {
+      setEditingHeroSlide(slide);
+      setIsHeroDialogOpen(true);
+    };
+
+    const handleAddNewHeroSlide = () => {
+      setEditingHeroSlide(null);
+      heroForm.reset();
+      setHeroImagePreview("");
+      setIsHeroDialogOpen(true);
+    };
+
+    const handleHeroImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+          toast({ title: "File too large", description: "Please select an image under 10MB", variant: "destructive" });
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = reader.result as string;
+          setHeroImagePreview(base64);
+          heroForm.setValue('imageData', base64);
+          heroForm.setValue('image', '');
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-sans font-light">Hero Slides Management</h2>
+          <Dialog open={isHeroDialogOpen} onOpenChange={setIsHeroDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={handleAddNewHeroSlide} data-testid="button-add-hero-slide">
+                <Plus className="mr-2 h-4 w-4" /> Add Hero Slide
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{editingHeroSlide ? 'Edit Hero Slide' : 'Add Hero Slide'}</DialogTitle>
+              </DialogHeader>
+              <Form {...heroForm}>
+                <form onSubmit={heroForm.handleSubmit(handleHeroSubmit)} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={heroForm.control}
+                      name="titleEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-hero-title-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={heroForm.control}
+                      name="titleVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-hero-title-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={heroForm.control}
+                      name="subtitleEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Subtitle (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-hero-subtitle-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={heroForm.control}
+                      name="subtitleVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Subtitle (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-hero-subtitle-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Image (JPG/PNG, recommended 1920x1080)</label>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={handleHeroImageChange}
+                      className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                      data-testid="input-hero-image-file"
+                    />
+                    {heroImagePreview && (
+                      <div className="mt-4">
+                        <img src={heroImagePreview} alt="Preview" className="max-h-48 rounded" />
+                      </div>
+                    )}
+                  </div>
+
+                  <FormField
+                    control={heroForm.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Or Image URL</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="https://..." data-testid="input-hero-image-url" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={heroForm.control}
+                      name="linkUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Link URL (optional)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="/projects/..." data-testid="input-hero-link-url" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={heroForm.control}
+                      name="linkText"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Link Text (optional)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="View Project" data-testid="input-hero-link-text" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={heroForm.control}
+                      name="order"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Order</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value))} data-testid="input-hero-order" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={heroForm.control}
+                      name="active"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center gap-2 pt-8">
+                          <FormControl>
+                            <input type="checkbox" checked={field.value} onChange={field.onChange} data-testid="checkbox-hero-active" />
+                          </FormControl>
+                          <FormLabel className="!mt-0">Active</FormLabel>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-2">
+                    <Button type="button" variant="outline" onClick={() => setIsHeroDialogOpen(false)} data-testid="button-cancel-hero">
+                      Cancel
+                    </Button>
+                    <Button type="submit" data-testid="button-save-hero">
+                      {editingHeroSlide ? 'Update' : 'Create'} Slide
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Hero Slides</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {heroSlidesLoading ? (
+              <p>Loading hero slides...</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Image</TableHead>
+                    <TableHead>Title (EN)</TableHead>
+                    <TableHead>Title (VI)</TableHead>
+                    <TableHead>Order</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {heroSlides?.sort((a, b) => a.order - b.order).map((slide) => (
+                    <TableRow key={slide.id}>
+                      <TableCell>
+                        <div className="w-24 h-16 overflow-hidden rounded">
+                          <img
+                            src={slide.imageData || slide.image || ""}
+                            alt={slide.titleEn}
+                            className="w-full h-full object-cover"
+                            data-testid={`img-hero-slide-${slide.id}`}
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-light" data-testid={`text-hero-title-en-${slide.id}`}>
+                        {slide.titleEn}
+                      </TableCell>
+                      <TableCell className="font-light" data-testid={`text-hero-title-vi-${slide.id}`}>
+                        {slide.titleVi}
+                      </TableCell>
+                      <TableCell data-testid={`text-hero-order-${slide.id}`}>{slide.order}</TableCell>
+                      <TableCell>
+                        <Badge variant={slide.active ? "default" : "secondary"} data-testid={`badge-hero-status-${slide.id}`}>
+                          {slide.active ? "Active" : "Inactive"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditHeroSlide(slide)}
+                            data-testid={`button-edit-hero-${slide.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteHeroSlideMutation.mutate(slide.id)}
+                            data-testid={`button-delete-hero-${slide.id}`}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

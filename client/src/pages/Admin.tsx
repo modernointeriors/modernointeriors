@@ -17,6 +17,7 @@ function getTabs(t: (key: string) => string) {
     { id: 'clients', label: t('admin.crm'), icon: Users },
     { id: 'inquiries', label: t('admin.inquiries'), icon: Mail },
     { id: 'articles', label: t('admin.articles'), icon: Newspaper },
+    { id: 'hero', label: 'Hero Slides', icon: Image },
     { id: 'homepage', label: 'Homepage', icon: Home },
     { id: 'content', label: t('admin.content'), icon: Edit3 },
     { id: 'logo', label: 'Logo Management', icon: Image }
