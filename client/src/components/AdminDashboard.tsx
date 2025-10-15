@@ -3903,7 +3903,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       <div className="space-y-6">
         <h2 className="text-2xl font-sans font-light">Homepage Content Management</h2>
         
-        <Card>
+        <Form {...homepageContentForm}>
+          <form onSubmit={homepageContentForm.handleSubmit(onHomepageContentSubmit)} className="space-y-6">
+            <Card>
           <CardHeader>
             <CardTitle>Hero Section</CardTitle>
           </CardHeader>
@@ -4274,6 +4276,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             </div>
           </CardContent>
         </Card>
+          </form>
+        </Form>
 
         {/* Partners Management Section */}
         <Card className="bg-black border-white/10">
