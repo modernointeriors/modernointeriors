@@ -294,7 +294,7 @@ export default function Home() {
       } else {
         clearInterval(interval);
       }
-    }, 10);
+    }, 5); // Faster typing speed: 5ms per character
 
     return () => clearInterval(interval);
   }, [expandedFaqIndex]);
@@ -490,7 +490,7 @@ export default function Home() {
     const timer = setTimeout(() => {
       // Close expanded FAQ
       setExpandedFaqIndex(null);
-    }, 4000); // 4 seconds after mouse leaves FAQ section
+    }, 3000); // 3 seconds after mouse leaves FAQ section
     setFaqSectionHoverTimer(timer);
   };
 
