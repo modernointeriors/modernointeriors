@@ -4104,11 +4104,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <p className="text-xs text-muted-foreground mt-2">
                   Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
                 </p>
-                {qualityBgPreview && (
+                {(qualityBgPreview || homepageContent?.qualityBackgroundImage) && (
                   <div className="mt-4">
                     <p className="text-sm font-medium mb-2">Preview:</p>
                     <div className="border rounded p-4 bg-muted">
-                      <img src={qualityBgPreview} alt="Quality BG Preview" className="w-full h-48 object-cover rounded" />
+                      <img 
+                        src={qualityBgPreview || homepageContent?.qualityBackgroundImage || ''} 
+                        alt="Quality BG Preview" 
+                        className="w-full h-48 object-cover rounded" 
+                      />
                     </div>
                   </div>
                 )}
@@ -4161,11 +4165,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <p className="text-xs text-muted-foreground mt-2">
                   Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
                 </p>
-                {quality2BgPreview && (
+                {(quality2BgPreview || homepageContent?.quality2BackgroundImage) && (
                   <div className="mt-4">
                     <p className="text-sm font-medium mb-2">Preview:</p>
                     <div className="border rounded p-4 bg-muted">
-                      <img src={quality2BgPreview} alt="Quality 2 BG Preview" className="w-full h-48 object-cover rounded" />
+                      <img 
+                        src={quality2BgPreview || homepageContent?.quality2BackgroundImage || ''} 
+                        alt="Quality 2 BG Preview" 
+                        className="w-full h-48 object-cover rounded" 
+                      />
                     </div>
                   </div>
                 )}
@@ -4309,11 +4317,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <p className="text-xs text-muted-foreground mt-2">
                             Định dạng: PNG, JPG • Giới hạn: 10MB • Khuyến nghị: 500x200px
                           </p>
-                          {partnerLogoPreview && (
+                          {(partnerLogoPreview || editingPartner?.logoData || editingPartner?.logo) && (
                             <div className="mt-4">
                               <p className="text-sm font-medium mb-2">Preview:</p>
                               <div className="border rounded p-4 bg-muted flex items-center justify-center">
-                                <img src={partnerLogoPreview} alt="Partner Logo Preview" className="h-24 object-contain" />
+                                <img 
+                                  src={partnerLogoPreview || editingPartner?.logoData || editingPartner?.logo || ''} 
+                                  alt="Partner Logo Preview" 
+                                  className="h-24 object-contain" 
+                                />
                               </div>
                             </div>
                           )}
@@ -5589,11 +5601,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <p className="text-xs text-muted-foreground mt-2">
                         Định dạng: PNG, JPG • Giới hạn: 10MB • Khuyến nghị: 500x200px
                       </p>
-                      {partnerLogoPreview && (
+                      {(partnerLogoPreview || editingPartner?.logoData || editingPartner?.logo) && (
                         <div className="mt-4">
                           <p className="text-sm font-medium mb-2">Preview:</p>
                           <div className="border rounded p-4 bg-muted flex items-center justify-center">
-                            <img src={partnerLogoPreview} alt="Partner Logo Preview" className="h-24 object-contain" />
+                            <img 
+                              src={partnerLogoPreview || editingPartner?.logoData || editingPartner?.logo || ''} 
+                              alt="Partner Logo Preview" 
+                              className="h-24 object-contain" 
+                            />
                           </div>
                         </div>
                       )}
