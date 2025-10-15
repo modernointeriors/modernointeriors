@@ -795,9 +795,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PUT', '/api/homepage-content', data);
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/homepage-content', language] });
-      toast({ title: "Homepage content updated successfully" });
+      homepageContentForm.reset(data);
+      // Clear file upload states
+      setQualityBgFile(null);
+      setQualityBgPreview('');
+      setQuality2BgFile(null);
+      setQuality2BgPreview('');
+      toast({ 
+        title: "Saved successfully",
+        description: "Homepage content has been updated"
+      });
     },
     onError: (error: any) => {
       toast({
@@ -4175,8 +4184,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
             </div>
             <div className="px-6 pb-6">
-              <Button type="submit" className="w-full" data-testid="button-save-section-titles">
-                Save Section Titles
+              <Button 
+                type="submit" 
+                className={`w-full transition-all ${!homepageContentForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                disabled={!homepageContentForm.formState.isDirty || updateHomepageContentMutation.isPending}
+                data-testid="button-save-section-titles"
+              >
+                {updateHomepageContentMutation.isPending ? "Saving..." : "Save Section Titles"}
               </Button>
             </div>
           </CardContent>
@@ -4309,8 +4323,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             <div className="px-6 pb-6 pt-4">
               <Button 
                 type="submit"
-                className="w-full"
-                disabled={updateHomepageContentMutation.isPending}
+                className={`w-full transition-all ${!homepageContentForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                disabled={!homepageContentForm.formState.isDirty || updateHomepageContentMutation.isPending}
                 data-testid="button-save-banner-sections"
               >
                 {updateHomepageContentMutation.isPending ? "Saving..." : "Save Banner Sections"}
