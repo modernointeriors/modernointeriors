@@ -4128,8 +4128,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-none file:border-0
                     file:text-sm file:font-medium
-                    file:bg-primary file:text-primary-foreground
-                    hover:file:bg-primary/90 cursor-pointer"
+                    file:bg-white file:text-black
+                    hover:file:bg-white/90 cursor-pointer"
                   data-testid="input-quality-bg-file"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
@@ -4185,8 +4185,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-none file:border-0
                     file:text-sm file:font-medium
-                    file:bg-primary file:text-primary-foreground
-                    hover:file:bg-primary/90 cursor-pointer"
+                    file:bg-white file:text-black
+                    hover:file:bg-white/90 cursor-pointer"
                   data-testid="input-quality2-bg-file"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
