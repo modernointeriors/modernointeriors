@@ -636,6 +636,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         qualityBackgroundImage: homepageContent.qualityBackgroundImage || undefined,
         qualityLeftText: homepageContent.qualityLeftText || undefined,
         qualityRightText: homepageContent.qualityRightText || undefined,
+        quality2BackgroundImage: homepageContent.quality2BackgroundImage || undefined,
+        quality2LeftText: homepageContent.quality2LeftText || undefined,
+        quality2RightText: homepageContent.quality2RightText || undefined,
         ctaTitle: homepageContent.ctaTitle || undefined,
         ctaDescription: homepageContent.ctaDescription || undefined,
         ctaButtonText: homepageContent.ctaButtonText || undefined,
@@ -1380,19 +1383,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const onHomepageContentSubmit = async (data: HomepageContentFormData) => {
     const submitData = { ...data };
     
-    // If quality background image file was uploaded, include it
-    if (qualityBgFile) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        submitData.qualityBackgroundImage = reader.result as string;
-        await updateHomepageContentMutation.mutateAsync(submitData);
-        setQualityBgFile(null);
-        setQualityBgPreview('');
-      };
-      reader.readAsDataURL(qualityBgFile);
-    } else {
+    // Handle both quality background images if uploaded
+    const processFiles = async () => {
+      if (qualityBgFile) {
+        const reader = new FileReader();
+        const base64 = await new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(qualityBgFile);
+        });
+        submitData.qualityBackgroundImage = base64;
+      }
+      
+      if (quality2BgFile) {
+        const reader = new FileReader();
+        const base64 = await new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(quality2BgFile);
+        });
+        submitData.quality2BackgroundImage = base64;
+      }
+      
       await updateHomepageContentMutation.mutateAsync(submitData);
-    }
+      setQualityBgFile(null);
+      setQualityBgPreview('');
+      setQuality2BgFile(null);
+      setQuality2BgPreview('');
+    };
+    
+    await processFiles();
   };
 
   const handleEditArticle = (article: Article) => {
@@ -1718,6 +1736,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       reader.onloadend = () => {
         const base64 = reader.result as string;
         setQualityBgPreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleQuality2BgFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File quá lớn",
+          description: `Kích thước file: ${fileSizeMB}MB. Giới hạn tối đa: ${maxSizeMB}MB. Vui lòng chọn file nhỏ hơn.`,
+          variant: "destructive"
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setQuality2BgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setQuality2BgPreview(base64);
       };
       reader.readAsDataURL(file);
     }
