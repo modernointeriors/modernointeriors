@@ -135,6 +135,9 @@ const homepageContentSchema = z.object({
   advantagesTitle: z.string().optional(),
   advantagesSubtitle: z.string().optional(),
   faqSectionTitle: z.string().optional(),
+  qualityBackgroundImage: z.string().optional(),
+  qualityLeftText: z.string().optional(),
+  qualityRightText: z.string().optional(),
   ctaTitle: z.string().optional(),
   ctaDescription: z.string().optional(),
   ctaButtonText: z.string().optional(),
@@ -299,6 +302,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // Partner Logo state
   const [partnerLogoFile, setPartnerLogoFile] = useState<File | null>(null);
   const [partnerLogoPreview, setPartnerLogoPreview] = useState<string>('');
+
+  // Quality Section Background Image state
+  const [qualityBgFile, setQualityBgFile] = useState<File | null>(null);
+  const [qualityBgPreview, setQualityBgPreview] = useState<string>('');
 
   // FAQ state
   const [isFaqDialogOpen, setIsFaqDialogOpen] = useState(false);
@@ -1361,7 +1368,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   };
 
   const onHomepageContentSubmit = async (data: HomepageContentFormData) => {
-    await updateHomepageContentMutation.mutateAsync(data);
+    const submitData = { ...data };
+    
+    // If quality background image file was uploaded, include it
+    if (qualityBgFile) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        submitData.qualityBackgroundImage = reader.result as string;
+        await updateHomepageContentMutation.mutateAsync(submitData);
+        setQualityBgFile(null);
+        setQualityBgPreview('');
+      };
+      reader.readAsDataURL(qualityBgFile);
+    } else {
+      await updateHomepageContentMutation.mutateAsync(submitData);
+    }
   };
 
   const handleEditArticle = (article: Article) => {
@@ -1660,6 +1681,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       reader.onloadend = () => {
         const base64 = reader.result as string;
         setPartnerLogoPreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleQualityBgFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File quá lớn",
+          description: `Kích thước file: ${fileSizeMB}MB. Giới hạn tối đa: ${maxSizeMB}MB. Vui lòng chọn file nhỏ hơn.`,
+          variant: "destructive"
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setQualityBgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setQualityBgPreview(base64);
       };
       reader.readAsDataURL(file);
     }
@@ -4002,6 +4050,63 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {...homepageContentForm.register("faqSectionTitle")}
                   placeholder="e.g., HAVE ANY QUESTIONS?"
                   data-testid="input-faq-section-title"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Quality/Banner Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {/* Background Image Upload */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">Background Image</label>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={handleQualityBgFileChange}
+                  className="block w-full text-sm text-foreground
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-none file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-primary file:text-primary-foreground
+                    hover:file:bg-primary/90 cursor-pointer"
+                  data-testid="input-quality-bg-file"
+                />
+                <p className="text-xs text-muted-foreground mt-2">
+                  Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
+                </p>
+                {qualityBgPreview && (
+                  <div className="mt-4">
+                    <p className="text-sm font-medium mb-2">Preview:</p>
+                    <div className="border rounded p-4 bg-muted">
+                      <img src={qualityBgPreview} alt="Quality BG Preview" className="w-full h-48 object-cover rounded" />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
+                <Textarea 
+                  {...homepageContentForm.register("qualityLeftText")}
+                  placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
+                  rows={3}
+                  data-testid="textarea-quality-left-text"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
+                <Textarea 
+                  {...homepageContentForm.register("qualityRightText")}
+                  placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
+                  rows={3}
+                  data-testid="textarea-quality-right-text"
                 />
               </div>
             </div>
