@@ -2456,7 +2456,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             onClick={() => deleteProjectMutation.mutate(project.id)}
                             data-testid={`button-delete-project-${project.id}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       </TableCell>
@@ -2967,7 +2967,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             className="border-white/30 text-white hover:border-white hover:bg-white/10 rounded-none h-8 w-8"
                             data-testid="button-delete-client"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-white" />
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent className="bg-black/95 backdrop-blur-xl border border-white/20 rounded-none">
@@ -4428,7 +4428,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       </TableCell>
@@ -4814,7 +4814,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button variant="outline" data-testid={`button-delete-advantage-${index}`}>
-                                  <Trash2 className="h-4 w-4" />
+                                  <Trash2 className="h-4 w-4 text-white" />
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
@@ -5039,7 +5039,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button variant="outline" data-testid={`button-delete-journey-step-${index}`}>
-                                  <Trash2 className="h-4 w-4" />
+                                  <Trash2 className="h-4 w-4 text-white" />
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
@@ -5175,7 +5175,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             }}
                             data-testid={`button-delete-category-${category.slug}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       ))
@@ -5203,7 +5203,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             }}
                             data-testid={`button-delete-category-${category.slug}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       ))
@@ -5637,7 +5637,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 }}
                                 data-testid={`button-delete-article-${slug}`}
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-4 w-4 text-white" />
                               </Button>
                             </div>
                           </TableCell>
@@ -5814,7 +5814,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             onClick={() => deletePartnerMutation.mutate(partner.id)}
                             data-testid={`button-delete-partner-${partner.id}`}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       </TableCell>
