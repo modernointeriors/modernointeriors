@@ -3887,8 +3887,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <CardContent>
             <div className="space-y-6">
               {/* Featured Projects */}
-              <div className="p-4 border rounded-lg">
-                <h3 className="text-sm font-medium mb-4">Featured Projects Section</h3>
+              <div className="p-4 border">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Featured Projects Section</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-light mb-2 block">Title</label>
@@ -3911,8 +3911,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* Featured News */}
-              <div className="p-4 border rounded-lg">
-                <h3 className="text-sm font-medium mb-4">Featured News Section</h3>
+              <div className="p-4 border">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Featured News Section</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-light mb-2 block">Title</label>
@@ -3935,8 +3935,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* CTA/Questions */}
-              <div className="p-4 border rounded-lg">
-                <h3 className="text-sm font-medium mb-4">CTA/Questions Section</h3>
+              <div className="p-4 border">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">CTA/Questions Section</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-light mb-2 block">Title</label>
@@ -3957,76 +3957,67 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Journey Steps Section Title</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-light mb-2 block">Journey Title</label>
-                <Input 
-                  {...homepageContentForm.register("journeyTitle")}
-                  placeholder="e.g., THE JOURNEY TO YOUR DREAM SPACE"
-                  data-testid="input-journey-title"
-                />
+              {/* Journey Steps */}
+              <div className="p-4 border">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Journey Steps Section</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Journey Title</label>
+                    <Input 
+                      {...homepageContentForm.register("journeyTitle")}
+                      placeholder="e.g., THE JOURNEY TO YOUR DREAM SPACE"
+                      data-testid="input-journey-title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Journey Description</label>
+                    <Textarea 
+                      {...homepageContentForm.register("journeyDescription")}
+                      rows={3}
+                      placeholder="Description for the journey/process section"
+                      data-testid="textarea-journey-description"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-light mb-2 block">Journey Description</label>
-                <Textarea 
-                  {...homepageContentForm.register("journeyDescription")}
-                  rows={3}
-                  placeholder="Description for the journey/process section"
-                  data-testid="textarea-journey-description"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Advantages Section Title</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-light mb-2 block">Advantages Title</label>
-                <Input 
-                  {...homepageContentForm.register("advantagesTitle")}
-                  placeholder="e.g., ADVANTAGES"
-                  data-testid="input-advantages-title"
-                />
+              {/* Advantages */}
+              <div className="p-4 border">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Advantages Section</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Advantages Title</label>
+                    <Input 
+                      {...homepageContentForm.register("advantagesTitle")}
+                      placeholder="e.g., ADVANTAGES"
+                      data-testid="input-advantages-title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Advantages Subtitle</label>
+                    <Input 
+                      {...homepageContentForm.register("advantagesSubtitle")}
+                      placeholder="e.g., Why Choose Moderno Interiors"
+                      data-testid="input-advantages-subtitle"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-light mb-2 block">Advantages Subtitle</label>
-                <Input 
-                  {...homepageContentForm.register("advantagesSubtitle")}
-                  placeholder="e.g., Why Choose Moderno Interiors"
-                  data-testid="input-advantages-subtitle"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Partners Section Title</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-light mb-2 block">Partners Title</label>
-                <Input 
-                  {...homepageContentForm.register("partnersTitle")}
-                  placeholder="e.g., OUR PARTNERS"
-                  data-testid="input-partners-title"
-                />
+              {/* Partners */}
+              <div className="p-4 border">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Partners Section</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Partners Title</label>
+                    <Input 
+                      {...homepageContentForm.register("partnersTitle")}
+                      placeholder="e.g., OUR PARTNERS"
+                      data-testid="input-partners-title"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
