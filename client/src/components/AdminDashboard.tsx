@@ -136,6 +136,9 @@ const homepageContentSchema = z.object({
   advantagesSubtitle: z.string().optional(),
   faqSectionTitle: z.string().optional(),
   partnersTitle: z.string().optional(),
+  featuredNewsTitle: z.string().optional(),
+  featuredNewsSubtitle: z.string().optional(),
+  ctaSubtitle: z.string().optional(),
   qualityBackgroundImage: z.string().optional(),
   qualityLeftText: z.string().optional(),
   qualityRightText: z.string().optional(),
@@ -624,6 +627,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         advantagesSubtitle: homepageContent.advantagesSubtitle || undefined,
         faqSectionTitle: homepageContent.faqSectionTitle || undefined,
         partnersTitle: homepageContent.partnersTitle || undefined,
+        featuredNewsTitle: homepageContent.featuredNewsTitle || undefined,
+        featuredNewsSubtitle: homepageContent.featuredNewsSubtitle || undefined,
+        ctaSubtitle: homepageContent.ctaSubtitle || undefined,
         qualityBackgroundImage: homepageContent.qualityBackgroundImage || undefined,
         qualityLeftText: homepageContent.qualityLeftText || undefined,
         qualityRightText: homepageContent.qualityRightText || undefined,
@@ -3876,6 +3882,87 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <form onSubmit={homepageContentForm.handleSubmit(onHomepageContentSubmit)} className="space-y-6">
             <Card>
           <CardHeader>
+            <CardTitle>Section Titles Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              {/* Featured Projects */}
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-sm font-medium mb-4">Featured Projects Section</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Title</label>
+                    <Input 
+                      {...homepageContentForm.register("featuredBadge")}
+                      placeholder="e.g., FEATURED PROJECTS"
+                      data-testid="input-featured-projects-title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Subtitle</label>
+                    <Textarea 
+                      {...homepageContentForm.register("featuredDescription")}
+                      placeholder="e.g., Discover our latest projects where innovation meets elegance."
+                      rows={2}
+                      data-testid="textarea-featured-projects-subtitle"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured News */}
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-sm font-medium mb-4">Featured News Section</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Title</label>
+                    <Input 
+                      {...homepageContentForm.register("featuredNewsTitle")}
+                      placeholder="e.g., FEATURED NEWS"
+                      data-testid="input-featured-news-title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Subtitle</label>
+                    <Textarea 
+                      {...homepageContentForm.register("featuredNewsSubtitle")}
+                      placeholder="e.g., Discover the latest design trends and expert insights from our professional team."
+                      rows={2}
+                      data-testid="textarea-featured-news-subtitle"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA/Questions */}
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-sm font-medium mb-4">CTA/Questions Section</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Title</label>
+                    <Input 
+                      {...homepageContentForm.register("faqSectionTitle")}
+                      placeholder="e.g., GOT QUESTIONS?"
+                      data-testid="input-cta-title"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Subtitle</label>
+                    <Textarea 
+                      {...homepageContentForm.register("ctaSubtitle")}
+                      placeholder="e.g., Leave a request for a free consultation and we will contact you as soon as possible."
+                      rows={2}
+                      data-testid="textarea-cta-subtitle"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>Journey Steps Section Title</CardTitle>
           </CardHeader>
           <CardContent>
@@ -3921,24 +4008,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {...homepageContentForm.register("advantagesSubtitle")}
                   placeholder="e.g., Why Choose Moderno Interiors"
                   data-testid="input-advantages-subtitle"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>FAQ Section Title</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-light mb-2 block">FAQ Section Title</label>
-                <Input 
-                  {...homepageContentForm.register("faqSectionTitle")}
-                  placeholder="e.g., HAVE ANY QUESTIONS?"
-                  data-testid="input-faq-section-title"
                 />
               </div>
             </div>

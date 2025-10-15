@@ -155,6 +155,11 @@ export const homepageContent = pgTable("homepage_content", {
   faqSectionTitle: text("faq_section_title"),
   // Partners Section Header
   partnersTitle: text("partners_title"),
+  // Featured News Section
+  featuredNewsTitle: text("featured_news_title"),
+  featuredNewsSubtitle: text("featured_news_subtitle"),
+  // CTA/Questions Section
+  ctaSubtitle: text("cta_subtitle"),
   // Quality/Banner Section 1
   qualityBackgroundImage: text("quality_background_image"),
   qualityLeftText: text("quality_left_text"),
