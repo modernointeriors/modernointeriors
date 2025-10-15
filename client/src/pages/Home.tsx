@@ -710,13 +710,13 @@ export default function Home() {
           <div className="mb-16">
             <div className="mb-8">
               <h2 className="text-sm font-light tracking-widest text-muted-foreground uppercase scroll-animate">
-                {t("featured.newsTitle")}
+                {homepageContent?.featuredNewsTitle || t("featured.newsTitle")}
               </h2>
             </div>
             <div className="flex items-start justify-between">
               <div className="max-w-4xl">
                 <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
-                  {t("featured.newsDesc")}
+                  {homepageContent?.featuredNewsSubtitle || t("featured.newsDesc")}
                 </p>
               </div>
               <div className="flex-shrink-0 ml-8">
@@ -1141,9 +1141,9 @@ export default function Home() {
                   className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate"
                   data-testid="text-consultation"
                 >
-                  {language === "vi"
+                  {homepageContent?.ctaSubtitle || (language === "vi"
                     ? "Để lại yêu cầu tư vấn miễn phí và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
-                    : "Leave a request for a free consultation and we will contact you as soon as possible."}
+                    : "Leave a request for a free consultation and we will contact you as soon as possible.")}
                 </p>
               </div>
             </div>
