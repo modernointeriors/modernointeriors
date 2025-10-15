@@ -4113,7 +4113,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Quality/Banner Section</CardTitle>
+            <CardTitle>Quality/Banner Section 1</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -4162,6 +4162,63 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
                   rows={3}
                   data-testid="textarea-quality-right-text"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Quality/Banner Section 2</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {/* Background Image Upload */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">Background Image</label>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={handleQuality2BgFileChange}
+                  className="block w-full text-sm text-foreground
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-none file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-primary file:text-primary-foreground
+                    hover:file:bg-primary/90 cursor-pointer"
+                  data-testid="input-quality2-bg-file"
+                />
+                <p className="text-xs text-muted-foreground mt-2">
+                  Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
+                </p>
+                {quality2BgPreview && (
+                  <div className="mt-4">
+                    <p className="text-sm font-medium mb-2">Preview:</p>
+                    <div className="border rounded p-4 bg-muted">
+                      <img src={quality2BgPreview} alt="Quality 2 BG Preview" className="w-full h-48 object-cover rounded" />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
+                <Textarea 
+                  {...homepageContentForm.register("quality2LeftText")}
+                  placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
+                  rows={3}
+                  data-testid="textarea-quality2-left-text"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
+                <Textarea 
+                  {...homepageContentForm.register("quality2RightText")}
+                  placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
+                  rows={3}
+                  data-testid="textarea-quality2-right-text"
                 />
               </div>
             </div>
