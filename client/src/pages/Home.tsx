@@ -42,6 +42,8 @@ export default function Home() {
   );
   const [processSectionHoverTimer, setProcessSectionHoverTimer] =
     useState<NodeJS.Timeout | null>(null);
+  const [faqSectionHoverTimer, setFaqSectionHoverTimer] =
+    useState<NodeJS.Timeout | null>(null);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState<number | null>(null);
   const [faqAnswerTexts, setFaqAnswerTexts] = useState<Record<string, string>>(
     {},
@@ -437,8 +439,11 @@ export default function Home() {
       if (autoCloseTimer) {
         clearTimeout(autoCloseTimer);
       }
+      if (faqSectionHoverTimer) {
+        clearTimeout(faqSectionHoverTimer);
+      }
     };
-  }, [processSectionHoverTimer, autoCloseTimer]);
+  }, [processSectionHoverTimer, autoCloseTimer, faqSectionHoverTimer]);
 
   // Handle Process Section auto-close functionality
   const handleProcessSectionMouseLeave = () => {
@@ -471,6 +476,22 @@ export default function Home() {
       }, 4000); // 4 seconds - between 3-5s as requested
       setAutoCloseTimer(timer);
     }
+  };
+
+  // Auto-close handlers for FAQ section
+  const handleFaqSectionMouseEnter = () => {
+    if (faqSectionHoverTimer) {
+      clearTimeout(faqSectionHoverTimer);
+      setFaqSectionHoverTimer(null);
+    }
+  };
+
+  const handleFaqSectionMouseLeave = () => {
+    const timer = setTimeout(() => {
+      // Close expanded FAQ
+      setExpandedFaqIndex(null);
+    }, 4000); // 4 seconds after mouse leaves FAQ section
+    setFaqSectionHoverTimer(timer);
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -1273,7 +1294,11 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-black">
+      <section
+        className="py-16 bg-black"
+        onMouseEnter={handleFaqSectionMouseEnter}
+        onMouseLeave={handleFaqSectionMouseLeave}
+      >
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Title */}
           <div className="mb-16">
