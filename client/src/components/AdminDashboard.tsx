@@ -5035,38 +5035,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </TableCell>
                         <TableCell className="text-white/70">{journeyStep.order}</TableCell>
                         <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              onClick={() => handleEditJourneyStep(journeyStep)}
-                              data-testid={`button-edit-journey-step-${index}`}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" data-testid={`button-delete-journey-step-${index}`}>
-                                  <Trash2 className="h-4 w-4 text-white" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Journey Step?</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This will permanently delete step "{journeyStep.titleEn}". This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => deleteJourneyStepMutation.mutate(journeyStep.id)}
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
+                          <Button
+                            variant="outline"
+                            onClick={() => handleEditJourneyStep(journeyStep)}
+                            data-testid={`button-edit-journey-step-${index}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
