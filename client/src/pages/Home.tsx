@@ -26,7 +26,6 @@ import type {
   Article,
   Partner,
   JourneyStep,
-  HeroSlide,
 } from "@shared/schema";
 
 export default function Home() {
@@ -215,9 +214,11 @@ export default function Home() {
     };
   }, [language, contactFormExpanded]);
 
-  const { data: heroSlides, isLoading: heroSlidesLoading } = useQuery<HeroSlide[]>({
-    queryKey: ["/api/hero-slides"],
-  });
+  const { data: allProjects, isLoading: projectsLoading } = useQuery<Project[]>(
+    {
+      queryKey: ["/api/projects"],
+    },
+  );
 
   const { data: featuredProjects, isLoading } = useQuery<Project[]>({
     queryKey: ["/api/projects", "featured"],
@@ -548,7 +549,7 @@ export default function Home() {
       )}
 
       {/* Hero Slider Section - IIDA Style */}
-      <HeroSlider heroSlides={heroSlides || []} />
+      <HeroSlider projects={allProjects || []} />
 
       {/* Featured Projects Section */}
       <section id="featured-projects" className="py-16 bg-card">

@@ -1,6 +1,6 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
-  interactions, deals, transactions, settings, faqs, advantages, journeySteps, heroSlides,
+  interactions, deals, transactions, settings, faqs, advantages, journeySteps,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -16,8 +16,7 @@ import {
   type Settings, type InsertSettings,
   type Faq, type InsertFaq,
   type Advantage, type InsertAdvantage,
-  type JourneyStep, type InsertJourneyStep,
-  type HeroSlide, type InsertHeroSlide
+  type JourneyStep, type InsertJourneyStep
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -138,13 +137,6 @@ export interface IStorage {
   createJourneyStep(journeyStep: InsertJourneyStep): Promise<JourneyStep>;
   updateJourneyStep(id: string, journeyStep: Partial<InsertJourneyStep>): Promise<JourneyStep>;
   deleteJourneyStep(id: string): Promise<void>;
-
-  // Hero Slides
-  getHeroSlides(filters?: { active?: boolean }): Promise<HeroSlide[]>;
-  getHeroSlide(id: string): Promise<HeroSlide | undefined>;
-  createHeroSlide(heroSlide: InsertHeroSlide): Promise<HeroSlide>;
-  updateHeroSlide(id: string, heroSlide: Partial<InsertHeroSlide>): Promise<HeroSlide>;
-  deleteHeroSlide(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -850,41 +842,6 @@ export class DatabaseStorage implements IStorage {
 
   async deleteJourneyStep(id: string): Promise<void> {
     await db.delete(journeySteps).where(eq(journeySteps.id, id));
-  }
-
-  // Hero Slides
-  async getHeroSlides(filters?: { active?: boolean }): Promise<HeroSlide[]> {
-    const conditions = [];
-    if (filters?.active !== undefined) conditions.push(eq(heroSlides.active, filters.active));
-
-    const query = conditions.length > 0
-      ? db.select().from(heroSlides).where(and(...conditions))
-      : db.select().from(heroSlides);
-
-    return await query.orderBy(heroSlides.order);
-  }
-
-  async getHeroSlide(id: string): Promise<HeroSlide | undefined> {
-    const [heroSlide] = await db.select().from(heroSlides).where(eq(heroSlides.id, id));
-    return heroSlide || undefined;
-  }
-
-  async createHeroSlide(heroSlide: InsertHeroSlide): Promise<HeroSlide> {
-    const [created] = await db.insert(heroSlides).values(heroSlide).returning();
-    return created;
-  }
-
-  async updateHeroSlide(id: string, heroSlide: Partial<InsertHeroSlide>): Promise<HeroSlide> {
-    const [updated] = await db
-      .update(heroSlides)
-      .set({ ...heroSlide, updatedAt: new Date() })
-      .where(eq(heroSlides.id, id))
-      .returning();
-    return updated;
-  }
-
-  async deleteHeroSlide(id: string): Promise<void> {
-    await db.delete(heroSlides).where(eq(heroSlides.id, id));
   }
 }
 

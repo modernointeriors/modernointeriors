@@ -510,29 +510,3 @@ export const insertJourneyStepSchema = createInsertSchema(journeySteps).omit({
 
 export type InsertJourneyStep = z.infer<typeof insertJourneyStepSchema>;
 export type JourneyStep = typeof journeySteps.$inferSelect;
-
-// Hero Slides table
-export const heroSlides = pgTable("hero_slides", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  titleEn: text("title_en").notNull(),
-  titleVi: text("title_vi").notNull(),
-  subtitleEn: text("subtitle_en"),
-  subtitleVi: text("subtitle_vi"),
-  image: text("image"), // URL to image
-  imageData: text("image_data"), // Base64 encoded image
-  linkUrl: text("link_url"), // Optional link when user clicks on slide
-  linkText: text("link_text"), // Link button text
-  order: integer("order").notNull().default(0),
-  active: boolean("active").notNull().default(true),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
-
-export const insertHeroSlideSchema = createInsertSchema(heroSlides).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export type InsertHeroSlide = z.infer<typeof insertHeroSlideSchema>;
-export type HeroSlide = typeof heroSlides.$inferSelect;

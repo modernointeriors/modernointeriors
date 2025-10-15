@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertHeroSlideSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -975,68 +975,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete journey step" });
-    }
-  });
-
-  // Hero Slides routes
-  app.get("/api/hero-slides", async (req, res) => {
-    try {
-      const { active } = req.query;
-      const filters: any = {};
-      
-      if (active !== undefined) filters.active = active === 'true';
-      
-      const heroSlides = await storage.getHeroSlides(filters);
-      res.json(heroSlides);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch hero slides" });
-    }
-  });
-
-  app.get("/api/hero-slides/:id", async (req, res) => {
-    try {
-      const heroSlide = await storage.getHeroSlide(req.params.id);
-      if (!heroSlide) {
-        return res.status(404).json({ message: "Hero slide not found" });
-      }
-      res.json(heroSlide);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch hero slide" });
-    }
-  });
-
-  app.post("/api/hero-slides", async (req, res) => {
-    try {
-      const validatedData = insertHeroSlideSchema.parse(req.body);
-      const heroSlide = await storage.createHeroSlide(validatedData);
-      res.status(201).json(heroSlide);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to create hero slide" });
-    }
-  });
-
-  app.patch("/api/hero-slides/:id", async (req, res) => {
-    try {
-      const validatedData = insertHeroSlideSchema.partial().parse(req.body);
-      const heroSlide = await storage.updateHeroSlide(req.params.id, validatedData);
-      res.json(heroSlide);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to update hero slide" });
-    }
-  });
-
-  app.delete("/api/hero-slides/:id", async (req, res) => {
-    try {
-      await storage.deleteHeroSlide(req.params.id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete hero slide" });
     }
   });
 
