@@ -4809,38 +4809,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              onClick={() => handleEditAdvantage(advantage)}
-                              data-testid={`button-edit-advantage-${index}`}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" data-testid={`button-delete-advantage-${index}`}>
-                                  <Trash2 className="h-4 w-4 text-white" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Advantage?</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This will permanently delete "{advantage.titleEn}". This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => deleteAdvantageMutation.mutate(advantage.id)}
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
+                          <Button
+                            variant="outline"
+                            onClick={() => handleEditAdvantage(advantage)}
+                            data-testid={`button-edit-advantage-${index}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
