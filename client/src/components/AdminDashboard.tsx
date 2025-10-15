@@ -4184,137 +4184,140 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Quality/Banner Section 1</CardTitle>
+            <CardTitle>Quality/Banner Sections</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {/* Background Image Upload */}
-              <div>
-                <label className="text-sm font-medium mb-2 block">Background Image</label>
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png"
-                  onChange={handleQualityBgFileChange}
-                  className="block w-full text-sm text-foreground
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-none file:border-0
-                    file:text-sm file:font-medium
-                    file:bg-white file:text-black
-                    hover:file:bg-white/90 cursor-pointer"
-                  data-testid="input-quality-bg-file"
-                />
-                <p className="text-xs text-muted-foreground mt-2">
-                  Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
-                </p>
-                {(qualityBgPreview || homepageContent?.qualityBackgroundImage) && (
-                  <div className="mt-4">
-                    <p className="text-sm font-medium mb-2">Preview:</p>
-                    <div className="border rounded p-4 bg-muted">
-                      <img 
-                        src={qualityBgPreview || homepageContent?.qualityBackgroundImage || ''} 
-                        alt="Quality BG Preview" 
-                        className="w-full aspect-[16/6] object-cover rounded" 
-                      />
-                    </div>
+            <div className="space-y-8">
+              {/* Section 1 */}
+              <div className="p-4">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Banner Section 1</h3>
+                <div className="space-y-4">
+                  {/* Background Image Upload */}
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Background Image</label>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={handleQualityBgFileChange}
+                      className="block w-full text-sm text-foreground
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-none file:border-0
+                        file:text-sm file:font-medium
+                        file:bg-white file:text-black
+                        hover:file:bg-white/90 cursor-pointer"
+                      data-testid="input-quality-bg-file"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
+                    </p>
+                    {(qualityBgPreview || homepageContent?.qualityBackgroundImage) && (
+                      <div className="mt-4">
+                        <p className="text-sm font-medium mb-2">Preview:</p>
+                        <div className="border p-4 bg-muted">
+                          <img 
+                            src={qualityBgPreview || homepageContent?.qualityBackgroundImage || ''} 
+                            alt="Quality BG Preview" 
+                            className="w-full aspect-[16/6] object-cover" 
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
+                    <Textarea 
+                      {...homepageContentForm.register("qualityLeftText")}
+                      placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
+                      rows={3}
+                      data-testid="textarea-quality-left-text"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
+                    <Textarea 
+                      {...homepageContentForm.register("qualityRightText")}
+                      placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
+                      rows={3}
+                      data-testid="textarea-quality-right-text"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
-                <Textarea 
-                  {...homepageContentForm.register("qualityLeftText")}
-                  placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
-                  rows={3}
-                  data-testid="textarea-quality-left-text"
-                />
-              </div>
+              {/* Section 2 */}
+              <div className="p-4">
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Banner Section 2</h3>
+                <div className="space-y-4">
+                  {/* Background Image Upload */}
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Background Image</label>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={handleQuality2BgFileChange}
+                      className="block w-full text-sm text-foreground
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-none file:border-0
+                        file:text-sm file:font-medium
+                        file:bg-white file:text-black
+                        hover:file:bg-white/90 cursor-pointer"
+                      data-testid="input-quality2-bg-file"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
+                    </p>
+                    {(quality2BgPreview || homepageContent?.quality2BackgroundImage) && (
+                      <div className="mt-4">
+                        <p className="text-sm font-medium mb-2">Preview:</p>
+                        <div className="border p-4 bg-muted">
+                          <img 
+                            src={quality2BgPreview || homepageContent?.quality2BackgroundImage || ''} 
+                            alt="Quality 2 BG Preview" 
+                            className="w-full aspect-[16/6] object-cover" 
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-              <div>
-                <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
-                <Textarea 
-                  {...homepageContentForm.register("qualityRightText")}
-                  placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
-                  rows={3}
-                  data-testid="textarea-quality-right-text"
-                />
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
+                    <Textarea 
+                      {...homepageContentForm.register("quality2LeftText")}
+                      placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
+                      rows={3}
+                      data-testid="textarea-quality2-left-text"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
+                    <Textarea 
+                      {...homepageContentForm.register("quality2RightText")}
+                      placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
+                      rows={3}
+                      data-testid="textarea-quality2-right-text"
+                    />
+                  </div>
+                </div>
               </div>
+            </div>
+            
+            {/* Save Button inside Card */}
+            <div className="px-6 pb-6 pt-4">
+              <Button 
+                type="submit"
+                className="w-full"
+                disabled={updateHomepageContentMutation.isPending}
+                data-testid="button-save-banner-sections"
+              >
+                {updateHomepageContentMutation.isPending ? "Saving..." : "Save Banner Sections"}
+              </Button>
             </div>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Quality/Banner Section 2</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {/* Background Image Upload */}
-              <div>
-                <label className="text-sm font-medium mb-2 block">Background Image</label>
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png"
-                  onChange={handleQuality2BgFileChange}
-                  className="block w-full text-sm text-foreground
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-none file:border-0
-                    file:text-sm file:font-medium
-                    file:bg-white file:text-black
-                    hover:file:bg-white/90 cursor-pointer"
-                  data-testid="input-quality2-bg-file"
-                />
-                <p className="text-xs text-muted-foreground mt-2">
-                  Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
-                </p>
-                {(quality2BgPreview || homepageContent?.quality2BackgroundImage) && (
-                  <div className="mt-4">
-                    <p className="text-sm font-medium mb-2">Preview:</p>
-                    <div className="border rounded p-4 bg-muted">
-                      <img 
-                        src={quality2BgPreview || homepageContent?.quality2BackgroundImage || ''} 
-                        alt="Quality 2 BG Preview" 
-                        className="w-full aspect-[16/6] object-cover rounded" 
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
-                <Textarea 
-                  {...homepageContentForm.register("quality2LeftText")}
-                  placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
-                  rows={3}
-                  data-testid="textarea-quality2-left-text"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
-                <Textarea 
-                  {...homepageContentForm.register("quality2RightText")}
-                  placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
-                  rows={3}
-                  data-testid="textarea-quality2-right-text"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Save Button */}
-        <div className="flex justify-end pt-6">
-          <Button 
-            type="submit"
-            disabled={updateHomepageContentMutation.isPending}
-            data-testid="button-save-homepage"
-            size="lg"
-          >
-            {updateHomepageContentMutation.isPending ? "Saving..." : "Save Homepage Content"}
-          </Button>
-        </div>
           </form>
         </Form>
 
