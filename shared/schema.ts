@@ -153,6 +153,10 @@ export const homepageContent = pgTable("homepage_content", {
   advantagesSubtitle: text("advantages_subtitle"),
   // FAQ Section Header
   faqSectionTitle: text("faq_section_title"),
+  // Quality/Banner Section
+  qualityBackgroundImage: text("quality_background_image"),
+  qualityLeftText: text("quality_left_text"),
+  qualityRightText: text("quality_right_text"),
   // CTA Section
   ctaTitle: text("cta_title"),
   ctaDescription: text("cta_description"),
