@@ -249,7 +249,6 @@ const journeyStepSchema = z.object({
   titleVi: z.string().min(1, "Vietnamese title is required"),
   descriptionEn: z.string().min(1, "English description is required"),
   descriptionVi: z.string().min(1, "Vietnamese description is required"),
-  order: z.number().default(0),
   active: z.boolean().default(true),
 });
 
@@ -602,7 +601,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       titleVi: "",
       descriptionEn: "",
       descriptionVi: "",
-      order: 0,
       active: true,
     },
   });
@@ -1641,17 +1639,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       titleVi: journeyStep.titleVi || "",
       descriptionEn: journeyStep.descriptionEn || "",
       descriptionVi: journeyStep.descriptionVi || "",
-      order: journeyStep.order || 0,
       active: journeyStep.active !== undefined ? journeyStep.active : true,
     });
     setIsJourneyStepDialogOpen(true);
   };
 
   const onJourneyStepSubmit = async (data: JourneyStepFormData) => {
+    // When creating new journey step, find the max order and add 1
+    const order = editingJourneyStep ? editingJourneyStep.order : Math.max(0, ...journeySteps.map(j => j.order)) + 1;
+    const journeyStepData = { ...data, order };
+
     if (editingJourneyStep) {
-      await updateJourneyStepMutation.mutateAsync({ id: editingJourneyStep.id, data });
+      await updateJourneyStepMutation.mutateAsync({ id: editingJourneyStep.id, data: journeyStepData });
     } else {
-      await createJourneyStepMutation.mutateAsync(data);
+      await createJourneyStepMutation.mutateAsync(journeyStepData);
     }
     
     setEditingJourneyStep(null);
@@ -4908,47 +4909,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <FormField
-                          control={journeyStepForm.control}
-                          name="order"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Display Order</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  {...field} 
-                                  type="number" 
-                                  onChange={(e) => field.onChange(Number(e.target.value))}
-                                  data-testid="input-journey-step-order" 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={journeyStepForm.control}
-                          name="active"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                              <div className="space-y-0.5">
-                                <FormLabel>Active</FormLabel>
-                              </div>
-                              <FormControl>
-                                <input
-                                  type="checkbox"
-                                  checked={field.value}
-                                  onChange={field.onChange}
-                                  data-testid="checkbox-journey-step-active"
-                                  className="h-4 w-4"
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      <FormField
+                        control={journeyStepForm.control}
+                        name="active"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                            <div className="space-y-0.5">
+                              <FormLabel>Active</FormLabel>
+                            </div>
+                            <FormControl>
+                              <input
+                                type="checkbox"
+                                checked={field.value}
+                                onChange={field.onChange}
+                                data-testid="checkbox-journey-step-active"
+                                className="h-4 w-4"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
 
                       <Button 
                         type="submit" 
