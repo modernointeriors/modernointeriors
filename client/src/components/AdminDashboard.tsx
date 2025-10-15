@@ -4472,14 +4472,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => deletePartnerMutation.mutate(partner.id)}
-                            data-testid={`button-delete-partner-${partner.id}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-white" />
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                data-testid={`button-delete-partner-${partner.id}`}
+                              >
+                                <Trash2 className="h-4 w-4 text-white" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Partner?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will permanently delete "{partner.name}". This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deletePartnerMutation.mutate(partner.id)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -5745,14 +5764,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => deletePartnerMutation.mutate(partner.id)}
-                            data-testid={`button-delete-partner-${partner.id}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-white" />
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                data-testid={`button-delete-partner-${partner.id}`}
+                              >
+                                <Trash2 className="h-4 w-4 text-white" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Partner?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will permanently delete "{partner.name}". This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deletePartnerMutation.mutate(partner.id)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </TableCell>
                     </TableRow>
