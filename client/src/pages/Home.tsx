@@ -679,7 +679,7 @@ export default function Home() {
       {/* Quality Hero Section */}
       <section className="relative h-[70vh] min-h-[600px] overflow-hidden scroll-animate">
         <img
-          src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          src={homepageContent?.qualityBackgroundImage || "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"}
           alt="Quality Interior Design"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -688,16 +688,16 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
             <div className="text-white space-y-6 scroll-animate">
               <p className="text-3xl md:text-5xl font-light leading-relaxed">
-                {language === "vi"
+                {homepageContent?.qualityLeftText || (language === "vi"
                   ? "Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và trông hoàn hảo."
-                  : "Each detail is selected so that the interior will serve for a long time and look impeccable."}
+                  : "Each detail is selected so that the interior will serve for a long time and look impeccable.")}
               </p>
             </div>
             <div className="text-white space-y-6 scroll-animate">
               <p className="text-xl md:text-2xl font-light leading-relaxed">
-                {language === "vi"
+                {homepageContent?.qualityRightText || (language === "vi"
                   ? "Chúng tôi chỉ sử dụng vật liệu và nội thất chất lượng cao từ các nhà sản xuất đáng tin cậy."
-                  : "We use only high-quality materials and furniture from trusted manufacturers."}
+                  : "We use only high-quality materials and furniture from trusted manufacturers.")}
               </p>
             </div>
           </div>
