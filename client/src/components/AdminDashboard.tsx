@@ -138,6 +138,9 @@ const homepageContentSchema = z.object({
   qualityBackgroundImage: z.string().optional(),
   qualityLeftText: z.string().optional(),
   qualityRightText: z.string().optional(),
+  quality2BackgroundImage: z.string().optional(),
+  quality2LeftText: z.string().optional(),
+  quality2RightText: z.string().optional(),
   ctaTitle: z.string().optional(),
   ctaDescription: z.string().optional(),
   ctaButtonText: z.string().optional(),
@@ -306,6 +309,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // Quality Section Background Image state
   const [qualityBgFile, setQualityBgFile] = useState<File | null>(null);
   const [qualityBgPreview, setQualityBgPreview] = useState<string>('');
+
+  // Quality Section 2 Background Image state
+  const [quality2BgFile, setQuality2BgFile] = useState<File | null>(null);
+  const [quality2BgPreview, setQuality2BgPreview] = useState<string>('');
 
   // FAQ state
   const [isFaqDialogOpen, setIsFaqDialogOpen] = useState(false);
