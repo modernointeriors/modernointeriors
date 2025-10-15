@@ -294,7 +294,7 @@ export default function Home() {
       } else {
         clearInterval(interval);
       }
-    }, 5); // Faster typing speed: 5ms per character
+    }, 20); // Typing speed: 20ms per character
 
     return () => clearInterval(interval);
   }, [expandedFaqIndex]);
