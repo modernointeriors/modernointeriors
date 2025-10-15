@@ -3887,7 +3887,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <CardContent>
             <div className="space-y-6">
               {/* Featured Projects */}
-              <div className="p-4 border">
+              <div className="p-4">
                 <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Featured Projects Section</h3>
                 <div className="space-y-4">
                   <div>
@@ -3911,7 +3911,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* Featured News */}
-              <div className="p-4 border">
+              <div className="p-4">
                 <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Featured News Section</h3>
                 <div className="space-y-4">
                   <div>
@@ -3935,7 +3935,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* CTA/Questions */}
-              <div className="p-4 border">
+              <div className="p-4">
                 <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">CTA/Questions Section</h3>
                 <div className="space-y-4">
                   <div>
@@ -3959,7 +3959,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* Journey Steps */}
-              <div className="p-4 border">
+              <div className="p-4">
                 <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Journey Steps Section</h3>
                 <div className="space-y-4">
                   <div>
@@ -3983,7 +3983,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* Advantages */}
-              <div className="p-4 border">
+              <div className="p-4">
                 <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Advantages Section</h3>
                 <div className="space-y-4">
                   <div>
@@ -4006,7 +4006,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </div>
 
               {/* Partners */}
-              <div className="p-4 border">
+              <div className="p-4">
                 <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Partners Section</h3>
                 <div className="space-y-4">
                   <div>
@@ -4019,6 +4019,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="px-6 pb-6">
+              <Button type="submit" className="w-full" data-testid="button-save-section-titles">
+                Save Section Titles
+              </Button>
             </div>
           </CardContent>
         </Card>
