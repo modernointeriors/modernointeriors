@@ -70,9 +70,10 @@ export default function Home() {
             ) {
               element.classList.add("animate-fade-in-up");
             }
-            // Buttons and arrows from right
+            // Elements that should slide from right
             else if (
               element.classList.contains("view-more-btn") ||
+              element.classList.contains("scroll-animate-right") ||
               element.tagName === "BUTTON"
             ) {
               element.classList.add("animate-slide-in-from-right");
@@ -89,7 +90,7 @@ export default function Home() {
 
     const observeElements = () => {
       const elements = document.querySelectorAll(
-        ".scroll-animate, .advantage-card, .process-step, .project-card, .article-card, .view-more-btn",
+        ".scroll-animate, .scroll-animate-right, .advantage-card, .process-step, .project-card, .article-card, .view-more-btn",
       );
       elements.forEach((el) => observer.observe(el));
     };
@@ -698,7 +699,7 @@ export default function Home() {
                   : "Each detail is selected so that the interior will serve for a long time and look impeccable.")}
               </p>
             </div>
-            <div className="text-white space-y-6 scroll-animate">
+            <div className="text-white space-y-6 scroll-animate-right">
               <p className="text-xl md:text-2xl font-light leading-relaxed">
                 {homepageContent?.qualityRightText || (language === "vi"
                   ? "Chúng tôi chỉ sử dụng vật liệu và nội thất chất lượng cao từ các nhà sản xuất đáng tin cậy."
@@ -855,7 +856,7 @@ export default function Home() {
               </p>
 
               {/* Right side content */}
-              <p className="text-xl md:text-2xl font-light leading-relaxed text-white scroll-animate">
+              <p className="text-xl md:text-2xl font-light leading-relaxed text-white scroll-animate-right">
                 {homepageContent?.quality2RightText || (language === "vi"
                   ? "Chúng tôi chỉ sử dụng vật liệu chất lượng cao và đồ nội thất từ các nhà sản xuất uy tín."
                   : "We use only high-quality materials and furniture from trusted manufacturers.")}
