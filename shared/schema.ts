@@ -517,7 +517,7 @@ export type Advantage = typeof advantages.$inferSelect;
 // Design Journey Steps table (5-step process section)
 export const journeySteps = pgTable("journey_steps", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  stepNumber: integer("step_number").notNull(), // 1, 2, 3, 4, 5
+  stepNumber: integer("step_number").notNull().default(1), // Auto set to 1 by default
   titleEn: text("title_en").notNull(),
   titleVi: text("title_vi").notNull(),
   descriptionEn: text("description_en").notNull(),
@@ -530,6 +530,8 @@ export const journeySteps = pgTable("journey_steps", {
 
 export const insertJourneyStepSchema = createInsertSchema(journeySteps).omit({
   id: true,
+  stepNumber: true,
+  active: true,
   createdAt: true,
   updatedAt: true,
 });
