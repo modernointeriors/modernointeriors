@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Sparkles, Trophy, Users2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import architectureBanner from "@assets/stock_images/modern_luxury_archit_ac188b7b.jpg";
 
 export default function About() {
   const { language, t } = useLanguage();
@@ -145,7 +146,7 @@ export default function About() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
+            backgroundImage: `url(${architectureBanner})`,
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
