@@ -4877,25 +4877,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </DialogHeader>
                   <Form {...journeyStepForm}>
                     <form onSubmit={journeyStepForm.handleSubmit(onJourneyStepSubmit)} className="space-y-4">
-                      <FormField
-                        control={journeyStepForm.control}
-                        name="stepNumber"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Step Number *</FormLabel>
-                            <FormControl>
-                              <Input 
-                                {...field} 
-                                type="number" 
-                                onChange={(e) => field.onChange(Number(e.target.value))}
-                                data-testid="input-journey-step-number" 
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-4">
                           <FormField
@@ -4957,27 +4938,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           />
                         </div>
                       </div>
-
-                      <FormField
-                        control={journeyStepForm.control}
-                        name="active"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                            <div className="space-y-0.5">
-                              <FormLabel>Active</FormLabel>
-                            </div>
-                            <FormControl>
-                              <input
-                                type="checkbox"
-                                checked={field.value}
-                                onChange={field.onChange}
-                                data-testid="checkbox-journey-step-active"
-                                className="h-4 w-4"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
 
                       <Button 
                         type="submit" 
