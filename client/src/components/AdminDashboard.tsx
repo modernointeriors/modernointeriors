@@ -1017,7 +1017,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/journey-steps'] });
-      toast({ title: "Journey step created successfully" });
+      toast({ 
+        title: "Saved successfully",
+        description: "Journey step has been created"
+      });
       journeyStepForm.reset();
       setIsJourneyStepDialogOpen(false);
     },
@@ -1035,9 +1038,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PATCH', `/api/journey-steps/${id}`, data);
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/journey-steps'] });
-      toast({ title: "Journey step updated successfully" });
+      journeyStepForm.reset(data);
+      toast({ 
+        title: "Saved successfully",
+        description: "Journey step has been updated"
+      });
       setEditingJourneyStep(null);
       setIsJourneyStepDialogOpen(false);
     },
@@ -4941,10 +4948,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                       <Button 
                         type="submit" 
-                        disabled={createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending}
+                        className={`w-full transition-all ${!journeyStepForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                        disabled={!journeyStepForm.formState.isDirty || createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending}
                         data-testid="button-submit-journey-step"
                       >
-                        {editingJourneyStep ? "Update Journey Step" : "Add Journey Step"}
+                        {createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending ? "Saving..." : "Save"}
                       </Button>
                     </form>
                   </Form>
