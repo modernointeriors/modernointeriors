@@ -507,6 +507,7 @@ export const advantages = pgTable("advantages", {
 
 export const insertAdvantageSchema = createInsertSchema(advantages).omit({
   id: true,
+  active: true,
   createdAt: true,
   updatedAt: true,
 });

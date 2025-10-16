@@ -960,7 +960,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/advantages'] });
-      toast({ title: "Advantage created successfully" });
+      toast({ 
+        title: "Saved successfully",
+        description: "Advantage has been created"
+      });
       advantageForm.reset();
       setIsAdvantageDialogOpen(false);
     },
@@ -978,9 +981,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PUT', `/api/advantages/${id}`, data);
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/advantages'] });
-      toast({ title: "Advantage updated successfully" });
+      advantageForm.reset(data);
+      toast({ 
+        title: "Saved successfully",
+        description: "Advantage has been updated"
+      });
       setEditingAdvantage(null);
       setIsAdvantageDialogOpen(false);
     },
@@ -4788,33 +4795,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </div>
                       </div>
 
-                      <FormField
-                        control={advantageForm.control}
-                        name="active"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                            <div className="space-y-0.5">
-                              <FormLabel>Active</FormLabel>
-                            </div>
-                            <FormControl>
-                              <input
-                                type="checkbox"
-                                checked={field.value}
-                                onChange={field.onChange}
-                                data-testid="checkbox-advantage-active"
-                                className="h-4 w-4"
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-
                       <Button 
                         type="submit" 
-                        disabled={createAdvantageMutation.isPending || updateAdvantageMutation.isPending}
+                        className={`w-full transition-all ${!advantageForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                        disabled={!advantageForm.formState.isDirty || createAdvantageMutation.isPending || updateAdvantageMutation.isPending}
                         data-testid="button-submit-advantage"
                       >
-                        {editingAdvantage ? "Update Advantage" : "Add Advantage"}
+                        {createAdvantageMutation.isPending || updateAdvantageMutation.isPending ? "Saving..." : "Save"}
                       </Button>
                     </form>
                   </Form>
