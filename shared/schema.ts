@@ -484,6 +484,7 @@ export const faqs = pgTable("faqs", {
 
 export const insertFaqSchema = createInsertSchema(faqs).omit({
   id: true,
+  active: true,
   createdAt: true,
   updatedAt: true,
 });

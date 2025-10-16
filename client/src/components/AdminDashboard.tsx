@@ -903,7 +903,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === '/api/faqs' });
-      toast({ title: "FAQ created successfully" });
+      toast({ 
+        title: "Saved successfully",
+        description: "FAQ has been created"
+      });
       faqForm.reset();
       setIsFaqDialogOpen(false);
     },
@@ -921,9 +924,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PUT', `/api/faqs/${id}`, data);
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === '/api/faqs' });
-      toast({ title: "FAQ updated successfully" });
+      faqForm.reset(data);
+      toast({ 
+        title: "Saved successfully",
+        description: "FAQ has been updated"
+      });
       setEditingFaq(null);
       setIsFaqDialogOpen(false);
     },
@@ -4553,7 +4560,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <Form {...faqForm}>
                     <form onSubmit={faqForm.handleSubmit(onFaqSubmit)} className="space-y-4">
                       <div className="space-y-4">
-                        <div className="border rounded-md p-4 space-y-4">
+                        <div className="border p-4 space-y-4">
                           <h3 className="font-medium text-sm text-muted-foreground">English Version</h3>
                           <FormField
                             control={faqForm.control}
@@ -4584,7 +4591,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           />
                         </div>
 
-                        <div className="border rounded-md p-4 space-y-4">
+                        <div className="border p-4 space-y-4">
                           <h3 className="font-medium text-sm text-muted-foreground">Vietnamese Version</h3>
                           <FormField
                             control={faqForm.control}
@@ -4618,10 +4625,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                       <Button 
                         type="submit" 
-                        disabled={createFaqMutation.isPending || updateFaqMutation.isPending}
+                        className={`w-full transition-all ${!faqForm.formState.isDirty ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+                        disabled={!faqForm.formState.isDirty || createFaqMutation.isPending || updateFaqMutation.isPending}
                         data-testid="button-submit-faq"
                       >
-                        {editingFaq ? "Update FAQ" : "Add FAQ"}
+                        {createFaqMutation.isPending || updateFaqMutation.isPending ? "Saving..." : "Save"}
                       </Button>
                     </form>
                   </Form>
