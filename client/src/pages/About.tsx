@@ -148,62 +148,71 @@ export default function About() {
             backgroundImage: 'url("https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
         </div>
 
         <div className="relative h-full flex items-end">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full pb-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="w-full pb-0">
+            {/* Grid with vertical separators */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-white/20">
               {/* Service 1 */}
-              <div className="space-y-4">
-                <h4 className="text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "THIẾT KẾ KIẾN TRÚC" : "ARCHITECTURAL DESIGN"}
-                </h4>
-                <p className="text-white/70 font-light text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Thiết kế kiến trúc hiện đại, kết hợp giữa thẩm mỹ và chức năng sử dụng. Từ biệt thự đến các công trình thương mại quy mô lớn."
-                    : "Modern architectural design combining aesthetics and functionality. From villas to large-scale commercial projects."
-                  }
-                </p>
+              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
+                    {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
+                  </h4>
+                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                    {language === "vi"
+                      ? "Dịch vụ thiết kế kiến trúc chuyên nghiệp, từ khảo sát, tư vấn đến hoàn thiện bản vẽ thi công. Chúng tôi cung cấp giải pháp tối ưu cho mọi loại công trình."
+                      : "Professional architectural design services, from survey and consultation to construction drawings. We provide optimal solutions for all types of projects."
+                    }
+                  </p>
+                </div>
               </div>
 
               {/* Service 2 */}
-              <div className="space-y-4">
-                <h4 className="text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN"}
-                </h4>
-                <p className="text-white/70 font-light text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Thiết kế không gian nội thất cao cấp với sự chú trọng đến từng chi tiết. Tạo ra môi trường sống và làm việc lý tưởng."
-                    : "Premium interior design with attention to every detail. Creating ideal living and working environments."
-                  }
-                </p>
+              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
+                    {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
+                  </h4>
+                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                    {language === "vi"
+                      ? "Thiết kế nội thất cao cấp với sự tư vấn từ chuyên gia. Tạo ra không gian sống và làm việc hoàn hảo với phong cách riêng biệt."
+                      : "Premium interior design with expert consultation. Creating perfect living and working spaces with distinctive style."
+                    }
+                  </p>
+                </div>
               </div>
 
               {/* Service 3 */}
-              <div className="space-y-4">
-                <h4 className="text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "QUẢN LÝ THI CÔNG" : "CONSTRUCTION MANAGEMENT"}
-                </h4>
-                <p className="text-white/70 font-light text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Quản lý toàn diện quá trình thi công từ A-Z. Đảm bảo chất lượng, tiến độ và ngân sách dự án được kiểm soát chặt chẽ."
-                    : "Comprehensive construction management from A-Z. Ensuring quality, timeline and budget are strictly controlled."
-                  }
-                </p>
+              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
+                    {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
+                  </h4>
+                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                    {language === "vi"
+                      ? "Ứng dụng công nghệ BIM và 3D visualization tiên tiến, giúp khách hàng hình dung rõ ràng dự án trước khi thi công và tối ưu quá trình quản lý."
+                      : "Advanced BIM and 3D visualization technology, helping clients clearly visualize projects before construction and optimize management process."
+                    }
+                  </p>
+                </div>
               </div>
 
               {/* Service 4 */}
-              <div className="space-y-4">
-                <h4 className="text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "TƯ VẤN THIẾT KẾ" : "DESIGN CONSULTATION"}
-                </h4>
-                <p className="text-white/70 font-light text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Tư vấn chuyên sâu về thiết kế, lựa chọn vật liệu và giải pháp tối ưu cho từng không gian. Phù hợp với nhu cầu và ngân sách."
-                    : "In-depth consultation on design, material selection and optimal solutions for each space. Tailored to needs and budget."
-                  }
-                </p>
+              <div className="px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
+                    {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
+                  </h4>
+                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                    {language === "vi"
+                      ? "Thiết kế cảnh quan xanh kết hợp với kiến trúc, tạo nên không gian sống hài hòa với thiên nhiên. Mang lại trải nghiệm thư giãn tuyệt vời."
+                      : "Green landscape design integrated with architecture, creating living spaces in harmony with nature. Delivering excellent relaxation experience."
+                    }
+                  </p>
+                </div>
               </div>
             </div>
           </div>
