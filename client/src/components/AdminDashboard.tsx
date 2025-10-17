@@ -3861,6 +3861,35 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     );
   }
 
+  if (activeTab === 'about') {
+    return (
+      <div className="space-y-6 p-6">
+        <h2 className="text-2xl font-sans font-light text-white">About Page Management</h2>
+        <p className="text-muted-foreground">
+          Manage About page content including principles, showcase services, process steps, and stats.
+        </p>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>About Content</CardTitle>
+          </CardHeader>
+          <CardContent className="text-muted-foreground">
+            <p>About page content management will be available here.</p>
+            <p className="mt-2">You can manage:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li>Hero titles and subtitles (EN/VI)</li>
+              <li>Principles (3 items with icons)</li>
+              <li>Showcase banner image</li>
+              <li>Showcase services (4 items)</li>
+              <li>Stats values (Projects, Awards, Clients, Countries)</li>
+              <li>Process steps (4 steps)</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (activeTab === 'content') {
     return (
       <div className="space-y-6">
