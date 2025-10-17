@@ -540,3 +540,116 @@ export const insertJourneyStepSchema = createInsertSchema(journeySteps).omit({
 
 export type InsertJourneyStep = z.infer<typeof insertJourneyStepSchema>;
 export type JourneyStep = typeof journeySteps.$inferSelect;
+
+// About Page Content table
+export const aboutPageContent = pgTable("about_page_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  // Hero Section
+  heroTitleEn: text("hero_title_en").notNull().default("ARCHITECTURAL & INTERIOR DESIGN"),
+  heroTitleVi: text("hero_title_vi").notNull().default("THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"),
+  heroSubtitleEn: text("hero_subtitle_en").notNull().default("INNOVATION IN EVERY PROJECT"),
+  heroSubtitleVi: text("hero_subtitle_vi").notNull().default("ĐỔI MỚI TRONG MỌI DỰ ÁN"),
+  // Principles Section
+  principlesTitleEn: text("principles_title_en").notNull().default("THE FOUNDATION OF OUR WORK"),
+  principlesTitleVi: text("principles_title_vi").notNull().default("NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI"),
+  // Architecture Showcase Section
+  showcaseBannerImage: text("showcase_banner_image").notNull().default(""),
+  // Stats Section (4 stats)
+  statsProjectsValue: text("stats_projects_value").notNull().default("150+"),
+  statsProjectsLabelEn: text("stats_projects_label_en").notNull().default("Projects Completed"),
+  statsProjectsLabelVi: text("stats_projects_label_vi").notNull().default("Dự án hoàn thành"),
+  statsAwardsValue: text("stats_awards_value").notNull().default("25+"),
+  statsAwardsLabelEn: text("stats_awards_label_en").notNull().default("Design Awards"),
+  statsAwardsLabelVi: text("stats_awards_label_vi").notNull().default("Giải thưởng thiết kế"),
+  statsClientsValue: text("stats_clients_value").notNull().default("200+"),
+  statsClientsLabelEn: text("stats_clients_label_en").notNull().default("Happy Clients"),
+  statsClientsLabelVi: text("stats_clients_label_vi").notNull().default("Khách hàng hài lòng"),
+  statsCountriesValue: text("stats_countries_value").notNull().default("12+"),
+  statsCountriesLabelEn: text("stats_countries_label_en").notNull().default("Countries"),
+  statsCountriesLabelVi: text("stats_countries_label_vi").notNull().default("Quốc gia"),
+  // Process Section
+  processTitleEn: text("process_title_en").notNull().default("FROM CONCEPT TO REALITY"),
+  processTitleVi: text("process_title_vi").notNull().default("TỪ Ý TƯỞNG ĐẾN HIỆN THỰC"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// About Page Principles
+export const aboutPrinciples = pgTable("about_principles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  icon: text("icon").notNull(), // Lucide icon name
+  titleEn: text("title_en").notNull(),
+  titleVi: text("title_vi").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionVi: text("description_vi").notNull(),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// About Page Showcase Services (Architecture Showcase Section)
+export const aboutShowcaseServices = pgTable("about_showcase_services", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  titleEn: text("title_en").notNull(),
+  titleVi: text("title_vi").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionVi: text("description_vi").notNull(),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// About Page Process Steps
+export const aboutProcessSteps = pgTable("about_process_steps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  stepNumber: text("step_number").notNull(), // "01", "02", "03", "04"
+  titleEn: text("title_en").notNull(),
+  titleVi: text("title_vi").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionVi: text("description_vi").notNull(),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// Insert schemas
+export const insertAboutPageContentSchema = createInsertSchema(aboutPageContent).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export const insertAboutPrincipleSchema = createInsertSchema(aboutPrinciples).omit({
+  id: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAboutShowcaseServiceSchema = createInsertSchema(aboutShowcaseServices).omit({
+  id: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAboutProcessStepSchema = createInsertSchema(aboutProcessSteps).omit({
+  id: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Types
+export type InsertAboutPageContent = z.infer<typeof insertAboutPageContentSchema>;
+export type AboutPageContent = typeof aboutPageContent.$inferSelect;
+
+export type InsertAboutPrinciple = z.infer<typeof insertAboutPrincipleSchema>;
+export type AboutPrinciple = typeof aboutPrinciples.$inferSelect;
+
+export type InsertAboutShowcaseService = z.infer<typeof insertAboutShowcaseServiceSchema>;
+export type AboutShowcaseService = typeof aboutShowcaseServices.$inferSelect;
+
+export type InsertAboutProcessStep = z.infer<typeof insertAboutProcessStepSchema>;
+export type AboutProcessStep = typeof aboutProcessSteps.$inferSelect;
