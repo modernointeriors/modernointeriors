@@ -133,7 +133,7 @@ export default function About() {
       </section>
 
       {/* Architecture Showcase Section */}
-      <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden">
+      <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden -ml-16">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
