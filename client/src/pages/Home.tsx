@@ -648,14 +648,24 @@ export default function Home() {
                         </div>
 
                         {/* Bottom - Project Details */}
-                        {(project.area || project.duration) && (
-                          <div className="flex justify-between items-end">
+                        {(project.area || project.duration || project.completionYear) && (
+                          <div className="grid grid-cols-3 gap-4">
+                            {project.completionYear && (
+                              <div className="text-white/90">
+                                <span className="text-xs uppercase tracking-wide opacity-70">
+                                  {language === "vi" ? "NĂM" : "YEAR"}
+                                </span>
+                                <p className="text-sm font-light" data-testid={`text-year-${project.id}`}>
+                                  {project.completionYear}
+                                </p>
+                              </div>
+                            )}
                             {project.duration && (
                               <div className="text-white/90">
                                 <span className="text-xs uppercase tracking-wide opacity-70">
                                   {language === "vi" ? "THỜI GIAN" : "DURATION"}
                                 </span>
-                                <p className="text-sm font-light">
+                                <p className="text-sm font-light" data-testid={`text-duration-${project.id}`}>
                                   {project.duration}
                                 </p>
                               </div>
@@ -665,8 +675,8 @@ export default function Home() {
                                 <span className="text-xs uppercase tracking-wide opacity-70">
                                   {language === "vi" ? "DIỆN TÍCH" : "AREA"}
                                 </span>
-                                <p className="text-sm font-light">
-                                  {project.area}
+                                <p className="text-sm font-light" data-testid={`text-area-${project.id}`}>
+                                  {project.area} m²
                                 </p>
                               </div>
                             )}

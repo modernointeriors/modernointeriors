@@ -59,7 +59,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 <div className="text-right">
                   <p className="text-white/80 text-xs uppercase tracking-wide mb-1">AREA</p>
                   <p className="text-white font-light" data-testid={`text-area-${project.id}`}>
-                    {project.area}
+                    {project.area} m²
                   </p>
                 </div>
               )}
