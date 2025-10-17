@@ -149,7 +149,7 @@ export default function About() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-full">
               {/* Service 1 */}
               <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="space-y-4">
+                <div className="min-h-[180px] flex flex-col justify-end space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
                   </h4>
@@ -164,7 +164,7 @@ export default function About() {
 
               {/* Service 2 */}
               <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="space-y-4">
+                <div className="min-h-[180px] flex flex-col justify-end space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
                   </h4>
@@ -179,7 +179,7 @@ export default function About() {
 
               {/* Service 3 */}
               <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="space-y-4">
+                <div className="min-h-[180px] flex flex-col justify-end space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
                   </h4>
@@ -194,7 +194,7 @@ export default function About() {
 
               {/* Service 4 */}
               <div className="px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="space-y-4">
+                <div className="min-h-[180px] flex flex-col justify-end space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
                   </h4>
