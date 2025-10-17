@@ -570,6 +570,27 @@ export const aboutPageContent = pgTable("about_page_content", {
   // Process Section
   processTitleEn: text("process_title_en").notNull().default("FROM CONCEPT TO REALITY"),
   processTitleVi: text("process_title_vi").notNull().default("TỪ Ý TƯỞNG ĐẾN HIỆN THỰC"),
+  // Company History Section
+  historyTitleEn: text("history_title_en").notNull().default("OUR STORY"),
+  historyTitleVi: text("history_title_vi").notNull().default("CÂU CHUYỆN CỦA CHÚNG TÔI"),
+  historyContentEn: text("history_content_en").notNull().default(""),
+  historyContentVi: text("history_content_vi").notNull().default(""),
+  // Mission Section
+  missionTitleEn: text("mission_title_en").notNull().default("OUR MISSION"),
+  missionTitleVi: text("mission_title_vi").notNull().default("SỨ MỆNH"),
+  missionContentEn: text("mission_content_en").notNull().default(""),
+  missionContentVi: text("mission_content_vi").notNull().default(""),
+  // Vision Section
+  visionTitleEn: text("vision_title_en").notNull().default("OUR VISION"),
+  visionTitleVi: text("vision_title_vi").notNull().default("TẦM NHÌN"),
+  visionContentEn: text("vision_content_en").notNull().default(""),
+  visionContentVi: text("vision_content_vi").notNull().default(""),
+  // Core Values Section Title
+  coreValuesTitleEn: text("core_values_title_en").notNull().default("CORE VALUES"),
+  coreValuesTitleVi: text("core_values_title_vi").notNull().default("GIÁ TRỊ CỐT LÕI"),
+  // Team Section Title
+  teamTitleEn: text("team_title_en").notNull().default("OUR TEAM"),
+  teamTitleVi: text("team_title_vi").notNull().default("ĐỘI NGŨ"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
@@ -614,6 +635,35 @@ export const aboutProcessSteps = pgTable("about_process_steps", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+// About Page Core Values
+export const aboutCoreValues = pgTable("about_core_values", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  icon: text("icon").notNull(), // Lucide icon name
+  titleEn: text("title_en").notNull(),
+  titleVi: text("title_vi").notNull(),
+  descriptionEn: text("description_en").notNull(),
+  descriptionVi: text("description_vi").notNull(),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// About Page Team Members
+export const aboutTeamMembers = pgTable("about_team_members", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  positionEn: text("position_en").notNull(),
+  positionVi: text("position_vi").notNull(),
+  bioEn: text("bio_en").notNull(),
+  bioVi: text("bio_vi").notNull(),
+  image: text("image").notNull().default(""),
+  order: integer("order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Insert schemas
 export const insertAboutPageContentSchema = createInsertSchema(aboutPageContent).omit({
   id: true,
@@ -641,6 +691,20 @@ export const insertAboutProcessStepSchema = createInsertSchema(aboutProcessSteps
   updatedAt: true,
 });
 
+export const insertAboutCoreValueSchema = createInsertSchema(aboutCoreValues).omit({
+  id: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAboutTeamMemberSchema = createInsertSchema(aboutTeamMembers).omit({
+  id: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertAboutPageContent = z.infer<typeof insertAboutPageContentSchema>;
 export type AboutPageContent = typeof aboutPageContent.$inferSelect;
@@ -653,3 +717,9 @@ export type AboutShowcaseService = typeof aboutShowcaseServices.$inferSelect;
 
 export type InsertAboutProcessStep = z.infer<typeof insertAboutProcessStepSchema>;
 export type AboutProcessStep = typeof aboutProcessSteps.$inferSelect;
+
+export type InsertAboutCoreValue = z.infer<typeof insertAboutCoreValueSchema>;
+export type AboutCoreValue = typeof aboutCoreValues.$inferSelect;
+
+export type InsertAboutTeamMember = z.infer<typeof insertAboutTeamMemberSchema>;
+export type AboutTeamMember = typeof aboutTeamMembers.$inferSelect;
