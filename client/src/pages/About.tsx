@@ -523,7 +523,7 @@ export default function About() {
 
                     {/* Expanded Content - Slides from right of this column */}
                     <div 
-                      className={`overflow-hidden transition-all duration-500 ease-in-out border-r border-white/10 ${
+                      className={`overflow-hidden transition-all duration-1000 ease-in-out border-r border-white/10 ${
                         isExpanded ? 'max-w-[800px] opacity-100' : 'max-w-0 opacity-0'
                       }`}
                     >
