@@ -631,7 +631,7 @@ export default function Home() {
 
                       {/* Content Overlay */}
                       <div className="absolute inset-0 p-6 pb-12 flex flex-col justify-between">
-                        {/* Top - Title */}
+                        {/* Top - Title and Area */}
                         <div>
                           <h3
                             className="text-white text-xl font-light mb-2"
@@ -640,16 +640,21 @@ export default function Home() {
                             {project.title}
                           </h3>
                           <p
-                            className="text-white/80 text-sm uppercase tracking-wide"
+                            className="text-white/80 text-sm uppercase tracking-wide mb-1"
                             data-testid={`text-category-${project.id}`}
                           >
                             {project.category}
                           </p>
+                          {project.area && (
+                            <p className="text-white/60 text-xs" data-testid={`text-area-${project.id}`}>
+                              {project.area}m²
+                            </p>
+                          )}
                         </div>
 
-                        {/* Bottom - Project Details */}
-                        {(project.area || project.duration || project.completionYear) && (
-                          <div className="grid grid-cols-3 gap-2 text-white">
+                        {/* Bottom - Year and Duration */}
+                        {(project.duration || project.completionYear) && (
+                          <div className="grid grid-cols-2 gap-4 text-white">
                             {project.completionYear && (
                               <div>
                                 <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
@@ -667,16 +672,6 @@ export default function Home() {
                                 </p>
                                 <p className="text-sm font-light" data-testid={`text-duration-${project.id}`}>
                                   {project.duration}
-                                </p>
-                              </div>
-                            )}
-                            {project.area && (
-                              <div className="text-right">
-                                <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
-                                  {language === "vi" ? "Diện tích" : "Area"}
-                                </p>
-                                <p className="text-sm font-light" data-testid={`text-area-${project.id}`}>
-                                  {project.area}m²
                                 </p>
                               </div>
                             )}
