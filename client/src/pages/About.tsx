@@ -494,84 +494,104 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-8">
-              {/* Left side - Names Column */}
-              <div className="md:w-1/3 space-y-0 border-l border-white/10">
-                {teamMembers.map((member, index) => (
-                  <button
-                    key={member.id}
-                    onClick={() => setSelectedMember(selectedMember === index ? null : index)}
-                    className={`w-full text-left px-6 py-6 border-b border-white/10 transition-all duration-300 ${
-                      selectedMember === index 
-                        ? 'bg-white/5 border-l-2 border-l-primary' 
-                        : 'hover:bg-white/5 border-l-2 border-l-transparent'
-                    }`}
-                    data-testid={`button-team-member-${member.id}`}
+            <div className="space-y-0">
+              {teamMembers.map((member, index) => {
+                const isExpanded = selectedMember === index;
+                const nameChars = member.name.toUpperCase().split('');
+                
+                return (
+                  <div 
+                    key={member.id} 
+                    className="border-b border-white/10 transition-all duration-500"
                   >
-                    <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                      {member.name}
-                    </h4>
-                    <p className="text-sm text-white/60 uppercase tracking-wider mt-2">
-                      {language === "vi" ? member.positionVi : member.positionEn}
-                    </p>
-                  </button>
-                ))}
-              </div>
-
-              {/* Right side - Details */}
-              <div className="md:w-2/3 min-h-[500px] relative">
-                {selectedMember !== null && teamMembers[selectedMember] && (
-                  <div className="flex gap-8 animate-in fade-in duration-500">
-                    {/* Portrait Image - 9:16 ratio */}
-                    {teamMembers[selectedMember].image && (
-                      <div className="w-1/3 flex-shrink-0">
-                        <div className="aspect-[9/16] overflow-hidden bg-white/10">
-                          <img 
-                            src={teamMembers[selectedMember].image} 
-                            alt={teamMembers[selectedMember].name}
-                            className="w-full h-full object-cover"
-                          />
+                    <button
+                      onClick={() => setSelectedMember(isExpanded ? null : index)}
+                      className="w-full text-left transition-all duration-500 hover:bg-white/5"
+                      data-testid={`button-team-member-${member.id}`}
+                    >
+                      <div className={`flex items-center gap-8 transition-all duration-500 ${
+                        isExpanded ? 'py-8' : 'py-4'
+                      }`}>
+                        {/* Left - Vertical Name */}
+                        <div className="flex-shrink-0 w-24 flex justify-center">
+                          <div className="flex flex-col items-center">
+                            {nameChars.map((char, charIndex) => (
+                              <span 
+                                key={charIndex} 
+                                className={`text-2xl font-light transition-all duration-500 ${
+                                  isExpanded ? 'text-white' : 'text-white/40'
+                                }`}
+                              >
+                                {char}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    
-                    {/* Bio and Details */}
-                    <div className="flex-1 space-y-6">
-                      <div>
-                        <h4 className="text-2xl font-light text-white mb-2">
-                          {teamMembers[selectedMember].name}
-                        </h4>
-                        <p className="text-sm text-white/60 uppercase tracking-wider">
-                          {language === "vi" 
-                            ? teamMembers[selectedMember].positionVi 
-                            : teamMembers[selectedMember].positionEn
-                          }
-                        </p>
-                      </div>
-                      
-                      {teamMembers[selectedMember].bioEn && teamMembers[selectedMember].bioVi && (
-                        <p className="text-white/70 font-light leading-relaxed text-justify">
-                          {language === "vi" 
-                            ? teamMembers[selectedMember].bioVi 
-                            : teamMembers[selectedMember].bioEn
-                          }
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                )}
 
-                {selectedMember === null && (
-                  <div className="flex items-center justify-center h-full">
-                    <p className="text-white/40 font-light text-lg">
-                      {language === "vi" 
-                        ? "Chọn một thành viên để xem chi tiết" 
-                        : "Select a team member to view details"
-                      }
-                    </p>
+                        {/* Middle - Image (when expanded) */}
+                        {isExpanded && member.image && (
+                          <div className="flex-shrink-0 w-64 animate-in fade-in slide-in-from-left duration-500">
+                            <div className="aspect-[9/16] overflow-hidden bg-white/10">
+                              <img 
+                                src={member.image} 
+                                alt={member.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Right - Details */}
+                        <div className="flex-1 min-h-0">
+                          {isExpanded ? (
+                            <div className="space-y-4 animate-in fade-in slide-in-from-right duration-500">
+                              <div>
+                                <h4 className="text-3xl font-light text-white mb-2 uppercase tracking-wide">
+                                  {member.name}
+                                </h4>
+                                <p className="text-sm text-white/60 uppercase tracking-wider">
+                                  {language === "vi" ? member.positionVi : member.positionEn}
+                                </p>
+                              </div>
+                              
+                              {member.bioEn && member.bioVi && (
+                                <p className="text-white/70 font-light leading-relaxed text-justify max-w-2xl">
+                                  {language === "vi" ? member.bioVi : member.bioEn}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="opacity-40">
+                              <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                                {member.name}
+                              </h4>
+                              <p className="text-sm text-white/60 uppercase tracking-wider mt-1">
+                                {language === "vi" ? member.positionVi : member.positionEn}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Right - Vertical Name (when expanded) */}
+                        {isExpanded && (
+                          <div className="flex-shrink-0 w-24 flex justify-center animate-in fade-in slide-in-from-right duration-500">
+                            <div className="flex flex-col items-center">
+                              {nameChars.map((char, charIndex) => (
+                                <span 
+                                  key={charIndex} 
+                                  className="text-2xl font-light text-white"
+                                >
+                                  {char}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </button>
                   </div>
-                )}
-              </div>
+                );
+              })}
             </div>
           </div>
         </section>
