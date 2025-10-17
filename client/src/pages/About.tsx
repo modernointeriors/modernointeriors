@@ -146,11 +146,11 @@ export default function About() {
         <div className="relative h-full flex items-end">
           <div className="w-full h-full flex items-end">
             {/* Grid with vertical separators - full height */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-full items-end">
               {/* Service 1 */}
-              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="grid grid-rows-[auto_1fr] gap-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide h-[3em] flex items-end">
+              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
                     {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
                   </h4>
                   <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
@@ -163,9 +163,9 @@ export default function About() {
               </div>
 
               {/* Service 2 */}
-              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="grid grid-rows-[auto_1fr] gap-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide h-[3em] flex items-end">
+              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
                     {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
                   </h4>
                   <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
@@ -178,9 +178,9 @@ export default function About() {
               </div>
 
               {/* Service 3 */}
-              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="grid grid-rows-[auto_1fr] gap-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide h-[3em] flex items-end">
+              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
                     {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
                   </h4>
                   <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
@@ -193,9 +193,9 @@ export default function About() {
               </div>
 
               {/* Service 4 */}
-              <div className="px-6 py-8 md:px-8 md:py-12 flex items-end">
-                <div className="grid grid-rows-[auto_1fr] gap-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide h-[3em] flex items-end">
+              <div className="px-6 py-8 md:px-8 md:py-12">
+                <div className="space-y-4">
+                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
                     {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
                   </h4>
                   <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
