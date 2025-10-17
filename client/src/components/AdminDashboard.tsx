@@ -20,9 +20,10 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep } from "@shared/schema";
-import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep } from "@shared/schema";
+import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
+import AboutAdminTab from "@/components/AboutAdminTab";
 
 const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -331,6 +332,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [isJourneyStepDialogOpen, setIsJourneyStepDialogOpen] = useState(false);
   const [editingJourneyStep, setEditingJourneyStep] = useState<JourneyStep | null>(null);
 
+  // About Page states
+  const [showcaseBannerFile, setShowcaseBannerFile] = useState<File | null>(null);
+  const [showcaseBannerPreview, setShowcaseBannerPreview] = useState<string>('');
+  const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
+  const [editingPrinciple, setEditingPrinciple] = useState<AboutPrinciple | null>(null);
+  const [isShowcaseServiceDialogOpen, setIsShowcaseServiceDialogOpen] = useState(false);
+  const [editingShowcaseService, setEditingShowcaseService] = useState<AboutShowcaseService | null>(null);
+  const [isProcessStepDialogOpen, setIsProcessStepDialogOpen] = useState(false);
+  const [editingProcessStep, setEditingProcessStep] = useState<AboutProcessStep | null>(null);
+
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
     totalProjects: number;
@@ -387,6 +398,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: journeySteps = [], isLoading: journeyStepsLoading } = useQuery<JourneyStep[]>({
     queryKey: ['/api/journey-steps'],
+  });
+
+  // About Page Content Queries
+  const { data: aboutContent, isLoading: aboutContentLoading } = useQuery<AboutPageContent>({
+    queryKey: ['/api/about-content'],
+  });
+
+  const { data: aboutPrinciples = [], isLoading: aboutPrinciplesLoading } = useQuery<AboutPrinciple[]>({
+    queryKey: ['/api/about-principles'],
+  });
+
+  const { data: aboutShowcaseServices = [], isLoading: aboutShowcaseServicesLoading } = useQuery<AboutShowcaseService[]>({
+    queryKey: ['/api/about-showcase-services'],
+  });
+
+  const { data: aboutProcessSteps = [], isLoading: aboutProcessStepsLoading } = useQuery<AboutProcessStep[]>({
+    queryKey: ['/api/about-process-steps'],
   });
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
@@ -634,6 +662,76 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       active: true,
     },
   });
+
+  // About Page Forms
+  const aboutContentForm = useForm<InsertAboutPageContent>({
+    resolver: zodResolver(insertAboutPageContentSchema),
+    defaultValues: aboutContent || {
+      heroTitleEn: "",
+      heroTitleVi: "",
+      heroSubtitleEn: "",
+      heroSubtitleVi: "",
+      principlesTitleEn: "",
+      principlesTitleVi: "",
+      showcaseBannerImage: "",
+      statsProjectsValue: "",
+      statsProjectsLabelEn: "",
+      statsProjectsLabelVi: "",
+      statsAwardsValue: "",
+      statsAwardsLabelEn: "",
+      statsAwardsLabelVi: "",
+      statsClientsValue: "",
+      statsClientsLabelEn: "",
+      statsClientsLabelVi: "",
+      statsCountriesValue: "",
+      statsCountriesLabelEn: "",
+      statsCountriesLabelVi: "",
+      processTitleEn: "",
+      processTitleVi: "",
+    },
+  });
+
+  const principleForm = useForm<InsertAboutPrinciple>({
+    resolver: zodResolver(insertAboutPrincipleSchema),
+    defaultValues: {
+      icon: "",
+      titleEn: "",
+      titleVi: "",
+      descriptionEn: "",
+      descriptionVi: "",
+      order: 0,
+    },
+  });
+
+  const showcaseServiceForm = useForm<InsertAboutShowcaseService>({
+    resolver: zodResolver(insertAboutShowcaseServiceSchema),
+    defaultValues: {
+      titleEn: "",
+      titleVi: "",
+      descriptionEn: "",
+      descriptionVi: "",
+      order: 0,
+    },
+  });
+
+  const processStepForm = useForm<InsertAboutProcessStep>({
+    resolver: zodResolver(insertAboutProcessStepSchema),
+    defaultValues: {
+      stepNumber: "",
+      titleEn: "",
+      titleVi: "",
+      descriptionEn: "",
+      descriptionVi: "",
+      order: 0,
+    },
+  });
+
+  // Update about content form when data loads
+  useEffect(() => {
+    if (aboutContent && !aboutContentForm.formState.isDirty) {
+      aboutContentForm.reset(aboutContent);
+    }
+  }, [aboutContent, aboutContentForm]);
 
   // Update form when content loads
   useEffect(() => {
@@ -1085,6 +1183,132 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         description: error.message,
         variant: "destructive",
       });
+    },
+  });
+
+  // About Page Content Mutations
+  const updateAboutContentMutation = useMutation({
+    mutationFn: async (data: InsertAboutPageContent) => {
+      const response = await apiRequest('PUT', '/api/about-content', data);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-content'] });
+      aboutContentForm.reset(data);
+      setShowcaseBannerFile(null);
+      setShowcaseBannerPreview('');
+      toast({ title: "About content updated successfully" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error updating about content", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const createPrincipleMutation = useMutation({
+    mutationFn: async (data: InsertAboutPrinciple) => {
+      const response = await apiRequest('POST', '/api/about-principles', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
+      toast({ title: "Principle created successfully" });
+      setIsPrincipleDialogOpen(false);
+      principleForm.reset();
+    },
+  });
+
+  const updatePrincipleMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAboutPrinciple> }) => {
+      const response = await apiRequest('PUT', `/api/about-principles/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
+      toast({ title: "Principle updated successfully" });
+      setIsPrincipleDialogOpen(false);
+      setEditingPrinciple(null);
+    },
+  });
+
+  const deletePrincipleMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/about-principles/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
+      toast({ title: "Principle deleted successfully" });
+    },
+  });
+
+  const createShowcaseServiceMutation = useMutation({
+    mutationFn: async (data: InsertAboutShowcaseService) => {
+      const response = await apiRequest('POST', '/api/about-showcase-services', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-showcase-services'] });
+      toast({ title: "Showcase service created successfully" });
+      setIsShowcaseServiceDialogOpen(false);
+      showcaseServiceForm.reset();
+    },
+  });
+
+  const updateShowcaseServiceMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAboutShowcaseService> }) => {
+      const response = await apiRequest('PUT', `/api/about-showcase-services/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-showcase-services'] });
+      toast({ title: "Showcase service updated successfully" });
+      setIsShowcaseServiceDialogOpen(false);
+      setEditingShowcaseService(null);
+    },
+  });
+
+  const deleteShowcaseServiceMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/about-showcase-services/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-showcase-services'] });
+      toast({ title: "Showcase service deleted successfully" });
+    },
+  });
+
+  const createProcessStepMutation = useMutation({
+    mutationFn: async (data: InsertAboutProcessStep) => {
+      const response = await apiRequest('POST', '/api/about-process-steps', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
+      toast({ title: "Process step created successfully" });
+      setIsProcessStepDialogOpen(false);
+      processStepForm.reset();
+    },
+  });
+
+  const updateProcessStepMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAboutProcessStep> }) => {
+      const response = await apiRequest('PUT', `/api/about-process-steps/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
+      toast({ title: "Process step updated successfully" });
+      setIsProcessStepDialogOpen(false);
+      setEditingProcessStep(null);
+    },
+  });
+
+  const deleteProcessStepMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/about-process-steps/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
+      toast({ title: "Process step deleted successfully" });
     },
   });
 
@@ -1812,6 +2036,65 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         setQuality2BgPreview(base64);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleShowcaseBannerFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File too large",
+          description: `File size: ${fileSizeMB}MB. Maximum: ${maxSizeMB}MB. Please select a smaller file.`,
+          variant: "destructive"
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setShowcaseBannerFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setShowcaseBannerPreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onAboutContentSubmit = async (data: InsertAboutPageContent) => {
+    const submitData = { ...data };
+    if (showcaseBannerPreview) {
+      submitData.showcaseBannerImage = showcaseBannerPreview;
+    }
+    await updateAboutContentMutation.mutateAsync(submitData);
+  };
+
+  const onPrincipleSubmit = async (data: InsertAboutPrinciple) => {
+    if (editingPrinciple) {
+      await updatePrincipleMutation.mutateAsync({ id: editingPrinciple.id, data });
+    } else {
+      await createPrincipleMutation.mutateAsync(data);
+    }
+  };
+
+  const onShowcaseServiceSubmit = async (data: InsertAboutShowcaseService) => {
+    if (editingShowcaseService) {
+      await updateShowcaseServiceMutation.mutateAsync({ id: editingShowcaseService.id, data });
+    } else {
+      await createShowcaseServiceMutation.mutateAsync(data);
+    }
+  };
+
+  const onProcessStepSubmit = async (data: InsertAboutProcessStep) => {
+    if (editingProcessStep) {
+      await updateProcessStepMutation.mutateAsync({ id: editingProcessStep.id, data });
+    } else {
+      await createProcessStepMutation.mutateAsync(data);
     }
   };
 
@@ -3863,29 +4146,31 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   if (activeTab === 'about') {
     return (
-      <div className="space-y-6 p-6">
-        <h2 className="text-2xl font-sans font-light text-white">About Page Management</h2>
-        <p className="text-muted-foreground">
-          Manage About page content including principles, showcase services, process steps, and stats.
-        </p>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>About Content</CardTitle>
-          </CardHeader>
-          <CardContent className="text-muted-foreground">
-            <p>About page content management will be available here.</p>
-            <p className="mt-2">You can manage:</p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Hero titles and subtitles (EN/VI)</li>
-              <li>Principles (3 items with icons)</li>
-              <li>Showcase banner image</li>
-              <li>Showcase services (4 items)</li>
-              <li>Stats values (Projects, Awards, Clients, Countries)</li>
-              <li>Process steps (4 steps)</li>
-            </ul>
-          </CardContent>
-        </Card>
+      <div className="p-6">
+        <AboutAdminTab
+          aboutContent={aboutContent}
+          aboutPrinciples={aboutPrinciples}
+          aboutShowcaseServices={aboutShowcaseServices}
+          aboutProcessSteps={aboutProcessSteps}
+          aboutContentLoading={aboutContentLoading}
+          aboutPrinciplesLoading={aboutPrinciplesLoading}
+          aboutShowcaseServicesLoading={aboutShowcaseServicesLoading}
+          aboutProcessStepsLoading={aboutProcessStepsLoading}
+          onAboutContentSubmit={onAboutContentSubmit}
+          onPrincipleSubmit={onPrincipleSubmit}
+          onShowcaseServiceSubmit={onShowcaseServiceSubmit}
+          onProcessStepSubmit={onProcessStepSubmit}
+          updatePrincipleMutation={updatePrincipleMutation}
+          deletePrincipleMutation={deletePrincipleMutation}
+          updateShowcaseServiceMutation={updateShowcaseServiceMutation}
+          deleteShowcaseServiceMutation={deleteShowcaseServiceMutation}
+          updateProcessStepMutation={updateProcessStepMutation}
+          deleteProcessStepMutation={deleteProcessStepMutation}
+          updateAboutContentMutation={updateAboutContentMutation}
+          showcaseBannerFile={showcaseBannerFile}
+          showcaseBannerPreview={showcaseBannerPreview}
+          handleShowcaseBannerFileChange={handleShowcaseBannerFileChange}
+        />
       </div>
     );
   }
