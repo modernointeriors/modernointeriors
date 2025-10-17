@@ -494,112 +494,79 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="flex gap-0">
+            <div className="flex gap-0 items-start">
               {/* Name Columns - Equal Width */}
               {teamMembers.map((member, index) => {
                 const isExpanded = selectedMember === index;
                 const nameChars = member.name.toUpperCase().split('');
                 
                 return (
-                  <div
+                  <button
                     key={member.id}
-                    className="relative border-r border-white/10 last:border-r-0 transition-all duration-500 ease-in-out"
-                    style={{
-                      flex: isExpanded ? '1 1 70%' : '1 1 auto'
-                    }}
+                    onClick={() => setSelectedMember(index)}
+                    className="flex-1 border-r border-white/10 last:border-r-0 transition-all duration-300 hover:bg-white/5 py-8"
+                    data-testid={`button-team-member-${member.id}`}
                   >
-                    <button
-                      onClick={() => setSelectedMember(index)}
-                      className="w-full h-full transition-all duration-300 hover:bg-white/5 py-8"
-                      data-testid={`button-team-member-${member.id}`}
-                    >
-                      {/* Vertical Name */}
-                      <div className="flex flex-col items-center">
-                        {nameChars.map((char, charIndex) => (
-                          <span 
-                            key={charIndex} 
-                            className={`text-2xl font-light transition-all duration-300 ${
-                              isExpanded ? 'text-white' : 'text-white/40'
-                            }`}
-                          >
-                            {char}
-                          </span>
-                        ))}
-                      </div>
-                    </button>
-
-                    {/* Expanded Content - Slides in from right */}
-                    <div 
-                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                        isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      <div className="px-8 pb-8 pt-4">
-                        <div className="flex gap-8 items-start">
-                          {/* Left - Vertical Name */}
-                          <div className="flex-shrink-0">
-                            <div className="flex flex-col items-center">
-                              {nameChars.map((char, charIndex) => (
-                                <span 
-                                  key={charIndex} 
-                                  className="text-2xl font-light text-white/40"
-                                >
-                                  {char}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Middle - Image (9:16 ratio) */}
-                          {member.image && (
-                            <div className="flex-shrink-0 w-48">
-                              <div className="aspect-[9/16] overflow-hidden bg-white/10">
-                                <img 
-                                  src={member.image} 
-                                  alt={member.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Right - Details */}
-                          <div className="flex-1 space-y-4">
-                            <div>
-                              <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">
-                                {member.name}
-                              </h4>
-                              <p className="text-sm text-white/60 uppercase tracking-wider">
-                                {language === "vi" ? member.positionVi : member.positionEn}
-                              </p>
-                            </div>
-                            
-                            {member.bioEn && member.bioVi && (
-                              <p className="text-white/70 font-light leading-relaxed text-justify">
-                                {language === "vi" ? member.bioVi : member.bioEn}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* Right - Vertical Name */}
-                          <div className="flex-shrink-0">
-                            <div className="flex flex-col items-center">
-                              {nameChars.map((char, charIndex) => (
-                                <span 
-                                  key={charIndex} 
-                                  className="text-2xl font-light text-white/40"
-                                >
-                                  {char}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    {/* Vertical Name */}
+                    <div className="flex flex-col items-center">
+                      {nameChars.map((char, charIndex) => (
+                        <span 
+                          key={charIndex} 
+                          className={`text-2xl font-light transition-all duration-300 ${
+                            isExpanded ? 'text-white' : 'text-white/40'
+                          }`}
+                        >
+                          {char}
+                        </span>
+                      ))}
                     </div>
-                  </div>
+                  </button>
                 );
               })}
+
+              {/* Expanded Content Area - Appears on the right */}
+              {selectedMember !== null && teamMembers[selectedMember] && (
+                <div className="flex-shrink-0 pl-12 pr-8 py-8 border-l border-white/10 animate-in fade-in slide-in-from-right duration-500">
+                  <div className="flex gap-8 items-start">
+                    {/* Image (9:16 ratio) */}
+                    {teamMembers[selectedMember].image && (
+                      <div className="flex-shrink-0 w-64">
+                        <div className="aspect-[9/16] overflow-hidden bg-white/10">
+                          <img 
+                            src={teamMembers[selectedMember].image} 
+                            alt={teamMembers[selectedMember].name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Details */}
+                    <div className="flex-1 max-w-xl space-y-4">
+                      <div>
+                        <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">
+                          {teamMembers[selectedMember].name}
+                        </h4>
+                        <p className="text-sm text-white/60 uppercase tracking-wider">
+                          {language === "vi" 
+                            ? teamMembers[selectedMember].positionVi 
+                            : teamMembers[selectedMember].positionEn
+                          }
+                        </p>
+                      </div>
+                      
+                      {teamMembers[selectedMember].bioEn && teamMembers[selectedMember].bioVi && (
+                        <p className="text-white/70 font-light leading-relaxed text-justify">
+                          {language === "vi" 
+                            ? teamMembers[selectedMember].bioVi 
+                            : teamMembers[selectedMember].bioEn
+                          }
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
