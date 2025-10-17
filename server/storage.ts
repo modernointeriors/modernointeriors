@@ -1,6 +1,7 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
   interactions, deals, transactions, settings, faqs, advantages, journeySteps,
+  aboutPageContent, aboutPrinciples, aboutShowcaseServices, aboutProcessSteps,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -16,7 +17,11 @@ import {
   type Settings, type InsertSettings,
   type Faq, type InsertFaq,
   type Advantage, type InsertAdvantage,
-  type JourneyStep, type InsertJourneyStep
+  type JourneyStep, type InsertJourneyStep,
+  type AboutPageContent, type InsertAboutPageContent,
+  type AboutPrinciple, type InsertAboutPrinciple,
+  type AboutShowcaseService, type InsertAboutShowcaseService,
+  type AboutProcessStep, type InsertAboutProcessStep
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -137,6 +142,31 @@ export interface IStorage {
   createJourneyStep(journeyStep: InsertJourneyStep): Promise<JourneyStep>;
   updateJourneyStep(id: string, journeyStep: Partial<InsertJourneyStep>): Promise<JourneyStep>;
   deleteJourneyStep(id: string): Promise<void>;
+
+  // About Page Content
+  getAboutPageContent(): Promise<AboutPageContent | undefined>;
+  upsertAboutPageContent(content: InsertAboutPageContent): Promise<AboutPageContent>;
+
+  // About Page Principles
+  getAboutPrinciples(filters?: { active?: boolean }): Promise<AboutPrinciple[]>;
+  getAboutPrinciple(id: string): Promise<AboutPrinciple | undefined>;
+  createAboutPrinciple(principle: InsertAboutPrinciple): Promise<AboutPrinciple>;
+  updateAboutPrinciple(id: string, principle: Partial<InsertAboutPrinciple>): Promise<AboutPrinciple>;
+  deleteAboutPrinciple(id: string): Promise<void>;
+
+  // About Page Showcase Services
+  getAboutShowcaseServices(filters?: { active?: boolean }): Promise<AboutShowcaseService[]>;
+  getAboutShowcaseService(id: string): Promise<AboutShowcaseService | undefined>;
+  createAboutShowcaseService(service: InsertAboutShowcaseService): Promise<AboutShowcaseService>;
+  updateAboutShowcaseService(id: string, service: Partial<InsertAboutShowcaseService>): Promise<AboutShowcaseService>;
+  deleteAboutShowcaseService(id: string): Promise<void>;
+
+  // About Page Process Steps
+  getAboutProcessSteps(filters?: { active?: boolean }): Promise<AboutProcessStep[]>;
+  getAboutProcessStep(id: string): Promise<AboutProcessStep | undefined>;
+  createAboutProcessStep(step: InsertAboutProcessStep): Promise<AboutProcessStep>;
+  updateAboutProcessStep(id: string, step: Partial<InsertAboutProcessStep>): Promise<AboutProcessStep>;
+  deleteAboutProcessStep(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -842,6 +872,133 @@ export class DatabaseStorage implements IStorage {
 
   async deleteJourneyStep(id: string): Promise<void> {
     await db.delete(journeySteps).where(eq(journeySteps.id, id));
+  }
+
+  // About Page Content
+  async getAboutPageContent(): Promise<AboutPageContent | undefined> {
+    const [content] = await db.select().from(aboutPageContent).limit(1);
+    return content || undefined;
+  }
+
+  async upsertAboutPageContent(content: InsertAboutPageContent): Promise<AboutPageContent> {
+    const existing = await this.getAboutPageContent();
+    
+    if (existing) {
+      const [updated] = await db
+        .update(aboutPageContent)
+        .set({ ...content, updatedAt: new Date() })
+        .where(eq(aboutPageContent.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db.insert(aboutPageContent).values(content).returning();
+      return created;
+    }
+  }
+
+  // About Page Principles
+  async getAboutPrinciples(filters?: { active?: boolean }): Promise<AboutPrinciple[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(aboutPrinciples.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(aboutPrinciples).where(and(...conditions))
+      : db.select().from(aboutPrinciples);
+
+    return await query.orderBy(aboutPrinciples.order);
+  }
+
+  async getAboutPrinciple(id: string): Promise<AboutPrinciple | undefined> {
+    const [principle] = await db.select().from(aboutPrinciples).where(eq(aboutPrinciples.id, id));
+    return principle || undefined;
+  }
+
+  async createAboutPrinciple(principle: InsertAboutPrinciple): Promise<AboutPrinciple> {
+    const [created] = await db.insert(aboutPrinciples).values(principle).returning();
+    return created;
+  }
+
+  async updateAboutPrinciple(id: string, principle: Partial<InsertAboutPrinciple>): Promise<AboutPrinciple> {
+    const [updated] = await db
+      .update(aboutPrinciples)
+      .set({ ...principle, updatedAt: new Date() })
+      .where(eq(aboutPrinciples.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAboutPrinciple(id: string): Promise<void> {
+    await db.delete(aboutPrinciples).where(eq(aboutPrinciples.id, id));
+  }
+
+  // About Page Showcase Services
+  async getAboutShowcaseServices(filters?: { active?: boolean }): Promise<AboutShowcaseService[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(aboutShowcaseServices.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(aboutShowcaseServices).where(and(...conditions))
+      : db.select().from(aboutShowcaseServices);
+
+    return await query.orderBy(aboutShowcaseServices.order);
+  }
+
+  async getAboutShowcaseService(id: string): Promise<AboutShowcaseService | undefined> {
+    const [service] = await db.select().from(aboutShowcaseServices).where(eq(aboutShowcaseServices.id, id));
+    return service || undefined;
+  }
+
+  async createAboutShowcaseService(service: InsertAboutShowcaseService): Promise<AboutShowcaseService> {
+    const [created] = await db.insert(aboutShowcaseServices).values(service).returning();
+    return created;
+  }
+
+  async updateAboutShowcaseService(id: string, service: Partial<InsertAboutShowcaseService>): Promise<AboutShowcaseService> {
+    const [updated] = await db
+      .update(aboutShowcaseServices)
+      .set({ ...service, updatedAt: new Date() })
+      .where(eq(aboutShowcaseServices.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAboutShowcaseService(id: string): Promise<void> {
+    await db.delete(aboutShowcaseServices).where(eq(aboutShowcaseServices.id, id));
+  }
+
+  // About Page Process Steps
+  async getAboutProcessSteps(filters?: { active?: boolean }): Promise<AboutProcessStep[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(aboutProcessSteps.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(aboutProcessSteps).where(and(...conditions))
+      : db.select().from(aboutProcessSteps);
+
+    return await query.orderBy(aboutProcessSteps.order);
+  }
+
+  async getAboutProcessStep(id: string): Promise<AboutProcessStep | undefined> {
+    const [step] = await db.select().from(aboutProcessSteps).where(eq(aboutProcessSteps.id, id));
+    return step || undefined;
+  }
+
+  async createAboutProcessStep(step: InsertAboutProcessStep): Promise<AboutProcessStep> {
+    const [created] = await db.insert(aboutProcessSteps).values(step).returning();
+    return created;
+  }
+
+  async updateAboutProcessStep(id: string, step: Partial<InsertAboutProcessStep>): Promise<AboutProcessStep> {
+    const [updated] = await db
+      .update(aboutProcessSteps)
+      .set({ ...step, updatedAt: new Date() })
+      .where(eq(aboutProcessSteps.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAboutProcessStep(id: string): Promise<void> {
+    await db.delete(aboutProcessSteps).where(eq(aboutProcessSteps.id, id));
   }
 }
 
