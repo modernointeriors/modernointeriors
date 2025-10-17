@@ -649,34 +649,34 @@ export default function Home() {
 
                         {/* Bottom - Project Details */}
                         {(project.area || project.duration || project.completionYear) && (
-                          <div className="grid grid-cols-3 gap-4">
+                          <div className="grid grid-cols-3 gap-2 text-white">
                             {project.completionYear && (
-                              <div className="text-white/90">
-                                <span className="text-xs uppercase tracking-wide opacity-70">
-                                  {language === "vi" ? "NĂM" : "YEAR"}
-                                </span>
+                              <div>
+                                <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
+                                  {language === "vi" ? "Năm" : "Year"}
+                                </p>
                                 <p className="text-sm font-light" data-testid={`text-year-${project.id}`}>
                                   {project.completionYear}
                                 </p>
                               </div>
                             )}
                             {project.duration && (
-                              <div className="text-white/90">
-                                <span className="text-xs uppercase tracking-wide opacity-70">
-                                  {language === "vi" ? "THỜI GIAN" : "DURATION"}
-                                </span>
+                              <div>
+                                <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
+                                  {language === "vi" ? "Thời gian" : "Duration"}
+                                </p>
                                 <p className="text-sm font-light" data-testid={`text-duration-${project.id}`}>
                                   {project.duration}
                                 </p>
                               </div>
                             )}
                             {project.area && (
-                              <div className="text-white/90 text-right">
-                                <span className="text-xs uppercase tracking-wide opacity-70">
-                                  {language === "vi" ? "DIỆN TÍCH" : "AREA"}
-                                </span>
+                              <div className="text-right">
+                                <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
+                                  {language === "vi" ? "Diện tích" : "Area"}
+                                </p>
                                 <p className="text-sm font-light" data-testid={`text-area-${project.id}`}>
-                                  {project.area} m²
+                                  {project.area}m²
                                 </p>
                               </div>
                             )}

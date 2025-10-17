@@ -38,28 +38,28 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           
           {/* Bottom - Project Details */}
           {(project.area || project.duration || project.completionYear) && (
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 text-white">
               {project.completionYear && (
                 <div>
-                  <p className="text-white/80 text-xs uppercase tracking-wide mb-1">YEAR</p>
-                  <p className="text-white font-light" data-testid={`text-year-${project.id}`}>
+                  <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">Year</p>
+                  <p className="font-light text-sm" data-testid={`text-year-${project.id}`}>
                     {project.completionYear}
                   </p>
                 </div>
               )}
               {project.duration && (
                 <div>
-                  <p className="text-white/80 text-xs uppercase tracking-wide mb-1">DURATION</p>
-                  <p className="text-white font-light" data-testid={`text-duration-${project.id}`}>
+                  <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">Duration</p>
+                  <p className="font-light text-sm" data-testid={`text-duration-${project.id}`}>
                     {project.duration}
                   </p>
                 </div>
               )}
               {project.area && (
                 <div className="text-right">
-                  <p className="text-white/80 text-xs uppercase tracking-wide mb-1">AREA</p>
-                  <p className="text-white font-light" data-testid={`text-area-${project.id}`}>
-                    {project.area} m²
+                  <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">Area</p>
+                  <p className="font-light text-sm" data-testid={`text-area-${project.id}`}>
+                    {project.area}m²
                   </p>
                 </div>
               )}
