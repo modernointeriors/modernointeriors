@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Sparkles, Trophy, Users2 } from "lucide-react";
+import { ArrowRight, Sparkles, Trophy, Users2, Target, Eye, Lightbulb } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade } from 'swiper/modules';
-import type { Project } from '@shared/schema';
+import type { Project, AboutPageContent, AboutCoreValue, AboutTeamMember } from '@shared/schema';
 import { useState } from 'react';
 import architectureBanner from "@assets/stock_images/modern_luxury_archit_ac188b7b.jpg";
 
@@ -20,6 +20,23 @@ export default function About() {
   // Fetch projects for hero slider
   const { data: projects = [] } = useQuery<Project[]>({
     queryKey: ["/api/projects"],
+  });
+
+  // Fetch about page content
+  const { data: aboutContent } = useQuery<AboutPageContent>({
+    queryKey: ["/api/about-page-content"],
+  });
+
+  // Fetch core values
+  const { data: coreValues = [] } = useQuery<AboutCoreValue[]>({
+    queryKey: ["/api/about-core-values"],
+    select: (data) => data.filter(v => v.active),
+  });
+
+  // Fetch team members
+  const { data: teamMembers = [] } = useQuery<AboutTeamMember[]>({
+    queryKey: ["/api/about-team-members"],
+    select: (data) => data.filter(m => m.active),
   });
 
   // Get fallback image based on category
@@ -370,6 +387,141 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* Company History Section */}
+      {aboutContent?.historyContentEn && aboutContent?.historyContentVi && (
+        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-12">
+              <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
+                {language === "vi" ? "LỊCH SỬ HÌNH THÀNH" : "COMPANY HISTORY"}
+              </h2>
+              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+                {language === "vi" ? aboutContent.historyTitleVi : aboutContent.historyTitleEn}
+              </h3>
+            </div>
+            <div className="max-w-4xl">
+              <p className="text-white/70 font-light text-lg leading-relaxed whitespace-pre-line">
+                {language === "vi" ? aboutContent.historyContentVi : aboutContent.historyContentEn}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Mission & Vision Section */}
+      {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
+        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {/* Mission */}
+              {aboutContent?.missionContentEn && aboutContent?.missionContentVi && (
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <Target className="w-10 h-10 text-white/40" />
+                    <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
+                      {language === "vi" ? aboutContent.missionTitleVi : aboutContent.missionTitleEn}
+                    </h3>
+                  </div>
+                  <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
+                    {language === "vi" ? aboutContent.missionContentVi : aboutContent.missionContentEn}
+                  </p>
+                </div>
+              )}
+
+              {/* Vision */}
+              {aboutContent?.visionContentEn && aboutContent?.visionContentVi && (
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <Eye className="w-10 h-10 text-white/40" />
+                    <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
+                      {language === "vi" ? aboutContent.visionTitleVi : aboutContent.visionTitleEn}
+                    </h3>
+                  </div>
+                  <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
+                    {language === "vi" ? aboutContent.visionContentVi : aboutContent.visionContentEn}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Core Values Section */}
+      {coreValues.length > 0 && (
+        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-16">
+              <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
+                {language === "vi" ? "GIÁ TRỊ CỐT LÕI" : "CORE VALUES"}
+              </h2>
+              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+                {language === "vi" ? aboutContent?.coreValuesTitleVi : aboutContent?.coreValuesTitleEn}
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {coreValues.map((value) => (
+                <div key={value.id} className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <Lightbulb className="w-8 h-8 text-white/40" />
+                    <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                      {language === "vi" ? value.titleVi : value.titleEn}
+                    </h4>
+                  </div>
+                  <p className="text-white/70 font-light leading-relaxed">
+                    {language === "vi" ? value.descriptionVi : value.descriptionEn}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Team Members Section */}
+      {teamMembers.length > 0 && (
+        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-16">
+              <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
+                {language === "vi" ? "ĐỘI NGŨ" : "OUR TEAM"}
+              </h2>
+              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+                {language === "vi" ? aboutContent?.teamTitleVi : aboutContent?.teamTitleEn}
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {teamMembers.map((member) => (
+                <div key={member.id} className="space-y-4">
+                  {member.image && (
+                    <div className="aspect-square overflow-hidden bg-white/10">
+                      <img 
+                        src={member.image} 
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <h4 className="text-xl font-light text-white">{member.name}</h4>
+                    <p className="text-sm text-white/60 uppercase tracking-wider">
+                      {language === "vi" ? member.positionVi : member.positionEn}
+                    </p>
+                    {member.bioEn && member.bioVi && (
+                      <p className="text-sm text-white/70 font-light leading-relaxed">
+                        {language === "vi" ? member.bioVi : member.bioEn}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Our Approach Section */}
       <section className="py-20 bg-black border-t border-white/10 -ml-16">
