@@ -40,15 +40,6 @@ export default function About() {
                     : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
                   }
                 </p>
-                <Button
-                  asChild
-                  className="bg-transparent border border-white/40 text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-6 text-base rounded-none uppercase tracking-wider"
-                  data-testid="button-order-project"
-                >
-                  <Link href="/contact">
-                    {language === "vi" ? "ĐẶT DỰ ÁN" : "ORDER PROJECT"}
-                  </Link>
-                </Button>
               </div>
 
               {/* Right side - Tagline */}
