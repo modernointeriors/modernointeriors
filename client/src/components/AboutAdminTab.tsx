@@ -446,22 +446,271 @@ export default function AboutAdminTab({
         </CardContent>
       </Card>
 
-      {/* Similar structure for Showcase Services and Process Steps - keeping it shorter for brevity */}
+      {/* Showcase Services Management */}
       <Card>
         <CardHeader>
           <CardTitle>Showcase Services (4 Items - Fixed)</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">Showcase Services: {aboutShowcaseServices.length} items</p>
+          <Dialog open={isShowcaseServiceDialogOpen} onOpenChange={setIsShowcaseServiceDialogOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Edit Showcase Service</DialogTitle>
+              </DialogHeader>
+              <Form {...showcaseServiceForm}>
+                <form onSubmit={showcaseServiceForm.handleSubmit(onShowcaseServiceSubmit)} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={showcaseServiceForm.control}
+                      name="titleEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (EN)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-showcase-title-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={showcaseServiceForm.control}
+                      name="titleVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (VI)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-showcase-title-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={showcaseServiceForm.control}
+                      name="descriptionEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (EN)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} data-testid="textarea-showcase-description-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={showcaseServiceForm.control}
+                      name="descriptionVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (VI)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} data-testid="textarea-showcase-description-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={showcaseServiceForm.control}
+                    name="order"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Display Order</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value))} data-testid="input-showcase-order" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full" data-testid="button-submit-showcase">
+                    Update Showcase Service
+                  </Button>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+          
+          {aboutShowcaseServicesLoading ? (
+            <div className="space-y-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-16 bg-muted rounded animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title (EN)</TableHead>
+                  <TableHead>Title (VI)</TableHead>
+                  <TableHead>Order</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {aboutShowcaseServices.map((service) => (
+                  <TableRow key={service.id}>
+                    <TableCell>{service.titleEn}</TableCell>
+                    <TableCell>{service.titleVi}</TableCell>
+                    <TableCell>{service.order}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setEditingShowcaseService(service);
+                          showcaseServiceForm.reset(service);
+                          setIsShowcaseServiceDialogOpen(true);
+                        }}
+                        data-testid={`button-edit-showcase-${service.id}`}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
+      {/* Process Steps Management */}
       <Card>
         <CardHeader>
           <CardTitle>Process Steps (4 Items - Fixed)</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">Process Steps: {aboutProcessSteps.length} items</p>
+          <Dialog open={isProcessStepDialogOpen} onOpenChange={setIsProcessStepDialogOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Edit Process Step</DialogTitle>
+              </DialogHeader>
+              <Form {...processStepForm}>
+                <form onSubmit={processStepForm.handleSubmit(onProcessStepSubmit)} className="space-y-4">
+                  <FormField
+                    control={processStepForm.control}
+                    name="stepNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Step Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value))} data-testid="input-step-number" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={processStepForm.control}
+                      name="titleEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (EN)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-step-title-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={processStepForm.control}
+                      name="titleVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title (VI)</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-step-title-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={processStepForm.control}
+                      name="descriptionEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (EN)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} data-testid="textarea-step-description-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={processStepForm.control}
+                      name="descriptionVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (VI)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} data-testid="textarea-step-description-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" data-testid="button-submit-step">
+                    Update Process Step
+                  </Button>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+          
+          {aboutProcessStepsLoading ? (
+            <div className="space-y-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-16 bg-muted rounded animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Step</TableHead>
+                  <TableHead>Title (EN)</TableHead>
+                  <TableHead>Title (VI)</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {aboutProcessSteps.map((step) => (
+                  <TableRow key={step.id}>
+                    <TableCell>{step.stepNumber}</TableCell>
+                    <TableCell>{step.titleEn}</TableCell>
+                    <TableCell>{step.titleVi}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setEditingProcessStep(step);
+                          processStepForm.reset(step);
+                          setIsProcessStepDialogOpen(true);
+                        }}
+                        data-testid={`button-edit-step-${step.id}`}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>
