@@ -140,15 +140,15 @@ export default function About() {
             backgroundImage: `url(${architectureBanner})`,
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
         </div>
 
         <div className="relative h-full flex items-end">
-          <div className="w-full pb-0">
-            {/* Grid with vertical separators */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-white/20">
+          <div className="w-full h-full flex items-end">
+            {/* Grid with vertical separators - full height */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-full">
               {/* Service 1 */}
-              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12">
+              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
                 <div className="space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
@@ -163,7 +163,7 @@ export default function About() {
               </div>
 
               {/* Service 2 */}
-              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12">
+              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
                 <div className="space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
@@ -178,7 +178,7 @@ export default function About() {
               </div>
 
               {/* Service 3 */}
-              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12">
+              <div className="border-r border-white/20 px-6 py-8 md:px-8 md:py-12 flex items-end">
                 <div className="space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
@@ -193,7 +193,7 @@ export default function About() {
               </div>
 
               {/* Service 4 */}
-              <div className="px-6 py-8 md:px-8 md:py-12">
+              <div className="px-6 py-8 md:px-8 md:py-12 flex items-end">
                 <div className="space-y-4">
                   <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
                     {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
