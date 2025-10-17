@@ -391,7 +391,7 @@ export default function About() {
 
       {/* Company History Section */}
       {aboutContent?.historyContentEn && aboutContent?.historyContentVi && (
-        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+        <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -412,7 +412,7 @@ export default function About() {
 
       {/* Mission & Vision Section */}
       {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
-        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+        <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Mission */}
@@ -451,7 +451,7 @@ export default function About() {
 
       {/* Core Values Section */}
       {coreValues.length > 0 && (
-        <section className="py-20 bg-black border-t border-white/10 -ml-16">
+        <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -483,7 +483,7 @@ export default function About() {
 
       {/* Team Members Section */}
       {teamMembers.length > 0 && (
-        <section className="py-20 bg-black border-t border-white/10 -ml-16 overflow-hidden">
+        <section className="py-20 bg-black -ml-16 overflow-hidden">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -571,7 +571,7 @@ export default function About() {
       )}
 
       {/* Our Approach Section */}
-      <section className="py-20 bg-black border-t border-white/10 -ml-16">
+      <section className="py-20 bg-black -ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -646,7 +646,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-black border-t border-white/10 -ml-16">
+      <section className="py-20 bg-black -ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-8 uppercase tracking-wide">
             {language === "vi"
