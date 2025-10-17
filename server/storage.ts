@@ -1,7 +1,7 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
   interactions, deals, transactions, settings, faqs, advantages, journeySteps,
-  aboutPageContent, aboutPrinciples, aboutShowcaseServices, aboutProcessSteps,
+  aboutPageContent, aboutPrinciples, aboutShowcaseServices, aboutProcessSteps, aboutCoreValues, aboutTeamMembers,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -21,7 +21,9 @@ import {
   type AboutPageContent, type InsertAboutPageContent,
   type AboutPrinciple, type InsertAboutPrinciple,
   type AboutShowcaseService, type InsertAboutShowcaseService,
-  type AboutProcessStep, type InsertAboutProcessStep
+  type AboutProcessStep, type InsertAboutProcessStep,
+  type AboutCoreValue, type InsertAboutCoreValue,
+  type AboutTeamMember, type InsertAboutTeamMember
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -167,6 +169,20 @@ export interface IStorage {
   createAboutProcessStep(step: InsertAboutProcessStep): Promise<AboutProcessStep>;
   updateAboutProcessStep(id: string, step: Partial<InsertAboutProcessStep>): Promise<AboutProcessStep>;
   deleteAboutProcessStep(id: string): Promise<void>;
+
+  // About Page Core Values
+  getAboutCoreValues(filters?: { active?: boolean }): Promise<AboutCoreValue[]>;
+  getAboutCoreValue(id: string): Promise<AboutCoreValue | undefined>;
+  createAboutCoreValue(value: InsertAboutCoreValue): Promise<AboutCoreValue>;
+  updateAboutCoreValue(id: string, value: Partial<InsertAboutCoreValue>): Promise<AboutCoreValue>;
+  deleteAboutCoreValue(id: string): Promise<void>;
+
+  // About Page Team Members
+  getAboutTeamMembers(filters?: { active?: boolean }): Promise<AboutTeamMember[]>;
+  getAboutTeamMember(id: string): Promise<AboutTeamMember | undefined>;
+  createAboutTeamMember(member: InsertAboutTeamMember): Promise<AboutTeamMember>;
+  updateAboutTeamMember(id: string, member: Partial<InsertAboutTeamMember>): Promise<AboutTeamMember>;
+  deleteAboutTeamMember(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -999,6 +1015,76 @@ export class DatabaseStorage implements IStorage {
 
   async deleteAboutProcessStep(id: string): Promise<void> {
     await db.delete(aboutProcessSteps).where(eq(aboutProcessSteps.id, id));
+  }
+
+  // About Page Core Values
+  async getAboutCoreValues(filters?: { active?: boolean }): Promise<AboutCoreValue[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(aboutCoreValues.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(aboutCoreValues).where(and(...conditions))
+      : db.select().from(aboutCoreValues);
+
+    return await query.orderBy(aboutCoreValues.order);
+  }
+
+  async getAboutCoreValue(id: string): Promise<AboutCoreValue | undefined> {
+    const [value] = await db.select().from(aboutCoreValues).where(eq(aboutCoreValues.id, id));
+    return value || undefined;
+  }
+
+  async createAboutCoreValue(value: InsertAboutCoreValue): Promise<AboutCoreValue> {
+    const [created] = await db.insert(aboutCoreValues).values(value).returning();
+    return created;
+  }
+
+  async updateAboutCoreValue(id: string, value: Partial<InsertAboutCoreValue>): Promise<AboutCoreValue> {
+    const [updated] = await db
+      .update(aboutCoreValues)
+      .set({ ...value, updatedAt: new Date() })
+      .where(eq(aboutCoreValues.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAboutCoreValue(id: string): Promise<void> {
+    await db.delete(aboutCoreValues).where(eq(aboutCoreValues.id, id));
+  }
+
+  // About Page Team Members
+  async getAboutTeamMembers(filters?: { active?: boolean }): Promise<AboutTeamMember[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(aboutTeamMembers.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(aboutTeamMembers).where(and(...conditions))
+      : db.select().from(aboutTeamMembers);
+
+    return await query.orderBy(aboutTeamMembers.order);
+  }
+
+  async getAboutTeamMember(id: string): Promise<AboutTeamMember | undefined> {
+    const [member] = await db.select().from(aboutTeamMembers).where(eq(aboutTeamMembers.id, id));
+    return member || undefined;
+  }
+
+  async createAboutTeamMember(member: InsertAboutTeamMember): Promise<AboutTeamMember> {
+    const [created] = await db.insert(aboutTeamMembers).values(member).returning();
+    return created;
+  }
+
+  async updateAboutTeamMember(id: string, member: Partial<InsertAboutTeamMember>): Promise<AboutTeamMember> {
+    const [updated] = await db
+      .update(aboutTeamMembers)
+      .set({ ...member, updatedAt: new Date() })
+      .where(eq(aboutTeamMembers.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAboutTeamMember(id: string): Promise<void> {
+    await db.delete(aboutTeamMembers).where(eq(aboutTeamMembers.id, id));
   }
 }
 

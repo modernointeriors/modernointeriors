@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -1181,6 +1181,128 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete process step" });
+    }
+  });
+
+  // About Core Values routes
+  app.get("/api/about-core-values", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const values = await storage.getAboutCoreValues(filters);
+      res.json(values);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch core values" });
+    }
+  });
+
+  app.get("/api/about-core-values/:id", async (req, res) => {
+    try {
+      const value = await storage.getAboutCoreValue(req.params.id);
+      if (!value) {
+        return res.status(404).json({ message: "Core value not found" });
+      }
+      res.json(value);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch core value" });
+    }
+  });
+
+  app.post("/api/about-core-values", async (req, res) => {
+    try {
+      const validatedData = insertAboutCoreValueSchema.parse(req.body);
+      const value = await storage.createAboutCoreValue(validatedData);
+      res.status(201).json(value);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create core value" });
+    }
+  });
+
+  app.put("/api/about-core-values/:id", async (req, res) => {
+    try {
+      const validatedData = insertAboutCoreValueSchema.partial().parse(req.body);
+      const value = await storage.updateAboutCoreValue(req.params.id, validatedData);
+      res.json(value);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update core value" });
+    }
+  });
+
+  app.delete("/api/about-core-values/:id", async (req, res) => {
+    try {
+      await storage.deleteAboutCoreValue(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete core value" });
+    }
+  });
+
+  // About Team Members routes
+  app.get("/api/about-team-members", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const members = await storage.getAboutTeamMembers(filters);
+      res.json(members);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch team members" });
+    }
+  });
+
+  app.get("/api/about-team-members/:id", async (req, res) => {
+    try {
+      const member = await storage.getAboutTeamMember(req.params.id);
+      if (!member) {
+        return res.status(404).json({ message: "Team member not found" });
+      }
+      res.json(member);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch team member" });
+    }
+  });
+
+  app.post("/api/about-team-members", async (req, res) => {
+    try {
+      const validatedData = insertAboutTeamMemberSchema.parse(req.body);
+      const member = await storage.createAboutTeamMember(validatedData);
+      res.status(201).json(member);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create team member" });
+    }
+  });
+
+  app.put("/api/about-team-members/:id", async (req, res) => {
+    try {
+      const validatedData = insertAboutTeamMemberSchema.partial().parse(req.body);
+      const member = await storage.updateAboutTeamMember(req.params.id, validatedData);
+      res.json(member);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update team member" });
+    }
+  });
+
+  app.delete("/api/about-team-members/:id", async (req, res) => {
+    try {
+      await storage.deleteAboutTeamMember(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete team member" });
     }
   });
 
