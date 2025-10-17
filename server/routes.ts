@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -975,6 +975,212 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete journey step" });
+    }
+  });
+
+  // About Page Content routes
+  app.get("/api/about-content", async (req, res) => {
+    try {
+      const content = await storage.getAboutPageContent();
+      res.json(content || {});
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch about content" });
+    }
+  });
+
+  app.put("/api/about-content", async (req, res) => {
+    try {
+      const validatedData = insertAboutPageContentSchema.parse(req.body);
+      const content = await storage.upsertAboutPageContent(validatedData);
+      res.json(content);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update about content" });
+    }
+  });
+
+  // About Principles routes
+  app.get("/api/about-principles", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const principles = await storage.getAboutPrinciples(filters);
+      res.json(principles);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch about principles" });
+    }
+  });
+
+  app.get("/api/about-principles/:id", async (req, res) => {
+    try {
+      const principle = await storage.getAboutPrinciple(req.params.id);
+      if (!principle) {
+        return res.status(404).json({ message: "Principle not found" });
+      }
+      res.json(principle);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch principle" });
+    }
+  });
+
+  app.post("/api/about-principles", async (req, res) => {
+    try {
+      const validatedData = insertAboutPrincipleSchema.parse(req.body);
+      const principle = await storage.createAboutPrinciple(validatedData);
+      res.status(201).json(principle);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create principle" });
+    }
+  });
+
+  app.put("/api/about-principles/:id", async (req, res) => {
+    try {
+      const validatedData = insertAboutPrincipleSchema.partial().parse(req.body);
+      const principle = await storage.updateAboutPrinciple(req.params.id, validatedData);
+      res.json(principle);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update principle" });
+    }
+  });
+
+  app.delete("/api/about-principles/:id", async (req, res) => {
+    try {
+      await storage.deleteAboutPrinciple(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete principle" });
+    }
+  });
+
+  // About Showcase Services routes
+  app.get("/api/about-showcase-services", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const services = await storage.getAboutShowcaseServices(filters);
+      res.json(services);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch showcase services" });
+    }
+  });
+
+  app.get("/api/about-showcase-services/:id", async (req, res) => {
+    try {
+      const service = await storage.getAboutShowcaseService(req.params.id);
+      if (!service) {
+        return res.status(404).json({ message: "Showcase service not found" });
+      }
+      res.json(service);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch showcase service" });
+    }
+  });
+
+  app.post("/api/about-showcase-services", async (req, res) => {
+    try {
+      const validatedData = insertAboutShowcaseServiceSchema.parse(req.body);
+      const service = await storage.createAboutShowcaseService(validatedData);
+      res.status(201).json(service);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create showcase service" });
+    }
+  });
+
+  app.put("/api/about-showcase-services/:id", async (req, res) => {
+    try {
+      const validatedData = insertAboutShowcaseServiceSchema.partial().parse(req.body);
+      const service = await storage.updateAboutShowcaseService(req.params.id, validatedData);
+      res.json(service);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update showcase service" });
+    }
+  });
+
+  app.delete("/api/about-showcase-services/:id", async (req, res) => {
+    try {
+      await storage.deleteAboutShowcaseService(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete showcase service" });
+    }
+  });
+
+  // About Process Steps routes
+  app.get("/api/about-process-steps", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const steps = await storage.getAboutProcessSteps(filters);
+      res.json(steps);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch process steps" });
+    }
+  });
+
+  app.get("/api/about-process-steps/:id", async (req, res) => {
+    try {
+      const step = await storage.getAboutProcessStep(req.params.id);
+      if (!step) {
+        return res.status(404).json({ message: "Process step not found" });
+      }
+      res.json(step);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch process step" });
+    }
+  });
+
+  app.post("/api/about-process-steps", async (req, res) => {
+    try {
+      const validatedData = insertAboutProcessStepSchema.parse(req.body);
+      const step = await storage.createAboutProcessStep(validatedData);
+      res.status(201).json(step);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create process step" });
+    }
+  });
+
+  app.put("/api/about-process-steps/:id", async (req, res) => {
+    try {
+      const validatedData = insertAboutProcessStepSchema.partial().parse(req.body);
+      const step = await storage.updateAboutProcessStep(req.params.id, validatedData);
+      res.json(step);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update process step" });
+    }
+  });
+
+  app.delete("/api/about-process-steps/:id", async (req, res) => {
+    try {
+      await storage.deleteAboutProcessStep(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete process step" });
     }
   });
 
