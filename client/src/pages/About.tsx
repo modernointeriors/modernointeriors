@@ -16,7 +16,7 @@ import 'swiper/css/effect-fade';
 export default function About() {
   const { language, t } = useLanguage();
   const [progressKey, setProgressKey] = useState(0);
-  const [selectedMember, setSelectedMember] = useState<number | null>(null);
+  const [selectedMember, setSelectedMember] = useState<number | null>(0);
 
   // Fetch projects for hero slider
   const { data: projects = [] } = useQuery<Project[]>({
@@ -494,107 +494,113 @@ export default function About() {
               </h3>
             </div>
 
-            {/* Names Row - All aligned at top */}
-            <div className="flex items-start justify-center gap-8 mb-12">
+            <div className="flex gap-0">
+              {/* Name Columns - Equal Width */}
               {teamMembers.map((member, index) => {
                 const isExpanded = selectedMember === index;
                 const nameChars = member.name.toUpperCase().split('');
                 
                 return (
-                  <button
+                  <div
                     key={member.id}
-                    onClick={() => setSelectedMember(isExpanded ? null : index)}
-                    className="flex-shrink-0 transition-all duration-300 hover:bg-white/5 px-4 py-4 border-x border-white/10"
-                    data-testid={`button-team-member-${member.id}`}
+                    className="relative border-r border-white/10 last:border-r-0 transition-all duration-500 ease-in-out"
+                    style={{
+                      flex: isExpanded ? '1 1 70%' : '1 1 auto'
+                    }}
                   >
-                    <div className="flex flex-col items-center">
-                      {nameChars.map((char, charIndex) => (
-                        <span 
-                          key={charIndex} 
-                          className={`text-2xl font-light transition-all duration-300 ${
-                            isExpanded ? 'text-white' : 'text-white/40'
-                          }`}
-                        >
-                          {char}
-                        </span>
-                      ))}
+                    <button
+                      onClick={() => setSelectedMember(index)}
+                      className="w-full h-full transition-all duration-300 hover:bg-white/5 py-8"
+                      data-testid={`button-team-member-${member.id}`}
+                    >
+                      {/* Vertical Name */}
+                      <div className="flex flex-col items-center">
+                        {nameChars.map((char, charIndex) => (
+                          <span 
+                            key={charIndex} 
+                            className={`text-2xl font-light transition-all duration-300 ${
+                              isExpanded ? 'text-white' : 'text-white/40'
+                            }`}
+                          >
+                            {char}
+                          </span>
+                        ))}
+                      </div>
+                    </button>
+
+                    {/* Expanded Content - Slides in from right */}
+                    <div 
+                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <div className="px-8 pb-8 pt-4">
+                        <div className="flex gap-8 items-start">
+                          {/* Left - Vertical Name */}
+                          <div className="flex-shrink-0">
+                            <div className="flex flex-col items-center">
+                              {nameChars.map((char, charIndex) => (
+                                <span 
+                                  key={charIndex} 
+                                  className="text-2xl font-light text-white/40"
+                                >
+                                  {char}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Middle - Image (9:16 ratio) */}
+                          {member.image && (
+                            <div className="flex-shrink-0 w-48">
+                              <div className="aspect-[9/16] overflow-hidden bg-white/10">
+                                <img 
+                                  src={member.image} 
+                                  alt={member.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Right - Details */}
+                          <div className="flex-1 space-y-4">
+                            <div>
+                              <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">
+                                {member.name}
+                              </h4>
+                              <p className="text-sm text-white/60 uppercase tracking-wider">
+                                {language === "vi" ? member.positionVi : member.positionEn}
+                              </p>
+                            </div>
+                            
+                            {member.bioEn && member.bioVi && (
+                              <p className="text-white/70 font-light leading-relaxed text-justify">
+                                {language === "vi" ? member.bioVi : member.bioEn}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Right - Vertical Name */}
+                          <div className="flex-shrink-0">
+                            <div className="flex flex-col items-center">
+                              {nameChars.map((char, charIndex) => (
+                                <span 
+                                  key={charIndex} 
+                                  className="text-2xl font-light text-white/40"
+                                >
+                                  {char}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </button>
+                  </div>
                 );
               })}
             </div>
-
-            {/* Expanded Content Area */}
-            {selectedMember !== null && teamMembers[selectedMember] && (
-              <div className="border-t border-white/10 pt-12 animate-in fade-in slide-in-from-top duration-500">
-                <div className="flex gap-12 items-start justify-center">
-                  {/* Left - Vertical Name */}
-                  <div className="flex-shrink-0">
-                    <div className="flex flex-col items-center">
-                      {teamMembers[selectedMember].name.toUpperCase().split('').map((char, charIndex) => (
-                        <span 
-                          key={charIndex} 
-                          className="text-2xl font-light text-white/60"
-                        >
-                          {char}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Middle - Image (9:16 ratio) */}
-                  {teamMembers[selectedMember].image && (
-                    <div className="flex-shrink-0 w-72">
-                      <div className="aspect-[9/16] overflow-hidden bg-white/10">
-                        <img 
-                          src={teamMembers[selectedMember].image} 
-                          alt={teamMembers[selectedMember].name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Right - Details */}
-                  <div className="flex-1 max-w-2xl space-y-6">
-                    <div>
-                      <h4 className="text-3xl font-light text-white mb-2 uppercase tracking-wide">
-                        {teamMembers[selectedMember].name}
-                      </h4>
-                      <p className="text-sm text-white/60 uppercase tracking-wider">
-                        {language === "vi" 
-                          ? teamMembers[selectedMember].positionVi 
-                          : teamMembers[selectedMember].positionEn
-                        }
-                      </p>
-                    </div>
-                    
-                    {teamMembers[selectedMember].bioEn && teamMembers[selectedMember].bioVi && (
-                      <p className="text-white/70 font-light leading-relaxed text-justify">
-                        {language === "vi" 
-                          ? teamMembers[selectedMember].bioVi 
-                          : teamMembers[selectedMember].bioEn
-                        }
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Right - Vertical Name */}
-                  <div className="flex-shrink-0">
-                    <div className="flex flex-col items-center">
-                      {teamMembers[selectedMember].name.toUpperCase().split('').map((char, charIndex) => (
-                        <span 
-                          key={charIndex} 
-                          className="text-2xl font-light text-white/60"
-                        >
-                          {char}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </section>
       )}
