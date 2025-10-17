@@ -1001,6 +1001,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // About Page Content route
+  app.get("/api/about-page-content", async (req, res) => {
+    try {
+      const content = await storage.getAboutPageContent();
+      res.json(content);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch about page content" });
+    }
+  });
+
   // About Principles routes
   app.get("/api/about-principles", async (req, res) => {
     try {
