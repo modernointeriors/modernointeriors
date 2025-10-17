@@ -93,6 +93,12 @@ export default function AboutAdminTab({
       statsCountriesLabelVi: "",
       processTitleEn: "",
       processTitleVi: "",
+      historyEn: "",
+      historyVi: "",
+      missionEn: "",
+      missionVi: "",
+      visionEn: "",
+      visionVi: "",
     },
   });
 
@@ -197,6 +203,51 @@ export default function AboutAdminTab({
                     <div>
                       <label className="text-sm font-light mb-2 block">Process Title (VI)</label>
                       <Input {...aboutContentForm.register("processTitleVi")} placeholder="TỪ Ý TƯỞNG ĐẾN HIỆN THỰC" data-testid="input-process-title-vi" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Company History Section */}
+                <div className="p-4 border-t">
+                  <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Company History</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-light mb-2 block">History (EN)</label>
+                      <Textarea {...aboutContentForm.register("historyEn")} rows={5} placeholder="Company history in English..." data-testid="textarea-history-en" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-light mb-2 block">History (VI)</label>
+                      <Textarea {...aboutContentForm.register("historyVi")} rows={5} placeholder="Lịch sử công ty..." data-testid="textarea-history-vi" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mission Section */}
+                <div className="p-4 border-t">
+                  <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Mission (Sứ mệnh)</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-light mb-2 block">Mission (EN)</label>
+                      <Textarea {...aboutContentForm.register("missionEn")} rows={4} placeholder="Our mission in English..." data-testid="textarea-mission-en" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-light mb-2 block">Mission (VI)</label>
+                      <Textarea {...aboutContentForm.register("missionVi")} rows={4} placeholder="Sứ mệnh của chúng tôi..." data-testid="textarea-mission-vi" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Vision Section */}
+                <div className="p-4 border-t">
+                  <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Vision (Tầm nhìn)</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-light mb-2 block">Vision (EN)</label>
+                      <Textarea {...aboutContentForm.register("visionEn")} rows={4} placeholder="Our vision in English..." data-testid="textarea-vision-en" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-light mb-2 block">Vision (VI)</label>
+                      <Textarea {...aboutContentForm.register("visionVi")} rows={4} placeholder="Tầm nhìn của chúng tôi..." data-testid="textarea-vision-vi" />
                     </div>
                   </div>
                 </div>
