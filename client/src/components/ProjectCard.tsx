@@ -37,8 +37,16 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </div>
           
           {/* Bottom - Project Details */}
-          {(project.area || project.duration) && (
-            <div className="flex justify-between items-end">
+          {(project.area || project.duration || project.completionYear) && (
+            <div className="grid grid-cols-3 gap-4">
+              {project.completionYear && (
+                <div>
+                  <p className="text-white/80 text-xs uppercase tracking-wide mb-1">YEAR</p>
+                  <p className="text-white font-light" data-testid={`text-year-${project.id}`}>
+                    {project.completionYear}
+                  </p>
+                </div>
+              )}
               {project.duration && (
                 <div>
                   <p className="text-white/80 text-xs uppercase tracking-wide mb-1">DURATION</p>
