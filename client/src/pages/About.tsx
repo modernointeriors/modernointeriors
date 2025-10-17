@@ -2,58 +2,174 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Sparkles, Trophy, Users2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectFade } from 'swiper/modules';
+import type { Project } from '@shared/schema';
+import { useState } from 'react';
 import architectureBanner from "@assets/stock_images/modern_luxury_archit_ac188b7b.jpg";
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/effect-fade';
 
 export default function About() {
   const { language, t } = useLanguage();
+  const [progressKey, setProgressKey] = useState(0);
+
+  // Fetch projects for hero slider
+  const { data: projects = [] } = useQuery<Project[]>({
+    queryKey: ["/api/projects"],
+  });
+
+  // Get fallback image based on category
+  const getFallbackImage = (category: string) => {
+    switch (category) {
+      case 'residential':
+        return 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+      case 'commercial':
+        return 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+      case 'architecture':
+        return 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+      default:
+        return 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
+    }
+  };
+
+  // Handle slide change
+  const handleSlideChange = () => {
+    setProgressKey(prev => prev + 1);
+  };
 
   return (
     <main className="ml-16 pb-8 md:pb-6 mb-4">
-      {/* Hero Section */}
+      {/* Hero Section - Slider */}
       <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          effect="fade"
+          fadeEffect={{
+            crossFade: false,
           }}
+          spaceBetween={0}
+          slidesPerView={1}
+          speed={1000}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          loop={true}
+          onSlideChange={handleSlideChange}
+          className="h-screen"
         >
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
+          {projects.length > 0 ? projects.map((project) => {
+            const backgroundImage = Array.isArray(project.coverImages) && project.coverImages[0] ||
+              Array.isArray(project.contentImages) && project.contentImages[0] ||
+              Array.isArray(project.galleryImages) && project.galleryImages[0] ||
+              project.heroImage ||
+              (Array.isArray(project.images) && project.images[0]) ||
+              getFallbackImage(project.category);
 
-        <div className="relative h-full flex items-center">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Left side - Main heading */}
-              <div className="space-y-8">
-                <div className="space-y-6">
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                    {language === "vi" 
-                      ? "THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"
-                      : "ARCHITECTURAL & INTERIOR DESIGN"
-                    }
-                  </h1>
-                  <div className="w-20 h-0.5 bg-white/40" />
+            return (
+              <SwiperSlide key={project.id}>
+                <div className="relative h-screen">
+                  <img 
+                    src={backgroundImage} 
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = getFallbackImage(project.category);
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black/50" />
+                  
+                  <div className="relative h-full flex items-center">
+                    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        {/* Left side - Main heading */}
+                        <div className="space-y-8">
+                          <div className="space-y-6">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
+                              {language === "vi" 
+                                ? "THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"
+                                : "ARCHITECTURAL & INTERIOR DESIGN"
+                              }
+                            </h1>
+                            <div className="w-20 h-0.5 bg-white/40" />
+                          </div>
+                          <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                            {project.title}
+                          </p>
+                        </div>
+
+                        {/* Right side - Tagline */}
+                        <div className="lg:text-right">
+                          <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
+                            {language === "vi"
+                              ? "ĐỔI MỚI TRONG MỌI DỰ ÁN"
+                              : "INNOVATION IN EVERY PROJECT"
+                            }
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
-                  {language === "vi"
-                    ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
-                    : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
-                  }
-                </p>
-              </div>
+              </SwiperSlide>
+            );
+          }) : (
+            // Fallback slide when no projects
+            <SwiperSlide>
+              <div className="relative h-screen">
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: 'url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-black/50" />
+                </div>
 
-              {/* Right side - Tagline */}
-              <div className="lg:text-right">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
-                  {language === "vi"
-                    ? "ĐỔI MỚI TRONG MỌI DỰ ÁN"
-                    : "INNOVATION IN EVERY PROJECT"
-                  }
-                </h2>
+                <div className="relative h-full flex items-center">
+                  <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                      {/* Left side - Main heading */}
+                      <div className="space-y-8">
+                        <div className="space-y-6">
+                          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
+                            {language === "vi" 
+                              ? "THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"
+                              : "ARCHITECTURAL & INTERIOR DESIGN"
+                            }
+                          </h1>
+                          <div className="w-20 h-0.5 bg-white/40" />
+                        </div>
+                        <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                          {language === "vi"
+                            ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
+                            : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
+                          }
+                        </p>
+                      </div>
+
+                      {/* Right side - Tagline */}
+                      <div className="lg:text-right">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
+                          {language === "vi"
+                            ? "ĐỔI MỚI TRONG MỌI DỰ ÁN"
+                            : "INNOVATION IN EVERY PROJECT"
+                          }
+                        </h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </SwiperSlide>
+          )}
+        </Swiper>
       </section>
 
       {/* Principles Section */}
@@ -78,15 +194,15 @@ export default function About() {
                 <Sparkles className="w-8 h-8 text-white/40" />
                 <h4 className="text-xl font-light text-white uppercase tracking-wide">
                   {language === "vi"
-                    ? "VẬT LIỆU ĐỔI MỚI"
-                    : "INNOVATIVE MATERIALS"
+                    ? "SÁNG TẠO & ĐỔI MỚI"
+                    : "CREATIVE & INNOVATIVE"
                   }
                 </h4>
               </div>
               <p className="text-white/70 font-light leading-relaxed">
                 {language === "vi"
-                  ? "Chúng tôi sử dụng vật liệu và giải pháp chức năng tiên tiến nhất, không chỉ đáp ứng các tiêu chuẩn quốc tế mà còn vượt xa mong đợi của khách hàng. Mỗi dự án được tối ưu hóa với công nghệ hiện đại nhất."
-                  : "We use the most advanced materials and functional solutions, not only meeting international standards but exceeding client expectations. Each project is optimized with cutting-edge technology."
+                  ? "Luôn đặt sự sáng tạo lên hàng đầu, kết hợp với công nghệ tiên tiến để tạo ra những giải pháp thiết kế độc đáo và hiện đại. Mỗi dự án đều là một tác phẩm nghệ thuật riêng biệt."
+                  : "Always putting creativity first, combining with advanced technology to create unique and modern design solutions. Every project is a unique work of art."
                 }
               </p>
             </div>
@@ -97,15 +213,15 @@ export default function About() {
                 <Trophy className="w-8 h-8 text-white/40" />
                 <h4 className="text-xl font-light text-white uppercase tracking-wide">
                   {language === "vi"
-                    ? "THIẾT KẾ ĐỘC ĐÁO"
-                    : "UNIQUE DESIGN"
+                    ? "CHẤT LƯỢNG HÀNG ĐẦU"
+                    : "QUALITY EXCELLENCE"
                   }
                 </h4>
               </div>
               <p className="text-white/70 font-light leading-relaxed">
                 {language === "vi"
-                  ? "Mỗi thiết kế của chúng tôi đều độc đáo và được cá nhân hóa theo nhu cầu cụ thể của từng khách hàng. Chúng tôi kết hợp nghệ thuật và chức năng để tạo ra không gian sống hoàn hảo."
-                  : "Each of our designs is unique and personalized to the specific needs of each client. We combine art and functionality to create perfect living spaces."
+                  ? "Cam kết mang đến chất lượng hoàn hảo trong từng chi tiết. Từ khâu thiết kế đến thi công, chúng tôi luôn đảm bảo tiêu chuẩn cao nhất để khách hàng hoàn toàn hài lòng."
+                  : "Committed to delivering perfect quality in every detail. From design to construction, we always ensure the highest standards for complete customer satisfaction."
                 }
               </p>
             </div>
