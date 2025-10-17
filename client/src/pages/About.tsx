@@ -144,67 +144,79 @@ export default function About() {
         </div>
 
         <div className="relative h-full flex items-end">
-          <div className="w-full h-full flex items-end">
-            {/* Grid with vertical separators - full height */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-full items-end">
-              {/* Service 1 */}
-              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12">
-                <div className="space-y-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
-                    {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
-                  </h4>
-                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                    {language === "vi"
-                      ? "Dịch vụ thiết kế kiến trúc chuyên nghiệp, từ khảo sát, tư vấn đến hoàn thiện bản vẽ thi công. Chúng tôi cung cấp giải pháp tối ưu cho mọi loại công trình."
-                      : "Professional architectural design services, from survey and consultation to construction drawings. We provide optimal solutions for all types of projects."
-                    }
-                  </p>
-                </div>
-              </div>
+          {/* Vertical lines with fade effect */}
+          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            <div className="border-r-2 border-white/20" style={{ 
+              borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
+            }} />
+            <div className="border-r-2 border-white/20" style={{ 
+              borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
+            }} />
+            <div className="border-r-2 border-white/20" style={{ 
+              borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
+            }} />
+            <div />
+          </div>
 
-              {/* Service 2 */}
-              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12">
-                <div className="space-y-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
-                    {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
-                  </h4>
-                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                    {language === "vi"
-                      ? "Thiết kế nội thất cao cấp với sự tư vấn từ chuyên gia. Tạo ra không gian sống và làm việc hoàn hảo với phong cách riêng biệt."
-                      : "Premium interior design with expert consultation. Creating perfect living and working spaces with distinctive style."
-                    }
-                  </p>
-                </div>
+          {/* Content grid */}
+          <div className="relative w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-end">
+            {/* Service 1 */}
+            <div className="px-6 py-8 md:px-8 md:py-12">
+              <div className="space-y-4">
+                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
+                  {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
+                </h4>
+                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                  {language === "vi"
+                    ? "Dịch vụ thiết kế kiến trúc chuyên nghiệp, từ khảo sát, tư vấn đến hoàn thiện bản vẽ thi công. Chúng tôi cung cấp giải pháp tối ưu cho mọi loại công trình."
+                    : "Professional architectural design services, from survey and consultation to construction drawings. We provide optimal solutions for all types of projects."
+                  }
+                </p>
               </div>
+            </div>
 
-              {/* Service 3 */}
-              <div className="border-r-2 border-white/20 px-6 py-8 md:px-8 md:py-12">
-                <div className="space-y-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
-                    {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
-                  </h4>
-                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                    {language === "vi"
-                      ? "Ứng dụng công nghệ BIM và 3D visualization tiên tiến, giúp khách hàng hình dung rõ ràng dự án trước khi thi công và tối ưu quá trình quản lý."
-                      : "Advanced BIM and 3D visualization technology, helping clients clearly visualize projects before construction and optimize management process."
-                    }
-                  </p>
-                </div>
+            {/* Service 2 */}
+            <div className="px-6 py-8 md:px-8 md:py-12">
+              <div className="space-y-4">
+                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
+                  {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
+                </h4>
+                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                  {language === "vi"
+                    ? "Thiết kế nội thất cao cấp với sự tư vấn từ chuyên gia. Tạo ra không gian sống và làm việc hoàn hảo với phong cách riêng biệt."
+                    : "Premium interior design with expert consultation. Creating perfect living and working spaces with distinctive style."
+                  }
+                </p>
               </div>
+            </div>
 
-              {/* Service 4 */}
-              <div className="px-6 py-8 md:px-8 md:py-12">
-                <div className="space-y-4">
-                  <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
-                    {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
-                  </h4>
-                  <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                    {language === "vi"
-                      ? "Thiết kế cảnh quan xanh kết hợp với kiến trúc, tạo nên không gian sống hài hòa với thiên nhiên. Mang lại trải nghiệm thư giãn tuyệt vời."
-                      : "Green landscape design integrated with architecture, creating living spaces in harmony with nature. Delivering excellent relaxation experience."
-                    }
-                  </p>
-                </div>
+            {/* Service 3 */}
+            <div className="px-6 py-8 md:px-8 md:py-12">
+              <div className="space-y-4">
+                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
+                  {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
+                </h4>
+                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                  {language === "vi"
+                    ? "Ứng dụng công nghệ BIM và 3D visualization tiên tiến, giúp khách hàng hình dung rõ ràng dự án trước khi thi công và tối ưu quá trình quản lý."
+                    : "Advanced BIM and 3D visualization technology, helping clients clearly visualize projects before construction and optimize management process."
+                  }
+                </p>
+              </div>
+            </div>
+
+            {/* Service 4 */}
+            <div className="px-6 py-8 md:px-8 md:py-12">
+              <div className="space-y-4">
+                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide min-h-[3.5em]">
+                  {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
+                </h4>
+                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                  {language === "vi"
+                    ? "Thiết kế cảnh quan xanh kết hợp với kiến trúc, tạo nên không gian sống hài hòa với thiên nhiên. Mang lại trải nghiệm thư giãn tuyệt vời."
+                    : "Green landscape design integrated with architecture, creating living spaces in harmony with nature. Delivering excellent relaxation experience."
+                  }
+                </p>
               </div>
             </div>
           </div>
