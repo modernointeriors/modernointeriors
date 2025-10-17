@@ -6,11 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep } from "@shared/schema";
 import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema } from "@shared/schema";
 
@@ -303,22 +301,14 @@ export default function AboutAdminTab({
       {/* Principles Management */}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle>Principles (3 Items)</CardTitle>
-            <Dialog open={isPrincipleDialogOpen} onOpenChange={setIsPrincipleDialogOpen}>
-              <DialogTrigger asChild>
-                <Button onClick={() => {
-                  setEditingPrinciple(null);
-                  principleForm.reset();
-                }} data-testid="button-add-principle">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Principle
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>{editingPrinciple ? "Edit Principle" : "Add New Principle"}</DialogTitle>
-                </DialogHeader>
+          <CardTitle>Principles (3 Items - Fixed)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Dialog open={isPrincipleDialogOpen} onOpenChange={setIsPrincipleDialogOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Edit Principle</DialogTitle>
+              </DialogHeader>
                 <Form {...principleForm}>
                   <form onSubmit={principleForm.handleSubmit(onPrincipleSubmit)} className="space-y-4">
                     <FormField
@@ -404,15 +394,12 @@ export default function AboutAdminTab({
                       )}
                     />
                     <Button type="submit" className="w-full" data-testid="button-submit-principle">
-                      {editingPrinciple ? "Update Principle" : "Add Principle"}
+                      Update Principle
                     </Button>
                   </form>
                 </Form>
               </DialogContent>
             </Dialog>
-          </div>
-        </CardHeader>
-        <CardContent>
           {aboutPrinciplesLoading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
@@ -427,7 +414,6 @@ export default function AboutAdminTab({
                   <TableHead>Title (EN)</TableHead>
                   <TableHead>Title (VI)</TableHead>
                   <TableHead>Order</TableHead>
-                  <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -438,12 +424,7 @@ export default function AboutAdminTab({
                     <TableCell>{principle.titleEn}</TableCell>
                     <TableCell>{principle.titleVi}</TableCell>
                     <TableCell>{principle.order}</TableCell>
-                    <TableCell>
-                      <Badge variant={principle.active ? "default" : "secondary"}>
-                        {principle.active ? "Active" : "Inactive"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right space-x-2">
+                    <TableCell className="text-right">
                       <Button
                         variant="outline"
                         size="sm"
@@ -456,33 +437,6 @@ export default function AboutAdminTab({
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            data-testid={`button-delete-principle-${principle.id}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-white" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Principle?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This will permanently delete "{principle.titleEn}". This action cannot be undone.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => deletePrincipleMutation.mutate(principle.id)}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -495,17 +449,7 @@ export default function AboutAdminTab({
       {/* Similar structure for Showcase Services and Process Steps - keeping it shorter for brevity */}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle>Showcase Services (4 Items)</CardTitle>
-            <Button onClick={() => {
-              setEditingShowcaseService(null);
-              showcaseServiceForm.reset();
-              setIsShowcaseServiceDialogOpen(true);
-            }} data-testid="button-add-showcase-service">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Service
-            </Button>
-          </div>
+          <CardTitle>Showcase Services (4 Items - Fixed)</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">Showcase Services: {aboutShowcaseServices.length} items</p>
@@ -514,17 +458,7 @@ export default function AboutAdminTab({
 
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle>Process Steps (4 Items)</CardTitle>
-            <Button onClick={() => {
-              setEditingProcessStep(null);
-              processStepForm.reset();
-              setIsProcessStepDialogOpen(true);
-            }} data-testid="button-add-process-step">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Step
-            </Button>
-          </div>
+          <CardTitle>Process Steps (4 Items - Fixed)</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">Process Steps: {aboutProcessSteps.length} items</p>
