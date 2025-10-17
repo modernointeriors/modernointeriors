@@ -16,6 +16,7 @@ import 'swiper/css/effect-fade';
 export default function About() {
   const { language, t } = useLanguage();
   const [progressKey, setProgressKey] = useState(0);
+  const [selectedMember, setSelectedMember] = useState<number | null>(null);
 
   // Fetch projects for hero slider
   const { data: projects = [] } = useQuery<Project[]>({
@@ -493,31 +494,84 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member) => (
-                <div key={member.id} className="space-y-4">
-                  {member.image && (
-                    <div className="aspect-square overflow-hidden bg-white/10">
-                      <img 
-                        src={member.image} 
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="space-y-2">
-                    <h4 className="text-xl font-light text-white">{member.name}</h4>
-                    <p className="text-sm text-white/60 uppercase tracking-wider">
+            <div className="flex flex-col md:flex-row gap-8">
+              {/* Left side - Names Column */}
+              <div className="md:w-1/3 space-y-0 border-l border-white/10">
+                {teamMembers.map((member, index) => (
+                  <button
+                    key={member.id}
+                    onClick={() => setSelectedMember(selectedMember === index ? null : index)}
+                    className={`w-full text-left px-6 py-6 border-b border-white/10 transition-all duration-300 ${
+                      selectedMember === index 
+                        ? 'bg-white/5 border-l-2 border-l-primary' 
+                        : 'hover:bg-white/5 border-l-2 border-l-transparent'
+                    }`}
+                    data-testid={`button-team-member-${member.id}`}
+                  >
+                    <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                      {member.name}
+                    </h4>
+                    <p className="text-sm text-white/60 uppercase tracking-wider mt-2">
                       {language === "vi" ? member.positionVi : member.positionEn}
                     </p>
-                    {member.bioEn && member.bioVi && (
-                      <p className="text-sm text-white/70 font-light leading-relaxed">
-                        {language === "vi" ? member.bioVi : member.bioEn}
-                      </p>
+                  </button>
+                ))}
+              </div>
+
+              {/* Right side - Details */}
+              <div className="md:w-2/3 min-h-[500px] relative">
+                {selectedMember !== null && teamMembers[selectedMember] && (
+                  <div className="flex gap-8 animate-in fade-in duration-500">
+                    {/* Portrait Image - 9:16 ratio */}
+                    {teamMembers[selectedMember].image && (
+                      <div className="w-1/3 flex-shrink-0">
+                        <div className="aspect-[9/16] overflow-hidden bg-white/10">
+                          <img 
+                            src={teamMembers[selectedMember].image} 
+                            alt={teamMembers[selectedMember].name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
                     )}
+                    
+                    {/* Bio and Details */}
+                    <div className="flex-1 space-y-6">
+                      <div>
+                        <h4 className="text-2xl font-light text-white mb-2">
+                          {teamMembers[selectedMember].name}
+                        </h4>
+                        <p className="text-sm text-white/60 uppercase tracking-wider">
+                          {language === "vi" 
+                            ? teamMembers[selectedMember].positionVi 
+                            : teamMembers[selectedMember].positionEn
+                          }
+                        </p>
+                      </div>
+                      
+                      {teamMembers[selectedMember].bioEn && teamMembers[selectedMember].bioVi && (
+                        <p className="text-white/70 font-light leading-relaxed text-justify">
+                          {language === "vi" 
+                            ? teamMembers[selectedMember].bioVi 
+                            : teamMembers[selectedMember].bioEn
+                          }
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                )}
+
+                {selectedMember === null && (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-white/40 font-light text-lg">
+                      {language === "vi" 
+                        ? "Chọn một thành viên để xem chi tiết" 
+                        : "Select a team member to view details"
+                      }
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>
