@@ -647,7 +647,7 @@ export default function Home() {
                           </p>
                           {project.area && (
                             <p className="text-white/60 text-xs" data-testid={`text-area-${project.id}`}>
-                              {project.area}m²
+                              {project.area}
                             </p>
                           )}
                         </div>

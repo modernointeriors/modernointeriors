@@ -36,7 +36,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </p>
             {project.area && (
               <p className="text-white/60 text-xs" data-testid={`text-area-${project.id}`}>
-                {project.area}m²
+                {project.area}
               </p>
             )}
           </div>
