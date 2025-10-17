@@ -10,7 +10,7 @@ export default function About() {
   return (
     <main className="ml-16 pb-8 md:pb-6 mb-4">
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[600px] bg-black overflow-hidden">
+      <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-16">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -57,7 +57,7 @@ export default function About() {
       </section>
 
       {/* Principles Section */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-black -ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -212,7 +212,7 @@ export default function About() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-black -ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center space-y-2">
@@ -244,7 +244,7 @@ export default function About() {
       </section>
 
       {/* Our Approach Section */}
-      <section className="py-20 bg-black border-t border-white/10">
+      <section className="py-20 bg-black border-t border-white/10 -ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16">
             <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -319,7 +319,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-black border-t border-white/10">
+      <section className="py-20 bg-black border-t border-white/10 -ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-8 uppercase tracking-wide">
             {language === "vi"
