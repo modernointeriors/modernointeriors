@@ -494,7 +494,7 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="flex gap-0 items-start">
+            <div className="flex gap-0 items-start justify-center">
               {teamMembers.map((member, index) => {
                 const isExpanded = selectedMember === index;
                 const nameChars = member.name.toUpperCase().split('');
@@ -543,7 +543,7 @@ export default function About() {
                           )}
 
                           {/* Details */}
-                          <div className="flex-1 space-y-4">
+                          <div className="flex-1 space-y-6">
                             <div>
                               <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">
                                 {member.name}
@@ -557,6 +557,28 @@ export default function About() {
                               <p className="text-white/70 font-light leading-relaxed text-justify">
                                 {language === "vi" ? member.bioVi : member.bioEn}
                               </p>
+                            )}
+
+                            {member.achievementsEn && member.achievementsVi && (
+                              <div className="space-y-2">
+                                <h5 className="text-sm font-light text-white/80 uppercase tracking-wider">
+                                  {language === "vi" ? "Thành tựu" : "Achievements"}
+                                </h5>
+                                <p className="text-white/70 font-light leading-relaxed text-justify">
+                                  {language === "vi" ? member.achievementsVi : member.achievementsEn}
+                                </p>
+                              </div>
+                            )}
+
+                            {member.philosophyEn && member.philosophyVi && (
+                              <div className="space-y-2">
+                                <h5 className="text-sm font-light text-white/80 uppercase tracking-wider">
+                                  {language === "vi" ? "Triết lý" : "Philosophy"}
+                                </h5>
+                                <p className="text-white/70 font-light leading-relaxed text-justify">
+                                  {language === "vi" ? member.philosophyVi : member.philosophyEn}
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
