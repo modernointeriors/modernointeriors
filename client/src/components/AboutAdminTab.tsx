@@ -8,33 +8,45 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
-import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep } from "@shared/schema";
-import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema } from "@shared/schema";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
+import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 
 interface AboutAdminTabProps {
   aboutContent?: AboutPageContent;
   aboutPrinciples: AboutPrinciple[];
   aboutShowcaseServices: AboutShowcaseService[];
   aboutProcessSteps: AboutProcessStep[];
+  aboutTeamMembers: AboutTeamMember[];
   aboutContentLoading: boolean;
   aboutPrinciplesLoading: boolean;
   aboutShowcaseServicesLoading: boolean;
   aboutProcessStepsLoading: boolean;
+  aboutTeamMembersLoading: boolean;
   onAboutContentSubmit: (data: InsertAboutPageContent) => Promise<void>;
   onPrincipleSubmit: (data: InsertAboutPrinciple) => Promise<void>;
   onShowcaseServiceSubmit: (data: InsertAboutShowcaseService) => Promise<void>;
   onProcessStepSubmit: (data: InsertAboutProcessStep) => Promise<void>;
+  onTeamMemberSubmit: (data: InsertAboutTeamMember) => Promise<void>;
   updatePrincipleMutation: any;
   deletePrincipleMutation: any;
   updateShowcaseServiceMutation: any;
   deleteShowcaseServiceMutation: any;
   updateProcessStepMutation: any;
   deleteProcessStepMutation: any;
+  updateTeamMemberMutation: any;
+  deleteTeamMemberMutation: any;
   updateAboutContentMutation: any;
   showcaseBannerFile: File | null;
   showcaseBannerPreview: string;
   handleShowcaseBannerFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isTeamMemberDialogOpen: boolean;
+  setIsTeamMemberDialogOpen: (open: boolean) => void;
+  editingTeamMember: AboutTeamMember | null;
+  setEditingTeamMember: (member: AboutTeamMember | null) => void;
+  teamMemberForm: any;
 }
 
 export default function AboutAdminTab({
@@ -42,24 +54,34 @@ export default function AboutAdminTab({
   aboutPrinciples,
   aboutShowcaseServices,
   aboutProcessSteps,
+  aboutTeamMembers,
   aboutContentLoading,
   aboutPrinciplesLoading,
   aboutShowcaseServicesLoading,
   aboutProcessStepsLoading,
+  aboutTeamMembersLoading,
   onAboutContentSubmit,
   onPrincipleSubmit,
   onShowcaseServiceSubmit,
   onProcessStepSubmit,
+  onTeamMemberSubmit,
   updatePrincipleMutation,
   deletePrincipleMutation,
   updateShowcaseServiceMutation,
   deleteShowcaseServiceMutation,
   updateProcessStepMutation,
   deleteProcessStepMutation,
+  updateTeamMemberMutation,
+  deleteTeamMemberMutation,
   updateAboutContentMutation,
   showcaseBannerFile,
   showcaseBannerPreview,
   handleShowcaseBannerFileChange,
+  isTeamMemberDialogOpen,
+  setIsTeamMemberDialogOpen,
+  editingTeamMember,
+  setEditingTeamMember,
+  teamMemberForm,
 }: AboutAdminTabProps) {
   
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
@@ -832,6 +854,277 @@ export default function AboutAdminTab({
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Team Members Management */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Team Members</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Dialog open={isTeamMemberDialogOpen} onOpenChange={setIsTeamMemberDialogOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{editingTeamMember ? 'Edit' : 'Add'} Team Member</DialogTitle>
+              </DialogHeader>
+              <Form {...teamMemberForm}>
+                <form onSubmit={teamMemberForm.handleSubmit(onTeamMemberSubmit)} className="space-y-4">
+                  <FormField
+                    control={teamMemberForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Sarah Chen" data-testid="input-team-member-name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="positionEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Position (EN)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Lead Designer" data-testid="input-team-member-position-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="positionVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Position (VI)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Trưởng phòng thiết kế" data-testid="input-team-member-position-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="bioEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bio (EN)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} placeholder="Professional background..." data-testid="textarea-team-member-bio-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="bioVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bio (VI)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} placeholder="Lý lịch chuyên môn..." data-testid="textarea-team-member-bio-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="achievementsEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Achievements (EN)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} placeholder="Awards and accomplishments..." data-testid="textarea-team-member-achievements-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="achievementsVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Achievements (VI)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} placeholder="Giải thưởng và thành tựu..." data-testid="textarea-team-member-achievements-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="philosophyEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Philosophy (EN)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} placeholder="Design philosophy..." data-testid="textarea-team-member-philosophy-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={teamMemberForm.control}
+                      name="philosophyVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Philosophy (VI)</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={3} placeholder="Triết lý thiết kế..." data-testid="textarea-team-member-philosophy-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={teamMemberForm.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Image URL</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="https://images.unsplash.com/..." data-testid="input-team-member-image" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={teamMemberForm.control}
+                    name="order"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Display Order</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value))} data-testid="input-team-member-order" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full" data-testid="button-submit-team-member">
+                    {editingTeamMember ? 'Update' : 'Add'} Team Member
+                  </Button>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+          
+          <div className="mb-4">
+            <Button 
+              onClick={() => {
+                setEditingTeamMember(null);
+                teamMemberForm.reset({
+                  name: "",
+                  positionEn: "",
+                  positionVi: "",
+                  bioEn: "",
+                  bioVi: "",
+                  achievementsEn: "",
+                  achievementsVi: "",
+                  philosophyEn: "",
+                  philosophyVi: "",
+                  image: "",
+                  order: 0,
+                });
+                setIsTeamMemberDialogOpen(true);
+              }}
+              data-testid="button-add-team-member"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Team Member
+            </Button>
+          </div>
+
+          {aboutTeamMembersLoading ? (
+            <div className="space-y-2">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-16 bg-muted rounded animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Position (EN)</TableHead>
+                  <TableHead>Position (VI)</TableHead>
+                  <TableHead>Order</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {aboutTeamMembers.map((member) => (
+                  <TableRow key={member.id}>
+                    <TableCell className="font-medium">{member.name}</TableCell>
+                    <TableCell>{member.positionEn}</TableCell>
+                    <TableCell>{member.positionVi}</TableCell>
+                    <TableCell>{member.order}</TableCell>
+                    <TableCell>
+                      <Badge variant={member.active ? "default" : "secondary"}>
+                        {member.active ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setEditingTeamMember(member);
+                          teamMemberForm.reset(member);
+                          setIsTeamMemberDialogOpen(true);
+                        }}
+                        data-testid={`button-edit-team-member-${member.id}`}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="outline" size="sm" data-testid={`button-delete-team-member-${member.id}`}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Team Member</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete {member.name}? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => deleteTeamMemberMutation.mutate(member.id)}>
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </TableCell>
                   </TableRow>
                 ))}

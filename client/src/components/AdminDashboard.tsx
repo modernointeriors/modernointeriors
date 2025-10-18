@@ -20,8 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep } from "@shared/schema";
-import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
+import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AboutAdminTab from "@/components/AboutAdminTab";
 
@@ -341,6 +341,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [editingShowcaseService, setEditingShowcaseService] = useState<AboutShowcaseService | null>(null);
   const [isProcessStepDialogOpen, setIsProcessStepDialogOpen] = useState(false);
   const [editingProcessStep, setEditingProcessStep] = useState<AboutProcessStep | null>(null);
+  const [isTeamMemberDialogOpen, setIsTeamMemberDialogOpen] = useState(false);
+  const [editingTeamMember, setEditingTeamMember] = useState<AboutTeamMember | null>(null);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -415,6 +417,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: aboutProcessSteps = [], isLoading: aboutProcessStepsLoading } = useQuery<AboutProcessStep[]>({
     queryKey: ['/api/about-process-steps'],
+  });
+
+  const { data: aboutTeamMembers = [], isLoading: aboutTeamMembersLoading } = useQuery<AboutTeamMember[]>({
+    queryKey: ['/api/about-team-members'],
   });
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery<any[]>({
@@ -722,6 +728,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       titleVi: "",
       descriptionEn: "",
       descriptionVi: "",
+      order: 0,
+    },
+  });
+
+  const teamMemberForm = useForm<InsertAboutTeamMember>({
+    resolver: zodResolver(insertAboutTeamMemberSchema),
+    defaultValues: {
+      name: "",
+      positionEn: "",
+      positionVi: "",
+      bioEn: "",
+      bioVi: "",
+      achievementsEn: "",
+      achievementsVi: "",
+      philosophyEn: "",
+      philosophyVi: "",
+      image: "",
       order: 0,
     },
   });
@@ -1309,6 +1332,42 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
       toast({ title: "Process step deleted successfully" });
+    },
+  });
+
+  const createTeamMemberMutation = useMutation({
+    mutationFn: async (data: InsertAboutTeamMember) => {
+      const response = await apiRequest('POST', '/api/about-team-members', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-team-members'] });
+      toast({ title: "Team member created successfully" });
+      setIsTeamMemberDialogOpen(false);
+      teamMemberForm.reset();
+    },
+  });
+
+  const updateTeamMemberMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAboutTeamMember> }) => {
+      const response = await apiRequest('PUT', `/api/about-team-members/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-team-members'] });
+      toast({ title: "Team member updated successfully" });
+      setIsTeamMemberDialogOpen(false);
+      setEditingTeamMember(null);
+    },
+  });
+
+  const deleteTeamMemberMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/about-team-members/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/about-team-members'] });
+      toast({ title: "Team member deleted successfully" });
     },
   });
 
@@ -2095,6 +2154,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       await updateProcessStepMutation.mutateAsync({ id: editingProcessStep.id, data });
     } else {
       await createProcessStepMutation.mutateAsync(data);
+    }
+  };
+
+  const onTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
+    if (editingTeamMember) {
+      await updateTeamMemberMutation.mutateAsync({ id: editingTeamMember.id, data });
+    } else {
+      await createTeamMemberMutation.mutateAsync(data);
     }
   };
 
@@ -4152,24 +4219,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           aboutPrinciples={aboutPrinciples}
           aboutShowcaseServices={aboutShowcaseServices}
           aboutProcessSteps={aboutProcessSteps}
+          aboutTeamMembers={aboutTeamMembers}
           aboutContentLoading={aboutContentLoading}
           aboutPrinciplesLoading={aboutPrinciplesLoading}
           aboutShowcaseServicesLoading={aboutShowcaseServicesLoading}
           aboutProcessStepsLoading={aboutProcessStepsLoading}
+          aboutTeamMembersLoading={aboutTeamMembersLoading}
           onAboutContentSubmit={onAboutContentSubmit}
           onPrincipleSubmit={onPrincipleSubmit}
           onShowcaseServiceSubmit={onShowcaseServiceSubmit}
           onProcessStepSubmit={onProcessStepSubmit}
+          onTeamMemberSubmit={onTeamMemberSubmit}
           updatePrincipleMutation={updatePrincipleMutation}
           deletePrincipleMutation={deletePrincipleMutation}
           updateShowcaseServiceMutation={updateShowcaseServiceMutation}
           deleteShowcaseServiceMutation={deleteShowcaseServiceMutation}
           updateProcessStepMutation={updateProcessStepMutation}
           deleteProcessStepMutation={deleteProcessStepMutation}
+          updateTeamMemberMutation={updateTeamMemberMutation}
+          deleteTeamMemberMutation={deleteTeamMemberMutation}
           updateAboutContentMutation={updateAboutContentMutation}
           showcaseBannerFile={showcaseBannerFile}
           showcaseBannerPreview={showcaseBannerPreview}
           handleShowcaseBannerFileChange={handleShowcaseBannerFileChange}
+          isTeamMemberDialogOpen={isTeamMemberDialogOpen}
+          setIsTeamMemberDialogOpen={setIsTeamMemberDialogOpen}
+          editingTeamMember={editingTeamMember}
+          setEditingTeamMember={setEditingTeamMember}
+          teamMemberForm={teamMemberForm}
         />
       </div>
     );
