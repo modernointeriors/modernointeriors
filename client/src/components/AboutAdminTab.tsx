@@ -1075,7 +1075,7 @@ export default function AboutAdminTab({
                   <TableHead>Position (EN)</TableHead>
                   <TableHead>Position (VI)</TableHead>
                   <TableHead>Order</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Image</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -1087,9 +1087,18 @@ export default function AboutAdminTab({
                     <TableCell>{member.positionVi}</TableCell>
                     <TableCell>{member.order}</TableCell>
                     <TableCell>
-                      <Badge variant={member.active ? "default" : "secondary"}>
-                        {member.active ? "Active" : "Inactive"}
-                      </Badge>
+                      {member.image ? (
+                        <img 
+                          src={member.image} 
+                          alt={member.name}
+                          className="h-12 w-12 rounded object-cover"
+                          data-testid={`img-team-member-${member.id}`}
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded bg-muted flex items-center justify-center text-xs text-muted-foreground">
+                          No Image
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell className="text-right space-x-2">
                       <Button
