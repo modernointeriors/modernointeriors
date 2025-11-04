@@ -44,6 +44,8 @@ interface AboutAdminTabProps {
   showcaseBannerFile: File | null;
   showcaseBannerPreview: string;
   handleShowcaseBannerFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  teamMemberImagePreview: string;
+  handleTeamMemberImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isTeamMemberDialogOpen: boolean;
   setIsTeamMemberDialogOpen: (open: boolean) => void;
   editingTeamMember: AboutTeamMember | null;
@@ -79,6 +81,8 @@ export default function AboutAdminTab({
   showcaseBannerFile,
   showcaseBannerPreview,
   handleShowcaseBannerFileChange,
+  teamMemberImagePreview,
+  handleTeamMemberImageChange,
   isTeamMemberDialogOpen,
   setIsTeamMemberDialogOpen,
   editingTeamMember,
@@ -182,7 +186,8 @@ export default function AboutAdminTab({
   }, [aboutContent]);
 
   const handleEditImage = () => {
-    const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImage;
+    // Prioritize base64 data from DB, then preview, then URL
+    const currentImage = aboutContent?.showcaseBannerImageData || showcaseBannerPreview || aboutContent?.showcaseBannerImage;
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -450,11 +455,11 @@ export default function AboutAdminTab({
             <CardContent>
               <div>
                 <div className="relative">
-                  {(showcaseBannerPreview || aboutContent?.showcaseBannerImage) ? (
+                  {(aboutContent?.showcaseBannerImageData || showcaseBannerPreview || aboutContent?.showcaseBannerImage) ? (
                     <div className="relative group">
                       <div className="border bg-muted overflow-hidden">
                         <img 
-                          src={showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
+                          src={aboutContent?.showcaseBannerImageData || showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
                           alt="Showcase Banner Preview" 
                           className="w-full aspect-[16/7] object-cover" 
                         />
@@ -1087,23 +1092,24 @@ export default function AboutAdminTab({
                       )}
                     />
                   </div>
-                  <FormField
-                    control={teamMemberForm.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Image (Max 10MB)</FormLabel>
-                        <FormControl>
-                          <ImageUpload
-                            value={field.value ? [field.value] : []}
-                            onChange={(urls) => field.onChange(urls[0] || "")}
-                            multiple={false}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Image (Max 10MB)</label>
+                    {(teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image) && (
+                      <div className="border bg-muted overflow-hidden mb-2">
+                        <img 
+                          src={teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image || ''} 
+                          alt="Team Member Preview" 
+                          className="w-full max-w-md aspect-square object-cover"
+                        />
+                      </div>
                     )}
-                  />
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleTeamMemberImageChange}
+                      data-testid="input-team-member-image"
+                    />
+                  </div>
                   <FormField
                     control={teamMemberForm.control}
                     name="order"
@@ -1177,9 +1183,9 @@ export default function AboutAdminTab({
                     <TableCell>{member.positionVi}</TableCell>
                     <TableCell>{member.order}</TableCell>
                     <TableCell>
-                      {member.image ? (
+                      {(member.imageData || member.image) ? (
                         <img 
-                          src={member.image} 
+                          src={member.imageData || member.image} 
                           alt={member.name}
                           className="h-12 w-12 rounded object-cover"
                           data-testid={`img-team-member-${member.id}`}

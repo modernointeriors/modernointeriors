@@ -342,6 +342,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // About Page states
   const [showcaseBannerFile, setShowcaseBannerFile] = useState<File | null>(null);
   const [showcaseBannerPreview, setShowcaseBannerPreview] = useState<string>('');
+  const [teamMemberImageFile, setTeamMemberImageFile] = useState<File | null>(null);
+  const [teamMemberImagePreview, setTeamMemberImagePreview] = useState<string>('');
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
   const [editingPrinciple, setEditingPrinciple] = useState<AboutPrinciple | null>(null);
   const [isShowcaseServiceDialogOpen, setIsShowcaseServiceDialogOpen] = useState(false);
@@ -2254,7 +2256,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const onAboutContentSubmit = async (data: InsertAboutPageContent) => {
     const submitData = { ...data };
     if (showcaseBannerPreview) {
-      submitData.showcaseBannerImage = showcaseBannerPreview;
+      // Save base64 data to imageData field
+      submitData.showcaseBannerImageData = showcaseBannerPreview;
+      submitData.showcaseBannerImage = ''; // Clear URL since we're using base64
     }
     await updateAboutContentMutation.mutateAsync(submitData);
   };
@@ -2283,12 +2287,50 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     }
   };
 
-  const onTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
-    if (editingTeamMember) {
-      await updateTeamMemberMutation.mutateAsync({ id: editingTeamMember.id, data });
-    } else {
-      await createTeamMemberMutation.mutateAsync(data);
+  const handleTeamMemberImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File too large",
+          description: `File size: ${fileSizeMB}MB. Maximum: ${maxSizeMB}MB. Please select a smaller file.`,
+          variant: "destructive"
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setTeamMemberImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setTeamMemberImagePreview(base64);
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const onTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
+    const submitData = { ...data };
+    if (teamMemberImagePreview) {
+      // Save base64 data to imageData field
+      submitData.imageData = teamMemberImagePreview;
+      submitData.image = ''; // Clear URL since we're using base64
+    }
+    
+    if (editingTeamMember) {
+      await updateTeamMemberMutation.mutateAsync({ id: editingTeamMember.id, data: submitData });
+    } else {
+      await createTeamMemberMutation.mutateAsync(submitData);
+    }
+    
+    // Clear image preview after submit
+    setTeamMemberImagePreview('');
+    setTeamMemberImageFile(null);
   };
 
   const handleEditTransaction = (transaction: any) => {
@@ -4448,6 +4490,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           showcaseBannerFile={showcaseBannerFile}
           showcaseBannerPreview={showcaseBannerPreview}
           handleShowcaseBannerFileChange={handleShowcaseBannerFileChange}
+          teamMemberImagePreview={teamMemberImagePreview}
+          handleTeamMemberImageChange={handleTeamMemberImageChange}
           isTeamMemberDialogOpen={isTeamMemberDialogOpen}
           setIsTeamMemberDialogOpen={setIsTeamMemberDialogOpen}
           editingTeamMember={editingTeamMember}

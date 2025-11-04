@@ -554,6 +554,7 @@ export const aboutPageContent = pgTable("about_page_content", {
   principlesTitleVi: text("principles_title_vi").notNull().default("NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI"),
   // Architecture Showcase Section
   showcaseBannerImage: text("showcase_banner_image").notNull().default(""),
+  showcaseBannerImageData: text("showcase_banner_image_data"), // Base64 encoded banner image
   // Stats Section (4 stats)
   statsProjectsValue: text("stats_projects_value").notNull().default("150+"),
   statsProjectsLabelEn: text("stats_projects_label_en").notNull().default("Projects Completed"),
@@ -662,6 +663,7 @@ export const aboutTeamMembers = pgTable("about_team_members", {
   philosophyEn: text("philosophy_en"),
   philosophyVi: text("philosophy_vi"),
   image: text("image").notNull().default(""),
+  imageData: text("image_data"), // Base64 encoded team member image
   order: integer("order").notNull().default(0),
   active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
