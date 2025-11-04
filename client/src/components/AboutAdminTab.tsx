@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2, Upload } from "lucide-react";
 import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
 import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import ImageUpload from "@/components/ImageUpload";
@@ -403,34 +403,65 @@ export default function AboutAdminTab({
             </CardHeader>
             <CardContent>
               <div>
-                <label className="text-sm font-medium mb-2 block">Upload Banner Image</label>
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png"
-                  onChange={handleShowcaseBannerFileChange}
-                  className="block w-full text-sm text-foreground
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-none file:border-0
-                    file:text-sm file:font-medium
-                    file:bg-white file:text-black
-                    hover:file:bg-white/90 cursor-pointer"
-                  data-testid="input-showcase-banner-file"
-                />
+                <div className="relative">
+                  {(showcaseBannerPreview || aboutContent?.showcaseBannerImage) ? (
+                    <div className="relative group">
+                      <div className="border bg-muted overflow-hidden">
+                        <img 
+                          src={showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
+                          alt="Showcase Banner Preview" 
+                          className="w-full aspect-[16/7] object-cover" 
+                        />
+                      </div>
+                      <label 
+                        htmlFor="showcase-banner-upload" 
+                        className="absolute top-4 right-4 bg-white text-black px-4 py-2 cursor-pointer hover:bg-white/90 transition-all shadow-lg flex items-center gap-2 group-hover:scale-105"
+                        data-testid="button-change-showcase-banner"
+                      >
+                        <Pencil className="h-4 w-4" />
+                        <span className="text-sm font-medium">Change Image</span>
+                      </label>
+                      <input
+                        id="showcase-banner-upload"
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={handleShowcaseBannerFileChange}
+                        className="hidden"
+                        data-testid="input-showcase-banner-file"
+                      />
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-muted-foreground/25 p-12 text-center">
+                      <label htmlFor="showcase-banner-upload-initial" className="cursor-pointer">
+                        <div className="flex flex-col items-center gap-4">
+                          <div className="p-4 rounded-full bg-muted">
+                            <Upload className="h-8 w-8 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium mb-1">Upload Banner Image</p>
+                            <p className="text-xs text-muted-foreground">
+                              PNG, JPG • Max 10MB • Recommended: 1920x800px
+                            </p>
+                          </div>
+                          <Button type="button" variant="outline" className="bg-white text-black hover:bg-white/90">
+                            Choose File
+                          </Button>
+                        </div>
+                      </label>
+                      <input
+                        id="showcase-banner-upload-initial"
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={handleShowcaseBannerFileChange}
+                        className="hidden"
+                        data-testid="input-showcase-banner-file-initial"
+                      />
+                    </div>
+                  )}
+                </div>
                 <p className="text-xs text-muted-foreground mt-2">
                   Format: PNG, JPG • Max: 10MB • Recommended: 1920x800px
                 </p>
-                {(showcaseBannerPreview || aboutContent?.showcaseBannerImage) && (
-                  <div className="mt-4">
-                    <p className="text-sm font-medium mb-2">Preview:</p>
-                    <div className="border p-4 bg-muted">
-                      <img 
-                        src={showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
-                        alt="Showcase Banner Preview" 
-                        className="w-full aspect-[16/7] object-cover" 
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>
