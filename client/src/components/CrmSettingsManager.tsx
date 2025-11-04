@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Pencil, Trash2, Plus, Settings } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
 import type { CrmPipelineStage, CrmCustomerTier, CrmStatus } from "@shared/schema";
 import { insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema } from "@shared/schema";
 import { z } from "zod";
@@ -25,7 +24,6 @@ export default function CrmSettingsManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
-  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
   const [isStageDialogOpen, setIsStageDialogOpen] = useState(false);
   const [isTierDialogOpen, setIsTierDialogOpen] = useState(false);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
@@ -207,26 +205,8 @@ export default function CrmSettingsManager() {
   };
 
   return (
-    <div className="mt-8">
-      <Card className="bg-black border-white/10 rounded-none">
-        <CardHeader 
-          className="cursor-pointer hover:bg-white/5 transition-colors"
-          onClick={() => setIsSettingsExpanded(!isSettingsExpanded)}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Settings className="h-5 w-5" />
-              <CardTitle className="text-lg">CRM Settings</CardTitle>
-            </div>
-            <span className="text-sm text-muted-foreground">
-              {isSettingsExpanded ? "Click to collapse" : "Click to expand"}
-            </span>
-          </div>
-        </CardHeader>
-        
-        {isSettingsExpanded && (
-          <CardContent>
-            <Tabs defaultValue="stages" className="w-full">
+    <div>
+      <Tabs defaultValue="stages" className="w-full">
               <TabsList className="grid w-full grid-cols-3 bg-black border border-white/10">
                 <TabsTrigger value="stages">Pipeline Stages</TabsTrigger>
                 <TabsTrigger value="tiers">Customer Tiers</TabsTrigger>
@@ -827,9 +807,6 @@ export default function CrmSettingsManager() {
                 </Table>
               </TabsContent>
             </Tabs>
-          </CardContent>
-        )}
-      </Card>
     </div>
   );
 }
