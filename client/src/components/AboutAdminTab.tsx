@@ -484,9 +484,6 @@ export default function AboutAdminTab({
                     <div className="border-2 border-dashed border-muted-foreground/25 p-12 text-center">
                       <label htmlFor="showcase-banner-upload-initial" className="cursor-pointer">
                         <div className="flex flex-col items-center gap-4">
-                          <div className="p-4 rounded-full bg-muted">
-                            <Upload className="h-8 w-8 text-muted-foreground" />
-                          </div>
                           <div>
                             <p className="text-sm font-medium mb-1">Upload Banner Image</p>
                             <p className="text-xs text-muted-foreground">

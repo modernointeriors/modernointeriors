@@ -202,10 +202,6 @@ export default function ImageUpload({
           data-testid="image-upload-area"
         >
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-              <Upload className="h-8 w-8 text-muted-foreground" />
-            </div>
-            
             <h3 className="text-lg font-light mb-2">
               {uploading ? "Uploading..." : "Upload Images"}
             </h3>
@@ -231,7 +227,6 @@ export default function ImageUpload({
               data-testid="button-browse-images"
             >
               <label htmlFor="file-upload" className="cursor-pointer">
-                <ImageIcon className="mr-2 h-4 w-4" />
                 {uploading ? "Uploading..." : "Browse Images"}
               </label>
             </Button>
