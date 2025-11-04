@@ -3844,7 +3844,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </Form>
             </DialogContent>
           </Dialog>
-        </div>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
