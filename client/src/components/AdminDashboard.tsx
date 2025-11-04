@@ -492,6 +492,25 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     }
   }, [clients.length, currentPage, totalPages]);
 
+  // Helper function to calculate total spending for a client
+  const calculateClientTotalSpending = (clientId: string) => {
+    return allTransactions
+      .filter((t: any) => t.clientId === clientId && t.status === "completed")
+      .reduce((sum: number, t: any) => {
+        const amount = parseFloat(t.amount || "0");
+        if (t.type === "payment") return sum + amount;
+        if (t.type === "refund") return sum - amount;
+        return sum;
+      }, 0);
+  };
+
+  // Helper function to calculate commission for a client
+  const calculateClientCommission = (clientId: string) => {
+    return allTransactions
+      .filter((t: any) => t.clientId === clientId && t.status === "completed" && t.type === "commission")
+      .reduce((sum: number, t: any) => sum + parseFloat(t.amount || "0"), 0);
+  };
+
   // Forms
   const projectForm = useForm<BilingualProjectFormData>({
     resolver: zodResolver(bilingualProjectSchema),
@@ -3571,7 +3590,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Total Revenue</label>
                         <p className="text-base mt-1 font-semibold">
-                          {viewingClient.totalSpending ? `${parseFloat(String(viewingClient.totalSpending)).toLocaleString('vi-VN')} đ` : "0 đ"}
+                          {calculateClientTotalSpending(viewingClient.id).toLocaleString('vi-VN')} đ
+                        </p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Hoa hồng</label>
+                        <p className="text-base mt-1 font-semibold">
+                          {calculateClientCommission(viewingClient.id).toLocaleString('vi-VN')} đ
                         </p>
                       </div>
                       <div>
@@ -4003,10 +4028,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </TableCell>
                           <TableCell className="align-middle">
                             <div className="text-sm whitespace-nowrap">
-                              {client.totalSpending ? `${parseFloat(client.totalSpending).toLocaleString('vi-VN')} đ` : "0 đ"}
+                              {calculateClientTotalSpending(client.id).toLocaleString('vi-VN')} đ
                             </div>
                             <div className="text-xs text-muted-foreground mt-1 whitespace-nowrap">
-                              {client.commission ? `${parseFloat(client.commission).toLocaleString('vi-VN')} đ` : "0 đ"}
+                              {calculateClientCommission(client.id).toLocaleString('vi-VN')} đ
                             </div>
                           </TableCell>
                           <TableCell className="align-middle text-center">
