@@ -1,9 +1,10 @@
 import { useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { X, Upload, Image as ImageIcon } from "lucide-react";
+import { X, Upload, Image as ImageIcon, Edit } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
+import ImageCropDialog from "@/components/ImageCropDialog";
 
 interface ImageMetadata {
   url: string;
@@ -28,6 +29,9 @@ export default function ImageUpload({
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [imageMetadata, setImageMetadata] = useState<Map<string, ImageMetadata>>(new Map());
+  const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string>("");
+  const [cropImageIndex, setCropImageIndex] = useState<number>(-1);
   const { toast } = useToast();
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
@@ -144,6 +148,36 @@ export default function ImageUpload({
     onChange(newUrls);
   };
 
+  const handleEditImage = (url: string, index: number) => {
+    setImageToCrop(url);
+    setCropImageIndex(index);
+    setIsCropDialogOpen(true);
+  };
+
+  const handleCropComplete = async (croppedBlob: Blob) => {
+    try {
+      const file = new File([croppedBlob], `cropped-${Date.now()}.jpg`, { type: 'image/jpeg' });
+      const metadata = await uploadImage(file);
+      
+      const newMetadata = new Map(imageMetadata);
+      newMetadata.set(metadata.url, metadata);
+      setImageMetadata(newMetadata);
+
+      const newUrls = [...value];
+      newUrls[cropImageIndex] = metadata.url;
+      onChange(newUrls);
+      
+      setIsCropDialogOpen(false);
+      toast({ title: "Image cropped successfully" });
+    } catch (error) {
+      toast({
+        title: "Crop failed",
+        description: error instanceof Error ? error.message : "Failed to crop image",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleFileSelect(e.target.files);
   };
@@ -233,15 +267,22 @@ export default function ImageUpload({
                       sizes="200px"
                     />
                     
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="absolute top-2 right-2 flex gap-1">
                       <Button
                         size="sm"
-                        variant="destructive"
+                        onClick={() => handleEditImage(url, index)}
+                        className="h-7 w-7 p-0 bg-white text-black hover:bg-white/90 shadow-lg"
+                        data-testid={`button-edit-image-${index}`}
+                      >
+                        <Edit className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="sm"
                         onClick={() => removeImage(index)}
-                        className="h-8 w-8 p-0"
+                        className="h-7 w-7 p-0 bg-white text-black hover:bg-white/90 shadow-lg"
                         data-testid={`button-remove-image-${index}`}
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                     
@@ -278,6 +319,15 @@ export default function ImageUpload({
         <p>• Recommended dimensions: 1200x800px or higher</p>
         {multiple && <p>• You can upload up to {maxImages} images</p>}
       </div>
+
+      {/* Image Crop Dialog */}
+      <ImageCropDialog
+        open={isCropDialogOpen}
+        onClose={() => setIsCropDialogOpen(false)}
+        imageSrc={imageToCrop}
+        onCropComplete={handleCropComplete}
+        aspectRatio={1}
+      />
     </div>
   );
 }
