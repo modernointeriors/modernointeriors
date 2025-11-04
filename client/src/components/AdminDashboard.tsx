@@ -2396,7 +2396,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         {formatDate(inquiry.createdAt)} • {inquiry.projectType}
                       </p>
                     </div>
-                    <Badge variant={inquiry.status === 'new' ? 'default' : 'secondary'}>
+                    <Badge variant={inquiry.status === 'new' ? 'default' : 'secondary'} className="text-sm px-3 py-1">
                       {inquiry.status}
                     </Badge>
                   </div>
