@@ -119,7 +119,6 @@ export default function OptimizedImage({
       {hasError && (
         <div className="absolute inset-0 bg-black flex items-center justify-center text-gray-400">
           <div className="text-center">
-            <div className="text-2xl mb-2">📷</div>
             <div className="text-sm">Image unavailable</div>
           </div>
         </div>
