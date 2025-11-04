@@ -155,6 +155,8 @@ export default function ImageUpload({
   };
 
   const handleCropComplete = async (croppedBlob: Blob) => {
+    setIsCropDialogOpen(false);
+    
     try {
       const file = new File([croppedBlob], `cropped-${Date.now()}.jpg`, { type: 'image/jpeg' });
       const metadata = await uploadImage(file);
@@ -167,7 +169,6 @@ export default function ImageUpload({
       newUrls[cropImageIndex] = metadata.url;
       onChange(newUrls);
       
-      setIsCropDialogOpen(false);
       toast({ title: "Image cropped successfully" });
     } catch (error) {
       toast({

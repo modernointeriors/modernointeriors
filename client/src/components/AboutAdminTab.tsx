@@ -183,6 +183,8 @@ export default function AboutAdminTab({
   };
 
   const handleCropComplete = (croppedBlob: Blob) => {
+    setIsCropDialogOpen(false);
+    
     const file = new File([croppedBlob], `banner-${Date.now()}.jpg`, { type: 'image/jpeg' });
     setCroppedImageFile(file);
     
@@ -193,7 +195,6 @@ export default function AboutAdminTab({
     } as unknown as React.ChangeEvent<HTMLInputElement>;
     
     handleShowcaseBannerFileChange(syntheticEvent);
-    setIsCropDialogOpen(false);
   };
 
   const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

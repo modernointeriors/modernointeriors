@@ -30,6 +30,7 @@ export default function ImageCropDialog({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const onCropCompleteHandler = useCallback(
     (croppedArea: CropArea, croppedAreaPixels: CropArea) => {
@@ -86,14 +87,15 @@ export default function ImageCropDialog({
   };
 
   const handleSave = async () => {
-    if (!croppedAreaPixels) return;
+    if (!croppedAreaPixels || isSaving) return;
 
+    setIsSaving(true);
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       onCropComplete(croppedImage);
-      onClose();
     } catch (error) {
       console.error('Error cropping image:', error);
+      setIsSaving(false);
     }
   };
 
@@ -141,16 +143,18 @@ export default function ImageCropDialog({
           <Button
             variant="outline"
             onClick={onClose}
+            disabled={isSaving}
             data-testid="button-cancel-crop"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSave}
+            disabled={isSaving}
             className="bg-white text-black hover:bg-white/90"
             data-testid="button-save-crop"
           >
-            Save Changes
+            {isSaving ? "Saving..." : "Save Changes"}
           </Button>
         </DialogFooter>
       </DialogContent>
