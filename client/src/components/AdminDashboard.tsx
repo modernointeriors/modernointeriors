@@ -1517,6 +1517,24 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
+  const toggleArticleFeaturedMutation = useMutation({
+    mutationFn: async ({ id, featured }: { id: string; featured: boolean }) => {
+      const response = await apiRequest('PUT', `/api/articles/${id}`, { featured });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
+      toast({ title: "Article featured status updated" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating article",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const createCategoryMutation = useMutation({
     mutationFn: async (data: { name: string; type: string; slug: string }) => {
       const response = await apiRequest('POST', '/api/categories', data);
@@ -5961,27 +5979,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       />
                     </div>
 
-                    <div className="mt-4">
-                      <FormField
-                        control={articleForm.control}
-                        name="featured"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-none border p-4">
-                            <FormControl>
-                              <input
-                                type="checkbox"
-                                checked={field.value}
-                                onChange={field.onChange}
-                                data-testid="checkbox-article-featured"
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Featured Article</FormLabel>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
                   </div>
 
                   {/* SEO Settings Section */}
@@ -6072,7 +6069,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead>Category</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Languages</TableHead>
-                    <TableHead>Featured</TableHead>
                     <TableHead>Published</TableHead>
                     <TableHead>SEO</TableHead>
                     <TableHead>Actions</TableHead>
@@ -6125,9 +6121,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               {hasVi && <Badge variant="outline" className="text-xs">VI</Badge>}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            {displayArticle.featured && <Badge data-testid={`badge-featured-${slug}`}>Featured</Badge>}
-                          </TableCell>
                           <TableCell data-testid={`text-published-${slug}`}>
                             {displayArticle.publishedAt ? formatDate(displayArticle.publishedAt) : '-'}
                           </TableCell>
@@ -6142,13 +6135,32 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <div className="flex space-x-2">
                               <Button
                                 variant="outline"
+                                size="sm"
+                                onClick={async () => {
+                                  // Toggle featured for all versions (en and vi)
+                                  for (const article of articleGroup) {
+                                    await toggleArticleFeaturedMutation.mutateAsync({ 
+                                      id: article.id, 
+                                      featured: !displayArticle.featured 
+                                    });
+                                  }
+                                }}
+                                className={displayArticle.featured ? "bg-yellow-500/20 border-yellow-500 hover:bg-yellow-500/30" : ""}
+                                data-testid={`button-toggle-featured-${slug}`}
+                              >
+                                <Star className={`h-4 w-4 ${displayArticle.featured ? "fill-yellow-500 text-yellow-500" : ""}`} />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => handleEditArticle(displayArticle)}
                                 data-testid={`button-edit-article-${slug}`}
                               >
                                 <Pencil className="h-4 w-4" />
                               </Button>
                               <Button
-                                variant="destructive"
+                                variant="outline"
+                                size="sm"
                                 onClick={async () => {
                                   // Delete all versions (en and vi)
                                   for (const article of articleGroup) {
@@ -6157,7 +6169,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 }}
                                 data-testid={`button-delete-article-${slug}`}
                               >
-                                <Trash2 className="h-4 w-4 text-white" />
+                                <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
                           </TableCell>
