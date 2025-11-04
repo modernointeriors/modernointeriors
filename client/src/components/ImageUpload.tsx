@@ -270,6 +270,7 @@ export default function ImageUpload({
                     
                     <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Button
+                        type="button"
                         size="sm"
                         onClick={() => handleEditImage(url, index)}
                         className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
@@ -278,6 +279,7 @@ export default function ImageUpload({
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
+                        type="button"
                         size="sm"
                         onClick={() => removeImage(index)}
                         className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-red-500/50 shadow-xl transition-all"
