@@ -24,6 +24,7 @@ import type { Project, Client, Inquiry, Service, HomepageContent, Article, Inser
 import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AboutAdminTab from "@/components/AboutAdminTab";
+import CrmSettingsManager from "@/components/CrmSettingsManager";
 
 const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -4125,6 +4126,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             )}
           </CardContent>
         </Card>
+
+        <CrmSettingsManager />
       </div>
     );
   }
