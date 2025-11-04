@@ -868,14 +868,39 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   });
 
   const updateClientMutation = useMutation({
-    mutationFn: async ({ id, ...updates }: { id: string; [key: string]: any }) => {
+    mutationFn: async ({ id, showToast, ...updates }: { id: string; showToast?: boolean; [key: string]: any }) => {
       const response = await apiRequest('PUT', `/api/clients/${id}`, updates);
       return response.json();
     },
-    onSuccess: () => {
+    onMutate: async ({ id, showToast, ...updates }) => {
+      await queryClient.cancelQueries({ queryKey: ['/api/clients'] });
+      const previousClients = queryClient.getQueryData(['/api/clients']);
+      
+      queryClient.setQueryData(['/api/clients'], (old: any) => {
+        if (!old) return old;
+        return old.map((client: any) => 
+          client.id === id ? { ...client, ...updates } : client
+        );
+      });
+      
+      return { previousClients };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousClients) {
+        queryClient.setQueryData(['/api/clients'], context.previousClients);
+      }
+      toast({ 
+        title: "Error updating client", 
+        description: "Failed to update. Please try again.",
+        variant: "destructive" 
+      });
+    },
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['/api/clients'] });
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
-      toast({ title: "Client updated successfully" });
+      if (variables.showToast !== false) {
+        toast({ title: "Client updated successfully" });
+      }
     },
   });
 
