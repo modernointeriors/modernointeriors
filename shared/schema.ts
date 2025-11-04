@@ -592,6 +592,8 @@ export const aboutPageContent = pgTable("about_page_content", {
   // Team Section Title
   teamTitleEn: text("team_title_en").notNull().default("OUR TEAM"),
   teamTitleVi: text("team_title_vi").notNull().default("ĐỘI NGŨ"),
+  teamSubtitleEn: text("team_subtitle_en"),
+  teamSubtitleVi: text("team_subtitle_vi"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
