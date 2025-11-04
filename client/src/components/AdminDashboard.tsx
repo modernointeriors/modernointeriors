@@ -3972,7 +3972,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 value={client.stage || "lead"}
                                 onValueChange={(value) => updateClientMutation.mutate({ 
                                   id: client.id, 
-                                  stage: value as "lead" | "prospect" | "contract" | "delivery" | "aftercare" 
+                                  stage: value as "lead" | "prospect" | "contract" | "delivery" | "aftercare",
+                                  showToast: false
                                 })}
                               >
                                 <SelectTrigger className="w-full" data-testid={`select-client-stage-${client.id}`}>
@@ -3994,7 +3995,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 value={client.tier || "silver"}
                                 onValueChange={(value) => updateClientMutation.mutate({ 
                                   id: client.id, 
-                                  tier: value as "silver" | "gold" | "platinum" | "vip" 
+                                  tier: value as "silver" | "gold" | "platinum" | "vip",
+                                  showToast: false
                                 })}
                               >
                                 <SelectTrigger className="w-full" data-testid={`select-client-tier-${client.id}`}>
@@ -4015,7 +4017,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 value={client.status || "active"}
                                 onValueChange={(value) => updateClientMutation.mutate({ 
                                   id: client.id, 
-                                  status: value as "active" | "inactive" | "archived" 
+                                  status: value as "active" | "inactive" | "archived",
+                                  showToast: false
                                 })}
                               >
                                 <SelectTrigger className="w-full" data-testid={`select-client-status-${client.id}`}>
