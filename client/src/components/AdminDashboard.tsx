@@ -973,9 +973,46 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PUT', `/api/inquiries/${id}`, { status });
       return response.json();
     },
+    onMutate: async ({ id, status }) => {
+      // Optimistic update for instant UI response
+      await queryClient.cancelQueries({ queryKey: ['/api/inquiries'] });
+      const previousInquiries = queryClient.getQueryData(['/api/inquiries']);
+      
+      queryClient.setQueryData(['/api/inquiries'], (old: any[]) =>
+        old.map((inquiry) =>
+          inquiry.id === id ? { ...inquiry, status } : inquiry
+        )
+      );
+      
+      return { previousInquiries };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['/api/inquiries'], context?.previousInquiries);
+      toast({ 
+        title: "Error updating inquiry", 
+        variant: "destructive" 
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
-      toast({ title: "Inquiry updated successfully" });
+    },
+  });
+
+  const deleteInquiryMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/inquiries/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
+      toast({ title: "Inquiry deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting inquiry",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -4286,35 +4323,67 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       </TableCell>
                       <TableCell>{formatDate(inquiry.createdAt)}</TableCell>
                       <TableCell className="text-right">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" data-testid={`button-view-inquiry-${inquiry.id}`}>
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Inquiry Details</DialogTitle>
-                            </DialogHeader>
-                            <div className="space-y-4">
-                              <div>
-                                <h4 className="font-light mb-1">Contact Information</h4>
-                                <p>{inquiry.firstName} {inquiry.lastName}</p>
-                                <p className="text-muted-foreground">{inquiry.email}</p>
-                                {inquiry.phone && <p className="text-muted-foreground">{inquiry.phone}</p>}
+                        <div className="flex justify-end gap-2">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" data-testid={`button-view-inquiry-${inquiry.id}`}>
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Inquiry Details</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="font-light mb-1">Contact Information</h4>
+                                  <p>{inquiry.firstName} {inquiry.lastName}</p>
+                                  <p className="text-muted-foreground">{inquiry.email}</p>
+                                  {inquiry.phone && <p className="text-muted-foreground">{inquiry.phone}</p>}
+                                </div>
+                                <div>
+                                  <h4 className="font-light mb-1">Project Details</h4>
+                                  <p>Type: {inquiry.projectType}</p>
+                                  {inquiry.budget && <p>Budget: {inquiry.budget}</p>}
+                                </div>
+                                <div>
+                                  <h4 className="font-light mb-1">Message</h4>
+                                  <p className="text-muted-foreground">{inquiry.message}</p>
+                                </div>
                               </div>
-                              <div>
-                                <h4 className="font-light mb-1">Project Details</h4>
-                                <p>Type: {inquiry.projectType}</p>
-                                {inquiry.budget && <p>Budget: {inquiry.budget}</p>}
-                              </div>
-                              <div>
-                                <h4 className="font-light mb-1">Message</h4>
-                                <p className="text-muted-foreground">{inquiry.message}</p>
-                              </div>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="outline" size="sm" data-testid={`button-delete-inquiry-${inquiry.id}`}>
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-black/95 backdrop-blur-xl border border-white/20 rounded-none">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Inquiry</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete this inquiry from <strong>{inquiry.firstName} {inquiry.lastName}</strong>?
+                                  <br />
+                                  This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel className="bg-black border-white/30 hover:border-white hover:bg-white/10 rounded-none">
+                                  Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteInquiryMutation.mutate(inquiry.id)}
+                                  className="bg-white hover:bg-white/90 text-black rounded-none"
+                                  disabled={deleteInquiryMutation.isPending}
+                                >
+                                  {deleteInquiryMutation.isPending ? "Deleting..." : "Delete"}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
