@@ -421,10 +421,10 @@ export default function About() {
                   <div key={member.id} className="flex items-stretch self-stretch">
                     <button
                       onClick={() => setSelectedMember(index)}
-                      className="flex-shrink-0 w-20 h-full border-r border-white/10 transition-all duration-300 hover:bg-white/5 pt-8"
+                      className="flex-shrink-0 w-20 h-full border-r border-white/10 transition-all duration-300 hover:bg-white/5"
                       data-testid={`button-team-member-${member.id}`}
                     >
-                      <div className="flex flex-col items-center">
+                      <div className="flex flex-col items-center pt-8">
                         {nameChars.map((char, charIndex) => (
                           <span 
                             key={charIndex} 
