@@ -421,7 +421,9 @@ export default function About() {
                   <div key={member.id} className="flex items-stretch self-stretch">
                     <button
                       onClick={() => setSelectedMember(index)}
-                      className="relative flex-shrink-0 w-48 h-full border-r border-white/10 transition-all duration-300 overflow-hidden group"
+                      className={`relative flex-shrink-0 h-full border-r border-white/10 transition-all duration-500 overflow-hidden group ${
+                        isExpanded ? 'w-0 opacity-0' : 'w-24 opacity-100'
+                      }`}
                       data-testid={`button-team-member-${member.id}`}
                     >
                       {/* Background Image */}
