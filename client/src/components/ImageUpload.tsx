@@ -3,6 +3,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
+import { useToast } from "@/hooks/use-toast";
+
+interface ImageMetadata {
+  url: string;
+  width: number;
+  height: number;
+  size: number;
+}
 
 interface ImageUploadProps {
   value: string[];
@@ -19,15 +27,45 @@ export default function ImageUpload({
 }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [imageMetadata, setImageMetadata] = useState<Map<string, ImageMetadata>>(new Map());
+  const { toast } = useToast();
+
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+
+  // Get image dimensions from file
+  const getImageDimensions = (file: File): Promise<{ width: number; height: number }> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height });
+      };
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
+  };
 
   // Mock upload function - in a real app, this would upload to cloud storage
-  const uploadImage = async (file: File): Promise<string> => {
+  const uploadImage = async (file: File): Promise<ImageMetadata> => {
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error(`File "${file.name}" exceeds 10MB limit (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+    }
+
+    // Get image dimensions
+    const dimensions = await getImageDimensions(file);
+    
     // Simulate upload delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Create a mock URL - in production, this would be the actual uploaded image URL
     const mockUrl = URL.createObjectURL(file);
-    return mockUrl;
+    
+    return {
+      url: mockUrl,
+      width: dimensions.width,
+      height: dimensions.height,
+      size: file.size,
+    };
   };
 
   const handleFileSelect = useCallback(async (files: FileList | null) => {
@@ -36,22 +74,51 @@ export default function ImageUpload({
     setUploading(true);
     try {
       const fileArray = Array.from(files);
-      const uploadPromises = fileArray.map(uploadImage);
-      const urls = await Promise.all(uploadPromises);
+      const uploadResults = await Promise.all(
+        fileArray.map(async (file) => {
+          try {
+            return await uploadImage(file);
+          } catch (error) {
+            toast({
+              title: "Upload failed",
+              description: error instanceof Error ? error.message : "Failed to upload image",
+              variant: "destructive",
+            });
+            return null;
+          }
+        })
+      );
 
-      if (multiple) {
-        const currentUrls = Array.isArray(value) ? value : [];
-        const newUrls = [...currentUrls, ...urls].slice(0, maxImages);
-        onChange(newUrls);
-      } else {
-        onChange([urls[0]]);
+      const successfulUploads = uploadResults.filter((result): result is ImageMetadata => result !== null);
+      
+      if (successfulUploads.length > 0) {
+        const newMetadata = new Map(imageMetadata);
+        successfulUploads.forEach(metadata => {
+          newMetadata.set(metadata.url, metadata);
+        });
+        setImageMetadata(newMetadata);
+
+        const newUrls = successfulUploads.map(m => m.url);
+        
+        if (multiple) {
+          const currentUrls = Array.isArray(value) ? value : [];
+          const combinedUrls = [...currentUrls, ...newUrls].slice(0, maxImages);
+          onChange(combinedUrls);
+        } else {
+          onChange([newUrls[0]]);
+        }
       }
     } catch (error) {
       console.error("Failed to upload images:", error);
+      toast({
+        title: "Upload failed",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
     } finally {
       setUploading(false);
     }
-  }, [value, onChange, multiple, maxImages]);
+  }, [value, onChange, multiple, maxImages, imageMetadata, toast]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -148,43 +215,58 @@ export default function ImageUpload({
         <div className="space-y-2">
           <h4 className="text-sm font-light">Uploaded Images</h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {currentImages.map((url, index) => (
-              <div
-                key={index}
-                className="relative group rounded-lg overflow-hidden bg-muted aspect-square"
-                data-testid={`image-preview-${index}`}
-              >
-                <OptimizedImage
-                  src={url}
-                  alt={`Upload ${index + 1}`}
-                  width={200}
-                  height={200}
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full"
-                  sizes="200px"
-                />
-                
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => removeImage(index)}
-                    className="h-8 w-8 p-0"
-                    data-testid={`button-remove-image-${index}`}
+            {currentImages.map((url, index) => {
+              const metadata = imageMetadata.get(url);
+              return (
+                <div key={index} className="space-y-1">
+                  <div
+                    className="relative group rounded-lg overflow-hidden bg-muted aspect-square"
+                    data-testid={`image-preview-${index}`}
                   >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                {index === 0 && multiple && (
-                  <div className="absolute top-2 left-2">
-                    <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
-                      Primary
+                    <OptimizedImage
+                      src={url}
+                      alt={`Upload ${index + 1}`}
+                      width={200}
+                      height={200}
+                      wrapperClassName="w-full h-full"
+                      className="w-full h-full"
+                      sizes="200px"
+                    />
+                    
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => removeImage(index)}
+                        className="h-8 w-8 p-0"
+                        data-testid={`button-remove-image-${index}`}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
                     </div>
+                    
+                    {index === 0 && multiple && (
+                      <div className="absolute top-2 left-2">
+                        <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
+                          Primary
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+                  
+                  {metadata && (
+                    <div className="text-xs text-muted-foreground space-y-0.5">
+                      <div className="font-medium">
+                        {metadata.width} × {metadata.height} px
+                      </div>
+                      <div>
+                        {(metadata.size / 1024 / 1024).toFixed(2)} MB
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

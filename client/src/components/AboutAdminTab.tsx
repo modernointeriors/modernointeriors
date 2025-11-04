@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
 import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
+import ImageUpload from "@/components/ImageUpload";
 
 interface AboutAdminTabProps {
   aboutContent?: AboutPageContent;
@@ -1006,9 +1007,13 @@ export default function AboutAdminTab({
                     name="image"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Image URL</FormLabel>
+                        <FormLabel>Image (Max 10MB)</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="https://images.unsplash.com/..." data-testid="input-team-member-image" />
+                          <ImageUpload
+                            value={field.value ? [field.value] : []}
+                            onChange={(urls) => field.onChange(urls[0] || "")}
+                            multiple={false}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
