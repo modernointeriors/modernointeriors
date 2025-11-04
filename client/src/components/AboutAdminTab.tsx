@@ -186,8 +186,8 @@ export default function AboutAdminTab({
   }, [aboutContent]);
 
   const handleEditImage = () => {
-    // Prioritize base64 data from DB, then preview, then URL
-    const currentImage = aboutContent?.showcaseBannerImageData || showcaseBannerPreview || aboutContent?.showcaseBannerImage;
+    // Use preview or URL
+    const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImage;
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -256,6 +256,65 @@ export default function AboutAdminTab({
                       <div>
                         <label className="text-sm font-light mb-2 block">Hero Subtitle (VI)</label>
                         <Input {...aboutContentForm.register("heroSubtitleVi")} placeholder="ĐỔI MỚI TRONG MỌI DỰ ÁN" data-testid="input-hero-subtitle-vi" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Hero Image Upload */}
+                  <div className="mt-6">
+                    <label className="text-sm font-light mb-2 block">Hero Background Image</label>
+                    <div className="space-y-2">
+                      <Input
+                        {...aboutContentForm.register("heroImage")}
+                        placeholder="https://example.com/image.jpg"
+                        data-testid="input-hero-image"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Enter image URL or upload an image below
+                      </p>
+                      
+                      {/* Image Preview */}
+                      {aboutContentForm.watch("heroImage") && (
+                        <div className="mt-2">
+                          <img
+                            src={aboutContentForm.watch("heroImage")}
+                            alt="Hero preview"
+                            className="w-full h-48 object-cover rounded"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      )}
+                      
+                      {/* File Upload Button */}
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => document.getElementById('hero-image-upload')?.click()}
+                          data-testid="button-upload-hero-image"
+                        >
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload Image
+                        </Button>
+                        <input
+                          id="hero-image-upload"
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                aboutContentForm.setValue("heroImage", event.target?.result as string);
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -455,11 +514,11 @@ export default function AboutAdminTab({
             <CardContent>
               <div>
                 <div className="relative">
-                  {(aboutContent?.showcaseBannerImageData || showcaseBannerPreview || aboutContent?.showcaseBannerImage) ? (
+                  {(showcaseBannerPreview || aboutContent?.showcaseBannerImage) ? (
                     <div className="relative group">
                       <div className="border bg-muted overflow-hidden">
                         <img 
-                          src={aboutContent?.showcaseBannerImageData || showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
+                          src={showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
                           alt="Showcase Banner Preview" 
                           className="w-full aspect-[16/7] object-cover" 
                         />
@@ -1094,10 +1153,10 @@ export default function AboutAdminTab({
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Image (Max 10MB)</label>
-                    {(teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image) && (
+                    {(teamMemberImagePreview || editingTeamMember?.image) && (
                       <div className="border bg-muted overflow-hidden mb-2">
                         <img 
-                          src={teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image || ''} 
+                          src={teamMemberImagePreview || editingTeamMember?.image || ''} 
                           alt="Team Member Preview" 
                           className="w-full max-w-md aspect-square object-cover"
                         />
@@ -1183,9 +1242,9 @@ export default function AboutAdminTab({
                     <TableCell>{member.positionVi}</TableCell>
                     <TableCell>{member.order}</TableCell>
                     <TableCell>
-                      {(member.imageData || member.image) ? (
+                      {member.image ? (
                         <img 
-                          src={member.imageData || member.image} 
+                          src={member.image} 
                           alt={member.name}
                           className="h-12 w-12 rounded object-cover"
                           data-testid={`img-team-member-${member.id}`}

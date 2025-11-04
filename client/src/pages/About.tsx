@@ -69,113 +69,58 @@ export default function About() {
 
   return (
     <main className="ml-16 pb-8 md:pb-6 mb-4">
-      {/* Hero Section - Slider */}
+      {/* Hero Section */}
       <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-16">
-        <Swiper
-          modules={[Autoplay, EffectFade]}
-          effect="fade"
-          fadeEffect={{ crossFade: false }}
-          spaceBetween={0}
-          slidesPerView={1}
-          speed={1000}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
-          loop={projects.length > 1}
-          className="h-screen"
-        >
-          {projects.length > 0 ? projects.map((project) => {
-            const backgroundImage = Array.isArray(project.coverImages) && project.coverImages[0] ||
-              Array.isArray(project.contentImages) && project.contentImages[0] ||
-              Array.isArray(project.galleryImages) && project.galleryImages[0] ||
-              project.heroImage ||
-              (Array.isArray(project.images) && project.images[0]) ||
-              getFallbackImage(project.category);
-
-            return (
-              <SwiperSlide key={project.id}>
-                <div className="relative h-screen">
-                  <img 
-                    src={backgroundImage} 
-                    alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = getFallbackImage(project.category);
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/50" />
-                  
-                  <div className="relative h-full flex items-center">
-                    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div className="space-y-8">
-                          <div className="space-y-6">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                              {language === "vi" ? aboutContent?.heroTitleVi : aboutContent?.heroTitleEn}
-                            </h1>
-                            <div className="w-20 h-0.5 bg-white/40" />
-                          </div>
-                          <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
-                            {project.title}
-                          </p>
-                        </div>
-
-                        <div className="lg:text-right">
-                          <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
-                            {language === "vi" ? aboutContent?.heroSubtitleVi : aboutContent?.heroSubtitleEn}
-                          </h2>
-                        </div>
-                      </div>
-                    </div>
+        <div className="relative h-screen">
+          {/* Background Image */}
+          {aboutContent?.heroImage ? (
+            <img 
+              src={aboutContent.heroImage} 
+              alt="About Hero"
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200';
+              }}
+            />
+          ) : (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: 'url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
+              }}
+            />
+          )}
+          <div className="absolute inset-0 bg-black/50" />
+          
+          {/* Content */}
+          <div className="relative h-full flex items-center">
+            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-8">
+                  <div className="space-y-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
+                      {language === "vi" ? aboutContent?.heroTitleVi : aboutContent?.heroTitleEn}
+                    </h1>
+                    <div className="w-20 h-0.5 bg-white/40" />
                   </div>
-                </div>
-              </SwiperSlide>
-            );
-          }) : (
-            <SwiperSlide>
-              <div className="relative h-screen">
-                <div
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{
-                    backgroundImage: 'url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
-                  }}
-                >
-                  <div className="absolute inset-0 bg-black/50" />
+                  <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                    {language === "vi"
+                      ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
+                      : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
+                    }
+                  </p>
                 </div>
 
-                <div className="relative h-full flex items-center">
-                  <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                      <div className="space-y-8">
-                        <div className="space-y-6">
-                          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                            {language === "vi" ? aboutContent?.heroTitleVi : aboutContent?.heroTitleEn}
-                          </h1>
-                          <div className="w-20 h-0.5 bg-white/40" />
-                        </div>
-                        <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
-                          {language === "vi"
-                            ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
-                            : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
-                          }
-                        </p>
-                      </div>
-
-                      <div className="lg:text-right">
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
-                          {language === "vi" ? aboutContent?.heroSubtitleVi : aboutContent?.heroSubtitleEn}
-                        </h2>
-                      </div>
-                    </div>
-                  </div>
+                <div className="lg:text-right">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
+                    {language === "vi" ? aboutContent?.heroSubtitleVi : aboutContent?.heroSubtitleEn}
+                  </h2>
                 </div>
               </div>
-            </SwiperSlide>
-          )}
-        </Swiper>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Principles Section */}
