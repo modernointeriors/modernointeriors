@@ -5,7 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade } from 'swiper/modules';
-import type { Project, AboutPageContent, AboutCoreValue, AboutTeamMember } from '@shared/schema';
+import type { Project, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutCoreValue, AboutTeamMember } from '@shared/schema';
 import { useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 
@@ -13,7 +13,7 @@ import 'swiper/css';
 import 'swiper/css/effect-fade';
 
 export default function About() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const [selectedMember, setSelectedMember] = useState<number | null>(0);
 
   const { data: projects = [] } = useQuery<Project[]>({
@@ -22,6 +22,21 @@ export default function About() {
 
   const { data: aboutContent } = useQuery<AboutPageContent>({
     queryKey: ["/api/about-page-content"],
+  });
+
+  const { data: principles = [] } = useQuery<AboutPrinciple[]>({
+    queryKey: ["/api/about-principles"],
+    select: (data) => data.filter(p => p.active).sort((a, b) => a.order - b.order),
+  });
+
+  const { data: showcaseServices = [] } = useQuery<AboutShowcaseService[]>({
+    queryKey: ["/api/about-showcase-services"],
+    select: (data) => data.filter(s => s.active).sort((a, b) => a.order - b.order),
+  });
+
+  const { data: processSteps = [] } = useQuery<AboutProcessStep[]>({
+    queryKey: ["/api/about-process-steps"],
+    select: (data) => data.filter(s => s.active).sort((a, b) => a.order - b.order),
   });
 
   const { data: coreValues = [] } = useQuery<AboutCoreValue[]>({
@@ -99,10 +114,7 @@ export default function About() {
                         <div className="space-y-8">
                           <div className="space-y-6">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                              {language === "vi" 
-                                ? "THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"
-                                : "ARCHITECTURAL & INTERIOR DESIGN"
-                              }
+                              {language === "vi" ? aboutContent?.heroTitleVi : aboutContent?.heroTitleEn}
                             </h1>
                             <div className="w-20 h-0.5 bg-white/40" />
                           </div>
@@ -113,10 +125,7 @@ export default function About() {
 
                         <div className="lg:text-right">
                           <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
-                            {language === "vi"
-                              ? "ĐỔI MỚI TRONG MỌI DỰ ÁN"
-                              : "INNOVATION IN EVERY PROJECT"
-                            }
+                            {language === "vi" ? aboutContent?.heroSubtitleVi : aboutContent?.heroSubtitleEn}
                           </h2>
                         </div>
                       </div>
@@ -143,10 +152,7 @@ export default function About() {
                       <div className="space-y-8">
                         <div className="space-y-6">
                           <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                            {language === "vi" 
-                              ? "THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"
-                              : "ARCHITECTURAL & INTERIOR DESIGN"
-                            }
+                            {language === "vi" ? aboutContent?.heroTitleVi : aboutContent?.heroTitleEn}
                           </h1>
                           <div className="w-20 h-0.5 bg-white/40" />
                         </div>
@@ -160,10 +166,7 @@ export default function About() {
 
                       <div className="lg:text-right">
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
-                          {language === "vi"
-                            ? "ĐỔI MỚI TRONG MỌI DỰ ÁN"
-                            : "INNOVATION IN EVERY PROJECT"
-                          }
+                          {language === "vi" ? aboutContent?.heroSubtitleVi : aboutContent?.heroSubtitleEn}
                         </h2>
                       </div>
                     </div>
@@ -174,6 +177,129 @@ export default function About() {
           )}
         </Swiper>
       </section>
+
+      {/* Principles Section */}
+      {principles.length > 0 && (
+        <section className="py-20 bg-black -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-16">
+              <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
+                {language === "vi" ? "NGUYÊN TẮC LÀM VIỆC" : "OUR PRINCIPLES"}
+              </h2>
+              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+                {language === "vi" ? aboutContent?.principlesTitleVi : aboutContent?.principlesTitleEn}
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {principles.map((principle) => {
+                const IconComponent = getIconComponent(principle.icon);
+                return (
+                  <div key={principle.id} className="space-y-6">
+                    <div className="flex items-center gap-4">
+                      <IconComponent className="w-8 h-8 text-white/40" />
+                      <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                        {language === "vi" ? principle.titleVi : principle.titleEn}
+                      </h4>
+                    </div>
+                    <p className="text-white/70 font-light leading-relaxed">
+                      {language === "vi" ? principle.descriptionVi : principle.descriptionEn}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Architecture Showcase Section */}
+      {(aboutContent?.showcaseBannerImage || showcaseServices.length > 0) && (
+        <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden -ml-16">
+          {aboutContent?.showcaseBannerImage && (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${aboutContent.showcaseBannerImage})`,
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+            </div>
+          )}
+
+          <div className="relative h-full flex items-end">
+            <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+              <div className="border-r-2 border-white/20" style={{ 
+                borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
+              }} />
+              <div className="border-r-2 border-white/20" style={{ 
+                borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
+              }} />
+              <div className="border-r-2 border-white/20" style={{ 
+                borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
+              }} />
+              <div />
+            </div>
+
+            <div className="relative w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-end">
+              {showcaseServices.map((service, index) => (
+                <div key={service.id} className="px-6 py-8 md:px-8 md:py-12">
+                  <div className="space-y-3 h-[180px] flex flex-col">
+                    <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
+                      {language === "vi" ? service.titleVi : service.titleEn}
+                    </h4>
+                    <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
+                      {language === "vi" ? service.descriptionVi : service.descriptionEn}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Stats Section */}
+      {aboutContent && (
+        <section className="py-20 bg-black -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center space-y-2">
+                <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-projects">
+                  {aboutContent.statsProjectsValue}
+                </div>
+                <div className="text-sm text-white/60 uppercase tracking-wider">
+                  {language === "vi" ? aboutContent.statsProjectsLabelVi : aboutContent.statsProjectsLabelEn}
+                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-awards">
+                  {aboutContent.statsAwardsValue}
+                </div>
+                <div className="text-sm text-white/60 uppercase tracking-wider">
+                  {language === "vi" ? aboutContent.statsAwardsLabelVi : aboutContent.statsAwardsLabelEn}
+                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-clients">
+                  {aboutContent.statsClientsValue}
+                </div>
+                <div className="text-sm text-white/60 uppercase tracking-wider">
+                  {language === "vi" ? aboutContent.statsClientsLabelVi : aboutContent.statsClientsLabelEn}
+                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-countries">
+                  {aboutContent.statsCountriesValue}
+                </div>
+                <div className="text-sm text-white/60 uppercase tracking-wider">
+                  {language === "vi" ? aboutContent.statsCountriesLabelVi : aboutContent.statsCountriesLabelEn}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Company History Section */}
       {aboutContent?.historyContentEn && aboutContent?.historyContentVi && (
@@ -319,11 +445,11 @@ export default function About() {
                     >
                       <div className="w-[800px] pl-12 pr-8 py-8">
                         <div className="flex gap-8 items-start">
-                          {(member.imageData || member.image) && (
+                          {member.image && (
                             <div className="flex-shrink-0 w-64">
                               <div className="aspect-[9/16] overflow-hidden bg-white/10">
                                 <img 
-                                  src={member.imageData || member.image} 
+                                  src={member.image} 
                                   alt={member.name}
                                   className="w-full h-full object-cover"
                                 />
@@ -375,6 +501,36 @@ export default function About() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Process Section */}
+      {processSteps.length > 0 && (
+        <section className="py-20 bg-black -ml-16">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-16">
+              <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
+                {language === "vi" ? "QUY TRÌNH LÀM VIỆC" : "OUR PROCESS"}
+              </h2>
+              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+                {language === "vi" ? aboutContent?.processTitleVi : aboutContent?.processTitleEn}
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {processSteps.map((step) => (
+                <div key={step.id} className="space-y-4">
+                  <div className="text-6xl font-light text-white/20">{step.stepNumber}</div>
+                  <h4 className="text-xl font-light text-white uppercase">
+                    {language === "vi" ? step.titleVi : step.titleEn}
+                  </h4>
+                  <p className="text-white/70 font-light text-sm leading-relaxed">
+                    {language === "vi" ? step.descriptionVi : step.descriptionEn}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
