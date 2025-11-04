@@ -10,10 +10,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Plus, Trash2, Upload } from "lucide-react";
+import { Pencil, Plus, Trash2, Upload, Edit } from "lucide-react";
 import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
 import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import ImageUpload from "@/components/ImageUpload";
+import ImageCropDialog from "@/components/ImageCropDialog";
 
 interface AboutAdminTabProps {
   aboutContent?: AboutPageContent;
@@ -91,6 +92,9 @@ export default function AboutAdminTab({
   const [editingShowcaseService, setEditingShowcaseService] = useState<AboutShowcaseService | null>(null);
   const [isProcessStepDialogOpen, setIsProcessStepDialogOpen] = useState(false);
   const [editingProcessStep, setEditingProcessStep] = useState<AboutProcessStep | null>(null);
+  const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string>("");
+  const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
 
   const aboutContentForm = useForm<InsertAboutPageContent>({
     resolver: zodResolver(insertAboutPageContentSchema),
@@ -169,6 +173,40 @@ export default function AboutAdminTab({
       order: 0,
     },
   });
+
+  const handleEditImage = () => {
+    const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImage;
+    if (currentImage) {
+      setImageToCrop(currentImage);
+      setIsCropDialogOpen(true);
+    }
+  };
+
+  const handleCropComplete = (croppedBlob: Blob) => {
+    const file = new File([croppedBlob], `banner-${Date.now()}.jpg`, { type: 'image/jpeg' });
+    setCroppedImageFile(file);
+    
+    const syntheticEvent = {
+      target: {
+        files: [file],
+      },
+    } as unknown as React.ChangeEvent<HTMLInputElement>;
+    
+    handleShowcaseBannerFileChange(syntheticEvent);
+    setIsCropDialogOpen(false);
+  };
+
+  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageToCrop(reader.result as string);
+        setIsCropDialogOpen(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -413,22 +451,33 @@ export default function AboutAdminTab({
                           className="w-full aspect-[16/7] object-cover" 
                         />
                       </div>
-                      <label 
-                        htmlFor="showcase-banner-upload" 
-                        className="absolute top-4 right-4 bg-white text-black px-4 py-2 cursor-pointer hover:bg-white/90 transition-all shadow-lg flex items-center gap-2 group-hover:scale-105"
-                        data-testid="button-change-showcase-banner"
-                      >
-                        <Pencil className="h-4 w-4" />
-                        <span className="text-sm font-medium">Change Image</span>
-                      </label>
-                      <input
-                        id="showcase-banner-upload"
-                        type="file"
-                        accept=".jpg,.jpeg,.png"
-                        onChange={handleShowcaseBannerFileChange}
-                        className="hidden"
-                        data-testid="input-showcase-banner-file"
-                      />
+                      <div className="absolute top-4 right-4 flex gap-2">
+                        <Button
+                          type="button"
+                          onClick={handleEditImage}
+                          className="bg-white text-black hover:bg-white/90 shadow-lg group-hover:scale-105 transition-all"
+                          data-testid="button-edit-showcase-banner"
+                        >
+                          <Edit className="h-4 w-4 mr-2" />
+                          <span className="text-sm font-medium">Edit</span>
+                        </Button>
+                        <label 
+                          htmlFor="showcase-banner-upload" 
+                          className="inline-flex items-center gap-2 bg-white text-black px-4 py-2 cursor-pointer hover:bg-white/90 transition-all shadow-lg group-hover:scale-105 text-sm font-medium"
+                          data-testid="button-change-showcase-banner"
+                        >
+                          <Pencil className="h-4 w-4" />
+                          Change
+                        </label>
+                        <input
+                          id="showcase-banner-upload"
+                          type="file"
+                          accept=".jpg,.jpeg,.png"
+                          onChange={handleNewImageUpload}
+                          className="hidden"
+                          data-testid="input-showcase-banner-file"
+                        />
+                      </div>
                     </div>
                   ) : (
                     <div className="border-2 border-dashed border-muted-foreground/25 p-12 text-center">
@@ -452,7 +501,7 @@ export default function AboutAdminTab({
                         id="showcase-banner-upload-initial"
                         type="file"
                         accept=".jpg,.jpeg,.png"
-                        onChange={handleShowcaseBannerFileChange}
+                        onChange={handleNewImageUpload}
                         className="hidden"
                         data-testid="input-showcase-banner-file-initial"
                       />
@@ -460,7 +509,7 @@ export default function AboutAdminTab({
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Format: PNG, JPG • Max: 10MB • Recommended: 1920x800px
+                  Format: PNG, JPG • Max: 10MB • Recommended: 1920x800px • Auto-crop enabled
                 </p>
               </div>
             </CardContent>
@@ -1178,6 +1227,15 @@ export default function AboutAdminTab({
           )}
         </CardContent>
       </Card>
+
+      {/* Image Crop Dialog */}
+      <ImageCropDialog
+        open={isCropDialogOpen}
+        onClose={() => setIsCropDialogOpen(false)}
+        imageSrc={imageToCrop}
+        onCropComplete={handleCropComplete}
+        aspectRatio={16 / 7}
+      />
     </div>
   );
 }
