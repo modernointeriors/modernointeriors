@@ -452,19 +452,19 @@ export default function AboutAdminTab({
                           className="w-full aspect-[16/7] object-cover" 
                         />
                       </div>
-                      <div className="absolute top-4 right-4 flex gap-2">
+                      <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button
                           type="button"
                           onClick={handleEditImage}
-                          className="bg-white text-black hover:bg-white/90 shadow-lg group-hover:scale-105 transition-all"
+                          className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
                           data-testid="button-edit-showcase-banner"
                         >
                           <Edit className="h-4 w-4 mr-2" />
-                          <span className="text-sm font-medium">Edit</span>
+                          <span className="text-sm font-light">Edit</span>
                         </Button>
                         <label 
                           htmlFor="showcase-banner-upload" 
-                          className="inline-flex items-center gap-2 bg-white text-black px-4 py-2 cursor-pointer hover:bg-white/90 transition-all shadow-lg group-hover:scale-105 text-sm font-medium"
+                          className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 px-4 py-2 cursor-pointer transition-all shadow-xl text-sm font-light"
                           data-testid="button-change-showcase-banner"
                         >
                           <Pencil className="h-4 w-4" />

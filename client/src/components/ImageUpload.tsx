@@ -268,22 +268,22 @@ export default function ImageUpload({
                       sizes="200px"
                     />
                     
-                    <div className="absolute top-2 right-2 flex gap-1">
+                    <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Button
                         size="sm"
                         onClick={() => handleEditImage(url, index)}
-                        className="h-7 w-7 p-0 bg-white text-black hover:bg-white/90 shadow-lg"
+                        className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
                         data-testid={`button-edit-image-${index}`}
                       >
-                        <Edit className="h-3.5 w-3.5" />
+                        <Edit className="h-4 w-4" />
                       </Button>
                       <Button
                         size="sm"
                         onClick={() => removeImage(index)}
-                        className="h-7 w-7 p-0 bg-white text-black hover:bg-white/90 shadow-lg"
+                        className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-red-500/50 shadow-xl transition-all"
                         data-testid={`button-remove-image-${index}`}
                       >
-                        <X className="h-3.5 w-3.5" />
+                        <X className="h-4 w-4" />
                       </Button>
                     </div>
                     
