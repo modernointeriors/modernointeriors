@@ -727,3 +727,66 @@ export type AboutCoreValue = typeof aboutCoreValues.$inferSelect;
 
 export type InsertAboutTeamMember = z.infer<typeof insertAboutTeamMemberSchema>;
 export type AboutTeamMember = typeof aboutTeamMembers.$inferSelect;
+
+// CRM Dropdown Settings Tables
+export const crmPipelineStages = pgTable("crm_pipeline_stages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  value: text("value").notNull().unique(), // Internal value like "lead", "prospect"
+  labelEn: text("label_en").notNull(), // English display label
+  labelVi: text("label_vi").notNull(), // Vietnamese display label
+  order: integer("order").notNull().default(0), // For sorting
+  active: boolean("active").notNull().default(true), // Enable/disable option
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const crmCustomerTiers = pgTable("crm_customer_tiers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  value: text("value").notNull().unique(), // Internal value like "silver", "gold"
+  labelEn: text("label_en").notNull(), // English display label
+  labelVi: text("label_vi").notNull(), // Vietnamese display label
+  order: integer("order").notNull().default(0), // For sorting
+  active: boolean("active").notNull().default(true), // Enable/disable option
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const crmStatuses = pgTable("crm_statuses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  value: text("value").notNull().unique(), // Internal value like "active", "inactive"
+  labelEn: text("label_en").notNull(), // English display label
+  labelVi: text("label_vi").notNull(), // Vietnamese display label
+  order: integer("order").notNull().default(0), // For sorting
+  active: boolean("active").notNull().default(true), // Enable/disable option
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// CRM Dropdown Settings Schemas
+export const insertCrmPipelineStageSchema = createInsertSchema(crmPipelineStages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCrmCustomerTierSchema = createInsertSchema(crmCustomerTiers).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertCrmStatusSchema = createInsertSchema(crmStatuses).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// CRM Dropdown Settings Types
+export type InsertCrmPipelineStage = z.infer<typeof insertCrmPipelineStageSchema>;
+export type CrmPipelineStage = typeof crmPipelineStages.$inferSelect;
+
+export type InsertCrmCustomerTier = z.infer<typeof insertCrmCustomerTierSchema>;
+export type CrmCustomerTier = typeof crmCustomerTiers.$inferSelect;
+
+export type InsertCrmStatus = z.infer<typeof insertCrmStatusSchema>;
+export type CrmStatus = typeof crmStatuses.$inferSelect;
