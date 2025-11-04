@@ -421,20 +421,47 @@ export default function About() {
                   <div key={member.id} className="flex items-stretch self-stretch">
                     <button
                       onClick={() => setSelectedMember(index)}
-                      className="flex-shrink-0 w-20 h-full border-r border-white/10 transition-all duration-300 hover:bg-white/5"
+                      className="relative flex-shrink-0 w-48 h-full border-r border-white/10 transition-all duration-300 overflow-hidden group"
                       data-testid={`button-team-member-${member.id}`}
                     >
-                      <div className="flex flex-col items-center pt-8">
-                        {nameChars.map((char, charIndex) => (
-                          <span 
-                            key={charIndex} 
-                            className={`text-2xl font-light transition-all duration-300 ${
-                              isExpanded ? 'text-white' : 'text-white/40'
-                            }`}
-                          >
-                            {char}
-                          </span>
-                        ))}
+                      {/* Background Image */}
+                      {member.image && (
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center transition-all duration-300"
+                          style={{
+                            backgroundImage: `url(${member.image})`,
+                            filter: 'grayscale(100%) brightness(0.3)',
+                          }}
+                        />
+                      )}
+                      
+                      {/* Overlay */}
+                      <div className={`absolute inset-0 transition-all duration-300 ${
+                        isExpanded ? 'bg-black/30' : 'bg-black/60'
+                      } group-hover:bg-black/40`} />
+                      
+                      {/* Content */}
+                      <div className="relative h-full flex flex-col items-center pt-8">
+                        {/* Plus Icon */}
+                        <div className={`text-4xl font-light mb-8 transition-all duration-300 ${
+                          isExpanded ? 'text-white' : 'text-white/60'
+                        }`}>
+                          +
+                        </div>
+                        
+                        {/* Name Vertical */}
+                        <div className="flex flex-col items-center">
+                          {nameChars.map((char, charIndex) => (
+                            <span 
+                              key={charIndex} 
+                              className={`text-2xl font-light transition-all duration-300 ${
+                                isExpanded ? 'text-white' : 'text-white/70'
+                              }`}
+                            >
+                              {char}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </button>
 
