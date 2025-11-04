@@ -2,6 +2,7 @@ import {
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
   interactions, deals, transactions, settings, faqs, advantages, journeySteps,
   aboutPageContent, aboutPrinciples, aboutShowcaseServices, aboutProcessSteps, aboutCoreValues, aboutTeamMembers,
+  crmPipelineStages, crmCustomerTiers, crmStatuses,
   type User, type InsertUser,
   type Client, type InsertClient,
   type Project, type InsertProject,
@@ -23,7 +24,10 @@ import {
   type AboutShowcaseService, type InsertAboutShowcaseService,
   type AboutProcessStep, type InsertAboutProcessStep,
   type AboutCoreValue, type InsertAboutCoreValue,
-  type AboutTeamMember, type InsertAboutTeamMember
+  type AboutTeamMember, type InsertAboutTeamMember,
+  type CrmPipelineStage, type InsertCrmPipelineStage,
+  type CrmCustomerTier, type InsertCrmCustomerTier,
+  type CrmStatus, type InsertCrmStatus
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, and, or, sql } from "drizzle-orm";
@@ -183,6 +187,27 @@ export interface IStorage {
   createAboutTeamMember(member: InsertAboutTeamMember): Promise<AboutTeamMember>;
   updateAboutTeamMember(id: string, member: Partial<InsertAboutTeamMember>): Promise<AboutTeamMember>;
   deleteAboutTeamMember(id: string): Promise<void>;
+
+  // CRM Pipeline Stages
+  getCrmPipelineStages(filters?: { active?: boolean }): Promise<CrmPipelineStage[]>;
+  getCrmPipelineStage(id: string): Promise<CrmPipelineStage | undefined>;
+  createCrmPipelineStage(stage: InsertCrmPipelineStage): Promise<CrmPipelineStage>;
+  updateCrmPipelineStage(id: string, stage: Partial<InsertCrmPipelineStage>): Promise<CrmPipelineStage>;
+  deleteCrmPipelineStage(id: string): Promise<void>;
+
+  // CRM Customer Tiers
+  getCrmCustomerTiers(filters?: { active?: boolean }): Promise<CrmCustomerTier[]>;
+  getCrmCustomerTier(id: string): Promise<CrmCustomerTier | undefined>;
+  createCrmCustomerTier(tier: InsertCrmCustomerTier): Promise<CrmCustomerTier>;
+  updateCrmCustomerTier(id: string, tier: Partial<InsertCrmCustomerTier>): Promise<CrmCustomerTier>;
+  deleteCrmCustomerTier(id: string): Promise<void>;
+
+  // CRM Statuses
+  getCrmStatuses(filters?: { active?: boolean }): Promise<CrmStatus[]>;
+  getCrmStatus(id: string): Promise<CrmStatus | undefined>;
+  createCrmStatus(status: InsertCrmStatus): Promise<CrmStatus>;
+  updateCrmStatus(id: string, status: Partial<InsertCrmStatus>): Promise<CrmStatus>;
+  deleteCrmStatus(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1085,6 +1110,111 @@ export class DatabaseStorage implements IStorage {
 
   async deleteAboutTeamMember(id: string): Promise<void> {
     await db.delete(aboutTeamMembers).where(eq(aboutTeamMembers.id, id));
+  }
+
+  // CRM Pipeline Stages
+  async getCrmPipelineStages(filters?: { active?: boolean }): Promise<CrmPipelineStage[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(crmPipelineStages.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(crmPipelineStages).where(and(...conditions))
+      : db.select().from(crmPipelineStages);
+
+    return await query.orderBy(crmPipelineStages.order);
+  }
+
+  async getCrmPipelineStage(id: string): Promise<CrmPipelineStage | undefined> {
+    const [stage] = await db.select().from(crmPipelineStages).where(eq(crmPipelineStages.id, id));
+    return stage || undefined;
+  }
+
+  async createCrmPipelineStage(stage: InsertCrmPipelineStage): Promise<CrmPipelineStage> {
+    const [created] = await db.insert(crmPipelineStages).values(stage).returning();
+    return created;
+  }
+
+  async updateCrmPipelineStage(id: string, stage: Partial<InsertCrmPipelineStage>): Promise<CrmPipelineStage> {
+    const [updated] = await db
+      .update(crmPipelineStages)
+      .set({ ...stage, updatedAt: new Date() })
+      .where(eq(crmPipelineStages.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCrmPipelineStage(id: string): Promise<void> {
+    await db.delete(crmPipelineStages).where(eq(crmPipelineStages.id, id));
+  }
+
+  // CRM Customer Tiers
+  async getCrmCustomerTiers(filters?: { active?: boolean }): Promise<CrmCustomerTier[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(crmCustomerTiers.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(crmCustomerTiers).where(and(...conditions))
+      : db.select().from(crmCustomerTiers);
+
+    return await query.orderBy(crmCustomerTiers.order);
+  }
+
+  async getCrmCustomerTier(id: string): Promise<CrmCustomerTier | undefined> {
+    const [tier] = await db.select().from(crmCustomerTiers).where(eq(crmCustomerTiers.id, id));
+    return tier || undefined;
+  }
+
+  async createCrmCustomerTier(tier: InsertCrmCustomerTier): Promise<CrmCustomerTier> {
+    const [created] = await db.insert(crmCustomerTiers).values(tier).returning();
+    return created;
+  }
+
+  async updateCrmCustomerTier(id: string, tier: Partial<InsertCrmCustomerTier>): Promise<CrmCustomerTier> {
+    const [updated] = await db
+      .update(crmCustomerTiers)
+      .set({ ...tier, updatedAt: new Date() })
+      .where(eq(crmCustomerTiers.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCrmCustomerTier(id: string): Promise<void> {
+    await db.delete(crmCustomerTiers).where(eq(crmCustomerTiers.id, id));
+  }
+
+  // CRM Statuses
+  async getCrmStatuses(filters?: { active?: boolean }): Promise<CrmStatus[]> {
+    const conditions = [];
+    if (filters?.active !== undefined) conditions.push(eq(crmStatuses.active, filters.active));
+
+    const query = conditions.length > 0
+      ? db.select().from(crmStatuses).where(and(...conditions))
+      : db.select().from(crmStatuses);
+
+    return await query.orderBy(crmStatuses.order);
+  }
+
+  async getCrmStatus(id: string): Promise<CrmStatus | undefined> {
+    const [status] = await db.select().from(crmStatuses).where(eq(crmStatuses.id, id));
+    return status || undefined;
+  }
+
+  async createCrmStatus(status: InsertCrmStatus): Promise<CrmStatus> {
+    const [created] = await db.insert(crmStatuses).values(status).returning();
+    return created;
+  }
+
+  async updateCrmStatus(id: string, status: Partial<InsertCrmStatus>): Promise<CrmStatus> {
+    const [updated] = await db
+      .update(crmStatuses)
+      .set({ ...status, updatedAt: new Date() })
+      .where(eq(crmStatuses.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCrmStatus(id: string): Promise<void> {
+    await db.delete(crmStatuses).where(eq(crmStatuses.id, id));
   }
 }
 
