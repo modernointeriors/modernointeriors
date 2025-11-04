@@ -494,17 +494,17 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="flex gap-0 items-start justify-center">
+            <div className="flex gap-0 items-stretch justify-center">
               {teamMembers.map((member, index) => {
                 const isExpanded = selectedMember === index;
                 const nameChars = member.name.toUpperCase().split('');
                 
                 return (
-                  <div key={member.id} className="flex items-start">
+                  <div key={member.id} className="flex items-stretch self-stretch">
                     {/* Name Column */}
                     <button
                       onClick={() => setSelectedMember(index)}
-                      className="flex-shrink-0 w-20 border-r border-white/10 transition-all duration-300 hover:bg-white/5 py-8"
+                      className="flex-shrink-0 w-20 h-full border-r border-white/10 transition-all duration-300 hover:bg-white/5 py-8"
                       data-testid={`button-team-member-${member.id}`}
                     >
                       <div className="flex flex-col items-center">
@@ -523,7 +523,7 @@ export default function About() {
 
                     {/* Expanded Content - Slides from right of this column */}
                     <div 
-                      className={`overflow-hidden transition-all duration-1000 ease-in-out border-r border-white/10 ${
+                      className={`h-full overflow-hidden transition-all duration-1000 ease-in-out border-r border-white/10 ${
                         isExpanded ? 'max-w-[800px] opacity-100' : 'max-w-0 opacity-0'
                       }`}
                     >
