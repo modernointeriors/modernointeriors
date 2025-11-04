@@ -3138,11 +3138,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="lead">{t('crm.stage.lead')}</SelectItem>
-                              <SelectItem value="prospect">{t('crm.stage.prospect')}</SelectItem>
-                              <SelectItem value="contract">{t('crm.stage.contract')}</SelectItem>
-                              <SelectItem value="delivery">{t('crm.stage.delivery')}</SelectItem>
-                              <SelectItem value="aftercare">{t('crm.stage.aftercare')}</SelectItem>
+                              {crmStages
+                                .filter((stage: any) => stage.active)
+                                .sort((a: any, b: any) => a.order - b.order)
+                                .map((stage: any) => (
+                                  <SelectItem key={stage.id} value={stage.value}>
+                                    {language === 'vi' ? stage.labelVi : stage.labelEn}
+                                  </SelectItem>
+                                ))
+                              }
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -3163,10 +3167,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="silver">{t('crm.tier.silver')}</SelectItem>
-                              <SelectItem value="gold">{t('crm.tier.gold')}</SelectItem>
-                              <SelectItem value="platinum">{t('crm.tier.platinum')}</SelectItem>
-                              <SelectItem value="vip">{t('crm.tier.vip')}</SelectItem>
+                              {crmTiers
+                                .filter((tier: any) => tier.active)
+                                .sort((a: any, b: any) => a.order - b.order)
+                                .map((tier: any) => (
+                                  <SelectItem key={tier.id} value={tier.value}>
+                                    {language === 'vi' ? tier.labelVi : tier.labelEn}
+                                  </SelectItem>
+                                ))
+                              }
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -3188,9 +3197,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="active">{t('crm.status.active')}</SelectItem>
-                            <SelectItem value="inactive">{t('crm.status.inactive')}</SelectItem>
-                            <SelectItem value="archived">{t('crm.status.archived')}</SelectItem>
+                            {crmStatuses
+                              .filter((status: any) => status.active)
+                              .sort((a: any, b: any) => a.order - b.order)
+                              .map((status: any) => (
+                                <SelectItem key={status.id} value={status.value}>
+                                  {language === 'vi' ? status.labelVi : status.labelEn}
+                                </SelectItem>
+                              ))
+                            }
                           </SelectContent>
                         </Select>
                         <FormMessage />
