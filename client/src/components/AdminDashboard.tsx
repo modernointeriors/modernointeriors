@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
-import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X } from "lucide-react";
+import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings } from "lucide-react";
 import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
 import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -332,6 +332,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   // Journey Step state
   const [isJourneyStepDialogOpen, setIsJourneyStepDialogOpen] = useState(false);
   const [editingJourneyStep, setEditingJourneyStep] = useState<JourneyStep | null>(null);
+
+  // CRM Settings state
+  const [isCrmSettingsDialogOpen, setIsCrmSettingsDialogOpen] = useState(false);
 
   // About Page states
   const [showcaseBannerFile, setShowcaseBannerFile] = useState<File | null>(null);
@@ -2912,7 +2915,17 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-sans font-light">{t('crm.clientManagement')}</h2>
-          <Dialog open={isClientDialogOpen} onOpenChange={(open) => {
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsCrmSettingsDialogOpen(true)}
+              data-testid="button-crm-settings"
+              className="h-10 px-4"
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              CRM Settings
+            </Button>
+            <Dialog open={isClientDialogOpen} onOpenChange={(open) => {
             setIsClientDialogOpen(open);
             if (!open) {
               setEditingClient(null);
@@ -3457,9 +3470,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </Form>
             </DialogContent>
           </Dialog>
+          </div>
+        </div>
 
-          {/* Client View Dialog */}
-          <Dialog open={isClientViewDialogOpen} onOpenChange={setIsClientViewDialogOpen}>
+        {/* CRM Settings Dialog */}
+        <Dialog open={isCrmSettingsDialogOpen} onOpenChange={setIsCrmSettingsDialogOpen}>
+          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-light">CRM Settings</DialogTitle>
+            </DialogHeader>
+            <CrmSettingsManager />
+          </DialogContent>
+        </Dialog>
+
+        {/* Client View Dialog */}
+        <Dialog open={isClientViewDialogOpen} onOpenChange={setIsClientViewDialogOpen}>
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-light">
@@ -4142,8 +4167,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             )}
           </CardContent>
         </Card>
-
-        <CrmSettingsManager />
       </div>
     );
   }
