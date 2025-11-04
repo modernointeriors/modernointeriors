@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -1374,6 +1374,153 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete team member" });
+    }
+  });
+
+  // CRM Pipeline Stages routes
+  app.get("/api/crm-pipeline-stages", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const stages = await storage.getCrmPipelineStages(filters);
+      res.json(stages);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch pipeline stages" });
+    }
+  });
+
+  app.post("/api/crm-pipeline-stages", async (req, res) => {
+    try {
+      const validatedData = insertCrmPipelineStageSchema.parse(req.body);
+      const stage = await storage.createCrmPipelineStage(validatedData);
+      res.status(201).json(stage);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create pipeline stage" });
+    }
+  });
+
+  app.put("/api/crm-pipeline-stages/:id", async (req, res) => {
+    try {
+      const validatedData = insertCrmPipelineStageSchema.partial().parse(req.body);
+      const stage = await storage.updateCrmPipelineStage(req.params.id, validatedData);
+      res.json(stage);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update pipeline stage" });
+    }
+  });
+
+  app.delete("/api/crm-pipeline-stages/:id", async (req, res) => {
+    try {
+      await storage.deleteCrmPipelineStage(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete pipeline stage" });
+    }
+  });
+
+  // CRM Customer Tiers routes
+  app.get("/api/crm-customer-tiers", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const tiers = await storage.getCrmCustomerTiers(filters);
+      res.json(tiers);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch customer tiers" });
+    }
+  });
+
+  app.post("/api/crm-customer-tiers", async (req, res) => {
+    try {
+      const validatedData = insertCrmCustomerTierSchema.parse(req.body);
+      const tier = await storage.createCrmCustomerTier(validatedData);
+      res.status(201).json(tier);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create customer tier" });
+    }
+  });
+
+  app.put("/api/crm-customer-tiers/:id", async (req, res) => {
+    try {
+      const validatedData = insertCrmCustomerTierSchema.partial().parse(req.body);
+      const tier = await storage.updateCrmCustomerTier(req.params.id, validatedData);
+      res.json(tier);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update customer tier" });
+    }
+  });
+
+  app.delete("/api/crm-customer-tiers/:id", async (req, res) => {
+    try {
+      await storage.deleteCrmCustomerTier(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete customer tier" });
+    }
+  });
+
+  // CRM Statuses routes
+  app.get("/api/crm-statuses", async (req, res) => {
+    try {
+      const { active } = req.query;
+      const filters: any = {};
+      if (active !== undefined) filters.active = active === 'true';
+      
+      const statuses = await storage.getCrmStatuses(filters);
+      res.json(statuses);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch statuses" });
+    }
+  });
+
+  app.post("/api/crm-statuses", async (req, res) => {
+    try {
+      const validatedData = insertCrmStatusSchema.parse(req.body);
+      const status = await storage.createCrmStatus(validatedData);
+      res.status(201).json(status);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create status" });
+    }
+  });
+
+  app.put("/api/crm-statuses/:id", async (req, res) => {
+    try {
+      const validatedData = insertCrmStatusSchema.partial().parse(req.body);
+      const status = await storage.updateCrmStatus(req.params.id, validatedData);
+      res.json(status);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update status" });
+    }
+  });
+
+  app.delete("/api/crm-statuses/:id", async (req, res) => {
+    try {
+      await storage.deleteCrmStatus(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete status" });
     }
   });
 
