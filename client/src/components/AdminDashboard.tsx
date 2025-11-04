@@ -403,6 +403,19 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     queryKey: ['/api/journey-steps'],
   });
 
+  // CRM Dropdown Settings Queries
+  const { data: crmStages = [] } = useQuery<any[]>({
+    queryKey: ['/api/crm-pipeline-stages'],
+  });
+
+  const { data: crmTiers = [] } = useQuery<any[]>({
+    queryKey: ['/api/crm-customer-tiers'],
+  });
+
+  const { data: crmStatuses = [] } = useQuery<any[]>({
+    queryKey: ['/api/crm-statuses'],
+  });
+
   // About Page Content Queries
   const { data: aboutContent, isLoading: aboutContentLoading } = useQuery<AboutPageContent>({
     queryKey: ['/api/about-content'],
@@ -3970,10 +3983,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <TableCell className="align-middle text-center">
                             <div className="inline-block w-full">
                               <Select
-                                value={client.stage || "lead"}
+                                value={client.stage || crmStages.find(s => s.active)?.value || "lead"}
                                 onValueChange={(value) => updateClientMutation.mutate({ 
                                   id: client.id, 
-                                  stage: value as "lead" | "prospect" | "contract" | "delivery" | "aftercare",
+                                  stage: value as any,
                                   showToast: false
                                 })}
                               >
@@ -3981,11 +3994,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="lead">{t('crm.stage.lead')}</SelectItem>
-                                  <SelectItem value="prospect">{t('crm.stage.prospect')}</SelectItem>
-                                  <SelectItem value="contract">{t('crm.stage.contract')}</SelectItem>
-                                  <SelectItem value="delivery">{t('crm.stage.delivery')}</SelectItem>
-                                  <SelectItem value="aftercare">{t('crm.stage.aftercare')}</SelectItem>
+                                  {crmStages.filter(s => s.active).sort((a, b) => a.order - b.order).map(stage => (
+                                    <SelectItem key={stage.id} value={stage.value}>
+                                      {language === 'vi' ? stage.labelVi : stage.labelEn}
+                                    </SelectItem>
+                                  ))}
                                 </SelectContent>
                               </Select>
                             </div>
@@ -3993,10 +4006,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <TableCell className="align-middle text-center">
                             <div className="inline-block w-full">
                               <Select
-                                value={client.tier || "silver"}
+                                value={client.tier || crmTiers.find(t => t.active)?.value || "silver"}
                                 onValueChange={(value) => updateClientMutation.mutate({ 
                                   id: client.id, 
-                                  tier: value as "silver" | "gold" | "platinum" | "vip",
+                                  tier: value as any,
                                   showToast: false
                                 })}
                               >
@@ -4004,10 +4017,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="silver">{t('crm.tier.silver')}</SelectItem>
-                                  <SelectItem value="gold">{t('crm.tier.gold')}</SelectItem>
-                                  <SelectItem value="platinum">{t('crm.tier.platinum')}</SelectItem>
-                                  <SelectItem value="vip">{t('crm.tier.vip')}</SelectItem>
+                                  {crmTiers.filter(t => t.active).sort((a, b) => a.order - b.order).map(tier => (
+                                    <SelectItem key={tier.id} value={tier.value}>
+                                      {language === 'vi' ? tier.labelVi : tier.labelEn}
+                                    </SelectItem>
+                                  ))}
                                 </SelectContent>
                               </Select>
                             </div>
@@ -4015,10 +4029,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <TableCell className="align-middle text-center">
                             <div className="inline-block w-full">
                               <Select
-                                value={client.status || "active"}
+                                value={client.status || crmStatuses.find(s => s.active)?.value || "active"}
                                 onValueChange={(value) => updateClientMutation.mutate({ 
                                   id: client.id, 
-                                  status: value as "active" | "inactive" | "archived",
+                                  status: value as any,
                                   showToast: false
                                 })}
                               >
@@ -4026,9 +4040,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="active">{t('crm.status.active')}</SelectItem>
-                                  <SelectItem value="inactive">{t('crm.status.inactive')}</SelectItem>
-                                  <SelectItem value="archived">{t('crm.status.archived')}</SelectItem>
+                                  {crmStatuses.filter(s => s.active).sort((a, b) => a.order - b.order).map(status => (
+                                    <SelectItem key={status.id} value={status.value}>
+                                      {language === 'vi' ? status.labelVi : status.labelEn}
+                                    </SelectItem>
+                                  ))}
                                 </SelectContent>
                               </Select>
                             </div>
