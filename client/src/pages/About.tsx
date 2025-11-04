@@ -1,46 +1,39 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Sparkles, Trophy, Users2, Target, Eye, Lightbulb } from "lucide-react";
+import { ArrowRight, Target, Eye } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade } from 'swiper/modules';
 import type { Project, AboutPageContent, AboutCoreValue, AboutTeamMember } from '@shared/schema';
 import { useState } from 'react';
-import architectureBanner from "@assets/stock_images/modern_luxury_archit_ac188b7b.jpg";
+import * as LucideIcons from 'lucide-react';
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 
 export default function About() {
   const { language, t } = useLanguage();
-  const [progressKey, setProgressKey] = useState(0);
   const [selectedMember, setSelectedMember] = useState<number | null>(0);
 
-  // Fetch projects for hero slider
   const { data: projects = [] } = useQuery<Project[]>({
     queryKey: ["/api/projects"],
   });
 
-  // Fetch about page content
   const { data: aboutContent } = useQuery<AboutPageContent>({
     queryKey: ["/api/about-page-content"],
   });
 
-  // Fetch core values
   const { data: coreValues = [] } = useQuery<AboutCoreValue[]>({
     queryKey: ["/api/about-core-values"],
-    select: (data) => data.filter(v => v.active),
+    select: (data) => data.filter(v => v.active).sort((a, b) => a.order - b.order),
   });
 
-  // Fetch team members
   const { data: teamMembers = [] } = useQuery<AboutTeamMember[]>({
     queryKey: ["/api/about-team-members"],
-    select: (data) => data.filter(m => m.active),
+    select: (data) => data.filter(m => m.active).sort((a, b) => a.order - b.order),
   });
 
-  // Get fallback image based on category
   const getFallbackImage = (category: string) => {
     switch (category) {
       case 'residential':
@@ -54,9 +47,9 @@ export default function About() {
     }
   };
 
-  // Handle slide change
-  const handleSlideChange = () => {
-    setProgressKey(prev => prev + 1);
+  const getIconComponent = (iconName: string) => {
+    const Icon = (LucideIcons as any)[iconName];
+    return Icon || LucideIcons.Circle;
   };
 
   return (
@@ -66,9 +59,7 @@ export default function About() {
         <Swiper
           modules={[Autoplay, EffectFade]}
           effect="fade"
-          fadeEffect={{
-            crossFade: false,
-          }}
+          fadeEffect={{ crossFade: false }}
           spaceBetween={0}
           slidesPerView={1}
           speed={1000}
@@ -77,8 +68,7 @@ export default function About() {
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
-          loop={true}
-          onSlideChange={handleSlideChange}
+          loop={projects.length > 1}
           className="h-screen"
         >
           {projects.length > 0 ? projects.map((project) => {
@@ -106,7 +96,6 @@ export default function About() {
                   <div className="relative h-full flex items-center">
                     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        {/* Left side - Main heading */}
                         <div className="space-y-8">
                           <div className="space-y-6">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
@@ -122,7 +111,6 @@ export default function About() {
                           </p>
                         </div>
 
-                        {/* Right side - Tagline */}
                         <div className="lg:text-right">
                           <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
                             {language === "vi"
@@ -138,7 +126,6 @@ export default function About() {
               </SwiperSlide>
             );
           }) : (
-            // Fallback slide when no projects
             <SwiperSlide>
               <div className="relative h-screen">
                 <div
@@ -153,7 +140,6 @@ export default function About() {
                 <div className="relative h-full flex items-center">
                   <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                      {/* Left side - Main heading */}
                       <div className="space-y-8">
                         <div className="space-y-6">
                           <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
@@ -172,7 +158,6 @@ export default function About() {
                         </p>
                       </div>
 
-                      {/* Right side - Tagline */}
                       <div className="lg:text-right">
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
                           {language === "vi"
@@ -188,205 +173,6 @@ export default function About() {
             </SwiperSlide>
           )}
         </Swiper>
-      </section>
-
-      {/* Principles Section */}
-      <section className="py-20 bg-black -ml-16">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-              {language === "vi" ? "NGUYÊN TẮC LÀM VIỆC" : "OUR PRINCIPLES"}
-            </h2>
-            <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
-              {language === "vi" 
-                ? "NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI"
-                : "THE FOUNDATION OF OUR WORK"
-              }
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {/* Principle 1 */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <Sparkles className="w-8 h-8 text-white/40" />
-                <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                  {language === "vi"
-                    ? "SÁNG TẠO & ĐỔI MỚI"
-                    : "CREATIVE & INNOVATIVE"
-                  }
-                </h4>
-              </div>
-              <p className="text-white/70 font-light leading-relaxed">
-                {language === "vi"
-                  ? "Luôn đặt sự sáng tạo lên hàng đầu, kết hợp với công nghệ tiên tiến để tạo ra những giải pháp thiết kế độc đáo và hiện đại. Mỗi dự án đều là một tác phẩm nghệ thuật riêng biệt."
-                  : "Always putting creativity first, combining with advanced technology to create unique and modern design solutions. Every project is a unique work of art."
-                }
-              </p>
-            </div>
-
-            {/* Principle 2 */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <Trophy className="w-8 h-8 text-white/40" />
-                <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                  {language === "vi"
-                    ? "CHẤT LƯỢNG HÀNG ĐẦU"
-                    : "QUALITY EXCELLENCE"
-                  }
-                </h4>
-              </div>
-              <p className="text-white/70 font-light leading-relaxed">
-                {language === "vi"
-                  ? "Cam kết mang đến chất lượng hoàn hảo trong từng chi tiết. Từ khâu thiết kế đến thi công, chúng tôi luôn đảm bảo tiêu chuẩn cao nhất để khách hàng hoàn toàn hài lòng."
-                  : "Committed to delivering perfect quality in every detail. From design to construction, we always ensure the highest standards for complete customer satisfaction."
-                }
-              </p>
-            </div>
-
-            {/* Principle 3 */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <Users2 className="w-8 h-8 text-white/40" />
-                <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                  {language === "vi"
-                    ? "QUẢN LÝ DỰ ÁN 3D/VR"
-                    : "3D/VR PROJECT MANAGEMENT"
-                  }
-                </h4>
-              </div>
-              <p className="text-white/70 font-light leading-relaxed">
-                {language === "vi"
-                  ? "Ứng dụng công nghệ BIM và 3D/VR tiên tiến trong quá trình thiết kế, giúp khách hàng hình dung rõ ràng dự án trước khi thi công. Quản lý chuyên nghiệp với đội ngũ giàu kinh nghiệm."
-                  : "Advanced BIM and 3D/VR technology application in the design process, helping clients visualize the project clearly before construction. Professional management with experienced teams."
-                }
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Architecture Showcase Section */}
-      <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden -ml-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${architectureBanner})`,
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-        </div>
-
-        <div className="relative h-full flex items-end">
-          {/* Vertical lines with fade effect */}
-          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-            <div className="border-r-2 border-white/20" style={{ 
-              borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
-            }} />
-            <div className="border-r-2 border-white/20" style={{ 
-              borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
-            }} />
-            <div className="border-r-2 border-white/20" style={{ 
-              borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
-            }} />
-            <div />
-          </div>
-
-          {/* Content grid */}
-          <div className="relative w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-end">
-            {/* Service 1 */}
-            <div className="px-6 py-8 md:px-8 md:py-12">
-              <div className="space-y-3 h-[180px] flex flex-col">
-                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "DỊCH VỤ KIẾN TRÚC" : "ARCHITECTURAL SERVICES"}
-                </h4>
-                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Dịch vụ thiết kế kiến trúc chuyên nghiệp, từ khảo sát, tư vấn đến hoàn thiện bản vẽ thi công. Chúng tôi cung cấp giải pháp tối ưu cho mọi loại công trình."
-                    : "Professional architectural design services, from survey and consultation to construction drawings. We provide optimal solutions for all types of projects."
-                  }
-                </p>
-              </div>
-            </div>
-
-            {/* Service 2 */}
-            <div className="px-6 py-8 md:px-8 md:py-12">
-              <div className="space-y-3 h-[180px] flex flex-col">
-                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "DỊCH VỤ THIẾT KẾ NỘI THẤT" : "INTERIOR DESIGN SERVICES"}
-                </h4>
-                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Thiết kế nội thất cao cấp với sự tư vấn từ chuyên gia. Tạo ra không gian sống và làm việc hoàn hảo với phong cách riêng biệt."
-                    : "Premium interior design with expert consultation. Creating perfect living and working spaces with distinctive style."
-                  }
-                </p>
-              </div>
-            </div>
-
-            {/* Service 3 */}
-            <div className="px-6 py-8 md:px-8 md:py-12">
-              <div className="space-y-3 h-[180px] flex flex-col">
-                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "MÔ HÌNH BIM VÀ 3D VISUALIZATION" : "BIM MODELING & 3D VISUALIZATION"}
-                </h4>
-                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Ứng dụng công nghệ BIM và 3D visualization tiên tiến, giúp khách hàng hình dung rõ ràng dự án trước khi thi công và tối ưu quá trình quản lý."
-                    : "Advanced BIM and 3D visualization technology, helping clients clearly visualize projects before construction and optimize management process."
-                  }
-                </p>
-              </div>
-            </div>
-
-            {/* Service 4 */}
-            <div className="px-6 py-8 md:px-8 md:py-12">
-              <div className="space-y-3 h-[180px] flex flex-col">
-                <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
-                  {language === "vi" ? "THIẾT KẾ CẢNH QUAN" : "LANDSCAPE DESIGN"}
-                </h4>
-                <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
-                  {language === "vi"
-                    ? "Thiết kế cảnh quan xanh kết hợp với kiến trúc, tạo nên không gian sống hài hòa với thiên nhiên. Mang lại trải nghiệm thư giãn tuyệt vời."
-                    : "Green landscape design integrated with architecture, creating living spaces in harmony with nature. Delivering excellent relaxation experience."
-                  }
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20 bg-black -ml-16">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-projects">150+</div>
-              <div className="text-sm text-white/60 uppercase tracking-wider">
-                {language === "vi" ? "Dự án hoàn thành" : "Projects Completed"}
-              </div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-awards">25+</div>
-              <div className="text-sm text-white/60 uppercase tracking-wider">
-                {language === "vi" ? "Giải thưởng thiết kế" : "Design Awards"}
-              </div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-clients">200+</div>
-              <div className="text-sm text-white/60 uppercase tracking-wider">
-                {language === "vi" ? "Khách hàng hài lòng" : "Happy Clients"}
-              </div>
-            </div>
-            <div className="text-center space-y-2">
-              <div className="text-4xl md:text-5xl font-light text-white" data-testid="stats-countries">12+</div>
-              <div className="text-sm text-white/60 uppercase tracking-wider">
-                {language === "vi" ? "Quốc gia" : "Countries"}
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Company History Section */}
@@ -415,7 +201,6 @@ export default function About() {
         <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Mission */}
               {aboutContent?.missionContentEn && aboutContent?.missionContentVi && (
                 <div className="space-y-6">
                   <div className="flex items-center gap-4 mb-6">
@@ -430,7 +215,6 @@ export default function About() {
                 </div>
               )}
 
-              {/* Vision */}
               {aboutContent?.visionContentEn && aboutContent?.visionContentVi && (
                 <div className="space-y-6">
                   <div className="flex items-center gap-4 mb-6">
@@ -463,19 +247,22 @@ export default function About() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {coreValues.map((value) => (
-                <div key={value.id} className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <Lightbulb className="w-8 h-8 text-white/40" />
-                    <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                      {language === "vi" ? value.titleVi : value.titleEn}
-                    </h4>
+              {coreValues.map((value) => {
+                const IconComponent = getIconComponent(value.icon);
+                return (
+                  <div key={value.id} className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <IconComponent className="w-8 h-8 text-white/40" />
+                      <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                        {language === "vi" ? value.titleVi : value.titleEn}
+                      </h4>
+                    </div>
+                    <p className="text-white/70 font-light leading-relaxed">
+                      {language === "vi" ? value.descriptionVi : value.descriptionEn}
+                    </p>
                   </div>
-                  <p className="text-white/70 font-light leading-relaxed">
-                    {language === "vi" ? value.descriptionVi : value.descriptionEn}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -489,9 +276,14 @@ export default function About() {
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
                 {language === "vi" ? "ĐỘI NGŨ" : "OUR TEAM"}
               </h2>
-              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide mb-4">
                 {language === "vi" ? aboutContent?.teamTitleVi : aboutContent?.teamTitleEn}
               </h3>
+              {aboutContent?.teamSubtitleEn && aboutContent?.teamSubtitleVi && (
+                <p className="text-white/60 font-light text-lg">
+                  {language === "vi" ? aboutContent.teamSubtitleVi : aboutContent.teamSubtitleEn}
+                </p>
+              )}
             </div>
 
             <div className="flex gap-0 items-stretch justify-center">
@@ -501,7 +293,6 @@ export default function About() {
                 
                 return (
                   <div key={member.id} className="flex items-stretch self-stretch">
-                    {/* Name Column */}
                     <button
                       onClick={() => setSelectedMember(index)}
                       className="flex-shrink-0 w-20 h-full border-r border-white/10 transition-all duration-300 hover:bg-white/5 py-8"
@@ -521,7 +312,6 @@ export default function About() {
                       </div>
                     </button>
 
-                    {/* Expanded Content - Slides from right of this column */}
                     <div 
                       className={`h-full overflow-hidden transition-all duration-1000 ease-in-out border-r border-white/10 ${
                         isExpanded ? 'max-w-[800px] opacity-100' : 'max-w-0 opacity-0'
@@ -529,12 +319,11 @@ export default function About() {
                     >
                       <div className="w-[800px] pl-12 pr-8 py-8">
                         <div className="flex gap-8 items-start">
-                          {/* Image (9:16 ratio) */}
-                          {member.image && (
+                          {(member.imageData || member.image) && (
                             <div className="flex-shrink-0 w-64">
                               <div className="aspect-[9/16] overflow-hidden bg-white/10">
                                 <img 
-                                  src={member.image} 
+                                  src={member.imageData || member.image} 
                                   alt={member.name}
                                   className="w-full h-full object-cover"
                                 />
@@ -542,7 +331,6 @@ export default function About() {
                             </div>
                           )}
 
-                          {/* Details */}
                           <div className="flex-1 space-y-6">
                             <div>
                               <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">
@@ -591,81 +379,6 @@ export default function About() {
           </div>
         </section>
       )}
-
-      {/* Our Approach Section */}
-      <section className="py-20 bg-black -ml-16">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-              {language === "vi" ? "QUY TRÌNH LÀM VIỆC" : "OUR PROCESS"}
-            </h2>
-            <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
-              {language === "vi" 
-                ? "TỪ Ý TƯỞNG ĐẾN HIỆN THỰC"
-                : "FROM CONCEPT TO REALITY"
-              }
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Step 1 */}
-            <div className="space-y-4">
-              <div className="text-6xl font-light text-white/20">01</div>
-              <h4 className="text-xl font-light text-white uppercase">
-                {language === "vi" ? "Tư vấn & Khảo sát" : "Consultation & Survey"}
-              </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
-                {language === "vi"
-                  ? "Gặp gỡ, lắng nghe nhu cầu và khảo sát thực địa để hiểu rõ mong muốn của khách hàng."
-                  : "Meeting, listening to needs and on-site survey to understand client desires."
-                }
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="space-y-4">
-              <div className="text-6xl font-light text-white/20">02</div>
-              <h4 className="text-xl font-light text-white uppercase">
-                {language === "vi" ? "Phát triển ý tưởng" : "Concept Development"}
-              </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
-                {language === "vi"
-                  ? "Phát triển ý tưởng thiết kế, bản vẽ sơ bộ và 3D visualization cho dự án."
-                  : "Developing design concepts, preliminary drawings and 3D visualization for the project."
-                }
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="space-y-4">
-              <div className="text-6xl font-light text-white/20">03</div>
-              <h4 className="text-xl font-light text-white uppercase">
-                {language === "vi" ? "Thiết kế chi tiết" : "Detailed Design"}
-              </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
-                {language === "vi"
-                  ? "Hoàn thiện bản vẽ kỹ thuật, lựa chọn vật liệu và lập kế hoạch thi công chi tiết."
-                  : "Completing technical drawings, material selection and detailed construction planning."
-                }
-              </p>
-            </div>
-
-            {/* Step 4 */}
-            <div className="space-y-4">
-              <div className="text-6xl font-light text-white/20">04</div>
-              <h4 className="text-xl font-light text-white uppercase">
-                {language === "vi" ? "Thi công & Bàn giao" : "Construction & Handover"}
-              </h4>
-              <p className="text-white/70 font-light text-sm leading-relaxed">
-                {language === "vi"
-                  ? "Giám sát thi công chặt chẽ, đảm bảo chất lượng và bàn giao công trình hoàn hảo."
-                  : "Strict construction supervision, ensuring quality and perfect project handover."
-                }
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-black -ml-16">
