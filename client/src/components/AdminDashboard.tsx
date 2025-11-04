@@ -3309,7 +3309,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 <div className="flex items-center gap-2">
                                   <span className="text-sm font-medium text-white">{transaction.title}</span>
                                   <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
-                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Commission" : "—"}
+                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Hoa hồng" : "—"}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -3651,7 +3651,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-white">{transaction.title}</span>
                                 <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
-                                  {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Commission" : "—"}
+                                  {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Hoa hồng" : "—"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-3">
@@ -3757,7 +3757,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             <SelectContent>
                               <SelectItem value="payment">Thanh toán</SelectItem>
                               <SelectItem value="refund">Hoàn tiền</SelectItem>
-                              <SelectItem value="commission">Commission</SelectItem>
+                              <SelectItem value="commission">Hoa hồng</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -3952,7 +3952,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         </TableHead>
                         <TableHead className="w-[110px]">
                           <div>{t('crm.totalSpending')}</div>
-                          <div className="text-xs font-normal text-muted-foreground mt-0.5">Commission</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">Hoa hồng</div>
                         </TableHead>
                         <TableHead className="w-[110px] text-center">{t('crm.warrantyStatus')}</TableHead>
                         <TableHead className="w-[110px] text-center">{t('crm.pipelineStage')}</TableHead>
