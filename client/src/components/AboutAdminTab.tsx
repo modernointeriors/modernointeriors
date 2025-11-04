@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -173,6 +173,13 @@ export default function AboutAdminTab({
       order: 0,
     },
   });
+
+  // Reset form when aboutContent is loaded
+  useEffect(() => {
+    if (aboutContent) {
+      aboutContentForm.reset(aboutContent);
+    }
+  }, [aboutContent]);
 
   const handleEditImage = () => {
     const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImage;
