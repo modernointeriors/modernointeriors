@@ -20,8 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
-import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
+import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutCoreValueSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AboutAdminTab from "@/components/AboutAdminTab";
 import CrmSettingsManager from "@/components/CrmSettingsManager";
@@ -349,7 +349,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [teamMemberImageFile, setTeamMemberImageFile] = useState<File | null>(null);
   const [teamMemberImagePreview, setTeamMemberImagePreview] = useState<string>('');
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
-  const [editingPrinciple, setEditingPrinciple] = useState<AboutPrinciple | null>(null);
+  const [editingPrinciple, setEditingPrinciple] = useState<AboutCoreValue | null>(null);
   const [isShowcaseServiceDialogOpen, setIsShowcaseServiceDialogOpen] = useState(false);
   const [editingShowcaseService, setEditingShowcaseService] = useState<AboutShowcaseService | null>(null);
   const [isProcessStepDialogOpen, setIsProcessStepDialogOpen] = useState(false);
@@ -433,8 +433,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     queryKey: ['/api/about-content'],
   });
 
-  const { data: aboutPrinciples = [], isLoading: aboutPrinciplesLoading } = useQuery<AboutPrinciple[]>({
-    queryKey: ['/api/about-principles'],
+  const { data: aboutPrinciples = [], isLoading: aboutPrinciplesLoading } = useQuery<AboutCoreValue[]>({
+    queryKey: ['/api/about-core-values'],
   });
 
   const { data: aboutShowcaseServices = [], isLoading: aboutShowcaseServicesLoading } = useQuery<AboutShowcaseService[]>({
@@ -749,8 +749,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
   });
 
-  const principleForm = useForm<InsertAboutPrinciple>({
-    resolver: zodResolver(insertAboutPrincipleSchema),
+  const principleForm = useForm<InsertAboutCoreValue>({
+    resolver: zodResolver(insertAboutCoreValueSchema),
     defaultValues: {
       icon: "",
       titleEn: "",
@@ -1331,10 +1331,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/about-page-content'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
       queryClient.invalidateQueries({ queryKey: ['/api/about-showcase-services'] });
       queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
       queryClient.invalidateQueries({ queryKey: ['/api/about-team-members'] });
       aboutContentForm.reset(data);
       setShowcaseBannerFile(null);
@@ -1347,26 +1346,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   });
 
   const createPrincipleMutation = useMutation({
-    mutationFn: async (data: InsertAboutPrinciple) => {
-      const response = await apiRequest('POST', '/api/about-principles', data);
+    mutationFn: async (data: InsertAboutCoreValue) => {
+      const response = await apiRequest('POST', '/api/about-core-values', data);
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
-      toast({ title: "Principle created successfully" });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
+      toast({ title: "Core value created successfully" });
       setIsPrincipleDialogOpen(false);
       principleForm.reset();
     },
   });
 
   const updatePrincipleMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAboutPrinciple> }) => {
-      const response = await apiRequest('PUT', `/api/about-principles/${id}`, data);
+    mutationFn: async ({ id, data }: { id: string; data: Partial<InsertAboutCoreValue> }) => {
+      const response = await apiRequest('PUT', `/api/about-core-values/${id}`, data);
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
-      toast({ title: "Principle updated successfully" });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
+      toast({ title: "Core value updated successfully" });
       setIsPrincipleDialogOpen(false);
       setEditingPrinciple(null);
     },
@@ -1374,11 +1373,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const deletePrincipleMutation = useMutation({
     mutationFn: async (id: string) => {
-      await apiRequest('DELETE', `/api/about-principles/${id}`);
+      await apiRequest('DELETE', `/api/about-core-values/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
-      toast({ title: "Principle deleted successfully" });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
+      toast({ title: "Core value deleted successfully" });
     },
   });
 
@@ -2343,7 +2342,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     await updateAboutContentMutation.mutateAsync(submitData);
   };
 
-  const onPrincipleSubmit = async (data: InsertAboutPrinciple) => {
+  const onPrincipleSubmit = async (data: InsertAboutCoreValue) => {
     if (editingPrinciple) {
       await updatePrincipleMutation.mutateAsync({ id: editingPrinciple.id, data });
     } else {

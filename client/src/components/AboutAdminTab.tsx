@@ -11,14 +11,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Plus, Trash2, Upload, Edit, X } from "lucide-react";
-import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
-import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
+import type { AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
+import { insertAboutPageContentSchema, insertAboutCoreValueSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import ImageUpload from "@/components/ImageUpload";
 import ImageCropDialog from "@/components/ImageCropDialog";
 
 interface AboutAdminTabProps {
   aboutContent?: AboutPageContent;
-  aboutPrinciples: AboutPrinciple[];
+  aboutPrinciples: AboutCoreValue[];
   aboutShowcaseServices: AboutShowcaseService[];
   aboutProcessSteps: AboutProcessStep[];
   aboutTeamMembers: AboutTeamMember[];
@@ -28,7 +28,7 @@ interface AboutAdminTabProps {
   aboutProcessStepsLoading: boolean;
   aboutTeamMembersLoading: boolean;
   onAboutContentSubmit: (data: InsertAboutPageContent) => Promise<void>;
-  onPrincipleSubmit: (data: InsertAboutPrinciple) => Promise<void>;
+  onPrincipleSubmit: (data: InsertAboutCoreValue) => Promise<void>;
   onShowcaseServiceSubmit: (data: InsertAboutShowcaseService) => Promise<void>;
   onProcessStepSubmit: (data: InsertAboutProcessStep) => Promise<void>;
   onTeamMemberSubmit: (data: InsertAboutTeamMember) => Promise<void>;
@@ -103,7 +103,7 @@ export default function AboutAdminTab({
 }: AboutAdminTabProps) {
   
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
-  const [editingPrinciple, setEditingPrinciple] = useState<AboutPrinciple | null>(null);
+  const [editingPrinciple, setEditingPrinciple] = useState<AboutCoreValue | null>(null);
   const [isShowcaseServiceDialogOpen, setIsShowcaseServiceDialogOpen] = useState(false);
   const [editingShowcaseService, setEditingShowcaseService] = useState<AboutShowcaseService | null>(null);
   const [isProcessStepDialogOpen, setIsProcessStepDialogOpen] = useState(false);
@@ -157,8 +157,8 @@ export default function AboutAdminTab({
     },
   });
 
-  const principleForm = useForm<InsertAboutPrinciple>({
-    resolver: zodResolver(insertAboutPrincipleSchema),
+  const principleForm = useForm<InsertAboutCoreValue>({
+    resolver: zodResolver(insertAboutCoreValueSchema),
     defaultValues: {
       icon: "",
       titleEn: "",
