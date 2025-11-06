@@ -199,6 +199,27 @@ export default function AboutAdminTab({
     }
   }, [aboutContent]);
 
+  // Wrapper functions to auto-close dialogs after successful submit
+  const handlePrincipleSubmit = async (data: InsertAboutPrinciple) => {
+    await onPrincipleSubmit(data);
+    setIsPrincipleDialogOpen(false);
+  };
+
+  const handleShowcaseServiceSubmit = async (data: InsertAboutShowcaseService) => {
+    await onShowcaseServiceSubmit(data);
+    setIsShowcaseServiceDialogOpen(false);
+  };
+
+  const handleProcessStepSubmit = async (data: InsertAboutProcessStep) => {
+    await onProcessStepSubmit(data);
+    setIsProcessStepDialogOpen(false);
+  };
+
+  const handleTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
+    await onTeamMemberSubmit(data);
+    setIsTeamMemberDialogOpen(false);
+  };
+
   const handleEditImage = (type: 'showcase' | 'history' | 'missionVision' = 'showcase') => {
     setCropType(type);
     // Use preview, base64 data, or URL
@@ -887,7 +908,7 @@ export default function AboutAdminTab({
                 <DialogTitle>Edit Principle</DialogTitle>
               </DialogHeader>
                 <Form {...principleForm}>
-                  <form onSubmit={principleForm.handleSubmit(onPrincipleSubmit)} className="space-y-4">
+                  <form onSubmit={principleForm.handleSubmit(handlePrincipleSubmit)} className="space-y-4">
                     <FormField
                       control={principleForm.control}
                       name="icon"
@@ -1035,7 +1056,7 @@ export default function AboutAdminTab({
                 <DialogTitle>Edit Showcase Service</DialogTitle>
               </DialogHeader>
               <Form {...showcaseServiceForm}>
-                <form onSubmit={showcaseServiceForm.handleSubmit(onShowcaseServiceSubmit)} className="space-y-4">
+                <form onSubmit={showcaseServiceForm.handleSubmit(handleShowcaseServiceSubmit)} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={showcaseServiceForm.control}
@@ -1169,7 +1190,7 @@ export default function AboutAdminTab({
                 <DialogTitle>Edit Process Step</DialogTitle>
               </DialogHeader>
               <Form {...processStepForm}>
-                <form onSubmit={processStepForm.handleSubmit(onProcessStepSubmit)} className="space-y-4">
+                <form onSubmit={processStepForm.handleSubmit(handleProcessStepSubmit)} className="space-y-4">
                   <FormField
                     control={processStepForm.control}
                     name="stepNumber"
@@ -1303,7 +1324,7 @@ export default function AboutAdminTab({
                 <DialogTitle>{editingTeamMember ? 'Edit' : 'Add'} Team Member</DialogTitle>
               </DialogHeader>
               <Form {...teamMemberForm}>
-                <form onSubmit={teamMemberForm.handleSubmit(onTeamMemberSubmit)} className="space-y-4">
+                <form onSubmit={teamMemberForm.handleSubmit(handleTeamMemberSubmit)} className="space-y-4">
                   <FormField
                     control={teamMemberForm.control}
                     name="name"
