@@ -2238,7 +2238,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setIsJourneyStepDialogOpen(false);
   };
 
-  const handlePartnerLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePartnerLogoFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2251,17 +2251,41 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           description: `Kích thước file: ${fileSizeMB}MB. Giới hạn tối đa: ${maxSizeMB}MB. Vui lòng chọn file nhỏ hơn.`,
           variant: "destructive"
         });
-        e.target.value = ''; // Reset input
+        e.target.value = '';
         return;
       }
 
       setPartnerLogoFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setPartnerLogoPreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      // Upload to server
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+        
+        const data = await response.json();
+        setPartnerLogoPreview(data.path);
+        
+        toast({
+          title: "Upload thành công",
+          description: "Logo đã được upload"
+        });
+      } catch (error) {
+        toast({
+          title: "Lỗi upload",
+          description: "Không thể upload logo",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
@@ -2394,7 +2418,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setArticleContentImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleQualityBgFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQualityBgFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2412,16 +2436,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setQualityBgFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setQualityBgPreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) throw new Error('Upload failed');
+        
+        const data = await response.json();
+        setQualityBgPreview(data.path);
+        
+        toast({
+          title: "Upload thành công",
+          description: "Ảnh background đã được upload"
+        });
+      } catch (error) {
+        toast({
+          title: "Lỗi upload",
+          description: "Không thể upload ảnh",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
-  const handleQuality2BgFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuality2BgFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2439,16 +2484,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setQuality2BgFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setQuality2BgPreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) throw new Error('Upload failed');
+        
+        const data = await response.json();
+        setQuality2BgPreview(data.path);
+        
+        toast({
+          title: "Upload thành công",
+          description: "Ảnh background đã được upload"
+        });
+      } catch (error) {
+        toast({
+          title: "Lỗi upload",
+          description: "Không thể upload ảnh",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
-  const handleShowcaseBannerFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleShowcaseBannerFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2466,16 +2532,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setShowcaseBannerFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setShowcaseBannerPreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) throw new Error('Upload failed');
+        
+        const data = await response.json();
+        setShowcaseBannerPreview(data.path);
+        
+        toast({
+          title: "Upload successful",
+          description: "Banner image uploaded"
+        });
+      } catch (error) {
+        toast({
+          title: "Upload error",
+          description: "Failed to upload image",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
-  const handleHistoryImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHistoryImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2493,16 +2580,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setHistoryImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setHistoryImagePreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) throw new Error('Upload failed');
+        
+        const data = await response.json();
+        setHistoryImagePreview(data.path);
+        
+        toast({
+          title: "Upload successful",
+          description: "History image uploaded"
+        });
+      } catch (error) {
+        toast({
+          title: "Upload error",
+          description: "Failed to upload image",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
-  const handleMissionVisionImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMissionVisionImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2520,30 +2628,49 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setMissionVisionImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setMissionVisionImagePreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) throw new Error('Upload failed');
+        
+        const data = await response.json();
+        setMissionVisionImagePreview(data.path);
+        
+        toast({
+          title: "Upload successful",
+          description: "Mission vision image uploaded"
+        });
+      } catch (error) {
+        toast({
+          title: "Upload error",
+          description: "Failed to upload image",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
   const onAboutContentSubmit = async (data: InsertAboutPageContent) => {
     const submitData = { ...data };
     if (showcaseBannerPreview) {
-      // Save base64 data to imageData field
-      submitData.showcaseBannerImageData = showcaseBannerPreview;
-      submitData.showcaseBannerImage = ''; // Clear URL since we're using base64
+      // Use uploaded path
+      submitData.showcaseBannerImage = showcaseBannerPreview;
     }
     if (historyImagePreview) {
-      // Save history image as base64 or keep the form value if it's a URL
+      // Use uploaded path
       submitData.historyImage = historyImagePreview;
     }
     if (missionVisionImagePreview) {
-      // Save mission vision image to imageData field
-      submitData.missionVisionImageData = missionVisionImagePreview;
-      submitData.missionVisionImage = ''; // Clear URL since we're using base64
+      // Use uploaded path
+      submitData.missionVisionImage = missionVisionImagePreview;
     }
     await updateAboutContentMutation.mutateAsync(submitData);
   };
@@ -2572,7 +2699,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     }
   };
 
-  const handleTeamMemberImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTeamMemberImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2590,21 +2717,41 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setTeamMemberImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setTeamMemberImagePreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) throw new Error('Upload failed');
+        
+        const data = await response.json();
+        setTeamMemberImagePreview(data.path);
+        
+        toast({
+          title: "Upload successful",
+          description: "Team member image uploaded"
+        });
+      } catch (error) {
+        toast({
+          title: "Upload error",
+          description: "Failed to upload image",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
   const onTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
     const submitData = { ...data };
     if (teamMemberImagePreview) {
-      // Save base64 data to imageData field
-      submitData.imageData = teamMemberImagePreview;
-      submitData.image = ''; // Clear URL since we're using base64
+      // Use uploaded path
+      submitData.image = teamMemberImagePreview;
     }
     
     if (editingTeamMember) {
