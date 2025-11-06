@@ -718,11 +718,11 @@ export default function AboutAdminTab({
                     <Input {...aboutContentForm.register("statsProjectsValue")} placeholder="150+" data-testid="input-stats-projects-value" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-blue-500 font-semibold">(English)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (English)</label>
                     <Input {...aboutContentForm.register("statsProjectsLabelEn")} placeholder="Projects Completed" data-testid="input-stats-projects-label-en" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (Tiếng Việt)</label>
                     <Input {...aboutContentForm.register("statsProjectsLabelVi")} placeholder="Dự án hoàn thành" data-testid="input-stats-projects-label-vi" />
                   </div>
                 </div>
@@ -735,11 +735,11 @@ export default function AboutAdminTab({
                     <Input {...aboutContentForm.register("statsAwardsValue")} placeholder="25+" data-testid="input-stats-awards-value" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-blue-500 font-semibold">(English)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (English)</label>
                     <Input {...aboutContentForm.register("statsAwardsLabelEn")} placeholder="Design Awards" data-testid="input-stats-awards-label-en" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (Tiếng Việt)</label>
                     <Input {...aboutContentForm.register("statsAwardsLabelVi")} placeholder="Giải thưởng thiết kế" data-testid="input-stats-awards-label-vi" />
                   </div>
                 </div>
@@ -752,11 +752,11 @@ export default function AboutAdminTab({
                     <Input {...aboutContentForm.register("statsClientsValue")} placeholder="200+" data-testid="input-stats-clients-value" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-blue-500 font-semibold">(English)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (English)</label>
                     <Input {...aboutContentForm.register("statsClientsLabelEn")} placeholder="Happy Clients" data-testid="input-stats-clients-label-en" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (Tiếng Việt)</label>
                     <Input {...aboutContentForm.register("statsClientsLabelVi")} placeholder="Khách hàng hài lòng" data-testid="input-stats-clients-label-vi" />
                   </div>
                 </div>
@@ -769,11 +769,11 @@ export default function AboutAdminTab({
                     <Input {...aboutContentForm.register("statsCountriesValue")} placeholder="12+" data-testid="input-stats-countries-value" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-blue-500 font-semibold">(English)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (English)</label>
                     <Input {...aboutContentForm.register("statsCountriesLabelEn")} placeholder="Countries" data-testid="input-stats-countries-label-en" />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Label <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                    <label className="text-sm font-light mb-2 block">Label (Tiếng Việt)</label>
                     <Input {...aboutContentForm.register("statsCountriesLabelVi")} placeholder="Quốc gia" data-testid="input-stats-countries-label-vi" />
                   </div>
                 </div>
