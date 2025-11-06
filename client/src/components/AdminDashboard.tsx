@@ -5001,17 +5001,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         <Card className="bg-black border-white/10">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle className="text-white">Partners Management</CardTitle>
+              <div>
+                <CardTitle className="text-white">Partners Management</CardTitle>
+                <p className="text-sm text-white/50 mt-1">
+                  {partners.length} / 20 partners • Maximum 20 partners allowed
+                </p>
+              </div>
               <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button onClick={() => {
-                    setEditingPartner(null);
-                    partnerForm.reset({
-                      name: "",
-                      logo: "",
-                    });
-                    setPartnerLogoPreview('');
-                  }} data-testid="button-add-partner">
+                  <Button 
+                    onClick={() => {
+                      if (partners.length >= 20) {
+                        toast({
+                          title: "Maximum partners reached",
+                          description: "You have reached the maximum limit of 20 partners. Please delete an existing partner to add a new one.",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      setEditingPartner(null);
+                      partnerForm.reset({
+                        name: "",
+                        logo: "",
+                      });
+                      setPartnerLogoPreview('');
+                    }} 
+                    disabled={partners.length >= 20}
+                    data-testid="button-add-partner"
+                  >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Partner
                   </Button>
@@ -6234,10 +6251,34 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-sans font-light">Partners Management</h2>
+          <div>
+            <h2 className="text-2xl font-sans font-light">Partners Management</h2>
+            <p className="text-sm text-white/50 mt-1">
+              {partners.length} / 20 partners • Maximum 20 partners allowed
+            </p>
+          </div>
           <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
             <DialogTrigger asChild>
-              <Button data-testid="button-add-partner">
+              <Button 
+                onClick={() => {
+                  if (partners.length >= 20) {
+                    toast({
+                      title: "Maximum partners reached",
+                      description: "You have reached the maximum limit of 20 partners. Please delete an existing partner to add a new one.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  setEditingPartner(null);
+                  partnerForm.reset({
+                    name: "",
+                    logo: "",
+                  });
+                  setPartnerLogoPreview('');
+                }}
+                disabled={partners.length >= 20}
+                data-testid="button-add-partner"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Partner
               </Button>
