@@ -539,15 +539,6 @@
   }
 
   /* Partners scrolling animations - seamless infinite loop */
-  @keyframes scroll-right-seamless {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(33.333%);
-    }
-  }
-
   @keyframes scroll-left-seamless {
     0% {
       transform: translateX(0);
@@ -557,12 +548,8 @@
     }
   }
 
-  .animate-scroll-right-seamless {
-    animation: scroll-right-seamless 30s linear infinite;
-  }
-
   .animate-scroll-left-seamless {
-    animation: scroll-left-seamless 30s linear infinite;
+    animation: scroll-left-seamless 50s linear infinite;
   }
 
   /* Section title slide-in animations */

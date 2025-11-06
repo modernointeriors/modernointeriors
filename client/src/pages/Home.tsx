@@ -1068,9 +1068,9 @@ export default function Home() {
 
         {partners && partners.length > 0 && (
           <div className="space-y-8">
-            {/* First row - scrolling right */}
+            {/* First row - scrolling left */}
             <div className="relative overflow-hidden">
-              <div className="inline-flex animate-scroll-right-seamless">
+              <div className="inline-flex animate-scroll-left-seamless">
                 {/* Create multiple copies for seamless infinite loop */}
                 {[0, 1, 2].flatMap((setIndex) =>
                   partners
