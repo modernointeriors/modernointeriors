@@ -206,7 +206,7 @@ export default function AboutAdminTab({
       ? (showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage)
       : type === 'history'
       ? (historyImagePreview || aboutContent?.historyImage)
-      : (missionVisionImagePreview || aboutContent?.missionVisionImage);
+      : (missionVisionImagePreview || aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage);
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -597,11 +597,11 @@ export default function AboutAdminTab({
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Mission & Vision Image</h3>
                   <div>
                     <div className="relative">
-                      {(missionVisionImagePreview || aboutContent?.missionVisionImage) ? (
+                      {(missionVisionImagePreview || aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage) ? (
                         <div className="relative group">
                           <div className="border bg-muted overflow-hidden">
                             <img 
-                              src={missionVisionImagePreview || aboutContent?.missionVisionImage || ''} 
+                              src={missionVisionImagePreview || aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage || ''} 
                               alt="Mission & Vision Preview" 
                               className="w-full aspect-[3/4] object-cover" 
                             />

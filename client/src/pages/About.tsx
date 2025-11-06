@@ -339,10 +339,10 @@ export default function About() {
               </div>
 
               {/* Image on the right */}
-              {aboutContent?.missionVisionImage && (
+              {(aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage) && (
                 <div className="relative overflow-hidden bg-white/5">
                   <img
-                    src={aboutContent.missionVisionImage}
+                    src={aboutContent.missionVisionImageData || aboutContent.missionVisionImage}
                     alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
                     className="w-full h-full object-cover"
                     onError={(e) => {

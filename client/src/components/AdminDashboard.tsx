@@ -2331,8 +2331,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       submitData.historyImage = historyImagePreview;
     }
     if (missionVisionImagePreview) {
-      // Save mission vision image as base64 or keep the form value if it's a URL
-      submitData.missionVisionImage = missionVisionImagePreview;
+      // Save mission vision image to imageData field
+      submitData.missionVisionImageData = missionVisionImagePreview;
+      submitData.missionVisionImage = ''; // Clear URL since we're using base64
     }
     await updateAboutContentMutation.mutateAsync(submitData);
   };
