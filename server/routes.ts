@@ -455,15 +455,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/partners", async (req, res) => {
     try {
-      console.log("📝 Partner creation request body:", JSON.stringify(req.body, null, 2));
       const validatedData = insertPartnerSchema.parse(req.body);
-      console.log("✅ Validated data:", JSON.stringify(validatedData, null, 2));
       const partner = await storage.createPartner(validatedData);
       res.status(201).json(partner);
     } catch (error) {
-      console.error("❌ Partner creation error:", error);
       if (error instanceof z.ZodError) {
-        console.error("❌ Validation errors:", JSON.stringify(error.errors, null, 2));
         return res.status(400).json({ message: "Validation error", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to create partner" });

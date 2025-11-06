@@ -2015,6 +2015,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     // Add logo fields only if they have values
     if (partnerLogoPreview) {
       partnerData.logoData = partnerLogoPreview;
+      partnerData.logo = "";
     } else if (data.logo) {
       partnerData.logo = data.logo;
     }
