@@ -2993,20 +2993,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   <FormField
                     control={projectForm.control}
-                    name="slug"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>URL Slug</FormLabel>
-                        <FormControl>
-                          <Input {...field} data-testid="input-project-slug" placeholder="auto-generated from English title" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={projectForm.control}
                     name="category"
                     render={({ field }) => (
                       <FormItem>
@@ -3292,6 +3278,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   {/* Bilingual SEO Settings */}
                   <div className="space-y-4 border-t pt-4">
                     <h4 className="text-sm font-light">SEO Settings</h4>
+                    
+                    {/* URL Slug */}
+                    <FormField
+                      control={projectForm.control}
+                      name="slug"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>URL Slug</FormLabel>
+                          <FormControl>
+                            <Input {...field} data-testid="input-project-slug" placeholder="auto-generated from English title if left empty" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     
                     {/* SEO Meta Title */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
