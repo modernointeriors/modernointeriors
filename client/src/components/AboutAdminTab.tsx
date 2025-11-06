@@ -433,7 +433,7 @@ export default function AboutAdminTab({
                     <div className="mt-4">
                       <label className="text-sm font-light mb-2 block">Story Image (Ảnh minh họa)</label>
                       <div className="space-y-2">
-                        {aboutContentForm.watch("historyImage") && (
+                        {aboutContentForm.watch("historyImage") ? (
                           <div className="relative aspect-[4/3] w-full max-w-md border rounded overflow-hidden bg-muted">
                             <img
                               src={aboutContentForm.watch("historyImage") || ""}
@@ -452,13 +452,65 @@ export default function AboutAdminTab({
                               <X className="w-4 h-4" />
                             </button>
                           </div>
+                        ) : (
+                          <div className="border-2 border-dashed border-muted-foreground/25 p-8 text-center">
+                            <p className="text-sm text-muted-foreground mb-3">Upload image or enter URL</p>
+                            <label 
+                              htmlFor="history-image-upload"
+                              className="inline-flex items-center gap-2 bg-white text-black border px-4 py-2 cursor-pointer hover:bg-gray-100 transition-all text-sm"
+                            >
+                              <Upload className="h-4 w-4" />
+                              Choose File
+                            </label>
+                            <input
+                              id="history-image-upload"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    aboutContentForm.setValue("historyImage", reader.result as string);
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                          </div>
                         )}
-                        <Input
-                          {...aboutContentForm.register("historyImage")}
-                          placeholder="Enter image URL or paste image"
-                          data-testid="input-history-image"
-                        />
-                        <p className="text-xs text-muted-foreground">Paste image URL or use an image from external source (Recommended: 4:3 aspect ratio, 800x600px)</p>
+                        <div className="flex gap-2">
+                          <Input
+                            {...aboutContentForm.register("historyImage")}
+                            placeholder="Or paste image URL here"
+                            data-testid="input-history-image"
+                          />
+                          <label 
+                            htmlFor="history-image-upload-alt"
+                            className="inline-flex items-center gap-2 bg-white text-black border px-4 py-2 cursor-pointer hover:bg-gray-100 transition-all text-sm whitespace-nowrap"
+                          >
+                            <Upload className="h-4 w-4" />
+                            Upload
+                          </label>
+                          <input
+                            id="history-image-upload-alt"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                  aboutContentForm.setValue("historyImage", reader.result as string);
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                            className="hidden"
+                          />
+                        </div>
+                        <p className="text-xs text-muted-foreground">Upload file or paste image URL (Recommended: 4:3 aspect ratio, 800x600px)</p>
                       </div>
                     </div>
                   </div>
