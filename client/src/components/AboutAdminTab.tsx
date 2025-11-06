@@ -1454,7 +1454,7 @@ export default function AboutAdminTab({
         onClose={() => setIsCropDialogOpen(false)}
         imageSrc={imageToCrop}
         onCropComplete={handleCropComplete}
-        aspectRatio={16 / 7}
+        aspectRatio={cropType === 'showcase' ? 16 / 7 : 4 / 3}
       />
     </div>
   );
