@@ -201,18 +201,33 @@ export default function AboutAdminTab({
 
   // Wrapper functions to auto-close dialogs after successful submit
   const handlePrincipleSubmit = async (data: InsertAboutCoreValue) => {
-    await onPrincipleSubmit(data);
+    if (editingPrinciple) {
+      await updatePrincipleMutation.mutateAsync({ id: editingPrinciple.id, data });
+    } else {
+      await onPrincipleSubmit(data);
+    }
     setIsPrincipleDialogOpen(false);
+    setEditingPrinciple(null);
   };
 
   const handleShowcaseServiceSubmit = async (data: InsertAboutShowcaseService) => {
-    await onShowcaseServiceSubmit(data);
+    if (editingShowcaseService) {
+      await updateShowcaseServiceMutation.mutateAsync({ id: editingShowcaseService.id, data });
+    } else {
+      await onShowcaseServiceSubmit(data);
+    }
     setIsShowcaseServiceDialogOpen(false);
+    setEditingShowcaseService(null);
   };
 
   const handleProcessStepSubmit = async (data: InsertAboutProcessStep) => {
-    await onProcessStepSubmit(data);
+    if (editingProcessStep) {
+      await updateProcessStepMutation.mutateAsync({ id: editingProcessStep.id, data });
+    } else {
+      await onProcessStepSubmit(data);
+    }
     setIsProcessStepDialogOpen(false);
+    setEditingProcessStep(null);
   };
 
   const handleTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
