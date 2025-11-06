@@ -22,31 +22,43 @@ export default function About() {
 
   const { data: aboutContent, isLoading: aboutContentLoading } = useQuery<AboutPageContent>({
     queryKey: ["/api/about-page-content"],
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 
   const { data: principles = [] } = useQuery<AboutPrinciple[]>({
     queryKey: ["/api/about-principles"],
     select: (data) => data.filter(p => p.active).sort((a, b) => a.order - b.order),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 
   const { data: showcaseServices = [] } = useQuery<AboutShowcaseService[]>({
     queryKey: ["/api/about-showcase-services"],
     select: (data) => data.filter(s => s.active).sort((a, b) => a.order - b.order),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 
   const { data: processSteps = [] } = useQuery<AboutProcessStep[]>({
     queryKey: ["/api/about-process-steps"],
     select: (data) => data.filter(s => s.active).sort((a, b) => a.order - b.order),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 
   const { data: coreValues = [] } = useQuery<AboutCoreValue[]>({
     queryKey: ["/api/about-core-values"],
     select: (data) => data.filter(v => v.active).sort((a, b) => a.order - b.order),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 
   const { data: teamMembers = [] } = useQuery<AboutTeamMember[]>({
     queryKey: ["/api/about-team-members"],
     select: (data) => data.filter(m => m.active).sort((a, b) => a.order - b.order),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 
   const getFallbackImage = (category: string) => {

@@ -340,6 +340,61 @@ export default function Home() {
     },
   });
 
+  // Prefetch About page data for instant navigation
+  useEffect(() => {
+    const prefetchAboutData = async () => {
+      await Promise.all([
+        queryClient.prefetchQuery({
+          queryKey: ["/api/about-page-content"],
+          queryFn: async () => {
+            const response = await fetch("/api/about-page-content");
+            if (!response.ok) throw new Error("Failed to fetch");
+            return response.json();
+          },
+          staleTime: 5 * 60 * 1000,
+        }),
+        queryClient.prefetchQuery({
+          queryKey: ["/api/about-principles"],
+          queryFn: async () => {
+            const response = await fetch("/api/about-principles");
+            if (!response.ok) return [];
+            return response.json();
+          },
+          staleTime: 5 * 60 * 1000,
+        }),
+        queryClient.prefetchQuery({
+          queryKey: ["/api/about-showcase-services"],
+          queryFn: async () => {
+            const response = await fetch("/api/about-showcase-services");
+            if (!response.ok) return [];
+            return response.json();
+          },
+          staleTime: 5 * 60 * 1000,
+        }),
+        queryClient.prefetchQuery({
+          queryKey: ["/api/about-process-steps"],
+          queryFn: async () => {
+            const response = await fetch("/api/about-process-steps");
+            if (!response.ok) return [];
+            return response.json();
+          },
+          staleTime: 5 * 60 * 1000,
+        }),
+        queryClient.prefetchQuery({
+          queryKey: ["/api/about-team-members"],
+          queryFn: async () => {
+            const response = await fetch("/api/about-team-members");
+            if (!response.ok) return [];
+            return response.json();
+          },
+          staleTime: 5 * 60 * 1000,
+        }),
+      ]);
+    };
+    
+    prefetchAboutData();
+  }, [queryClient]);
+
   // Typing animation for journey step descriptions
   useEffect(() => {
     if (expandedStepNumber === null || !journeySteps || journeySteps.length === 0) {
