@@ -1330,7 +1330,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return response.json();
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/about-content'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-page-content'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-principles'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-showcase-services'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/about-team-members'] });
       aboutContentForm.reset(data);
       setShowcaseBannerFile(null);
       setShowcaseBannerPreview('');
