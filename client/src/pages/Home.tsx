@@ -1071,52 +1071,48 @@ export default function Home() {
             {/* First row - scrolling right */}
             <div className="relative overflow-hidden">
               <div className="flex animate-scroll-right-seamless whitespace-nowrap">
-                {/* Create seamless loop with multiple copies */}
-                {[...Array(4)].map((_, setIndex) => (
-                  <div key={`set-${setIndex}`} className="flex">
-                    {partners
-                      .slice(0, Math.ceil(partners.length / 2))
-                      .map((partner) => (
-                        <div
-                          key={`row1-${setIndex}-${partner.id}`}
-                          className="flex-shrink-0 w-48 h-24 mx-4 flex items-center justify-center"
-                          data-testid={`partner-logo-row1-${partner.id}`}
-                        >
-                          <img
-                            src={partner.logoData || partner.logo || ""}
-                            alt={partner.name}
-                            className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
-                          />
-                        </div>
-                      ))}
-                  </div>
-                ))}
+                {/* Duplicate exactly 2 times - original + copy for seamless loop */}
+                {[0, 1].flatMap((setIndex) =>
+                  partners
+                    .slice(0, Math.ceil(partners.length / 2))
+                    .map((partner) => (
+                      <div
+                        key={`row1-${setIndex}-${partner.id}`}
+                        className="flex-shrink-0 w-48 h-24 mx-4 flex items-center justify-center"
+                        data-testid={`partner-logo-row1-${partner.id}`}
+                      >
+                        <img
+                          src={partner.logoData || partner.logo || ""}
+                          alt={partner.name}
+                          className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                        />
+                      </div>
+                    ))
+                )}
               </div>
             </div>
 
             {/* Second row - scrolling left */}
             <div className="relative overflow-hidden">
               <div className="flex animate-scroll-left-seamless whitespace-nowrap">
-                {/* Create seamless loop with multiple copies */}
-                {[...Array(4)].map((_, setIndex) => (
-                  <div key={`set-${setIndex}`} className="flex">
-                    {partners
-                      .slice(Math.ceil(partners.length / 2))
-                      .map((partner) => (
-                        <div
-                          key={`row2-${setIndex}-${partner.id}`}
-                          className="flex-shrink-0 w-48 h-24 mx-4 flex items-center justify-center"
-                          data-testid={`partner-logo-row2-${partner.id}`}
-                        >
-                          <img
-                            src={partner.logoData || partner.logo || ""}
-                            alt={partner.name}
-                            className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
-                          />
-                        </div>
-                      ))}
-                  </div>
-                ))}
+                {/* Duplicate exactly 2 times - original + copy for seamless loop */}
+                {[0, 1].flatMap((setIndex) =>
+                  partners
+                    .slice(Math.ceil(partners.length / 2))
+                    .map((partner) => (
+                      <div
+                        key={`row2-${setIndex}-${partner.id}`}
+                        className="flex-shrink-0 w-48 h-24 mx-4 flex items-center justify-center"
+                        data-testid={`partner-logo-row2-${partner.id}`}
+                      >
+                        <img
+                          src={partner.logoData || partner.logo || ""}
+                          alt={partner.name}
+                          className="max-w-full max-h-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                        />
+                      </div>
+                    ))
+                )}
               </div>
             </div>
           </div>
