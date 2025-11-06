@@ -1511,8 +1511,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const deleteArticleMutation = useMutation({
     mutationFn: async (id: string) => {
-      const response = await apiRequest('DELETE', `/api/articles/${id}`);
-      return response.json();
+      await apiRequest('DELETE', `/api/articles/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
