@@ -341,6 +341,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   
   // Category Management Dialog state
   const [isCategoryManagementDialogOpen, setIsCategoryManagementDialogOpen] = useState(false);
+  const [deleteCategoryData, setDeleteCategoryData] = useState<{ id: number, name: string } | null>(null);
+  const [isDeleteCategoryAlertOpen, setIsDeleteCategoryAlertOpen] = useState(false);
 
   // About Page states
   const [showcaseBannerFile, setShowcaseBannerFile] = useState<File | null>(null);
@@ -3468,9 +3470,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              if (confirm(`Delete category "${category.name}"?`)) {
-                                deleteCategoryMutation.mutate(category.id);
-                              }
+                              setDeleteCategoryData({ id: category.id, name: category.name });
+                              setIsDeleteCategoryAlertOpen(true);
                             }}
                             data-testid={`button-delete-category-${category.slug}`}
                           >
@@ -3484,6 +3485,44 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Category Confirmation Alert */}
+        <AlertDialog open={isDeleteCategoryAlertOpen} onOpenChange={setIsDeleteCategoryAlertOpen}>
+          <AlertDialogContent className="bg-black border border-white/20 rounded-none">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl font-light">Confirm Category Deletion</AlertDialogTitle>
+              <AlertDialogDescription className="text-white/70">
+                Are you sure you want to delete the category <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?
+                <br /><br />
+                <span className="text-red-400">This action cannot be undone.</span> Please confirm to proceed.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel 
+                className="bg-white/5 border-white/10 hover:bg-white/10 rounded-none"
+                onClick={() => {
+                  setDeleteCategoryData(null);
+                  setIsDeleteCategoryAlertOpen(false);
+                }}
+              >
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-red-600 hover:bg-red-700 text-white rounded-none"
+                onClick={() => {
+                  if (deleteCategoryData) {
+                    deleteCategoryMutation.mutate(deleteCategoryData.id);
+                    setDeleteCategoryData(null);
+                  }
+                  setIsDeleteCategoryAlertOpen(false);
+                }}
+                data-testid="button-confirm-delete-category"
+              >
+                Delete Category
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <Card>
           <CardContent className="p-0">
@@ -6360,9 +6399,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              if (confirm(`Delete category "${category.name}"?`)) {
-                                deleteCategoryMutation.mutate(category.id);
-                              }
+                              setDeleteCategoryData({ id: category.id, name: category.name });
+                              setIsDeleteCategoryAlertOpen(true);
                             }}
                             data-testid={`button-delete-category-${category.slug}`}
                           >
@@ -6376,6 +6414,44 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Category Confirmation Alert */}
+        <AlertDialog open={isDeleteCategoryAlertOpen} onOpenChange={setIsDeleteCategoryAlertOpen}>
+          <AlertDialogContent className="bg-black border border-white/20 rounded-none">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl font-light">Confirm Category Deletion</AlertDialogTitle>
+              <AlertDialogDescription className="text-white/70">
+                Are you sure you want to delete the category <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?
+                <br /><br />
+                <span className="text-red-400">This action cannot be undone.</span> Please confirm to proceed.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel 
+                className="bg-white/5 border-white/10 hover:bg-white/10 rounded-none"
+                onClick={() => {
+                  setDeleteCategoryData(null);
+                  setIsDeleteCategoryAlertOpen(false);
+                }}
+              >
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-red-600 hover:bg-red-700 text-white rounded-none"
+                onClick={() => {
+                  if (deleteCategoryData) {
+                    deleteCategoryMutation.mutate(deleteCategoryData.id);
+                    setDeleteCategoryData(null);
+                  }
+                  setIsDeleteCategoryAlertOpen(false);
+                }}
+                data-testid="button-confirm-delete-category"
+              >
+                Delete Category
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <Card>
           <CardHeader>
