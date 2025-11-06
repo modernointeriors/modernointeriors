@@ -306,10 +306,10 @@ export default function About() {
       {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
         <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Image LEFT */}
               {(aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage) && (
-                <div className="relative overflow-hidden bg-white/5 h-full">
+                <div className="relative overflow-hidden bg-white/5 aspect-[3/4]">
                   <img
                     src={aboutContent.missionVisionImageData || aboutContent.missionVisionImage}
                     alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
