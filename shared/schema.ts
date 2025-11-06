@@ -36,10 +36,10 @@ export const projects = pgTable("projects", {
   // Legacy fields for backward compatibility
   heroImage: text("hero_image"), // Legacy: Main project hero image
   images: jsonb("images").default([]), // Legacy field, keeping for compatibility
-  relatedProjects: jsonb("related_projects").default([]), // Array of related project IDs
   // SEO fields
   metaTitle: text("meta_title"),
   metaDescription: text("meta_description"),
+  metaKeywords: text("meta_keywords"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

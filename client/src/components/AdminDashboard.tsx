@@ -46,9 +46,9 @@ const projectSchema = z.object({
   // Legacy fields for backward compatibility  
   heroImage: z.string().optional(),
   images: z.array(z.string()).default([]), // Legacy field
-  relatedProjects: z.array(z.string()).default([]),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
+  metaKeywords: z.string().optional(),
 });
 
 // Bilingual project schema for form
@@ -74,11 +74,12 @@ const bilingualProjectSchema = z.object({
   featured: z.boolean().default(false),
   heroImage: z.string().optional(),
   images: z.array(z.string()).default([]),
-  relatedProjects: z.array(z.string()).default([]),
   metaTitleEn: z.string().optional(),
   metaTitleVi: z.string().optional(),
   metaDescriptionEn: z.string().optional(),
   metaDescriptionVi: z.string().optional(),
+  metaKeywordsEn: z.string().optional(),
+  metaKeywordsVi: z.string().optional(),
 });
 
 type BilingualProjectFormData = z.infer<typeof bilingualProjectSchema>;
@@ -590,11 +591,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       // Legacy fields for backward compatibility
       heroImage: "",
       images: [],
-      relatedProjects: [],
       metaTitleEn: "",
       metaTitleVi: "",
       metaDescriptionEn: "",
       metaDescriptionVi: "",
+      metaKeywordsEn: "",
+      metaKeywordsVi: "",
     },
   });
 
@@ -1747,6 +1749,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       metaTitleVi: viVersion?.metaTitle || "",
       metaDescriptionEn: enVersion?.metaDescription || "",
       metaDescriptionVi: viVersion?.metaDescription || "",
+      metaKeywordsEn: enVersion?.metaKeywords || "",
+      metaKeywordsVi: viVersion?.metaKeywords || "",
       slug: project.slug || "",
       category: project.category,
       location: project.location || "",
@@ -1764,7 +1768,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       // Legacy fields for backward compatibility
       heroImage: project.heroImage || "",
       images: Array.isArray(project.images) ? project.images : [],
-      relatedProjects: Array.isArray(project.relatedProjects) ? project.relatedProjects : [],
     });
     setIsProjectDialogOpen(true);
   };
@@ -1832,9 +1835,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       featured: data.featured,
       heroImage: data.heroImage,
       images: data.images,
-      relatedProjects: data.relatedProjects,
       metaTitle: data.metaTitleEn,
       metaDescription: data.metaDescriptionEn,
+      metaKeywords: data.metaKeywordsEn,
       language: 'en' as const,
       status: 'active' as const,
     };
@@ -1859,9 +1862,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       featured: data.featured,
       heroImage: data.heroImage,
       images: data.images,
-      relatedProjects: data.relatedProjects,
       metaTitle: data.metaTitleVi,
       metaDescription: data.metaDescriptionVi,
+      metaKeywords: data.metaKeywordsVi,
       language: 'vi' as const,
       status: 'active' as const,
     };
@@ -3272,40 +3275,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <FormField
-                    control={projectForm.control}
-                    name="relatedProjects"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Related Projects</FormLabel>
-                        <ScrollArea className="h-48 rounded-none border border-white/20 p-4">
-                          <div className="space-y-2">
-                            {projects.filter(p => p.id !== editingProject?.id).map((project) => (
-                              <div key={project.id} className="flex items-center space-x-2">
-                                <input
-                                  type="checkbox"
-                                  checked={field.value.includes(project.id)}
-                                  onChange={(e) => {
-                                    const newValue = e.target.checked
-                                      ? [...field.value, project.id]
-                                      : field.value.filter((id: string) => id !== project.id);
-                                    field.onChange(newValue);
-                                  }}
-                                  className="rounded-none border-white/20"
-                                />
-                                <label className="text-sm">{project.title}</label>
-                              </div>
-                            ))}
-                            {projects.filter(p => p.id !== editingProject?.id).length === 0 && (
-                              <p className="text-sm text-muted-foreground">No other projects available</p>
-                            )}
-                          </div>
-                        </ScrollArea>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   {/* Bilingual SEO Settings */}
                   <div className="space-y-4 border-t pt-4">
                     <h4 className="text-sm font-light">SEO Settings</h4>
@@ -3371,16 +3340,37 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         )}
                       />
                     </div>
-                  </div>
 
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      {...projectForm.register("featured")}
-                      className="rounded border-white/20"
-                      data-testid="checkbox-project-featured"
-                    />
-                    <label className="text-sm font-light">Featured Project</label>
+                    {/* SEO Meta Keywords */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={projectForm.control}
+                        name="metaKeywordsEn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Keywords (English)</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="keyword1, keyword2, keyword3..." data-testid="input-project-meta-keywords-en" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={projectForm.control}
+                        name="metaKeywordsVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Meta Keywords (Vietnamese)</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="từ khóa 1, từ khóa 2, từ khóa 3..." data-testid="input-project-meta-keywords-vi" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex justify-end space-x-2">
