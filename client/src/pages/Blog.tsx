@@ -472,9 +472,9 @@ export default function Blog() {
                 <Link key={article.id} href={`/blog/${article.slug}`}>
                   <Card className="article-card group overflow-hidden hover-scale project-hover rounded-none cursor-pointer h-[28rem] flex flex-col" data-testid={`card-article-${article.id}`}>
                     <div className="relative">
-                      {article.featuredImage ? (
+                      {(article.featuredImage || article.featuredImageData) ? (
                         <OptimizedImage
-                          src={article.featuredImage}
+                          src={article.featuredImage || article.featuredImageData || ''}
                           alt={article.title}
                           width={600}
                           height={192}

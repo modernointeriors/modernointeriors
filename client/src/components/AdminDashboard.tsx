@@ -1963,9 +1963,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       metaKeywordsVi: viVersion?.metaKeywords || "",
     });
     
-    // Set featured image preview if exists (now uses featuredImage path)
-    if (enVersion?.featuredImage || article.featuredImage) {
-      setArticleImagePreview(enVersion?.featuredImage || article.featuredImage || '');
+    // Set featured image preview if exists (check both new and old format)
+    const previewImage = enVersion?.featuredImage || enVersion?.featuredImageData || article.featuredImage || article.featuredImageData;
+    if (previewImage) {
+      setArticleImagePreview(previewImage);
     } else {
       setArticleImagePreview('');
     }
@@ -6318,12 +6319,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         <p className="text-xs text-muted-foreground mt-2">
                           Định dạng: PNG, JPG • Giới hạn: 10MB • Khuyến nghị: 1200x630px (16:9)
                         </p>
-                        {(articleImagePreview || editingArticle?.featuredImageData || editingArticle?.featuredImage) && (
+                        {articleImagePreview && (
                           <div className="mt-4">
                             <p className="text-sm font-medium mb-2">Preview:</p>
                             <div className="border rounded p-4 bg-muted">
                               <img 
-                                src={articleImagePreview || editingArticle?.featuredImageData || editingArticle?.featuredImage || ''} 
+                                src={articleImagePreview} 
                                 alt="Article Image Preview" 
                                 className="w-full max-h-64 object-cover rounded" 
                               />
