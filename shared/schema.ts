@@ -577,6 +577,7 @@ export const aboutPageContent = pgTable("about_page_content", {
   historyTitleVi: text("history_title_vi").notNull().default("CÂU CHUYỆN CỦA CHÚNG TÔI"),
   historyContentEn: text("history_content_en").notNull().default(""),
   historyContentVi: text("history_content_vi").notNull().default(""),
+  historyImage: text("history_image"),
   // Mission Section
   missionTitleEn: text("mission_title_en").notNull().default("OUR MISSION"),
   missionTitleVi: text("mission_title_vi").notNull().default("SỨ MỆNH"),

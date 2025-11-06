@@ -128,6 +128,7 @@ export default function AboutAdminTab({
       historyTitleVi: "",
       historyContentEn: "",
       historyContentVi: "",
+      historyImage: "",
       missionTitleEn: "",
       missionTitleVi: "",
       missionContentEn: "",
@@ -425,6 +426,39 @@ export default function AboutAdminTab({
                       <div>
                         <label className="text-sm font-light mb-2 block">Content (VI)</label>
                         <Textarea {...aboutContentForm.register("historyContentVi")} rows={5} placeholder="Lịch sử công ty..." data-testid="textarea-history-content-vi" />
+                      </div>
+                    </div>
+                    
+                    {/* History Image */}
+                    <div className="mt-4">
+                      <label className="text-sm font-light mb-2 block">Story Image (Ảnh minh họa)</label>
+                      <div className="space-y-2">
+                        {aboutContentForm.watch("historyImage") && (
+                          <div className="relative aspect-[4/3] w-full max-w-md border rounded overflow-hidden bg-muted">
+                            <img
+                              src={aboutContentForm.watch("historyImage") || ""}
+                              alt="History"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600';
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => aboutContentForm.setValue("historyImage", "")}
+                              className="absolute top-2 right-2 p-1 bg-black/50 hover:bg-black/70 rounded-full text-white"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        )}
+                        <Input
+                          {...aboutContentForm.register("historyImage")}
+                          placeholder="Enter image URL or paste image"
+                          data-testid="input-history-image"
+                        />
+                        <p className="text-xs text-muted-foreground">Paste image URL or use an image from external source (Recommended: 4:3 aspect ratio, 800x600px)</p>
                       </div>
                     </div>
                   </div>

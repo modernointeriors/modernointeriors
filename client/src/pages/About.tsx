@@ -292,10 +292,25 @@ export default function About() {
                 {language === "vi" ? aboutContent.historyTitleVi : aboutContent.historyTitleEn}
               </h3>
             </div>
-            <div className="max-w-4xl">
-              <p className="text-white/70 font-light text-lg leading-relaxed whitespace-pre-line">
-                {language === "vi" ? aboutContent.historyContentVi : aboutContent.historyContentEn}
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <div>
+                <p className="text-white/70 font-light text-lg leading-relaxed whitespace-pre-line">
+                  {language === "vi" ? aboutContent.historyContentVi : aboutContent.historyContentEn}
+                </p>
+              </div>
+              {aboutContent.historyImage && (
+                <div className="relative aspect-[4/3] overflow-hidden bg-white/5">
+                  <img 
+                    src={aboutContent.historyImage} 
+                    alt={language === "vi" ? "Lịch sử công ty" : "Company History"}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600';
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>
