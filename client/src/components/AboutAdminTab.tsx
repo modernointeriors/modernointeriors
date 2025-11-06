@@ -1631,7 +1631,7 @@ export default function AboutAdminTab({
           cropType === 'showcase' ? 16 / 7 
           : cropType === 'history' ? 4 / 3 
           : cropType === 'missionVision' ? 3 / 4
-          : 1 / 1
+          : 9 / 16
         }
       />
     </div>
