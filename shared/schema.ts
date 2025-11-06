@@ -549,12 +549,13 @@ export const aboutPageContent = pgTable("about_page_content", {
   heroTitleVi: text("hero_title_vi").notNull().default("THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT"),
   heroSubtitleEn: text("hero_subtitle_en").notNull().default("INNOVATION IN EVERY PROJECT"),
   heroSubtitleVi: text("hero_subtitle_vi").notNull().default("ĐỔI MỚI TRONG MỌI DỰ ÁN"),
-  heroImage: text("hero_image").notNull().default(""),
+  heroImages: text("hero_images").array().notNull().default(sql`ARRAY[]::text[]`),
   // Principles Section
   principlesTitleEn: text("principles_title_en").notNull().default("THE FOUNDATION OF OUR WORK"),
   principlesTitleVi: text("principles_title_vi").notNull().default("NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI"),
   // Architecture Showcase Section
   showcaseBannerImage: text("showcase_banner_image").notNull().default(""),
+  showcaseBannerImageData: text("showcase_banner_image_data"),
   // Stats Section (4 stats)
   statsProjectsValue: text("stats_projects_value").notNull().default("150+"),
   statsProjectsLabelEn: text("stats_projects_label_en").notNull().default("Projects Completed"),
