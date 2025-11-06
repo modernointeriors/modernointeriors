@@ -46,8 +46,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No file uploaded" });
       }
       
-      // Return short path
-      const filePath = `/dist/attached_assets/${req.file.filename}`;
+      // Return short path (works in both dev and prod)
+      const filePath = `/attached_assets/${req.file.filename}`;
       res.json({ path: filePath });
     } catch (error) {
       res.status(500).json({ message: "Failed to upload file" });
