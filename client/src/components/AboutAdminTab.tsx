@@ -1509,7 +1509,7 @@ export default function AboutAdminTab({
             </DialogContent>
           </Dialog>
           
-          <div className="mb-4">
+          <div className="mb-4 flex items-center gap-4">
             <Button 
               onClick={() => {
                 setEditingTeamMember(null);
@@ -1528,11 +1528,17 @@ export default function AboutAdminTab({
                 });
                 setIsTeamMemberDialogOpen(true);
               }}
+              disabled={aboutTeamMembers.length >= 8}
               data-testid="button-add-team-member"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Team Member
             </Button>
+            {aboutTeamMembers.length >= 8 && (
+              <span className="text-sm text-muted-foreground">
+                Maximum limit reached (8 team members)
+              </span>
+            )}
           </div>
 
           {aboutTeamMembersLoading ? (
