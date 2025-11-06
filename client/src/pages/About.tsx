@@ -99,12 +99,7 @@ export default function About() {
               ))}
             </Swiper>
           ) : (
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{
-                backgroundImage: 'url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200")',
-              }}
-            />
+            <div className="absolute inset-0 bg-black" />
           )}
           <div className="absolute inset-0 bg-black/50" />
           
