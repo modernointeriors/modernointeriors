@@ -429,17 +429,28 @@ export default function AboutAdminTab({
                         type="file"
                         accept="image/*"
                         className="hidden"
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (file) {
                             const currentImages = aboutContentForm.getValues("heroImages") || [];
                             if (currentImages.length < 5) {
-                              const reader = new FileReader();
-                              reader.onload = (event) => {
-                                const base64 = event.target?.result as string;
-                                aboutContentForm.setValue("heroImages", [...currentImages, base64], { shouldDirty: true });
-                              };
-                              reader.readAsDataURL(file);
+                              // Upload to server
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              
+                              try {
+                                const response = await fetch('/api/upload', {
+                                  method: 'POST',
+                                  body: formData
+                                });
+                                
+                                if (!response.ok) throw new Error('Upload failed');
+                                
+                                const data = await response.json();
+                                aboutContentForm.setValue("heroImages", [...currentImages, data.path], { shouldDirty: true });
+                              } catch (error) {
+                                console.error('Failed to upload hero image:', error);
+                              }
                             }
                           }
                           e.target.value = '';
