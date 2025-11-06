@@ -5,7 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade } from 'swiper/modules';
-import type { Project, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutCoreValue, AboutTeamMember } from '@shared/schema';
+import type { Project, AboutPageContent, AboutShowcaseService, AboutProcessStep, AboutCoreValue, AboutTeamMember } from '@shared/schema';
 import { useState, useEffect } from 'react';
 import * as LucideIcons from 'lucide-react';
 
@@ -24,8 +24,8 @@ export default function About() {
     queryKey: ["/api/about-page-content"],
   });
 
-  const { data: principles = [] } = useQuery<AboutPrinciple[]>({
-    queryKey: ["/api/about-principles"],
+  const { data: principles = [] } = useQuery<AboutCoreValue[]>({
+    queryKey: ["/api/about-core-values"],
     select: (data) => data.filter(p => p.active).sort((a, b) => a.order - b.order),
   });
 

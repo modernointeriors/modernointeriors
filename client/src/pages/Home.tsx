@@ -355,9 +355,9 @@ export default function Home() {
           staleTime: 5 * 60 * 1000,
         }),
         queryClient.prefetchQuery({
-          queryKey: ["/api/about-principles"],
+          queryKey: ["/api/about-core-values"],
           queryFn: async () => {
-            const response = await fetch("/api/about-principles");
+            const response = await fetch("/api/about-core-values");
             if (!response.ok) return [];
             return response.json();
           },
