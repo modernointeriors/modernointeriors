@@ -1289,7 +1289,7 @@ export default function Home() {
                         requirements: e.target.value,
                       }))
                     }
-                    className="bg-transparent border border-gray-600 rounded-none px-4 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
+                    className="bg-transparent border border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 min-h-[120px] resize-none"
                     data-testid="textarea-requirements"
                   />
                 </div>
