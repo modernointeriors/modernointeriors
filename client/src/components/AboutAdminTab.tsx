@@ -186,8 +186,8 @@ export default function AboutAdminTab({
   }, [aboutContent]);
 
   const handleEditImage = () => {
-    // Use preview or URL
-    const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImage;
+    // Use preview, base64 data, or URL
+    const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage;
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -514,11 +514,11 @@ export default function AboutAdminTab({
             <CardContent>
               <div>
                 <div className="relative">
-                  {(showcaseBannerPreview || aboutContent?.showcaseBannerImage) ? (
+                  {(showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) ? (
                     <div className="relative group">
                       <div className="border bg-muted overflow-hidden">
                         <img 
-                          src={showcaseBannerPreview || aboutContent?.showcaseBannerImage || ''} 
+                          src={showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage || ''} 
                           alt="Showcase Banner Preview" 
                           className="w-full aspect-[16/7] object-cover" 
                         />
