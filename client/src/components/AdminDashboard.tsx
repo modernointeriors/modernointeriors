@@ -6377,46 +6377,42 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     </p>
                     
                     {articleContentImages.length > 0 && (
-                      <div className="space-y-3 mb-4">
-                        {articleContentImages.map((imageData, index) => (
-                          <div key={index} className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                        {articleContentImages.map((imagePath, index) => (
+                          <div key={index} className="relative group border rounded-lg overflow-hidden bg-muted/50 hover:border-primary transition-colors">
                             <img 
-                              src={imageData} 
+                              src={imagePath} 
                               alt={`Content ${index + 1}`} 
-                              className="w-20 h-20 object-cover rounded"
+                              className="w-full h-32 object-cover"
                             />
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium mb-1">Ảnh {index + 1}</p>
-                              <div className="flex items-center gap-2">
-                                <code className="text-xs bg-background px-2 py-1 rounded border flex-1 truncate">
-                                  {imageData.substring(0, 40)}...
-                                </code>
-                                <Button
-                                  type="button"
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(imageData);
-                                    toast({
-                                      title: "Đã copy",
-                                      description: "Đường dẫn ảnh đã được copy. Paste vào content để chèn ảnh."
-                                    });
-                                  }}
-                                >
-                                  Copy
-                                </Button>
-                                <Button
-                                  type="button"
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => removeContentImage(index)}
-                                  className="border-white/30 hover:bg-red-500/20 hover:border-red-500"
-                                >
-                                  <Trash2 className="h-4 w-4 text-white" />
-                                </Button>
-                              </div>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Click copy để lấy đường dẫn và chèn vào content
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(imagePath);
+                                  toast({
+                                    title: "Đã copy",
+                                    description: "Đường dẫn ảnh đã được copy vào clipboard"
+                                  });
+                                }}
+                                className="text-xs"
+                              >
+                                Copy Path
+                              </Button>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => removeContentImage(index)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/80 px-2 py-1">
+                              <p className="text-xs text-white truncate">
+                                Ảnh {index + 1}: {imagePath.split('/').pop()}
                               </p>
                             </div>
                           </div>
