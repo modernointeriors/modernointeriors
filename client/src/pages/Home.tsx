@@ -1068,17 +1068,17 @@ export default function Home() {
 
         {partners && partners.length > 0 && (
           <div className="space-y-8">
-            {/* First row - scrolling left */}
+            {/* First row - scrolling right */}
             <div className="relative overflow-hidden">
-              <div className="inline-flex animate-scroll-left-seamless">
+              <div className="inline-flex animate-scroll-right-seamless">
                 {/* Create multiple copies for seamless infinite loop */}
-                {[0, 1, 2].flatMap((setIndex) =>
+                {[0, 1, 2, 3, 4].flatMap((setIndex) =>
                   partners
                     .slice(0, Math.ceil(partners.length / 2))
                     .map((partner) => (
                       <div
                         key={`row1-${setIndex}-${partner.id}`}
-                        className="flex-shrink-0 w-48 h-24 mx-4 flex items-center justify-center"
+                        className="flex-shrink-0 w-48 h-24 mx-3 flex items-center justify-center"
                         data-testid={`partner-logo-row1-${partner.id}`}
                       >
                         <img
@@ -1096,13 +1096,13 @@ export default function Home() {
             <div className="relative overflow-hidden">
               <div className="inline-flex animate-scroll-left-seamless">
                 {/* Create multiple copies for seamless infinite loop */}
-                {[0, 1, 2].flatMap((setIndex) =>
+                {[0, 1, 2, 3, 4].flatMap((setIndex) =>
                   partners
                     .slice(Math.ceil(partners.length / 2))
                     .map((partner) => (
                       <div
                         key={`row2-${setIndex}-${partner.id}`}
-                        className="flex-shrink-0 w-48 h-24 mx-4 flex items-center justify-center"
+                        className="flex-shrink-0 w-48 h-24 mx-3 flex items-center justify-center"
                         data-testid={`partner-logo-row2-${partner.id}`}
                       >
                         <img
