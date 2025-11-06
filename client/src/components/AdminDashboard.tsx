@@ -1094,11 +1094,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('POST', '/api/articles', data);
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
-      toast({ title: "Article created successfully" });
-      articleForm.reset();
-      setIsArticleDialogOpen(false);
+    onSuccess: (newArticle) => {
+      // Optimistically add to cache instead of refetching
+      queryClient.setQueryData(['/api/articles'], (old: any) => {
+        if (!old) return [newArticle];
+        return [newArticle, ...old];
+      });
     },
     onError: (error: any) => {
       toast({
@@ -1530,11 +1531,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PUT', `/api/articles/${id}`, data);
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
-      toast({ title: "Article updated successfully" });
-      setEditingArticle(null);
-      setIsArticleDialogOpen(false);
+    onSuccess: (updatedArticle) => {
+      // Optimistically update the cache instead of refetching
+      queryClient.setQueryData(['/api/articles'], (old: any) => {
+        if (!old) return old;
+        return old.map((article: any) => 
+          article.id === updatedArticle.id ? updatedArticle : article
+        );
+      });
     },
     onError: (error: any) => {
       toast({
@@ -2062,6 +2066,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       setArticleImageFile(null);
       setArticleContentImages([]);
       setIsArticleDialogOpen(false);
+      
+      // Show success toast after all updates complete
+      toast({ title: "Article updated successfully" });
     } catch (error) {
       // Error handling is done in mutation's onError
       console.error('Article submit error:', error);
@@ -6179,9 +6186,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         status: "draft",
                         featured: false,
                         featuredImage: "",
-                        metaTitle: "",
-                        metaDescription: "",
-                        metaKeywords: "",
+                        metaTitleEn: "",
+                        metaTitleVi: "",
+                        metaDescriptionEn: "",
+                        metaDescriptionVi: "",
+                        metaKeywordsEn: "",
+                        metaKeywordsVi: "",
                       });
                     }}
                     data-testid="button-add-article"
