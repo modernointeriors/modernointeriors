@@ -6335,8 +6335,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               className="w-20 h-20 object-cover rounded"
                             />
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium mb-2">Ảnh {index + 1}</p>
+                              <p className="font-medium mb-1">Ảnh {index + 1}</p>
                               <div className="flex items-center gap-2">
+                                <code className="text-xs bg-background px-2 py-1 rounded border flex-1 truncate">
+                                  {imageData.substring(0, 40)}...
+                                </code>
                                 <Button
                                   type="button"
                                   size="sm"
@@ -6348,9 +6351,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                       description: "Đường dẫn ảnh đã được copy. Paste vào content để chèn ảnh."
                                     });
                                   }}
-                                  className="flex-1"
                                 >
-                                  Click to copy image path
+                                  Copy
                                 </Button>
                                 <Button
                                   type="button"
@@ -6362,6 +6364,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                   <Trash2 className="h-4 w-4 text-white" />
                                 </Button>
                               </div>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Click copy để lấy đường dẫn và chèn vào content
+                              </p>
                             </div>
                           </div>
                         ))}
