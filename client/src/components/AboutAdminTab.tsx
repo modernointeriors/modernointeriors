@@ -899,7 +899,7 @@ export default function AboutAdminTab({
       {/* Principles Management */}
       <Card>
         <CardHeader>
-          <CardTitle>Principles (3 Items - Fixed)</CardTitle>
+          <CardTitle>Core Values (4 Items - Fixed)</CardTitle>
         </CardHeader>
         <CardContent>
           <Dialog open={isPrincipleDialogOpen} onOpenChange={setIsPrincipleDialogOpen}>
@@ -1000,7 +1000,7 @@ export default function AboutAdminTab({
             </Dialog>
           {aboutPrinciplesLoading ? (
             <div className="space-y-2">
-              {[1, 2, 3].map((i) => (
+              {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-16 bg-muted rounded animate-pulse" />
               ))}
             </div>
