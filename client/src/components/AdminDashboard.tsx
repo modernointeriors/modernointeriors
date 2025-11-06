@@ -1978,92 +1978,95 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   };
 
   const onArticleSubmit = async (data: BilingualArticleFormData) => {
-    // Generate slug if not provided
-    const slug = data.slug || data.titleEn
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+    try {
+      // Generate slug if not provided
+      const slug = data.slug || data.titleEn
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
 
-    // Prepare English version
-    const enArticle: InsertArticle = {
-      title: data.titleEn,
-      slug: slug,
-      excerpt: data.excerptEn,
-      content: data.contentEn,
-      category: data.category,
-      status: data.status,
-      language: 'en',
-      featured: data.featured,
-      metaTitle: data.metaTitleEn,
-      metaDescription: data.metaDescriptionEn,
-      metaKeywords: data.metaKeywordsEn,
-      tags: [],
-    };
+      // Prepare English version
+      const enArticle: InsertArticle = {
+        title: data.titleEn,
+        slug: slug,
+        excerpt: data.excerptEn,
+        content: data.contentEn,
+        category: data.category,
+        status: data.status,
+        language: 'en',
+        featured: data.featured,
+        metaTitle: data.metaTitleEn,
+        metaDescription: data.metaDescriptionEn,
+        metaKeywords: data.metaKeywordsEn,
+        tags: [],
+      };
 
-    // Prepare Vietnamese version
-    const viArticle: InsertArticle = {
-      title: data.titleVi,
-      slug: slug,
-      excerpt: data.excerptVi,
-      content: data.contentVi,
-      category: data.category,
-      status: data.status,
-      language: 'vi',
-      featured: data.featured,
-      metaTitle: data.metaTitleVi,
-      metaDescription: data.metaDescriptionVi,
-      metaKeywords: data.metaKeywordsVi,
-      tags: [],
-    };
+      // Prepare Vietnamese version
+      const viArticle: InsertArticle = {
+        title: data.titleVi,
+        slug: slug,
+        excerpt: data.excerptVi,
+        content: data.contentVi,
+        category: data.category,
+        status: data.status,
+        language: 'vi',
+        featured: data.featured,
+        metaTitle: data.metaTitleVi,
+        metaDescription: data.metaDescriptionVi,
+        metaKeywords: data.metaKeywordsVi,
+        tags: [],
+      };
 
-    // Handle featured image upload
-    if (articleImagePreview) {
-      enArticle.featuredImageData = articleImagePreview;
-      enArticle.featuredImage = "";
-      viArticle.featuredImageData = articleImagePreview;
-      viArticle.featuredImage = "";
-    } else if (data.featuredImage) {
-      enArticle.featuredImage = data.featuredImage;
-      viArticle.featuredImage = data.featuredImage;
-    }
-
-    // Handle content images (shared between EN and VI)
-    if (articleContentImages.length > 0) {
-      enArticle.contentImages = articleContentImages as any;
-      viArticle.contentImages = articleContentImages as any;
-    }
-
-    if (editingArticle) {
-      // Find both versions
-      const enVersion = articles.find(a => a.slug === editingArticle.slug && a.language === 'en');
-      const viVersion = articles.find(a => a.slug === editingArticle.slug && a.language === 'vi');
-
-      // Update or create EN version
-      if (enVersion) {
-        await updateArticleMutation.mutateAsync({ id: enVersion.id, data: enArticle });
-      } else {
-        await createArticleMutation.mutateAsync(enArticle);
+      // Handle featured image upload
+      if (articleImagePreview) {
+        enArticle.featuredImageData = articleImagePreview;
+        enArticle.featuredImage = "";
+        viArticle.featuredImageData = articleImagePreview;
+        viArticle.featuredImage = "";
+      } else if (data.featuredImage) {
+        enArticle.featuredImage = data.featuredImage;
+        viArticle.featuredImage = data.featuredImage;
       }
 
-      // Update or create VI version
-      if (viVersion) {
-        await updateArticleMutation.mutateAsync({ id: viVersion.id, data: viArticle });
-      } else {
-        await createArticleMutation.mutateAsync(viArticle);
+      // Handle content images (shared between EN and VI)
+      if (articleContentImages.length > 0) {
+        enArticle.contentImages = articleContentImages as any;
+        viArticle.contentImages = articleContentImages as any;
       }
-    } else {
-      // Create both versions
-      await createArticleMutation.mutateAsync(enArticle);
-      await createArticleMutation.mutateAsync(viArticle);
-    }
 
-    // Reset form and close dialog
-    articleForm.reset();
-    setEditingArticle(null);
-    setArticleImagePreview('');
-    setArticleImageFile(null);
-    setArticleContentImages([]);
-    setIsArticleDialogOpen(false);
+      if (editingArticle) {
+        // Find both versions
+        const enVersion = articles.find(a => a.slug === editingArticle.slug && a.language === 'en');
+        const viVersion = articles.find(a => a.slug === editingArticle.slug && a.language === 'vi');
+
+        // Update or create both versions in parallel for better performance
+        await Promise.all([
+          enVersion 
+            ? updateArticleMutation.mutateAsync({ id: enVersion.id, data: enArticle })
+            : createArticleMutation.mutateAsync(enArticle),
+          viVersion
+            ? updateArticleMutation.mutateAsync({ id: viVersion.id, data: viArticle })
+            : createArticleMutation.mutateAsync(viArticle)
+        ]);
+      } else {
+        // Create both versions in parallel
+        await Promise.all([
+          createArticleMutation.mutateAsync(enArticle),
+          createArticleMutation.mutateAsync(viArticle)
+        ]);
+      }
+
+      // Reset form and close dialog after all mutations complete
+      articleForm.reset();
+      setEditingArticle(null);
+      setArticleImagePreview('');
+      setArticleImageFile(null);
+      setArticleContentImages([]);
+      setIsArticleDialogOpen(false);
+    } catch (error) {
+      // Error handling is done in mutation's onError
+      console.error('Article submit error:', error);
+    }
   };
 
   const handleEditPartner = (partner: Partner) => {
@@ -6332,11 +6335,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               className="w-20 h-20 object-cover rounded"
                             />
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium mb-1">Ảnh {index + 1}</p>
+                              <p className="font-medium mb-2">Ảnh {index + 1}</p>
                               <div className="flex items-center gap-2">
-                                <code className="text-xs bg-background px-2 py-1 rounded border flex-1 truncate">
-                                  {imageData.substring(0, 60)}...
-                                </code>
                                 <Button
                                   type="button"
                                   size="sm"
@@ -6345,25 +6345,24 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                     navigator.clipboard.writeText(imageData);
                                     toast({
                                       title: "Đã copy",
-                                      description: "Đường dẫn ảnh đã được copy vào clipboard"
+                                      description: "Đường dẫn ảnh đã được copy. Paste vào content để chèn ảnh."
                                     });
                                   }}
+                                  className="flex-1"
                                 >
-                                  Copy
+                                  Click to copy image path
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => removeContentImage(index)}
+                                  className="border-white/30 hover:bg-red-500/20 hover:border-red-500"
+                                >
+                                  <Trash2 className="h-4 w-4 text-white" />
                                 </Button>
                               </div>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                Click đường dẫn bên trên để copy và chèn vào vị trí bất kỳ trong bài viết
-                              </p>
                             </div>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => removeContentImage(index)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
                           </div>
                         ))}
                       </div>
