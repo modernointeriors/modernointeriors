@@ -829,8 +829,8 @@ export default function AboutAdminTab({
           <div className="flex justify-end">
             <Button 
               type="submit" 
-              className={`px-8 transition-all ${!aboutContentForm.formState.isDirty && !showcaseBannerFile && !historyImageFile ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
-              disabled={(!aboutContentForm.formState.isDirty && !showcaseBannerFile && !historyImageFile) || updateAboutContentMutation.isPending}
+              className={`px-8 transition-all ${!aboutContentForm.formState.isDirty && !showcaseBannerFile && !historyImageFile && !missionVisionImageFile ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+              disabled={(!aboutContentForm.formState.isDirty && !showcaseBannerFile && !historyImageFile && !missionVisionImageFile) || updateAboutContentMutation.isPending}
               data-testid="button-save-about-content"
             >
               {updateAboutContentMutation.isPending ? "Saving..." : "Save About Content"}
