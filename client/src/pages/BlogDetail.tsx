@@ -350,7 +350,8 @@ export default function BlogDetail() {
 
           {/* Article Content */}
           <div 
-            className="prose prose-lg prose-gray dark:prose-invert max-w-none"
+            className="prose prose-lg prose-gray dark:prose-invert max-w-none break-words overflow-wrap-anywhere"
+            style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
             dangerouslySetInnerHTML={{ __html: parseBoldTextToHTML(String(article.content)) }}
             data-testid="article-content"
           />
