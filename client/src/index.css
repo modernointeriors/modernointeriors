@@ -541,7 +541,7 @@
   /* Partners scrolling animations - seamless infinite loop */
   @keyframes scroll-right-seamless {
     0% {
-      transform: translateX(-20%);
+      transform: translateX(-10%);
     }
     100% {
       transform: translateX(0);
@@ -553,7 +553,7 @@
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-20%);
+      transform: translateX(-10%);
     }
   }
 

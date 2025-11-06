@@ -1072,7 +1072,7 @@ export default function Home() {
             <div className="relative overflow-hidden">
               <div className="inline-flex animate-scroll-right-seamless">
                 {/* Create multiple copies for seamless infinite loop */}
-                {[0, 1, 2, 3, 4].flatMap((setIndex) =>
+                {Array.from({ length: 10 }).flatMap((_, setIndex) =>
                   partners
                     .slice(0, Math.ceil(partners.length / 2))
                     .map((partner) => (
@@ -1096,7 +1096,7 @@ export default function Home() {
             <div className="relative overflow-hidden">
               <div className="inline-flex animate-scroll-left-seamless">
                 {/* Create multiple copies for seamless infinite loop */}
-                {[0, 1, 2, 3, 4].flatMap((setIndex) =>
+                {Array.from({ length: 10 }).flatMap((_, setIndex) =>
                   partners
                     .slice(Math.ceil(partners.length / 2))
                     .map((partner) => (
