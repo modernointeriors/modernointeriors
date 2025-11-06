@@ -307,33 +307,51 @@ export default function About() {
         <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {aboutContent?.missionContentEn && aboutContent?.missionContentVi && (
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4 mb-6">
-                    <Target className="w-10 h-10 text-white/40" />
-                    <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
-                      {language === "vi" ? aboutContent.missionTitleVi : aboutContent.missionTitleEn}
-                    </h3>
-                  </div>
-                  <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
-                    {language === "vi" ? aboutContent.missionContentVi : aboutContent.missionContentEn}
-                  </p>
+              {/* Image on the left */}
+              {aboutContent?.missionVisionImage && (
+                <div className="relative overflow-hidden bg-white/5">
+                  <img
+                    src={aboutContent.missionVisionImage}
+                    alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=1600';
+                    }}
+                  />
                 </div>
               )}
 
-              {aboutContent?.visionContentEn && aboutContent?.visionContentVi && (
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4 mb-6">
-                    <Eye className="w-10 h-10 text-white/40" />
-                    <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
-                      {language === "vi" ? aboutContent.visionTitleVi : aboutContent.visionTitleEn}
-                    </h3>
+              {/* Mission & Vision stacked on the right */}
+              <div className="flex flex-col gap-12">
+                {aboutContent?.missionContentEn && aboutContent?.missionContentVi && (
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4 mb-6">
+                      <Target className="w-10 h-10 text-white/40" />
+                      <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
+                        {language === "vi" ? aboutContent.missionTitleVi : aboutContent.missionTitleEn}
+                      </h3>
+                    </div>
+                    <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
+                      {language === "vi" ? aboutContent.missionContentVi : aboutContent.missionContentEn}
+                    </p>
                   </div>
-                  <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
-                    {language === "vi" ? aboutContent.visionContentVi : aboutContent.visionContentEn}
-                  </p>
-                </div>
-              )}
+                )}
+
+                {aboutContent?.visionContentEn && aboutContent?.visionContentVi && (
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4 mb-6">
+                      <Eye className="w-10 h-10 text-white/40" />
+                      <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
+                        {language === "vi" ? aboutContent.visionTitleVi : aboutContent.visionTitleEn}
+                      </h3>
+                    </div>
+                    <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
+                      {language === "vi" ? aboutContent.visionContentVi : aboutContent.visionContentEn}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>

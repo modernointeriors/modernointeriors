@@ -47,6 +47,9 @@ interface AboutAdminTabProps {
   historyImageFile: File | null;
   historyImagePreview: string;
   handleHistoryImageFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  missionVisionImageFile: File | null;
+  missionVisionImagePreview: string;
+  handleMissionVisionImageFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   teamMemberImagePreview: string;
   handleTeamMemberImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isTeamMemberDialogOpen: boolean;
@@ -87,6 +90,9 @@ export default function AboutAdminTab({
   historyImageFile,
   historyImagePreview,
   handleHistoryImageFileChange,
+  missionVisionImageFile,
+  missionVisionImagePreview,
+  handleMissionVisionImageFileChange,
   teamMemberImagePreview,
   handleTeamMemberImageChange,
   isTeamMemberDialogOpen,
@@ -105,7 +111,7 @@ export default function AboutAdminTab({
   const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string>("");
   const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
-  const [cropType, setCropType] = useState<'showcase' | 'history'>('showcase');
+  const [cropType, setCropType] = useState<'showcase' | 'history' | 'missionVision'>('showcase');
 
   const aboutContentForm = useForm<InsertAboutPageContent>({
     resolver: zodResolver(insertAboutPageContentSchema),
@@ -193,12 +199,14 @@ export default function AboutAdminTab({
     }
   }, [aboutContent]);
 
-  const handleEditImage = (type: 'showcase' | 'history' = 'showcase') => {
+  const handleEditImage = (type: 'showcase' | 'history' | 'missionVision' = 'showcase') => {
     setCropType(type);
     // Use preview, base64 data, or URL
     const currentImage = type === 'showcase' 
       ? (showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage)
-      : (historyImagePreview || aboutContent?.historyImage);
+      : type === 'history'
+      ? (historyImagePreview || aboutContent?.historyImage)
+      : (missionVisionImagePreview || aboutContent?.missionVisionImage);
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -208,7 +216,11 @@ export default function AboutAdminTab({
   const handleCropComplete = (croppedBlob: Blob) => {
     setIsCropDialogOpen(false);
     
-    const fileName = cropType === 'showcase' ? `banner-${Date.now()}.jpg` : `history-${Date.now()}.jpg`;
+    const fileName = cropType === 'showcase' 
+      ? `banner-${Date.now()}.jpg` 
+      : cropType === 'history'
+      ? `history-${Date.now()}.jpg`
+      : `mission-vision-${Date.now()}.jpg`;
     const file = new File([croppedBlob], fileName, { type: 'image/jpeg' });
     setCroppedImageFile(file);
     
@@ -220,12 +232,14 @@ export default function AboutAdminTab({
     
     if (cropType === 'showcase') {
       handleShowcaseBannerFileChange(syntheticEvent);
-    } else {
+    } else if (cropType === 'history') {
       handleHistoryImageFileChange(syntheticEvent);
+    } else {
+      handleMissionVisionImageFileChange(syntheticEvent);
     }
   };
 
-  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'showcase' | 'history' = 'showcase') => {
+  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'showcase' | 'history' | 'missionVision' = 'showcase') => {
     setCropType(type);
     const file = e.target.files?.[0];
     if (file) {
@@ -575,6 +589,84 @@ export default function AboutAdminTab({
                         <Textarea {...aboutContentForm.register("visionContentVi")} rows={4} placeholder="Tầm nhìn của chúng tôi..." data-testid="textarea-vision-content-vi" />
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Mission & Vision Image */}
+                <div className="p-4 border-t">
+                  <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Mission & Vision Image</h3>
+                  <div>
+                    <div className="relative">
+                      {(missionVisionImagePreview || aboutContent?.missionVisionImage) ? (
+                        <div className="relative group">
+                          <div className="border bg-muted overflow-hidden">
+                            <img 
+                              src={missionVisionImagePreview || aboutContent?.missionVisionImage || ''} 
+                              alt="Mission & Vision Preview" 
+                              className="w-full aspect-[3/4] object-cover" 
+                            />
+                          </div>
+                          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button
+                              type="button"
+                              onClick={() => handleEditImage('missionVision')}
+                              className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
+                              data-testid="button-edit-mission-vision-image"
+                            >
+                              <Edit className="h-4 w-4 mr-2" />
+                              <span className="text-sm font-light">Edit</span>
+                            </Button>
+                            <label 
+                              htmlFor="mission-vision-image-upload" 
+                              className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 px-4 py-2 cursor-pointer transition-all shadow-xl text-sm font-light"
+                              data-testid="button-change-mission-vision-image"
+                            >
+                              <Pencil className="h-4 w-4" />
+                              Change
+                            </label>
+                          </div>
+                          <input
+                            id="mission-vision-image-upload"
+                            type="file"
+                            accept=".jpg,.jpeg,.png"
+                            onChange={(e) => handleNewImageUpload(e, 'missionVision')}
+                            className="hidden"
+                            data-testid="input-mission-vision-image-file"
+                          />
+                        </div>
+                      ) : (
+                        <div className="border-2 border-dashed p-8 text-center bg-muted/50">
+                          <div className="flex flex-col items-center gap-4">
+                            <Upload className="h-12 w-12 text-muted-foreground" />
+                            <div>
+                              <p className="text-sm font-medium mb-1">Upload Mission & Vision Image</p>
+                              <p className="text-xs text-muted-foreground">
+                                PNG, JPG • Max 10MB • Recommended: 600x800px (3:4)
+                              </p>
+                            </div>
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              className="bg-white text-black hover:bg-white/90"
+                              onClick={() => document.getElementById('mission-vision-image-upload-initial')?.click()}
+                            >
+                              Choose File
+                            </Button>
+                          </div>
+                          <input
+                            id="mission-vision-image-upload-initial"
+                            type="file"
+                            accept=".jpg,.jpeg,.png"
+                            onChange={(e) => handleNewImageUpload(e, 'missionVision')}
+                            className="hidden"
+                            data-testid="input-mission-vision-image-file-initial"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Format: PNG, JPG • Max: 10MB • Recommended: 600x800px (3:4) • Auto-crop enabled
+                    </p>
                   </div>
                 </div>
 
@@ -1454,7 +1546,7 @@ export default function AboutAdminTab({
         onClose={() => setIsCropDialogOpen(false)}
         imageSrc={imageToCrop}
         onCropComplete={handleCropComplete}
-        aspectRatio={cropType === 'showcase' ? 16 / 7 : 4 / 3}
+        aspectRatio={cropType === 'showcase' ? 16 / 7 : cropType === 'history' ? 4 / 3 : 3 / 4}
       />
     </div>
   );

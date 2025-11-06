@@ -344,6 +344,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [showcaseBannerPreview, setShowcaseBannerPreview] = useState<string>('');
   const [historyImageFile, setHistoryImageFile] = useState<File | null>(null);
   const [historyImagePreview, setHistoryImagePreview] = useState<string>('');
+  const [missionVisionImageFile, setMissionVisionImageFile] = useState<File | null>(null);
+  const [missionVisionImagePreview, setMissionVisionImagePreview] = useState<string>('');
   const [teamMemberImageFile, setTeamMemberImageFile] = useState<File | null>(null);
   const [teamMemberImagePreview, setTeamMemberImagePreview] = useState<string>('');
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
@@ -2290,6 +2292,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     }
   };
 
+  const handleMissionVisionImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File too large",
+          description: `File size: ${fileSizeMB}MB. Maximum: ${maxSizeMB}MB. Please select a smaller file.`,
+          variant: "destructive"
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setMissionVisionImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setMissionVisionImagePreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onAboutContentSubmit = async (data: InsertAboutPageContent) => {
     const submitData = { ...data };
     if (showcaseBannerPreview) {
@@ -2300,6 +2329,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     if (historyImagePreview) {
       // Save history image as base64 or keep the form value if it's a URL
       submitData.historyImage = historyImagePreview;
+    }
+    if (missionVisionImagePreview) {
+      // Save mission vision image as base64 or keep the form value if it's a URL
+      submitData.missionVisionImage = missionVisionImagePreview;
     }
     await updateAboutContentMutation.mutateAsync(submitData);
   };
@@ -4534,6 +4567,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           historyImageFile={historyImageFile}
           historyImagePreview={historyImagePreview}
           handleHistoryImageFileChange={handleHistoryImageFileChange}
+          missionVisionImageFile={missionVisionImageFile}
+          missionVisionImagePreview={missionVisionImagePreview}
+          handleMissionVisionImageFileChange={handleMissionVisionImageFileChange}
           teamMemberImagePreview={teamMemberImagePreview}
           handleTeamMemberImageChange={handleTeamMemberImageChange}
           isTeamMemberDialogOpen={isTeamMemberDialogOpen}
