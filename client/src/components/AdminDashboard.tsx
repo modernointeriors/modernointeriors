@@ -2006,11 +2006,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   };
 
   const onPartnerSubmit = async (data: PartnerFormData) => {
-    const partnerData = {
-      ...data,
-      logoData: partnerLogoPreview || undefined,
-      logo: partnerLogoPreview ? undefined : data.logo, // Only use URL if no file uploaded
+    const partnerData: any = {
+      name: data.name,
+      order: 0,
+      active: true,
     };
+    
+    // Add logo fields only if they have values
+    if (partnerLogoPreview) {
+      partnerData.logoData = partnerLogoPreview;
+    } else if (data.logo) {
+      partnerData.logo = data.logo;
+    }
     
     if (editingPartner) {
       await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data: partnerData });
