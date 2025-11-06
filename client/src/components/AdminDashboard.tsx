@@ -2909,13 +2909,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-sans font-light">Projects Management</h2>
-          <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
-            <DialogTrigger asChild>
-              <Button data-testid="button-add-project" className="h-10 px-4">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Project
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsCategoryManagementDialogOpen(true)}
+              data-testid="button-category-settings-projects"
+              className="h-10 px-4"
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Category Settings
+            </Button>
+            <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
+              <DialogTrigger asChild>
+                <Button data-testid="button-add-project" className="h-10 px-4">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Project
+                </Button>
+              </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
@@ -3376,6 +3386,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               </Form>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         <Card>
