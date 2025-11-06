@@ -245,7 +245,7 @@ export default function AboutAdminTab({
       ? (historyImagePreview || aboutContent?.historyImage)
       : type === 'missionVision'
       ? (missionVisionImagePreview || aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage)
-      : (teamMemberImagePreview || editingTeamMember?.image);
+      : (teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image);
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -1459,10 +1459,10 @@ export default function AboutAdminTab({
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Image (Max 10MB)</label>
-                    {(teamMemberImagePreview || editingTeamMember?.image) && (
+                    {(teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image) && (
                       <div className="border bg-muted overflow-hidden mb-2 relative">
                         <img 
-                          src={teamMemberImagePreview || editingTeamMember?.image || ''} 
+                          src={teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image || ''} 
                           alt="Team Member Preview" 
                           className="w-full max-w-md aspect-square object-cover"
                         />
@@ -1559,9 +1559,9 @@ export default function AboutAdminTab({
                     <TableCell>{member.positionVi}</TableCell>
                     <TableCell>{member.order}</TableCell>
                     <TableCell>
-                      {member.image ? (
+                      {(member.imageData || member.image) ? (
                         <img 
-                          src={member.image} 
+                          src={member.imageData || member.image} 
                           alt={member.name}
                           className="h-12 w-12 rounded object-cover"
                           data-testid={`img-team-member-${member.id}`}
