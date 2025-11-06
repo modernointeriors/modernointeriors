@@ -47,11 +47,22 @@ export function parseBoldText(text: string): JSX.Element[] {
 
 /**
  * Parse text and convert *text* to <strong>text</strong> HTML
+ * Also convert (image-url) to <img> tags
  * For use with dangerouslySetInnerHTML
  */
 export function parseBoldTextToHTML(text: string): string {
   if (!text) return '';
-  return text.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+  
+  // First, convert *text* to bold
+  let html = text.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+  
+  // Then, convert (image-url) to <img> tags
+  // Match URLs in parentheses that end with image extensions
+  html = html.replace(/\(([^)]+\.(?:png|jpg|jpeg|gif|webp|svg))\)/gi, (match, url) => {
+    return `<img src="${url}" alt="Content image" class="max-w-full h-auto my-4 rounded-lg" />`;
+  });
+  
+  return html;
 }
 
 /**
