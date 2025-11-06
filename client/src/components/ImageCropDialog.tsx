@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Cropper from 'react-easy-crop';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,16 @@ export default function ImageCropDialog({
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Reset state when dialog opens
+  useEffect(() => {
+    if (open) {
+      setCrop({ x: 0, y: 0 });
+      setZoom(1);
+      setCroppedAreaPixels(null);
+      setIsSaving(false);
+    }
+  }, [open]);
 
   const onCropCompleteHandler = useCallback(
     (croppedArea: CropArea, croppedAreaPixels: CropArea) => {
@@ -93,6 +103,8 @@ export default function ImageCropDialog({
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       onCropComplete(croppedImage);
+      setIsSaving(false);
+      onClose();
     } catch (error) {
       console.error('Error cropping image:', error);
       setIsSaving(false);
