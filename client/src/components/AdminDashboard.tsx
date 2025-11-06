@@ -3389,11 +3389,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           </div>
         </div>
 
-        {/* Category Management Dialog */}
+        {/* Category Management Dialog for Projects */}
         <Dialog open={isCategoryManagementDialogOpen} onOpenChange={setIsCategoryManagementDialogOpen}>
-          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-light">Quản Lý Danh Mục</DialogTitle>
+              <DialogTitle className="text-2xl font-light">Project Categories Management</DialogTitle>
             </DialogHeader>
             <div className="space-y-6">
               <div className="flex justify-end">
@@ -3401,26 +3401,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <DialogTrigger asChild>
                     <Button data-testid="button-add-category">
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Category
+                      Add Project Category
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Add New Category</DialogTitle>
+                      <DialogTitle>Add New Project Category</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium">Type</label>
-                        <Select value={newCategoryType} onValueChange={(value: "project" | "article") => setNewCategoryType(value)}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="article">Article Category</SelectItem>
-                            <SelectItem value="project">Project Category</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
                       <div>
                         <label className="text-sm font-medium">Category Name</label>
                         <Input
@@ -3449,7 +3437,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 .replace(/^-+|-+$/g, '');
                               createCategoryMutation.mutate({
                                 name: newCategoryName,
-                                type: newCategoryType,
+                                type: 'project',
                                 slug,
                               });
                             }
@@ -3465,62 +3453,32 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </Dialog>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Article Categories</h3>
-                  <div className="space-y-2">
-                    {categories.filter(cat => cat.type === 'article' && cat.active).length === 0 ? (
-                      <p className="text-sm text-muted-foreground">No article categories</p>
-                    ) : (
-                      categories
-                        .filter(cat => cat.type === 'article' && cat.active)
-                        .map((category) => (
-                          <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
-                            <span className="text-sm font-light">{category.name}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (confirm(`Delete category "${category.name}"?`)) {
-                                  deleteCategoryMutation.mutate(category.id);
-                                }
-                              }}
-                              data-testid={`button-delete-category-${category.slug}`}
-                            >
-                              <Trash2 className="h-4 w-4 text-white" />
-                            </Button>
-                          </div>
-                        ))
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Project Categories</h3>
-                  <div className="space-y-2">
-                    {categories.filter(cat => cat.type === 'project' && cat.active).length === 0 ? (
-                      <p className="text-sm text-muted-foreground">No project categories</p>
-                    ) : (
-                      categories
-                        .filter(cat => cat.type === 'project' && cat.active)
-                        .map((category) => (
-                          <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
-                            <span className="text-sm font-light">{category.name}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (confirm(`Delete category "${category.name}"?`)) {
-                                  deleteCategoryMutation.mutate(category.id);
-                                }
-                              }}
-                              data-testid={`button-delete-category-${category.slug}`}
-                            >
-                              <Trash2 className="h-4 w-4 text-white" />
-                            </Button>
-                          </div>
-                        ))
-                    )}
-                  </div>
+              <div>
+                <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Project Categories</h3>
+                <div className="space-y-2">
+                  {categories.filter(cat => cat.type === 'project' && cat.active).length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No project categories</p>
+                  ) : (
+                    categories
+                      .filter(cat => cat.type === 'project' && cat.active)
+                      .map((category) => (
+                        <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
+                          <span className="text-sm font-light">{category.name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Delete category "${category.name}"?`)) {
+                                deleteCategoryMutation.mutate(category.id);
+                              }
+                            }}
+                            data-testid={`button-delete-category-${category.slug}`}
+                          >
+                            <Trash2 className="h-4 w-4 text-white" />
+                          </Button>
+                        </div>
+                      ))
+                  )}
                 </div>
               </div>
             </div>
@@ -6323,11 +6281,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           </Button>
         </div>
 
-        {/* Category Management Dialog */}
+        {/* Category Management Dialog for Articles */}
         <Dialog open={isCategoryManagementDialogOpen} onOpenChange={setIsCategoryManagementDialogOpen}>
-          <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-light">Quản Lý Danh Mục</DialogTitle>
+              <DialogTitle className="text-2xl font-light">Article Categories Management</DialogTitle>
             </DialogHeader>
             <div className="space-y-6">
               <div className="flex justify-end">
@@ -6335,26 +6293,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   <DialogTrigger asChild>
                     <Button data-testid="button-add-category">
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Category
+                      Add Article Category
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Add New Category</DialogTitle>
+                      <DialogTitle>Add New Article Category</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium">Type</label>
-                        <Select value={newCategoryType} onValueChange={(value: "project" | "article") => setNewCategoryType(value)}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="article">Article Category</SelectItem>
-                            <SelectItem value="project">Project Category</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
                       <div>
                         <label className="text-sm font-medium">Category Name</label>
                         <Input
@@ -6383,7 +6329,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 .replace(/^-+|-+$/g, '');
                               createCategoryMutation.mutate({
                                 name: newCategoryName,
-                                type: newCategoryType,
+                                type: 'article',
                                 slug,
                               });
                             }
@@ -6399,62 +6345,32 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </Dialog>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Article Categories</h3>
-                  <div className="space-y-2">
-                    {categories.filter(cat => cat.type === 'article' && cat.active).length === 0 ? (
-                      <p className="text-sm text-muted-foreground">No article categories</p>
-                    ) : (
-                      categories
-                        .filter(cat => cat.type === 'article' && cat.active)
-                        .map((category) => (
-                          <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
-                            <span className="text-sm font-light">{category.name}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (confirm(`Delete category "${category.name}"?`)) {
-                                  deleteCategoryMutation.mutate(category.id);
-                                }
-                              }}
-                              data-testid={`button-delete-category-${category.slug}`}
-                            >
-                              <Trash2 className="h-4 w-4 text-white" />
-                            </Button>
-                          </div>
-                        ))
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Project Categories</h3>
-                  <div className="space-y-2">
-                    {categories.filter(cat => cat.type === 'project' && cat.active).length === 0 ? (
-                      <p className="text-sm text-muted-foreground">No project categories</p>
-                    ) : (
-                      categories
-                        .filter(cat => cat.type === 'project' && cat.active)
-                        .map((category) => (
-                          <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
-                            <span className="text-sm font-light">{category.name}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                if (confirm(`Delete category "${category.name}"?`)) {
-                                  deleteCategoryMutation.mutate(category.id);
-                                }
-                              }}
-                              data-testid={`button-delete-category-${category.slug}`}
-                            >
-                              <Trash2 className="h-4 w-4 text-white" />
-                            </Button>
-                          </div>
-                        ))
-                    )}
-                  </div>
+              <div>
+                <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Article Categories</h3>
+                <div className="space-y-2">
+                  {categories.filter(cat => cat.type === 'article' && cat.active).length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No article categories</p>
+                  ) : (
+                    categories
+                      .filter(cat => cat.type === 'article' && cat.active)
+                      .map((category) => (
+                        <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
+                          <span className="text-sm font-light">{category.name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Delete category "${category.name}"?`)) {
+                                deleteCategoryMutation.mutate(category.id);
+                              }
+                            }}
+                            data-testid={`button-delete-category-${category.slug}`}
+                          >
+                            <Trash2 className="h-4 w-4 text-white" />
+                          </Button>
+                        </div>
+                      ))
+                  )}
                 </div>
               </div>
             </div>
