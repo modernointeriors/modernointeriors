@@ -449,11 +449,11 @@ export default function About() {
                     >
                       <div className="w-[800px] pl-12 pr-8 py-8">
                         <div className="flex gap-8 items-start">
-                          {member.image && (
+                          {(member.imageData || member.image) && (
                             <div className="flex-shrink-0 w-64">
                               <div className="aspect-[9/16] overflow-hidden bg-white/10">
                                 <img 
-                                  src={member.image} 
+                                  src={member.imageData || member.image} 
                                   alt={member.name}
                                   className="w-full h-full object-cover"
                                 />
