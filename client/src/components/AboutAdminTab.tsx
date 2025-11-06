@@ -553,19 +553,22 @@ export default function AboutAdminTab({
                     </div>
                   ) : (
                     <div className="border-2 border-dashed border-muted-foreground/25 p-12 text-center">
-                      <label htmlFor="showcase-banner-upload-initial" className="cursor-pointer">
-                        <div className="flex flex-col items-center gap-4">
-                          <div>
-                            <p className="text-sm font-medium mb-1">Upload Banner Image</p>
-                            <p className="text-xs text-muted-foreground">
-                              PNG, JPG • Max 10MB • Recommended: 1920x800px
-                            </p>
-                          </div>
-                          <Button type="button" variant="outline" className="bg-white text-black hover:bg-white/90">
-                            Choose File
-                          </Button>
+                      <div className="flex flex-col items-center gap-4">
+                        <div>
+                          <p className="text-sm font-medium mb-1">Upload Banner Image</p>
+                          <p className="text-xs text-muted-foreground">
+                            PNG, JPG • Max 10MB • Recommended: 1920x800px
+                          </p>
                         </div>
-                      </label>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          className="bg-white text-black hover:bg-white/90"
+                          onClick={() => document.getElementById('showcase-banner-upload-initial')?.click()}
+                        >
+                          Choose File
+                        </Button>
+                      </div>
                       <input
                         id="showcase-banner-upload-initial"
                         type="file"
