@@ -848,7 +848,7 @@ export default function Home() {
                       <div className="relative">
                         <img
                           src={
-                            article.featuredImage ||
+                            article.featuredImage || article.featuredImageData ||
                             "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
                           }
                           alt={article.title}
