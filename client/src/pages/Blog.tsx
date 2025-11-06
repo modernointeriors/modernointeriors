@@ -8,6 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
 import { useState, useEffect, useMemo } from "react";
+import { FormattedText } from "@/lib/textUtils";
 
 const categories = [
   { value: 'all', label: 'All Articles' },
@@ -499,7 +500,7 @@ export default function Blog() {
                         {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
                       </p>
                       <p className="text-foreground/80 text-sm line-clamp-3 flex-1" data-testid={`text-excerpt-${article.id}`}>
-                        {article.excerpt || 'Discover insights and trends in interior design...'}
+                        {article.excerpt ? <FormattedText text={article.excerpt} /> : 'Discover insights and trends in interior design...'}
                       </p>
                     </CardContent>
                   </Card>

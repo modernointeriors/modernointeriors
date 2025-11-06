@@ -6538,10 +6538,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 size="sm"
                                 variant="secondary"
                                 onClick={() => {
-                                  navigator.clipboard.writeText(imagePath);
+                                  navigator.clipboard.writeText(`(${imagePath})`);
                                   toast({
                                     title: "Đã copy",
-                                    description: "Đường dẫn ảnh đã được copy vào clipboard"
+                                    description: `Đã copy: (${imagePath})`
                                   });
                                 }}
                                 className="text-xs"
@@ -6558,8 +6558,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               </Button>
                             </div>
                             <div className="absolute bottom-0 left-0 right-0 bg-black/80 px-2 py-1">
-                              <p className="text-xs text-white truncate">
-                                Ảnh {index + 1}: {imagePath.split('/').pop()}
+                              <p className="text-xs text-white truncate" title={`(${imagePath})`}>
+                                ({imagePath})
                               </p>
                             </div>
                           </div>

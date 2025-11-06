@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
 import { useEffect, useState } from "react";
+import { FormattedText, parseBoldTextToHTML } from "@/lib/textUtils";
 
 // Related Articles Component
 function RelatedArticles({ currentArticleId, category, language }: { currentArticleId: string; category: string; language: string }) {
@@ -101,7 +102,7 @@ function RelatedArticles({ currentArticleId, category, language }: { currentArti
               </p>
               {article.excerpt && (
                 <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-excerpt-${article.id}`}>
-                  {article.excerpt}
+                  <FormattedText text={article.excerpt} />
                 </p>
               )}
             </CardContent>
@@ -336,7 +337,7 @@ export default function BlogDetail() {
 
             {article.excerpt && (
               <p className="text-xl text-muted-foreground leading-relaxed mb-8" data-testid="article-excerpt">
-                {article.excerpt}
+                <FormattedText text={article.excerpt} />
               </p>
             )}
 
@@ -354,7 +355,7 @@ export default function BlogDetail() {
           {/* Article Content */}
           <div 
             className="prose prose-lg prose-gray dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: String(article.content) }}
+            dangerouslySetInnerHTML={{ __html: parseBoldTextToHTML(String(article.content)) }}
             data-testid="article-content"
           />
         </article>

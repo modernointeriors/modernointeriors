@@ -20,6 +20,7 @@ import HeroSlider from "@/components/HeroSlider";
 import ScrollableContainer from "@/components/ScrollableContainer";
 import { Progress } from "@/components/ui/progress";
 import { apiRequest } from "@/lib/queryClient";
+import { FormattedText } from "@/lib/textUtils";
 import type {
   Project,
   HomepageContent,
@@ -879,8 +880,9 @@ export default function Home() {
                           className="text-foreground/80 text-sm line-clamp-3"
                           data-testid={`text-article-excerpt-${article.id}`}
                         >
-                          {article.excerpt ||
-                            "Discover insights and trends in interior design..."}
+                          {article.excerpt 
+                            ? <FormattedText text={article.excerpt} />
+                            : "Discover insights and trends in interior design..."}
                         </p>
                       </CardContent>
                     </Card>
