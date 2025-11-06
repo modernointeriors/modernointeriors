@@ -354,22 +354,16 @@ export default function About() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {coreValues.map((value) => {
-                const IconComponent = getIconComponent(value.icon);
-                return (
-                  <div key={value.id} className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <IconComponent className="w-8 h-8 text-white/40" />
-                      <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                        {language === "vi" ? value.titleVi : value.titleEn}
-                      </h4>
-                    </div>
-                    <p className="text-white/70 font-light leading-relaxed">
-                      {language === "vi" ? value.descriptionVi : value.descriptionEn}
-                    </p>
-                  </div>
-                );
-              })}
+              {coreValues.map((value) => (
+                <div key={value.id} className="space-y-4">
+                  <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                    {language === "vi" ? value.titleVi : value.titleEn}
+                  </h4>
+                  <p className="text-white/70 font-light leading-relaxed">
+                    {language === "vi" ? value.descriptionVi : value.descriptionEn}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>

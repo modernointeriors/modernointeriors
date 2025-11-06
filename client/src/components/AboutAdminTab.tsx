@@ -909,19 +909,6 @@ export default function AboutAdminTab({
               </DialogHeader>
                 <Form {...principleForm}>
                   <form onSubmit={principleForm.handleSubmit(handlePrincipleSubmit)} className="space-y-4">
-                    <FormField
-                      control={principleForm.control}
-                      name="icon"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Icon (Lucide name)</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="e.g., Zap, Award, Users" data-testid="input-principle-icon" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                     <div className="grid grid-cols-2 gap-4">
                       <FormField
                         control={principleForm.control}
@@ -1008,7 +995,6 @@ export default function AboutAdminTab({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Icon</TableHead>
                   <TableHead>Title (EN)</TableHead>
                   <TableHead>Title (VI)</TableHead>
                   <TableHead>Order</TableHead>
@@ -1018,7 +1004,6 @@ export default function AboutAdminTab({
               <TableBody>
                 {aboutPrinciples.map((principle) => (
                   <TableRow key={principle.id}>
-                    <TableCell>{principle.icon}</TableCell>
                     <TableCell>{principle.titleEn}</TableCell>
                     <TableCell>{principle.titleVi}</TableCell>
                     <TableCell>{principle.order}</TableCell>
