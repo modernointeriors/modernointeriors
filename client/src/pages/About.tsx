@@ -121,20 +121,18 @@ export default function About() {
           <div className="absolute inset-0 bg-black/50" />
           
           {/* Content */}
-          <div className="relative h-full flex items-center">
+          <div className="relative h-full flex items-center z-10">
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-8">
-                  <div className="space-y-6">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                      {language === "vi" 
-                        ? (aboutContent?.heroTitleVi || "VỀ CHÚNG TÔI") 
-                        : (aboutContent?.heroTitleEn || "ABOUT US")
-                      }
-                    </h1>
-                    <div className="w-20 h-0.5 bg-white/40" />
-                  </div>
-                  <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                <div className="space-y-6">
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-tight text-white uppercase tracking-wide">
+                    {language === "vi" 
+                      ? (aboutContent?.heroTitleVi || "VỀ CHÚNG TÔI") 
+                      : (aboutContent?.heroTitleEn || "ABOUT US")
+                    }
+                  </h1>
+                  <div className="w-20 h-0.5 bg-white/40" />
+                  <p className="text-base md:text-lg text-white/70 font-light leading-relaxed max-w-xl">
                     {language === "vi"
                       ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
                       : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
@@ -143,7 +141,7 @@ export default function About() {
                 </div>
 
                 <div className="lg:text-right">
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white uppercase tracking-wider leading-tight">
                     {language === "vi" 
                       ? (aboutContent?.heroSubtitleVi || "Thiết kế nội thất hiện đại")
                       : (aboutContent?.heroSubtitleEn || "Modern Interior Design")
