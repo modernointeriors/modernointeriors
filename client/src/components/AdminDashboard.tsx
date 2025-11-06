@@ -364,6 +364,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [editingProcessStep, setEditingProcessStep] = useState<AboutProcessStep | null>(null);
   const [isTeamMemberDialogOpen, setIsTeamMemberDialogOpen] = useState(false);
   const [editingTeamMember, setEditingTeamMember] = useState<AboutTeamMember | null>(null);
+  const [togglingFeaturedSlug, setTogglingFeaturedSlug] = useState<string | null>(null);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -1573,16 +1574,36 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       const response = await apiRequest('PUT', `/api/articles/${id}`, { featured });
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
-      toast({ title: "Article featured status updated" });
+    onMutate: async ({ id, featured }) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['/api/articles'] });
+      
+      // Snapshot previous value
+      const previousArticles = queryClient.getQueryData(['/api/articles']);
+      
+      // Optimistically update to the new value
+      queryClient.setQueryData(['/api/articles'], (old: any) => {
+        if (!old) return old;
+        return old.map((article: any) => 
+          article.id === id ? { ...article, featured } : article
+        );
+      });
+      
+      return { previousArticles };
     },
-    onError: (error: any) => {
+    onError: (error: any, variables, context: any) => {
+      // Rollback on error
+      if (context?.previousArticles) {
+        queryClient.setQueryData(['/api/articles'], context.previousArticles);
+      }
       toast({
         title: "Error updating article",
         description: error.message,
         variant: "destructive",
       });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/articles'] });
     },
   });
 
@@ -7010,18 +7031,24 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 variant="outline"
                                 size="sm"
                                 onClick={async () => {
-                                  // Toggle featured for all versions (en and vi)
-                                  for (const article of articleGroup) {
-                                    await toggleArticleFeaturedMutation.mutateAsync({ 
-                                      id: article.id, 
-                                      featured: !displayArticle.featured 
-                                    });
+                                  setTogglingFeaturedSlug(slug);
+                                  try {
+                                    // Toggle featured for all versions (en and vi)
+                                    for (const article of articleGroup) {
+                                      await toggleArticleFeaturedMutation.mutateAsync({ 
+                                        id: article.id, 
+                                        featured: !displayArticle.featured 
+                                      });
+                                    }
+                                  } finally {
+                                    setTogglingFeaturedSlug(null);
                                   }
                                 }}
-                                className={displayArticle.featured ? "bg-yellow-500/20 border-yellow-500 hover:bg-yellow-500/30" : ""}
+                                disabled={togglingFeaturedSlug === slug}
+                                className={`transition-all ${displayArticle.featured ? "bg-yellow-500/20 border-yellow-500 hover:bg-yellow-500/30" : ""} ${togglingFeaturedSlug === slug ? "opacity-50" : ""}`}
                                 data-testid={`button-toggle-featured-${slug}`}
                               >
-                                <Star className={`h-4 w-4 ${displayArticle.featured ? "fill-yellow-500 text-yellow-500" : ""}`} />
+                                <Star className={`h-4 w-4 ${displayArticle.featured ? "fill-yellow-500 text-yellow-500" : ""} ${togglingFeaturedSlug === slug ? "animate-pulse" : ""}`} />
                               </Button>
                               <Button
                                 variant="outline"
