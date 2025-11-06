@@ -166,7 +166,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   <div className="absolute inset-0 bg-black/40" style={{ zIndex: 2 }}></div>
                 </div>
                 
-                <div className="relative h-full flex flex-col justify-between z-10">
+                <div className="relative h-full flex flex-col justify-between" style={{ zIndex: 10 }}>
                   <div className="flex-1 flex items-center">
                     <Link 
                       href={`/project/${project.id}`} 
@@ -174,7 +174,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       data-testid={`slide-link-${project.id}`}
                     >
                       <div className="max-w-4xl">
-                        <h2 className="heading-0 js-slider-slide-title break-words">
+                        <h2 className="heading-0 js-slider-slide-title break-words" style={{ position: 'relative', zIndex: 20 }}>
                           {project.title}
                         </h2>
                         

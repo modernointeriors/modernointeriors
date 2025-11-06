@@ -79,6 +79,7 @@ export default function About() {
               effect="fade"
               autoplay={{ delay: 5000, disableOnInteraction: false }}
               loop={true}
+              speed={800}
               className="absolute inset-0 w-full h-full"
             >
               {aboutContent.heroImages.map((imageUrl, index) => (
@@ -87,6 +88,8 @@ export default function About() {
                     src={imageUrl} 
                     alt={`About Hero ${index + 1}`}
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding="async"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200';
