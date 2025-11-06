@@ -1963,9 +1963,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       metaKeywordsVi: viVersion?.metaKeywords || "",
     });
     
-    // Set featured image preview if exists
-    if (enVersion?.featuredImageData || article.featuredImageData) {
-      setArticleImagePreview(enVersion?.featuredImageData || article.featuredImageData || '');
+    // Set featured image preview if exists (now uses featuredImage path)
+    if (enVersion?.featuredImage || article.featuredImage) {
+      setArticleImagePreview(enVersion?.featuredImage || article.featuredImage || '');
     } else {
       setArticleImagePreview('');
     }
@@ -2017,12 +2017,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         tags: [],
       };
 
-      // Handle featured image upload
+      // Handle featured image (now uses uploaded path instead of base64)
       if (articleImagePreview) {
-        enArticle.featuredImageData = articleImagePreview;
-        enArticle.featuredImage = "";
-        viArticle.featuredImageData = articleImagePreview;
-        viArticle.featuredImage = "";
+        enArticle.featuredImage = articleImagePreview; // Short path from upload
+        viArticle.featuredImage = articleImagePreview;
       } else if (data.featuredImage) {
         enArticle.featuredImage = data.featuredImage;
         viArticle.featuredImage = data.featuredImage;
@@ -2259,7 +2257,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     }
   };
 
-  const handleArticleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleArticleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSizeMB = 10;
@@ -2277,16 +2275,40 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       }
 
       setArticleImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setArticleImagePreview(base64);
-      };
-      reader.readAsDataURL(file);
+      
+      // Upload to server
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+        
+        const data = await response.json();
+        setArticleImagePreview(data.path); // Store short path instead of base64
+        
+        toast({
+          title: "Upload thành công",
+          description: "Ảnh đã được upload"
+        });
+      } catch (error) {
+        toast({
+          title: "Lỗi upload",
+          description: "Không thể upload ảnh",
+          variant: "destructive"
+        });
+        e.target.value = '';
+      }
     }
   };
 
-  const handleContentImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleContentImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const maxSizeMB = 10;
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
@@ -2324,22 +2346,40 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       return;
     }
 
-    const newImages: string[] = [];
-    let processed = 0;
-
-    validFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImages.push(reader.result as string);
-        processed++;
-        
-        if (processed === validFiles.length) {
-          setArticleContentImages(prev => [...prev, ...newImages]);
-          e.target.value = '';
-        }
-      };
-      reader.readAsDataURL(file);
+    // Upload files to server
+    const uploadPromises = validFiles.map(async (file) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to upload ${file.name}`);
+      }
+      
+      const data = await response.json();
+      return data.path;
     });
+
+    try {
+      const uploadedPaths = await Promise.all(uploadPromises);
+      setArticleContentImages(prev => [...prev, ...uploadedPaths]);
+      toast({
+        title: "Upload thành công",
+        description: `Đã upload ${uploadedPaths.length} ảnh`
+      });
+      e.target.value = '';
+    } catch (error) {
+      toast({
+        title: "Lỗi upload",
+        description: error instanceof Error ? error.message : "Không thể upload ảnh",
+        variant: "destructive"
+      });
+      e.target.value = '';
+    }
   };
 
   const removeContentImage = (index: number) => {

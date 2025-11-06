@@ -1,11 +1,59 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
+import multer from "multer";
+import path from "path";
+import { randomUUID } from "crypto";
 import { storage } from "./storage";
 import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema } from "@shared/schema";
 import { z } from "zod";
 
+// Configure multer for file uploads
+const uploadStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'attached_assets/');
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const filename = `${randomUUID()}${ext}`;
+    cb(null, filename);
+  }
+});
+
+const upload = multer({
+  storage: uploadStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|webp/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    
+    if (extname && mimetype) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Only images are allowed (jpeg, jpg, png, webp)'));
+    }
+  }
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // File upload endpoint
+  app.post("/api/upload", upload.single('file'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      
+      // Return short path
+      const filePath = `/dist/attached_assets/${req.file.filename}`;
+      res.json({ path: filePath });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to upload file" });
+    }
+  });
+
   // Authentication routes
   app.post("/api/auth/login", passport.authenticate('local'), (req, res) => {
     res.json(req.user);
