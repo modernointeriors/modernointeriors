@@ -359,13 +359,16 @@ export default function BlogDetail() {
         {/* Share Section */}
         <div className="flex items-center justify-between mt-12 mb-8 border-t border-gray-800 pt-6">
           <div className="text-sm text-muted-foreground">
-            {formatDate(String(article.publishedAt || article.createdAt))}
+            <p className="mb-1">
+              {language === 'vi' ? 'Xuất bản bởi' : 'Published by'} <span className="text-white">Moderno Team</span>
+            </p>
+            <p>{formatDate(String(article.publishedAt || article.createdAt))}</p>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleShare}
-            className="border border-white/20 rounded-full px-4 py-2 hover:bg-white/10 hover:text-white transition-all"
+            className="border border-white/20 rounded-none px-4 py-2 hover:bg-white/10 hover:text-white transition-all"
             data-testid="button-share"
             disabled={copied}
           >
