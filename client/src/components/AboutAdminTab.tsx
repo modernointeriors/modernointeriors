@@ -111,7 +111,7 @@ export default function AboutAdminTab({
   const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string>("");
   const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
-  const [cropType, setCropType] = useState<'showcase' | 'history' | 'missionVision'>('showcase');
+  const [cropType, setCropType] = useState<'showcase' | 'history' | 'missionVision' | 'teamMember'>('showcase');
 
   const aboutContentForm = useForm<InsertAboutPageContent>({
     resolver: zodResolver(insertAboutPageContentSchema),
@@ -235,14 +235,16 @@ export default function AboutAdminTab({
     setIsTeamMemberDialogOpen(false);
   };
 
-  const handleEditImage = (type: 'showcase' | 'history' | 'missionVision' = 'showcase') => {
+  const handleEditImage = (type: 'showcase' | 'history' | 'missionVision' | 'teamMember' = 'showcase') => {
     setCropType(type);
     // Use preview, base64 data, or URL
     const currentImage = type === 'showcase' 
       ? (showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage)
       : type === 'history'
       ? (historyImagePreview || aboutContent?.historyImage)
-      : (missionVisionImagePreview || aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage);
+      : type === 'missionVision'
+      ? (missionVisionImagePreview || aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage)
+      : (teamMemberImagePreview || editingTeamMember?.image);
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -256,7 +258,9 @@ export default function AboutAdminTab({
       ? `banner-${Date.now()}.jpg` 
       : cropType === 'history'
       ? `history-${Date.now()}.jpg`
-      : `mission-vision-${Date.now()}.jpg`;
+      : cropType === 'missionVision'
+      ? `mission-vision-${Date.now()}.jpg`
+      : `team-member-${Date.now()}.jpg`;
     const file = new File([croppedBlob], fileName, { type: 'image/jpeg' });
     setCroppedImageFile(file);
     
@@ -270,12 +274,14 @@ export default function AboutAdminTab({
       handleShowcaseBannerFileChange(syntheticEvent);
     } else if (cropType === 'history') {
       handleHistoryImageFileChange(syntheticEvent);
-    } else {
+    } else if (cropType === 'missionVision') {
       handleMissionVisionImageFileChange(syntheticEvent);
+    } else {
+      handleTeamMemberImageChange(syntheticEvent);
     }
   };
 
-  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'showcase' | 'history' | 'missionVision' = 'showcase') => {
+  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'showcase' | 'history' | 'missionVision' | 'teamMember' = 'showcase') => {
     setCropType(type);
     const file = e.target.files?.[0];
     if (file) {
@@ -1453,18 +1459,29 @@ export default function AboutAdminTab({
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Image (Max 10MB)</label>
                     {(teamMemberImagePreview || editingTeamMember?.image) && (
-                      <div className="border bg-muted overflow-hidden mb-2">
+                      <div className="border bg-muted overflow-hidden mb-2 relative">
                         <img 
                           src={teamMemberImagePreview || editingTeamMember?.image || ''} 
                           alt="Team Member Preview" 
                           className="w-full max-w-md aspect-square object-cover"
                         />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                          onClick={() => handleEditImage('teamMember')}
+                          data-testid="button-edit-team-member-image"
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
                       </div>
                     )}
                     <Input
                       type="file"
                       accept="image/*"
-                      onChange={handleTeamMemberImageChange}
+                      onChange={(e) => handleNewImageUpload(e, 'teamMember')}
                       data-testid="input-team-member-image"
                     />
                   </div>
@@ -1603,7 +1620,12 @@ export default function AboutAdminTab({
         onClose={() => setIsCropDialogOpen(false)}
         imageSrc={imageToCrop}
         onCropComplete={handleCropComplete}
-        aspectRatio={cropType === 'showcase' ? 16 / 7 : cropType === 'history' ? 4 / 3 : 3 / 4}
+        aspectRatio={
+          cropType === 'showcase' ? 16 / 7 
+          : cropType === 'history' ? 4 / 3 
+          : cropType === 'missionVision' ? 3 / 4
+          : 1 / 1
+        }
       />
     </div>
   );
