@@ -309,7 +309,7 @@ export default function About() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Image LEFT */}
               {(aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage) && (
-                <div className="relative overflow-hidden bg-white/5 aspect-[3/4]">
+                <div className="relative overflow-hidden bg-white/5 aspect-[4/5] max-h-[600px]">
                   <img
                     src={aboutContent.missionVisionImageData || aboutContent.missionVisionImage}
                     alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
