@@ -656,6 +656,7 @@ export const aboutTeamMembers = pgTable("about_team_members", {
   philosophyEn: text("philosophy_en"),
   philosophyVi: text("philosophy_vi"),
   image: text("image").notNull().default(""),
+  imageData: text("image_data"),
   order: integer("order").notNull().default(0),
   active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
