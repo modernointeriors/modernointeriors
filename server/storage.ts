@@ -911,7 +911,7 @@ export class DatabaseStorage implements IStorage {
 
   // About Page Content
   async getAboutPageContent(): Promise<AboutPageContent | undefined> {
-    const [content] = await db.select().from(aboutPageContent).limit(1);
+    const [content] = await db.select().from(aboutPageContent).orderBy(desc(aboutPageContent.updatedAt)).limit(1);
     return content || undefined;
   }
 
