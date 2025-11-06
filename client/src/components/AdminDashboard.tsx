@@ -5017,8 +5017,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
                 <DialogTrigger asChild>
                   <Button 
-                    onClick={() => {
+                    onClick={(e) => {
                       if (partners.length >= 20) {
+                        e.preventDefault();
                         toast({
                           title: "Maximum partners reached",
                           description: "You have reached the maximum limit of 20 partners. Please delete an existing partner to add a new one.",
@@ -5032,6 +5033,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         logo: "",
                       });
                       setPartnerLogoPreview('');
+                      setIsPartnerDialogOpen(true);
                     }} 
                     disabled={partners.length >= 20}
                     data-testid="button-add-partner"
@@ -6267,8 +6269,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
             <DialogTrigger asChild>
               <Button 
-                onClick={() => {
+                onClick={(e) => {
                   if (partners.length >= 20) {
+                    e.preventDefault();
                     toast({
                       title: "Maximum partners reached",
                       description: "You have reached the maximum limit of 20 partners. Please delete an existing partner to add a new one.",
@@ -6282,6 +6285,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     logo: "",
                   });
                   setPartnerLogoPreview('');
+                  setIsPartnerDialogOpen(true);
                 }}
                 disabled={partners.length >= 20}
                 data-testid="button-add-partner"
