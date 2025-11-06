@@ -17,7 +17,7 @@ export function parseBoldText(text: string): JSX.Element[] {
     // Add text before the bold part
     if (match.index > lastIndex) {
       parts.push(
-        <span key={`text-${key++}`}>
+        <span key={`text-${key++}`} className="break-words" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
           {text.substring(lastIndex, match.index)}
         </span>
       );
@@ -25,7 +25,7 @@ export function parseBoldText(text: string): JSX.Element[] {
 
     // Add bold part
     parts.push(
-      <strong key={`bold-${key++}`} className="font-semibold">
+      <strong key={`bold-${key++}`} className="font-semibold break-words" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
         {match[1]}
       </strong>
     );
@@ -36,7 +36,7 @@ export function parseBoldText(text: string): JSX.Element[] {
   // Add remaining text
   if (lastIndex < text.length) {
     parts.push(
-      <span key={`text-${key++}`}>
+      <span key={`text-${key++}`} className="break-words" style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
         {text.substring(lastIndex)}
       </span>
     );
@@ -69,5 +69,5 @@ export function parseBoldTextToHTML(text: string): string {
  * Component wrapper for rendering text with bold formatting
  */
 export function FormattedText({ text, className }: { text: string; className?: string }) {
-  return <span className={className}>{parseBoldText(text)}</span>;
+  return <span className={`break-words ${className || ''}`} style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{parseBoldText(text)}</span>;
 }
