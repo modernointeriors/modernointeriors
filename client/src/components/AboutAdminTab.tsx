@@ -233,6 +233,7 @@ export default function AboutAdminTab({
   const handleTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
     await onTeamMemberSubmit(data);
     setIsTeamMemberDialogOpen(false);
+    setEditingTeamMember(null);
   };
 
   const handleEditImage = (type: 'showcase' | 'history' | 'missionVision' | 'teamMember' = 'showcase') => {
