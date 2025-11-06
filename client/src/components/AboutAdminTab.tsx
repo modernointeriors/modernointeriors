@@ -391,7 +391,7 @@ export default function AboutAdminTab({
                     </div>
                     
                     <p className="text-xs text-muted-foreground mb-2">
-                      Add up to 5 images for the hero slider. Click empty slots to add, hover over images to remove.
+                      Add up to 5 images for the hero slider • PNG, JPG • Max 10MB • Recommended: 1920x1080px (16:9) • Click empty slots to add, hover over images to remove.
                     </p>
                     
                     {/* URL Input */}
