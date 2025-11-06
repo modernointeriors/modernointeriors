@@ -107,6 +107,7 @@ export const articles = pgTable("articles", {
   excerpt: text("excerpt"),
   content: text("content").notNull(),
   featuredImage: text("featured_image"),
+  featuredImageData: text("featured_image_data"),
   category: varchar("category", { length: 50 }).notNull().default("general"), // news, tips, projects, design-trends
   tags: jsonb("tags").default([]), // array of tag strings
   status: varchar("status", { length: 20 }).notNull().default("draft"), // draft, published, archived
