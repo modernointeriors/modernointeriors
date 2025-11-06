@@ -129,7 +129,6 @@ export default function About() {
                     <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-tight text-white uppercase tracking-wide">
                       {language === "vi" ? aboutContent.heroTitleVi : aboutContent.heroTitleEn}
                     </h1>
-                    <div className="w-20 h-0.5 bg-white/40" />
                     <p className="text-base md:text-lg text-white/70 font-light leading-relaxed max-w-xl">
                       {language === "vi"
                         ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
