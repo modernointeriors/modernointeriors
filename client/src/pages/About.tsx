@@ -125,16 +125,10 @@ export default function About() {
             <div className="relative h-full flex items-center z-10">
               <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                  <div className="space-y-6">
+                  <div>
                     <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-tight text-white uppercase tracking-wide">
                       {language === "vi" ? aboutContent.heroTitleVi : aboutContent.heroTitleEn}
                     </h1>
-                    <p className="text-base md:text-lg text-white/70 font-light leading-relaxed max-w-xl">
-                      {language === "vi"
-                        ? "Tạo ra những dự án kết hợp hoàn hảo giữa chức năng, thẩm mỹ và công nghệ tiên tiến nhất."
-                        : "Creating projects that perfectly combine functionality, aesthetics, and the most advanced technology."
-                      }
-                    </p>
                   </div>
 
                   <div className="lg:text-right">
