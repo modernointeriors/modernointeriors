@@ -402,11 +402,11 @@ export default function About() {
                       data-testid={`button-team-member-${member.id}`}
                     >
                       {/* Background Image */}
-                      {member.image && (
+                      {(member.imageData || member.image) && (
                         <div 
                           className="absolute inset-0 bg-cover bg-center transition-all duration-300"
                           style={{
-                            backgroundImage: `url(${member.image})`,
+                            backgroundImage: `url(${member.imageData || member.image})`,
                             filter: 'grayscale(100%) brightness(0.3)',
                           }}
                         />
