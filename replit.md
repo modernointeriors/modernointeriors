@@ -89,5 +89,12 @@ The application manages core entities:
 - **React Hook Form**: Performance-optimized form library with validation integration
 
 ## Image Handling
+- **File System Storage**: All images stored in `/attached_assets` directory via `/api/upload` endpoint
+  - Partner logos, quality backgrounds, showcase banners, hero slider images
+  - History images, mission/vision images, team member portraits
+  - Article featured images and content images
+  - Images stored as actual files with UUID filenames (e.g., `/attached_assets/abc123.jpg`)
+  - Database stores short file paths, not base64 data
+  - 10MB file size limit per image upload
 - **Unsplash**: External image service for placeholder content
-- **Custom Upload Component**: File upload interface with drag-and-drop support (mock implementation)
+- **Custom Upload Component**: File upload interface with drag-and-drop support
