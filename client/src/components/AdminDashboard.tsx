@@ -514,13 +514,24 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const projectsEndIndex = projectsStartIndex + projectsPerPage;
   const paginatedProjects = projects.slice(projectsStartIndex, projectsEndIndex);
 
-  // Pagination state for Articles
+  // Pagination state for Articles - group by slug first, then paginate
   const [articlesPage, setArticlesPage] = useState(1);
   const articlesPerPage = 10;
-  const articlesTotalPages = Math.ceil(articles.length / articlesPerPage);
+  
+  // Group articles by slug to get unique articles (each article has EN + VI versions)
+  const groupedArticlesMap = articles.reduce((acc, article) => {
+    if (!acc[article.slug]) {
+      acc[article.slug] = [];
+    }
+    acc[article.slug].push(article);
+    return acc;
+  }, {} as Record<string, Article[]>);
+  
+  const uniqueArticleSlugs = Object.keys(groupedArticlesMap);
+  const articlesTotalPages = Math.ceil(uniqueArticleSlugs.length / articlesPerPage);
   const articlesStartIndex = (articlesPage - 1) * articlesPerPage;
   const articlesEndIndex = articlesStartIndex + articlesPerPage;
-  const paginatedArticles = articles.slice(articlesStartIndex, articlesEndIndex);
+  const paginatedSlugs = uniqueArticleSlugs.slice(articlesStartIndex, articlesEndIndex);
 
   // Memoized client financial calculations (calculate once, reuse for all clients)
   const clientFinances = useMemo(() => {
@@ -6448,16 +6459,9 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </TableHeader>
                 <TableBody>
                   {(() => {
-                    // Group articles by slug
-                    const groupedArticles = paginatedArticles.reduce((acc, article) => {
-                      if (!acc[article.slug]) {
-                        acc[article.slug] = [];
-                      }
-                      acc[article.slug].push(article);
-                      return acc;
-                    }, {} as Record<string, Article[]>);
-
-                    return Object.entries(groupedArticles).map(([slug, articleGroup]) => {
+                    // Use paginated slugs to display articles
+                    return paginatedSlugs.map((slug) => {
+                      const articleGroup = groupedArticlesMap[slug];
                       const enVersion = articleGroup.find(a => a.language === 'en');
                       const viVersion = articleGroup.find(a => a.language === 'vi');
                       const displayArticle = enVersion || viVersion || articleGroup[0];
@@ -6571,7 +6575,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </TableBody>
               </Table>
             )}
-            {articles.length > 10 && (
+            {uniqueArticleSlugs.length > 10 && (
               <div className="p-4 border-t border-white/10">
                 <div className="flex items-center justify-center gap-2">
                   <Button
@@ -6624,7 +6628,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </div>
                 <div className="text-center mt-2">
                   <span className="text-xs text-muted-foreground">
-                    Showing {articlesStartIndex + 1}-{Math.min(articlesEndIndex, articles.length)} of {articles.length} articles
+                    Showing {articlesStartIndex + 1}-{Math.min(articlesEndIndex, uniqueArticleSlugs.length)} of {uniqueArticleSlugs.length} articles
                   </span>
                 </div>
               </div>
