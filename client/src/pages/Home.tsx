@@ -1360,7 +1360,6 @@ export default function Home() {
                 <div
                   key={faq.id}
                   className="pb-8 group transition-colors cursor-pointer scroll-animate"
-                  style={{ animationDelay: `${index * 50}ms` }}
                   data-testid={`faq-item-${index + 1}`}
                 >
                   <div
