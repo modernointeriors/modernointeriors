@@ -484,11 +484,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     queryKey: ['/api/settings'],
   });
 
-  // Pagination state
+  // Pagination state for Clients
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   
-  // Calculate pagination
+  // Calculate pagination for Clients
   const totalPages = Math.ceil(clients.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -500,6 +500,22 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       setCurrentPage(1);
     }
   }, [clients.length, currentPage, totalPages]);
+
+  // Pagination state for Projects
+  const [projectsPage, setProjectsPage] = useState(1);
+  const projectsPerPage = 10;
+  const projectsTotalPages = Math.ceil(projects.length / projectsPerPage);
+  const projectsStartIndex = (projectsPage - 1) * projectsPerPage;
+  const projectsEndIndex = projectsStartIndex + projectsPerPage;
+  const paginatedProjects = projects.slice(projectsStartIndex, projectsEndIndex);
+
+  // Pagination state for Articles
+  const [articlesPage, setArticlesPage] = useState(1);
+  const articlesPerPage = 10;
+  const articlesTotalPages = Math.ceil(articles.length / articlesPerPage);
+  const articlesStartIndex = (articlesPage - 1) * articlesPerPage;
+  const articlesEndIndex = articlesStartIndex + articlesPerPage;
+  const paginatedArticles = articles.slice(articlesStartIndex, articlesEndIndex);
 
   // Memoized client financial calculations (calculate once, reuse for all clients)
   const clientFinances = useMemo(() => {
@@ -3058,7 +3074,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {projects.map((project) => (
+                  {paginatedProjects.map((project) => (
                     <TableRow key={project.id} data-testid={`row-project-${project.id}`}>
                       <TableCell>
                         <p className="font-light">{project.title}</p>
@@ -3108,6 +3124,64 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 </TableBody>
               </Table>
             )}
+            {projects.length > 10 && (
+              <div className="p-4 border-t border-white/10">
+                  <div className="flex items-center justify-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setProjectsPage(1)}
+                      disabled={projectsPage === 1}
+                      className="text-xs"
+                    >
+                      FIRST
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setProjectsPage(prev => Math.max(1, prev - 1))}
+                      disabled={projectsPage === 1}
+                      className="text-xs"
+                    >
+                      PREV
+                    </Button>
+                    {Array.from({ length: projectsTotalPages }, (_, i) => i + 1).map((page) => (
+                      <Button
+                        key={page}
+                        variant={projectsPage === page ? "default" : "ghost"}
+                        size="sm"
+                        onClick={() => setProjectsPage(page)}
+                        className="text-xs min-w-[32px]"
+                      >
+                        {page}
+                      </Button>
+                    ))}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setProjectsPage(prev => Math.min(projectsTotalPages, prev + 1))}
+                      disabled={projectsPage === projectsTotalPages}
+                      className="text-xs"
+                    >
+                      NEXT
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setProjectsPage(projectsTotalPages)}
+                      disabled={projectsPage === projectsTotalPages}
+                      className="text-xs"
+                    >
+                      LAST
+                    </Button>
+                  </div>
+                  <div className="text-center mt-2">
+                    <span className="text-xs text-muted-foreground">
+                      Showing {projectsStartIndex + 1}-{Math.min(projectsEndIndex, projects.length)} of {projects.length} projects
+                    </span>
+                  </div>
+                </div>
+              )}
           </CardContent>
         </Card>
       </div>
@@ -6225,7 +6299,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                 <TableBody>
                   {(() => {
                     // Group articles by slug
-                    const groupedArticles = articles.reduce((acc, article) => {
+                    const groupedArticles = paginatedArticles.reduce((acc, article) => {
                       if (!acc[article.slug]) {
                         acc[article.slug] = [];
                       }
@@ -6327,6 +6401,64 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   })()}
                 </TableBody>
               </Table>
+            )}
+            {articles.length > 10 && (
+              <div className="p-4 border-t border-white/10">
+                <div className="flex items-center justify-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setArticlesPage(1)}
+                    disabled={articlesPage === 1}
+                    className="text-xs"
+                  >
+                    FIRST
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setArticlesPage(prev => Math.max(1, prev - 1))}
+                    disabled={articlesPage === 1}
+                    className="text-xs"
+                  >
+                    PREV
+                  </Button>
+                  {Array.from({ length: articlesTotalPages }, (_, i) => i + 1).map((page) => (
+                    <Button
+                      key={page}
+                      variant={articlesPage === page ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setArticlesPage(page)}
+                      className="text-xs min-w-[32px]"
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setArticlesPage(prev => Math.min(articlesTotalPages, prev + 1))}
+                    disabled={articlesPage === articlesTotalPages}
+                    className="text-xs"
+                  >
+                    NEXT
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setArticlesPage(articlesTotalPages)}
+                    disabled={articlesPage === articlesTotalPages}
+                    className="text-xs"
+                  >
+                    LAST
+                  </Button>
+                </div>
+                <div className="text-center mt-2">
+                  <span className="text-xs text-muted-foreground">
+                    Showing {articlesStartIndex + 1}-{Math.min(articlesEndIndex, articles.length)} of {articles.length} articles
+                  </span>
+                </div>
+              </div>
             )}
           </CardContent>
         </Card>
