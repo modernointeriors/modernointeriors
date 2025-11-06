@@ -302,7 +302,7 @@ export default function BlogDetail() {
                 {formatDate(String(article.publishedAt || article.createdAt))}
               </div>
               {article.featured && (
-                <Badge className="bg-primary">
+                <Badge className="bg-white/10 border-white/30 text-white">
                   {language === 'vi' ? 'Nổi bật' : 'Featured'}
                 </Badge>
               )}
