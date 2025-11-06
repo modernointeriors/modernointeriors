@@ -1870,18 +1870,23 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     };
 
     if (editingProject) {
-      // Update both language versions
-      const promises = [
-        apiRequest('PATCH', `/api/projects/${editingProject.id}`, editingProject.language === 'en' ? enProject : viProject),
-      ];
+      // Find both language versions
+      const enVersion = projects.find(p => p.slug === editingProject.slug && p.language === 'en');
+      const viVersion = projects.find(p => p.slug === editingProject.slug && p.language === 'vi');
       
-      // Find and update the other language version
-      const otherLangProject = projects.find(
-        p => p.slug === editingProject.slug && p.language !== editingProject.language
-      );
-      if (otherLangProject) {
+      const promises = [];
+      
+      // Update English version if exists
+      if (enVersion) {
         promises.push(
-          apiRequest('PATCH', `/api/projects/${otherLangProject.id}`, otherLangProject.language === 'en' ? enProject : viProject)
+          apiRequest('PATCH', `/api/projects/${enVersion.id}`, enProject)
+        );
+      }
+      
+      // Update Vietnamese version if exists
+      if (viVersion) {
+        promises.push(
+          apiRequest('PATCH', `/api/projects/${viVersion.id}`, viProject)
         );
       }
       
