@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade } from 'swiper/modules';
 import type { Project, AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutCoreValue, AboutTeamMember } from '@shared/schema';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as LucideIcons from 'lucide-react';
 
 import 'swiper/css';
@@ -72,17 +72,29 @@ export default function About() {
       {/* Hero Section */}
       <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-16">
         <div className="relative h-screen">
-          {/* Background Image */}
-          {aboutContent?.heroImage ? (
-            <img 
-              src={aboutContent.heroImage} 
-              alt="About Hero"
-              className="absolute inset-0 w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200';
-              }}
-            />
+          {/* Background Images Slider */}
+          {aboutContent?.heroImages && aboutContent.heroImages.length > 0 ? (
+            <Swiper
+              modules={[Autoplay, EffectFade]}
+              effect="fade"
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              loop={true}
+              className="absolute inset-0 w-full h-full"
+            >
+              {aboutContent.heroImages.map((imageUrl, index) => (
+                <SwiperSlide key={index}>
+                  <img 
+                    src={imageUrl} 
+                    alt={`About Hero ${index + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200';
+                    }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           ) : (
             <div
               className="absolute inset-0 bg-cover bg-center"
@@ -159,13 +171,13 @@ export default function About() {
       )}
 
       {/* Architecture Showcase Section */}
-      {(aboutContent?.showcaseBannerImage || showcaseServices.length > 0) && (
+      {((aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) || showcaseServices.length > 0) && (
         <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden -ml-16">
-          {aboutContent?.showcaseBannerImage && (
+          {(aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) && (
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{
-                backgroundImage: `url(${aboutContent.showcaseBannerImage})`,
+                backgroundImage: `url(${aboutContent.showcaseBannerImageData || aboutContent.showcaseBannerImage})`,
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
