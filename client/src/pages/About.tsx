@@ -307,22 +307,7 @@ export default function About() {
         <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Image on the left */}
-              {aboutContent?.missionVisionImage && (
-                <div className="relative overflow-hidden bg-white/5">
-                  <img
-                    src={aboutContent.missionVisionImage}
-                    alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=1600';
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* Mission & Vision stacked on the right */}
+              {/* Mission & Vision stacked on the left */}
               <div className="flex flex-col gap-12">
                 {aboutContent?.missionContentEn && aboutContent?.missionContentVi && (
                   <div className="space-y-6">
@@ -352,6 +337,21 @@ export default function About() {
                   </div>
                 )}
               </div>
+
+              {/* Image on the right */}
+              {aboutContent?.missionVisionImage && (
+                <div className="relative overflow-hidden bg-white/5">
+                  <img
+                    src={aboutContent.missionVisionImage}
+                    alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=1600';
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>
