@@ -438,7 +438,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   // About Page Content Queries
   const { data: aboutContent, isLoading: aboutContentLoading } = useQuery<AboutPageContent>({
-    queryKey: ['/api/about-content'],
+    queryKey: ['/api/about-page-content'],
   });
 
   const { data: aboutPrinciples = [], isLoading: aboutPrinciplesLoading } = useQuery<AboutCoreValue[]>({
