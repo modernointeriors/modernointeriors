@@ -139,23 +139,17 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              {principles.map((principle) => {
-                const IconComponent = getIconComponent(principle.icon);
-                return (
-                  <div key={principle.id} className="space-y-6">
-                    <div className="flex items-center gap-4">
-                      <IconComponent className="w-8 h-8 text-white/40" />
-                      <h4 className="text-xl font-light text-white uppercase tracking-wide">
-                        {language === "vi" ? principle.titleVi : principle.titleEn}
-                      </h4>
-                    </div>
-                    <p className="text-white/70 font-light leading-relaxed">
-                      {language === "vi" ? principle.descriptionVi : principle.descriptionEn}
-                    </p>
-                  </div>
-                );
-              })}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {principles.map((principle) => (
+                <div key={principle.id} className="space-y-4">
+                  <h4 className="text-xl font-light text-white uppercase tracking-wide">
+                    {language === "vi" ? principle.titleVi : principle.titleEn}
+                  </h4>
+                  <p className="text-white/70 font-light leading-relaxed">
+                    {language === "vi" ? principle.descriptionVi : principle.descriptionEn}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
