@@ -271,21 +271,21 @@ export default function AboutAdminTab({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Hero Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Hero Title (English)</label>
                         <Input {...aboutContentForm.register("heroTitleEn")} placeholder="ARCHITECTURAL & INTERIOR DESIGN" data-testid="input-hero-title-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Hero Subtitle <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Hero Subtitle (English)</label>
                         <Input {...aboutContentForm.register("heroSubtitleEn")} placeholder="INNOVATION IN EVERY PROJECT" data-testid="input-hero-subtitle-en" />
                       </div>
                     </div>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Hero Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Hero Title (Tiếng Việt)</label>
                         <Input {...aboutContentForm.register("heroTitleVi")} placeholder="THIẾT KẾ KIẾN TRÚC VÀ NỘI THẤT" data-testid="input-hero-title-vi" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Hero Subtitle <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Hero Subtitle (Tiếng Việt)</label>
                         <Input {...aboutContentForm.register("heroSubtitleVi")} placeholder="ĐỔI MỚI TRONG MỌI DỰ ÁN" data-testid="input-hero-subtitle-vi" />
                       </div>
                     </div>
@@ -409,11 +409,11 @@ export default function AboutAdminTab({
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Principles Section</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Principles Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                      <label className="text-sm font-light mb-2 block">Principles Title (English)</label>
                       <Input {...aboutContentForm.register("principlesTitleEn")} placeholder="THE FOUNDATION OF OUR WORK" data-testid="input-principles-title-en" />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Principles Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                      <label className="text-sm font-light mb-2 block">Principles Title (Tiếng Việt)</label>
                       <Input {...aboutContentForm.register("principlesTitleVi")} placeholder="NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI" data-testid="input-principles-title-vi" />
                     </div>
                   </div>
@@ -424,11 +424,11 @@ export default function AboutAdminTab({
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Process Section</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Process Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                      <label className="text-sm font-light mb-2 block">Process Title (English)</label>
                       <Input {...aboutContentForm.register("processTitleEn")} placeholder="FROM CONCEPT TO REALITY" data-testid="input-process-title-en" />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Process Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                      <label className="text-sm font-light mb-2 block">Process Title (Tiếng Việt)</label>
                       <Input {...aboutContentForm.register("processTitleVi")} placeholder="TỪ Ý TƯỞNG ĐẾN HIỆN THỰC" data-testid="input-process-title-vi" />
                     </div>
                   </div>
@@ -440,21 +440,21 @@ export default function AboutAdminTab({
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Section Title (English)</label>
                         <Input {...aboutContentForm.register("historyTitleEn")} placeholder="OUR STORY" data-testid="input-history-title-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
                         <Input {...aboutContentForm.register("historyTitleVi")} placeholder="CÂU CHUYỆN CỦA CHÚNG TÔI" data-testid="input-history-title-vi" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Content <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Content (English)</label>
                         <Textarea {...aboutContentForm.register("historyContentEn")} rows={5} placeholder="Company history in English..." data-testid="textarea-history-content-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Content <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Content (Tiếng Việt)</label>
                         <Textarea {...aboutContentForm.register("historyContentVi")} rows={5} placeholder="Lịch sử công ty..." data-testid="textarea-history-content-vi" />
                       </div>
                     </div>
@@ -544,21 +544,21 @@ export default function AboutAdminTab({
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Section Title (English)</label>
                         <Input {...aboutContentForm.register("missionTitleEn")} placeholder="OUR MISSION" data-testid="input-mission-title-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
                         <Input {...aboutContentForm.register("missionTitleVi")} placeholder="SỨ MỆNH" data-testid="input-mission-title-vi" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Content <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Content (English)</label>
                         <Textarea {...aboutContentForm.register("missionContentEn")} rows={4} placeholder="Our mission in English..." data-testid="textarea-mission-content-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Content <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Content (Tiếng Việt)</label>
                         <Textarea {...aboutContentForm.register("missionContentVi")} rows={4} placeholder="Sứ mệnh của chúng tôi..." data-testid="textarea-mission-content-vi" />
                       </div>
                     </div>
@@ -571,21 +571,21 @@ export default function AboutAdminTab({
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Section Title (English)</label>
                         <Input {...aboutContentForm.register("visionTitleEn")} placeholder="OUR VISION" data-testid="input-vision-title-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
                         <Input {...aboutContentForm.register("visionTitleVi")} placeholder="TẦM NHÌN" data-testid="input-vision-title-vi" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Content <span className="text-blue-500 font-semibold">(English)</span></label>
+                        <label className="text-sm font-light mb-2 block">Content (English)</label>
                         <Textarea {...aboutContentForm.register("visionContentEn")} rows={4} placeholder="Our vision in English..." data-testid="textarea-vision-content-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Content <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                        <label className="text-sm font-light mb-2 block">Content (Tiếng Việt)</label>
                         <Textarea {...aboutContentForm.register("visionContentVi")} rows={4} placeholder="Tầm nhìn của chúng tôi..." data-testid="textarea-vision-content-vi" />
                       </div>
                     </div>
@@ -675,11 +675,11 @@ export default function AboutAdminTab({
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Core Values Section Title</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Section Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                      <label className="text-sm font-light mb-2 block">Section Title (English)</label>
                       <Input {...aboutContentForm.register("coreValuesTitleEn")} placeholder="CORE VALUES" data-testid="input-core-values-title-en" />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Section Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                      <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
                       <Input {...aboutContentForm.register("coreValuesTitleVi")} placeholder="GIÁ TRỊ CỐT LÕI" data-testid="input-core-values-title-vi" />
                     </div>
                   </div>
@@ -690,11 +690,11 @@ export default function AboutAdminTab({
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Team Section Title</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Section Title <span className="text-blue-500 font-semibold">(English)</span></label>
+                      <label className="text-sm font-light mb-2 block">Section Title (English)</label>
                       <Input {...aboutContentForm.register("teamTitleEn")} placeholder="OUR TEAM" data-testid="input-team-title-en" />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Section Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></label>
+                      <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
                       <Input {...aboutContentForm.register("teamTitleVi")} placeholder="ĐỘI NGŨ" data-testid="input-team-title-vi" />
                     </div>
                   </div>
@@ -907,7 +907,7 @@ export default function AboutAdminTab({
                         name="titleEn"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Title <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                            <FormLabel>Title (English)</FormLabel>
                             <FormControl>
                               <Input {...field} data-testid="input-principle-title-en" />
                             </FormControl>
@@ -920,7 +920,7 @@ export default function AboutAdminTab({
                         name="titleVi"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                            <FormLabel>Title (Tiếng Việt)</FormLabel>
                             <FormControl>
                               <Input {...field} data-testid="input-principle-title-vi" />
                             </FormControl>
@@ -935,7 +935,7 @@ export default function AboutAdminTab({
                         name="descriptionEn"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Description <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                            <FormLabel>Description (English)</FormLabel>
                             <FormControl>
                               <Textarea {...field} rows={3} data-testid="textarea-principle-description-en" />
                             </FormControl>
@@ -948,7 +948,7 @@ export default function AboutAdminTab({
                         name="descriptionVi"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Description <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                            <FormLabel>Description (Tiếng Việt)</FormLabel>
                             <FormControl>
                               <Textarea {...field} rows={3} data-testid="textarea-principle-description-vi" />
                             </FormControl>
@@ -1042,7 +1042,7 @@ export default function AboutAdminTab({
                       name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Title (English)</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-showcase-title-en" />
                           </FormControl>
@@ -1055,7 +1055,7 @@ export default function AboutAdminTab({
                       name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Title (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-showcase-title-vi" />
                           </FormControl>
@@ -1070,7 +1070,7 @@ export default function AboutAdminTab({
                       name="descriptionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Description (English)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} data-testid="textarea-showcase-description-en" />
                           </FormControl>
@@ -1083,7 +1083,7 @@ export default function AboutAdminTab({
                       name="descriptionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Description (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} data-testid="textarea-showcase-description-vi" />
                           </FormControl>
@@ -1189,7 +1189,7 @@ export default function AboutAdminTab({
                       name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Title (English)</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-step-title-en" />
                           </FormControl>
@@ -1202,7 +1202,7 @@ export default function AboutAdminTab({
                       name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Title (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-step-title-vi" />
                           </FormControl>
@@ -1217,7 +1217,7 @@ export default function AboutAdminTab({
                       name="descriptionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Description (English)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} data-testid="textarea-step-description-en" />
                           </FormControl>
@@ -1230,7 +1230,7 @@ export default function AboutAdminTab({
                       name="descriptionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Description (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} data-testid="textarea-step-description-vi" />
                           </FormControl>
@@ -1323,7 +1323,7 @@ export default function AboutAdminTab({
                       name="positionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Position <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Position (English)</FormLabel>
                           <FormControl>
                             <Input {...field} placeholder="Lead Designer" data-testid="input-team-member-position-en" />
                           </FormControl>
@@ -1336,7 +1336,7 @@ export default function AboutAdminTab({
                       name="positionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Position <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Position (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Input {...field} placeholder="Trưởng phòng thiết kế" data-testid="input-team-member-position-vi" />
                           </FormControl>
@@ -1351,7 +1351,7 @@ export default function AboutAdminTab({
                       name="bioEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Bio <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Bio (English)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} placeholder="Professional background..." data-testid="textarea-team-member-bio-en" />
                           </FormControl>
@@ -1364,7 +1364,7 @@ export default function AboutAdminTab({
                       name="bioVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Bio <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Bio (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} placeholder="Lý lịch chuyên môn..." data-testid="textarea-team-member-bio-vi" />
                           </FormControl>
@@ -1379,7 +1379,7 @@ export default function AboutAdminTab({
                       name="achievementsEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Achievements <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Achievements (English)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} placeholder="Awards and accomplishments..." data-testid="textarea-team-member-achievements-en" />
                           </FormControl>
@@ -1392,7 +1392,7 @@ export default function AboutAdminTab({
                       name="achievementsVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Achievements <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Achievements (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} placeholder="Giải thưởng và thành tựu..." data-testid="textarea-team-member-achievements-vi" />
                           </FormControl>
@@ -1407,7 +1407,7 @@ export default function AboutAdminTab({
                       name="philosophyEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Philosophy <span className="text-blue-500 font-semibold">(English)</span></FormLabel>
+                          <FormLabel>Philosophy (English)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} placeholder="Design philosophy..." data-testid="textarea-team-member-philosophy-en" />
                           </FormControl>
@@ -1420,7 +1420,7 @@ export default function AboutAdminTab({
                       name="philosophyVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Philosophy <span className="text-orange-500 font-semibold">(Tiếng Việt)</span></FormLabel>
+                          <FormLabel>Philosophy (Tiếng Việt)</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={3} placeholder="Triết lý thiết kế..." data-testid="textarea-team-member-philosophy-vi" />
                           </FormControl>
