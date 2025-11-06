@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import passport from "passport";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -1029,67 +1029,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(content);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch about page content" });
-    }
-  });
-
-  // About Principles routes
-  app.get("/api/about-principles", async (req, res) => {
-    try {
-      const { active } = req.query;
-      const filters: any = {};
-      if (active !== undefined) filters.active = active === 'true';
-      
-      const principles = await storage.getAboutPrinciples(filters);
-      res.json(principles);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch about principles" });
-    }
-  });
-
-  app.get("/api/about-principles/:id", async (req, res) => {
-    try {
-      const principle = await storage.getAboutPrinciple(req.params.id);
-      if (!principle) {
-        return res.status(404).json({ message: "Principle not found" });
-      }
-      res.json(principle);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch principle" });
-    }
-  });
-
-  app.post("/api/about-principles", async (req, res) => {
-    try {
-      const validatedData = insertAboutPrincipleSchema.parse(req.body);
-      const principle = await storage.createAboutPrinciple(validatedData);
-      res.status(201).json(principle);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to create principle" });
-    }
-  });
-
-  app.put("/api/about-principles/:id", async (req, res) => {
-    try {
-      const validatedData = insertAboutPrincipleSchema.partial().parse(req.body);
-      const principle = await storage.updateAboutPrinciple(req.params.id, validatedData);
-      res.json(principle);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to update principle" });
-    }
-  });
-
-  app.delete("/api/about-principles/:id", async (req, res) => {
-    try {
-      await storage.deleteAboutPrinciple(req.params.id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete principle" });
     }
   });
 

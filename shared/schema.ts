@@ -602,20 +602,6 @@ export const aboutPageContent = pgTable("about_page_content", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-// About Page Principles
-export const aboutPrinciples = pgTable("about_principles", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  icon: text("icon").notNull(), // Lucide icon name
-  titleEn: text("title_en").notNull(),
-  titleVi: text("title_vi").notNull(),
-  descriptionEn: text("description_en").notNull(),
-  descriptionVi: text("description_vi").notNull(),
-  order: integer("order").notNull().default(0),
-  active: boolean("active").notNull().default(true),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
-
 // About Page Showcase Services (Architecture Showcase Section)
 export const aboutShowcaseServices = pgTable("about_showcase_services", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -682,13 +668,6 @@ export const insertAboutPageContentSchema = createInsertSchema(aboutPageContent)
   updatedAt: true,
 });
 
-export const insertAboutPrincipleSchema = createInsertSchema(aboutPrinciples).omit({
-  id: true,
-  active: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
 export const insertAboutShowcaseServiceSchema = createInsertSchema(aboutShowcaseServices).omit({
   id: true,
   active: true,
@@ -720,9 +699,6 @@ export const insertAboutTeamMemberSchema = createInsertSchema(aboutTeamMembers).
 // Types
 export type InsertAboutPageContent = z.infer<typeof insertAboutPageContentSchema>;
 export type AboutPageContent = typeof aboutPageContent.$inferSelect;
-
-export type InsertAboutPrinciple = z.infer<typeof insertAboutPrincipleSchema>;
-export type AboutPrinciple = typeof aboutPrinciples.$inferSelect;
 
 export type InsertAboutShowcaseService = z.infer<typeof insertAboutShowcaseServiceSchema>;
 export type AboutShowcaseService = typeof aboutShowcaseServices.$inferSelect;

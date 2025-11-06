@@ -1,7 +1,7 @@
 import { 
   users, clients, projects, inquiries, services, articles, homepageContent, partners, categories,
   interactions, deals, transactions, settings, faqs, advantages, journeySteps,
-  aboutPageContent, aboutPrinciples, aboutShowcaseServices, aboutProcessSteps, aboutCoreValues, aboutTeamMembers,
+  aboutPageContent, aboutShowcaseServices, aboutProcessSteps, aboutCoreValues, aboutTeamMembers,
   crmPipelineStages, crmCustomerTiers, crmStatuses,
   type User, type InsertUser,
   type Client, type InsertClient,
@@ -20,7 +20,6 @@ import {
   type Advantage, type InsertAdvantage,
   type JourneyStep, type InsertJourneyStep,
   type AboutPageContent, type InsertAboutPageContent,
-  type AboutPrinciple, type InsertAboutPrinciple,
   type AboutShowcaseService, type InsertAboutShowcaseService,
   type AboutProcessStep, type InsertAboutProcessStep,
   type AboutCoreValue, type InsertAboutCoreValue,
@@ -152,13 +151,6 @@ export interface IStorage {
   // About Page Content
   getAboutPageContent(): Promise<AboutPageContent | undefined>;
   upsertAboutPageContent(content: InsertAboutPageContent): Promise<AboutPageContent>;
-
-  // About Page Principles
-  getAboutPrinciples(filters?: { active?: boolean }): Promise<AboutPrinciple[]>;
-  getAboutPrinciple(id: string): Promise<AboutPrinciple | undefined>;
-  createAboutPrinciple(principle: InsertAboutPrinciple): Promise<AboutPrinciple>;
-  updateAboutPrinciple(id: string, principle: Partial<InsertAboutPrinciple>): Promise<AboutPrinciple>;
-  deleteAboutPrinciple(id: string): Promise<void>;
 
   // About Page Showcase Services
   getAboutShowcaseServices(filters?: { active?: boolean }): Promise<AboutShowcaseService[]>;
@@ -935,41 +927,6 @@ export class DatabaseStorage implements IStorage {
       const [created] = await db.insert(aboutPageContent).values(content).returning();
       return created;
     }
-  }
-
-  // About Page Principles
-  async getAboutPrinciples(filters?: { active?: boolean }): Promise<AboutPrinciple[]> {
-    const conditions = [];
-    if (filters?.active !== undefined) conditions.push(eq(aboutPrinciples.active, filters.active));
-
-    const query = conditions.length > 0
-      ? db.select().from(aboutPrinciples).where(and(...conditions))
-      : db.select().from(aboutPrinciples);
-
-    return await query.orderBy(aboutPrinciples.order);
-  }
-
-  async getAboutPrinciple(id: string): Promise<AboutPrinciple | undefined> {
-    const [principle] = await db.select().from(aboutPrinciples).where(eq(aboutPrinciples.id, id));
-    return principle || undefined;
-  }
-
-  async createAboutPrinciple(principle: InsertAboutPrinciple): Promise<AboutPrinciple> {
-    const [created] = await db.insert(aboutPrinciples).values(principle).returning();
-    return created;
-  }
-
-  async updateAboutPrinciple(id: string, principle: Partial<InsertAboutPrinciple>): Promise<AboutPrinciple> {
-    const [updated] = await db
-      .update(aboutPrinciples)
-      .set({ ...principle, updatedAt: new Date() })
-      .where(eq(aboutPrinciples.id, id))
-      .returning();
-    return updated;
-  }
-
-  async deleteAboutPrinciple(id: string): Promise<void> {
-    await db.delete(aboutPrinciples).where(eq(aboutPrinciples.id, id));
   }
 
   // About Page Showcase Services

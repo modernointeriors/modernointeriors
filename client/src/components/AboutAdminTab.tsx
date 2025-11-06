@@ -200,7 +200,7 @@ export default function AboutAdminTab({
   }, [aboutContent]);
 
   // Wrapper functions to auto-close dialogs after successful submit
-  const handlePrincipleSubmit = async (data: InsertAboutPrinciple) => {
+  const handlePrincipleSubmit = async (data: InsertAboutCoreValue) => {
     await onPrincipleSubmit(data);
     setIsPrincipleDialogOpen(false);
   };
