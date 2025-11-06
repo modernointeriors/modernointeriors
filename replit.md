@@ -37,8 +37,9 @@ The application manages core entities:
 - **Services**: Configurable service offerings with descriptions, features, and ordering
 - **Partners**: Simplified partner/brand logo management (managed in Homepage Content tab)
   - Only requires: Partner name and logo (PNG/JPG upload or URL)
+  - Maximum limit: 24 partners total (12 per row)
   - No descriptions, websites, ordering, or status fields
-  - Displays in two-row scrolling animation on homepage
+  - Displays in two-row scrolling animation on homepage (seamless infinite loop with 20 copies, 5% translateX animation, mx-4 spacing)
   - Simple table view showing logo preview, name, and actions (edit/delete)
 - **FAQs**: Frequently asked questions with multilingual support
   - Page-specific filtering (home, contact, etc.)

@@ -5012,18 +5012,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
               <div>
                 <CardTitle className="text-white">Partners Management</CardTitle>
                 <p className="text-sm text-white/50 mt-1">
-                  {partners.length} / 20 partners • Maximum 20 partners allowed
+                  {partners.length} / 24 partners • Maximum 24 partners allowed
                 </p>
               </div>
               <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
                 <DialogTrigger asChild>
                   <Button 
                     onClick={(e) => {
-                      if (partners.length >= 20) {
+                      if (partners.length >= 24) {
                         e.preventDefault();
                         toast({
                           title: "Maximum partners reached",
-                          description: "You have reached the maximum limit of 20 partners. Please delete an existing partner to add a new one.",
+                          description: "You have reached the maximum limit of 24 partners. Please delete an existing partner to add a new one.",
                           variant: "destructive"
                         });
                         return;
@@ -5036,7 +5036,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       setPartnerLogoPreview('');
                       setIsPartnerDialogOpen(true);
                     }} 
-                    disabled={partners.length >= 20}
+                    disabled={partners.length >= 24}
                     data-testid="button-add-partner"
                   >
                     <Plus className="mr-2 h-4 w-4" />
@@ -6264,18 +6264,18 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           <div>
             <h2 className="text-2xl font-sans font-light">Partners Management</h2>
             <p className="text-sm text-white/50 mt-1">
-              {partners.length} / 20 partners • Maximum 20 partners allowed
+              {partners.length} / 24 partners • Maximum 24 partners allowed
             </p>
           </div>
           <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
             <DialogTrigger asChild>
               <Button 
                 onClick={(e) => {
-                  if (partners.length >= 20) {
+                  if (partners.length >= 24) {
                     e.preventDefault();
                     toast({
                       title: "Maximum partners reached",
-                      description: "You have reached the maximum limit of 20 partners. Please delete an existing partner to add a new one.",
+                      description: "You have reached the maximum limit of 24 partners. Please delete an existing partner to add a new one.",
                       variant: "destructive"
                     });
                     return;
@@ -6288,7 +6288,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                   setPartnerLogoPreview('');
                   setIsPartnerDialogOpen(true);
                 }}
-                disabled={partners.length >= 20}
+                disabled={partners.length >= 24}
                 data-testid="button-add-partner"
               >
                 <Plus className="mr-2 h-4 w-4" />
