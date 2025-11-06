@@ -122,6 +122,8 @@ export default function AboutAdminTab({
       heroTitleVi: "",
       heroSubtitleEn: "",
       heroSubtitleVi: "",
+      principlesSubtitleEn: "",
+      principlesSubtitleVi: "",
       principlesTitleEn: "",
       principlesTitleVi: "",
       showcaseBannerImage: "",
@@ -137,8 +139,12 @@ export default function AboutAdminTab({
       statsCountriesValue: "",
       statsCountriesLabelEn: "",
       statsCountriesLabelVi: "",
+      processSubtitleEn: "",
+      processSubtitleVi: "",
       processTitleEn: "",
       processTitleVi: "",
+      historySubtitleEn: "",
+      historySubtitleVi: "",
       historyTitleEn: "",
       historyTitleVi: "",
       historyContentEn: "",
@@ -152,8 +158,12 @@ export default function AboutAdminTab({
       visionTitleVi: "",
       visionContentEn: "",
       visionContentVi: "",
+      coreValuesSubtitleEn: "",
+      coreValuesSubtitleVi: "",
       coreValuesTitleEn: "",
       coreValuesTitleVi: "",
+      teamSubtitleEn: "",
+      teamSubtitleVi: "",
       teamTitleEn: "",
       teamTitleVi: "",
     },
@@ -463,14 +473,26 @@ export default function AboutAdminTab({
                 {/* Principles Section Title */}
                 <div className="p-4">
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Principles Section</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Principles Title (English)</label>
-                      <Input {...aboutContentForm.register("principlesTitleEn")} placeholder="THE FOUNDATION OF OUR WORK" data-testid="input-principles-title-en" />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (English)</label>
+                        <Input {...aboutContentForm.register("principlesSubtitleEn")} placeholder="OUR PRINCIPLES" data-testid="input-principles-subtitle-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("principlesSubtitleVi")} placeholder="NGUYÊN TẮC LÀM VIỆC" data-testid="input-principles-subtitle-vi" />
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Principles Title (Tiếng Việt)</label>
-                      <Input {...aboutContentForm.register("principlesTitleVi")} placeholder="NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI" data-testid="input-principles-title-vi" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (English)</label>
+                        <Input {...aboutContentForm.register("principlesTitleEn")} placeholder="THE FOUNDATION OF OUR WORK" data-testid="input-principles-title-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("principlesTitleVi")} placeholder="NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI" data-testid="input-principles-title-vi" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -478,14 +500,26 @@ export default function AboutAdminTab({
                 {/* Process Section Title */}
                 <div className="p-4">
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Process Section</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Process Title (English)</label>
-                      <Input {...aboutContentForm.register("processTitleEn")} placeholder="FROM CONCEPT TO REALITY" data-testid="input-process-title-en" />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (English)</label>
+                        <Input {...aboutContentForm.register("processSubtitleEn")} placeholder="OUR PROCESS" data-testid="input-process-subtitle-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("processSubtitleVi")} placeholder="QUY TRÌNH LÀM VIỆC" data-testid="input-process-subtitle-vi" />
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Process Title (Tiếng Việt)</label>
-                      <Input {...aboutContentForm.register("processTitleVi")} placeholder="TỪ Ý TƯỞNG ĐẾN HIỆN THỰC" data-testid="input-process-title-vi" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (English)</label>
+                        <Input {...aboutContentForm.register("processTitleEn")} placeholder="FROM CONCEPT TO REALITY" data-testid="input-process-title-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("processTitleVi")} placeholder="TỪ Ý TƯỞNG ĐẾN HIỆN THỰC" data-testid="input-process-title-vi" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -496,11 +530,21 @@ export default function AboutAdminTab({
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title (English)</label>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (English)</label>
+                        <Input {...aboutContentForm.register("historySubtitleEn")} placeholder="COMPANY HISTORY" data-testid="input-history-subtitle-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("historySubtitleVi")} placeholder="LỊCH SỬ HÌNH THÀNH" data-testid="input-history-subtitle-vi" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (English)</label>
                         <Input {...aboutContentForm.register("historyTitleEn")} placeholder="OUR STORY" data-testid="input-history-title-en" />
                       </div>
                       <div>
-                        <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (Tiếng Việt)</label>
                         <Input {...aboutContentForm.register("historyTitleVi")} placeholder="CÂU CHUYỆN CỦA CHÚNG TÔI" data-testid="input-history-title-vi" />
                       </div>
                     </div>
@@ -729,14 +773,26 @@ export default function AboutAdminTab({
                 {/* Core Values Section Title */}
                 <div className="p-4 border-t">
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Core Values Section Title</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Section Title (English)</label>
-                      <Input {...aboutContentForm.register("coreValuesTitleEn")} placeholder="CORE VALUES" data-testid="input-core-values-title-en" />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (English)</label>
+                        <Input {...aboutContentForm.register("coreValuesSubtitleEn")} placeholder="CORE VALUES" data-testid="input-core-values-subtitle-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("coreValuesSubtitleVi")} placeholder="GIÁ TRỊ CỐT LÕI" data-testid="input-core-values-subtitle-vi" />
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
-                      <Input {...aboutContentForm.register("coreValuesTitleVi")} placeholder="GIÁ TRỊ CỐT LÕI" data-testid="input-core-values-title-vi" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (English)</label>
+                        <Input {...aboutContentForm.register("coreValuesTitleEn")} placeholder="CORE VALUES" data-testid="input-core-values-title-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("coreValuesTitleVi")} placeholder="GIÁ TRỊ CỐT LÕI" data-testid="input-core-values-title-vi" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -744,14 +800,26 @@ export default function AboutAdminTab({
                 {/* Team Section Title */}
                 <div className="p-4 border-t">
                   <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Team Section Title</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Section Title (English)</label>
-                      <Input {...aboutContentForm.register("teamTitleEn")} placeholder="OUR TEAM" data-testid="input-team-title-en" />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (English)</label>
+                        <Input {...aboutContentForm.register("teamSubtitleEn")} placeholder="OUR TEAM" data-testid="input-team-subtitle-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Section Subtitle H2 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("teamSubtitleVi")} placeholder="ĐỘI NGŨ" data-testid="input-team-subtitle-vi" />
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-light mb-2 block">Section Title (Tiếng Việt)</label>
-                      <Input {...aboutContentForm.register("teamTitleVi")} placeholder="ĐỘI NGŨ" data-testid="input-team-title-vi" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (English)</label>
+                        <Input {...aboutContentForm.register("teamTitleEn")} placeholder="OUR TEAM" data-testid="input-team-title-en" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-light mb-2 block">Main Title H3 (Tiếng Việt)</label>
+                        <Input {...aboutContentForm.register("teamTitleVi")} placeholder="ĐỘI NGŨ" data-testid="input-team-title-vi" />
+                      </div>
                     </div>
                   </div>
                 </div>

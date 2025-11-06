@@ -132,7 +132,7 @@ export default function About() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-                {language === "vi" ? "NGUYÊN TẮC LÀM VIỆC" : "OUR PRINCIPLES"}
+                {language === "vi" ? aboutContent.principlesSubtitleVi : aboutContent.principlesSubtitleEn}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
                 {language === "vi" ? aboutContent.principlesTitleVi : aboutContent.principlesTitleEn}
@@ -249,7 +249,7 @@ export default function About() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-                {language === "vi" ? "LỊCH SỬ HÌNH THÀNH" : "COMPANY HISTORY"}
+                {language === "vi" ? aboutContent.historySubtitleVi : aboutContent.historySubtitleEn}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
                 {language === "vi" ? aboutContent.historyTitleVi : aboutContent.historyTitleEn}
@@ -303,12 +303,9 @@ export default function About() {
               <div className="flex flex-col gap-12">
                 {aboutContent?.missionContentEn && aboutContent?.missionContentVi && (
                   <div className="space-y-6">
-                    <div className="flex items-center gap-4 mb-6">
-                      <Target className="w-10 h-10 text-white/40" />
-                      <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
-                        {language === "vi" ? aboutContent.missionTitleVi : aboutContent.missionTitleEn}
-                      </h3>
-                    </div>
+                    <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide mb-6">
+                      {language === "vi" ? aboutContent.missionTitleVi : aboutContent.missionTitleEn}
+                    </h3>
                     <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
                       {language === "vi" ? aboutContent.missionContentVi : aboutContent.missionContentEn}
                     </p>
@@ -317,12 +314,9 @@ export default function About() {
 
                 {aboutContent?.visionContentEn && aboutContent?.visionContentVi && (
                   <div className="space-y-6">
-                    <div className="flex items-center gap-4 mb-6">
-                      <Eye className="w-10 h-10 text-white/40" />
-                      <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide">
-                        {language === "vi" ? aboutContent.visionTitleVi : aboutContent.visionTitleEn}
-                      </h3>
-                    </div>
+                    <h3 className="text-2xl md:text-3xl font-light text-white uppercase tracking-wide mb-6">
+                      {language === "vi" ? aboutContent.visionTitleVi : aboutContent.visionTitleEn}
+                    </h3>
                     <p className="text-white/70 font-light leading-relaxed whitespace-pre-line">
                       {language === "vi" ? aboutContent.visionContentVi : aboutContent.visionContentEn}
                     </p>
@@ -340,7 +334,7 @@ export default function About() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-                {language === "vi" ? "GIÁ TRỊ CỐT LÕI" : "CORE VALUES"}
+                {language === "vi" ? aboutContent.coreValuesSubtitleVi : aboutContent.coreValuesSubtitleEn}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
                 {language === "vi" ? aboutContent.coreValuesTitleVi : aboutContent.coreValuesTitleEn}
@@ -369,16 +363,11 @@ export default function About() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-                {language === "vi" ? "ĐỘI NGŨ" : "OUR TEAM"}
+                {language === "vi" ? aboutContent.teamSubtitleVi : aboutContent.teamSubtitleEn}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide mb-4">
                 {language === "vi" ? aboutContent.teamTitleVi : aboutContent.teamTitleEn}
               </h3>
-              {aboutContent?.teamSubtitleEn && aboutContent?.teamSubtitleVi && (
-                <p className="text-white/60 font-light text-lg">
-                  {language === "vi" ? aboutContent.teamSubtitleVi : aboutContent.teamSubtitleEn}
-                </p>
-              )}
             </div>
 
             <div className="flex gap-0 items-stretch justify-center">
@@ -510,7 +499,7 @@ export default function About() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
-                {language === "vi" ? "QUY TRÌNH LÀM VIỆC" : "OUR PROCESS"}
+                {language === "vi" ? aboutContent.processSubtitleVi : aboutContent.processSubtitleEn}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
                 {language === "vi" ? aboutContent.processTitleVi : aboutContent.processTitleEn}

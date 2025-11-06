@@ -553,6 +553,8 @@ export const aboutPageContent = pgTable("about_page_content", {
   heroSubtitleVi: text("hero_subtitle_vi").notNull().default("ĐỔI MỚI TRONG MỌI DỰ ÁN"),
   heroImages: text("hero_images").array().notNull().default(sql`ARRAY[]::text[]`),
   // Principles Section
+  principlesSubtitleEn: text("principles_subtitle_en").notNull().default("OUR PRINCIPLES"),
+  principlesSubtitleVi: text("principles_subtitle_vi").notNull().default("NGUYÊN TẮC LÀM VIỆC"),
   principlesTitleEn: text("principles_title_en").notNull().default("THE FOUNDATION OF OUR WORK"),
   principlesTitleVi: text("principles_title_vi").notNull().default("NỀN TẢNG CỦA CÔNG VIỆC CHÚNG TÔI"),
   // Architecture Showcase Section
@@ -572,9 +574,13 @@ export const aboutPageContent = pgTable("about_page_content", {
   statsCountriesLabelEn: text("stats_countries_label_en").notNull().default("Countries"),
   statsCountriesLabelVi: text("stats_countries_label_vi").notNull().default("Quốc gia"),
   // Process Section
+  processSubtitleEn: text("process_subtitle_en").notNull().default("OUR PROCESS"),
+  processSubtitleVi: text("process_subtitle_vi").notNull().default("QUY TRÌNH LÀM VIỆC"),
   processTitleEn: text("process_title_en").notNull().default("FROM CONCEPT TO REALITY"),
   processTitleVi: text("process_title_vi").notNull().default("TỪ Ý TƯỞNG ĐẾN HIỆN THỰC"),
   // Company History Section
+  historySubtitleEn: text("history_subtitle_en").notNull().default("COMPANY HISTORY"),
+  historySubtitleVi: text("history_subtitle_vi").notNull().default("LỊCH SỬ HÌNH THÀNH"),
   historyTitleEn: text("history_title_en").notNull().default("OUR STORY"),
   historyTitleVi: text("history_title_vi").notNull().default("CÂU CHUYỆN CỦA CHÚNG TÔI"),
   historyContentEn: text("history_content_en").notNull().default(""),
@@ -594,13 +600,15 @@ export const aboutPageContent = pgTable("about_page_content", {
   missionVisionImage: text("mission_vision_image"),
   missionVisionImageData: text("mission_vision_image_data"),
   // Core Values Section Title
+  coreValuesSubtitleEn: text("core_values_subtitle_en").notNull().default("CORE VALUES"),
+  coreValuesSubtitleVi: text("core_values_subtitle_vi").notNull().default("GIÁ TRỊ CỐT LÕI"),
   coreValuesTitleEn: text("core_values_title_en").notNull().default("CORE VALUES"),
   coreValuesTitleVi: text("core_values_title_vi").notNull().default("GIÁ TRỊ CỐT LÕI"),
   // Team Section Title
+  teamSubtitleEn: text("team_subtitle_en").notNull().default("OUR TEAM"),
+  teamSubtitleVi: text("team_subtitle_vi").notNull().default("ĐỘI NGŨ"),
   teamTitleEn: text("team_title_en").notNull().default("OUR TEAM"),
   teamTitleVi: text("team_title_vi").notNull().default("ĐỘI NGŨ"),
-  teamSubtitleEn: text("team_subtitle_en"),
-  teamSubtitleVi: text("team_subtitle_vi"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
