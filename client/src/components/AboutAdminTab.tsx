@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Plus, Trash2, Upload, Edit } from "lucide-react";
+import { Pencil, Plus, Trash2, Upload, Edit, X } from "lucide-react";
 import type { AboutPageContent, AboutPrinciple, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutPrinciple, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
 import { insertAboutPageContentSchema, insertAboutPrincipleSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import ImageUpload from "@/components/ImageUpload";
@@ -260,62 +260,115 @@ export default function AboutAdminTab({
                     </div>
                   </div>
                   
-                  {/* Hero Image Upload */}
+                  {/* Hero Images Upload (5 images for slider) */}
                   <div className="mt-6">
-                    <label className="text-sm font-light mb-2 block">Hero Background Image</label>
-                    <div className="space-y-2">
-                      <Input
-                        {...aboutContentForm.register("heroImage")}
-                        placeholder="https://example.com/image.jpg"
-                        data-testid="input-hero-image"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Enter image URL or upload an image below
-                      </p>
-                      
-                      {/* Image Preview */}
-                      {aboutContentForm.watch("heroImage") && (
-                        <div className="mt-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-sm font-light">Hero Background Images (Slider)</label>
+                      <span className="text-xs text-muted-foreground">
+                        {(aboutContentForm.watch("heroImages") || []).length} / 5 images
+                      </span>
+                    </div>
+                    
+                    {/* Images Grid */}
+                    <div className="grid grid-cols-5 gap-2 mb-4">
+                      {(aboutContentForm.watch("heroImages") || []).map((imageUrl: string, index: number) => (
+                        <div key={index} className="relative group aspect-video border rounded overflow-hidden bg-muted">
                           <img
-                            src={aboutContentForm.watch("heroImage")}
-                            alt="Hero preview"
-                            className="w-full h-48 object-cover rounded"
+                            src={imageUrl}
+                            alt={`Hero image ${index + 1}`}
+                            className="w-full h-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
+                              target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext fill="%23999" x="50%" y="50%" text-anchor="middle" dy=".3em"%3EError%3C/text%3E%3C/svg%3E';
                             }}
                           />
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="destructive"
+                            className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => {
+                              const currentImages = aboutContentForm.getValues("heroImages") || [];
+                              const newImages = currentImages.filter((_: string, i: number) => i !== index);
+                              aboutContentForm.setValue("heroImages", newImages, { shouldDirty: true });
+                            }}
+                            data-testid={`button-remove-hero-image-${index}`}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                          <div className="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded">
+                            {index + 1}
+                          </div>
                         </div>
-                      )}
+                      ))}
                       
-                      {/* File Upload Button */}
-                      <div className="flex gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => document.getElementById('hero-image-upload')?.click()}
-                          data-testid="button-upload-hero-image"
+                      {/* Add Image Slots */}
+                      {Array.from({ length: Math.max(0, 5 - (aboutContentForm.watch("heroImages") || []).length) }).map((_, index) => (
+                        <div
+                          key={`empty-${index}`}
+                          className="aspect-video border-2 border-dashed border-muted-foreground/25 rounded flex items-center justify-center cursor-pointer hover:border-muted-foreground/50 transition-colors"
+                          onClick={() => document.getElementById('hero-images-upload')?.click()}
                         >
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload Image
-                        </Button>
-                        <input
-                          id="hero-image-upload"
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
+                          <Plus className="h-6 w-6 text-muted-foreground/50" />
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Add up to 5 images for the hero slider. Click empty slots to add, hover over images to remove.
+                    </p>
+                    
+                    {/* URL Input */}
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="https://example.com/image.jpg"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const input = e.target as HTMLInputElement;
+                            const url = input.value.trim();
+                            if (url) {
+                              const currentImages = aboutContentForm.getValues("heroImages") || [];
+                              if (currentImages.length < 5) {
+                                aboutContentForm.setValue("heroImages", [...currentImages, url], { shouldDirty: true });
+                                input.value = '';
+                              }
+                            }
+                          }
+                        }}
+                        data-testid="input-hero-image-url"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('hero-images-upload')?.click()}
+                        disabled={(aboutContentForm.watch("heroImages") || []).length >= 5}
+                        data-testid="button-upload-hero-images"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload
+                      </Button>
+                      <input
+                        id="hero-images-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const currentImages = aboutContentForm.getValues("heroImages") || [];
+                            if (currentImages.length < 5) {
                               const reader = new FileReader();
                               reader.onload = (event) => {
-                                aboutContentForm.setValue("heroImage", event.target?.result as string);
+                                const base64 = event.target?.result as string;
+                                aboutContentForm.setValue("heroImages", [...currentImages, base64], { shouldDirty: true });
                               };
                               reader.readAsDataURL(file);
                             }
-                          }}
-                        />
-                      </div>
+                          }
+                          e.target.value = '';
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
