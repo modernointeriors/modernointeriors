@@ -302,12 +302,12 @@ export default function About() {
         </section>
       )}
 
-      {/* Mission & Vision Section */}
+      {/* Mission & Vision Section - Image LEFT, Content RIGHT */}
       {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
         <section className="py-20 bg-black -ml-16">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Image on the left */}
+              {/* Image LEFT */}
               {(aboutContent?.missionVisionImageData || aboutContent?.missionVisionImage) && (
                 <div className="relative overflow-hidden bg-white/5">
                   <img
