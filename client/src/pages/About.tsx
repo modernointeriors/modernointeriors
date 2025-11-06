@@ -20,7 +20,7 @@ export default function About() {
     queryKey: ["/api/projects"],
   });
 
-  const { data: aboutContent } = useQuery<AboutPageContent>({
+  const { data: aboutContent, isLoading: aboutContentLoading } = useQuery<AboutPageContent>({
     queryKey: ["/api/about-page-content"],
   });
 
@@ -112,7 +112,10 @@ export default function About() {
                 <div className="space-y-8">
                   <div className="space-y-6">
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white uppercase tracking-wide">
-                      {language === "vi" ? aboutContent?.heroTitleVi : aboutContent?.heroTitleEn}
+                      {language === "vi" 
+                        ? (aboutContent?.heroTitleVi || "VỀ CHÚNG TÔI") 
+                        : (aboutContent?.heroTitleEn || "ABOUT US")
+                      }
                     </h1>
                     <div className="w-20 h-0.5 bg-white/40" />
                   </div>
@@ -126,7 +129,10 @@ export default function About() {
 
                 <div className="lg:text-right">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 uppercase tracking-wider leading-relaxed">
-                    {language === "vi" ? aboutContent?.heroSubtitleVi : aboutContent?.heroSubtitleEn}
+                    {language === "vi" 
+                      ? (aboutContent?.heroSubtitleVi || "Thiết kế nội thất hiện đại")
+                      : (aboutContent?.heroSubtitleEn || "Modern Interior Design")
+                    }
                   </h2>
                 </div>
               </div>
@@ -144,7 +150,10 @@ export default function About() {
                 {language === "vi" ? "NGUYÊN TẮC LÀM VIỆC" : "OUR PRINCIPLES"}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
-                {language === "vi" ? aboutContent?.principlesTitleVi : aboutContent?.principlesTitleEn}
+                {language === "vi" 
+                  ? (aboutContent?.principlesTitleVi || "Nguyên tắc làm việc của chúng tôi")
+                  : (aboutContent?.principlesTitleEn || "Our Working Principles")
+                }
               </h3>
             </div>
 
@@ -325,7 +334,10 @@ export default function About() {
                 {language === "vi" ? "GIÁ TRỊ CỐT LÕI" : "CORE VALUES"}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
-                {language === "vi" ? aboutContent?.coreValuesTitleVi : aboutContent?.coreValuesTitleEn}
+                {language === "vi" 
+                  ? (aboutContent?.coreValuesTitleVi || "Giá trị cốt lõi")
+                  : (aboutContent?.coreValuesTitleEn || "Our Core Values")
+                }
               </h3>
             </div>
 
@@ -360,7 +372,10 @@ export default function About() {
                 {language === "vi" ? "ĐỘI NGŨ" : "OUR TEAM"}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide mb-4">
-                {language === "vi" ? aboutContent?.teamTitleVi : aboutContent?.teamTitleEn}
+                {language === "vi" 
+                  ? (aboutContent?.teamTitleVi || "Đội ngũ của chúng tôi")
+                  : (aboutContent?.teamTitleEn || "Meet Our Team")
+                }
               </h3>
               {aboutContent?.teamSubtitleEn && aboutContent?.teamSubtitleVi && (
                 <p className="text-white/60 font-light text-lg">
@@ -501,7 +516,10 @@ export default function About() {
                 {language === "vi" ? "QUY TRÌNH LÀM VIỆC" : "OUR PROCESS"}
               </h2>
               <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
-                {language === "vi" ? aboutContent?.processTitleVi : aboutContent?.processTitleEn}
+                {language === "vi" 
+                  ? (aboutContent?.processTitleVi || "Quy trình làm việc chuyên nghiệp")
+                  : (aboutContent?.processTitleEn || "Our Professional Process")
+                }
               </h3>
             </div>
 
