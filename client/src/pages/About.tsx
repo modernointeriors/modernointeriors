@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
-import { ArrowRight, Target, Eye } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -522,34 +519,6 @@ export default function About() {
           </div>
         </section>
       )}
-
-      {/* CTA Section */}
-      <section className="py-20 bg-black -ml-16">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-8 uppercase tracking-wide">
-            {language === "vi"
-              ? "SẴN SÀNG BẮT ĐẦU DỰ ÁN CỦA BẠN?"
-              : "READY TO START YOUR PROJECT?"
-            }
-          </h2>
-          <p className="text-lg text-white/70 mb-12 max-w-2xl mx-auto">
-            {language === "vi"
-              ? "Liên hệ với chúng tôi ngay hôm nay để được tư vấn miễn phí và nhận báo giá chi tiết cho dự án của bạn."
-              : "Contact us today for a free consultation and detailed quote for your project."
-            }
-          </p>
-          <Button
-            asChild
-            className="bg-white text-black hover:bg-white/90 transition-all duration-300 px-12 py-6 text-base rounded-none uppercase tracking-wider group"
-            data-testid="button-contact-us"
-          >
-            <Link href="/contact">
-              {language === "vi" ? "Liên hệ ngay" : "Contact Us"}
-              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
-        </div>
-      </section>
     </main>
   );
 }
