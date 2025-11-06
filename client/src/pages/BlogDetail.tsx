@@ -11,13 +11,13 @@ import type { Article } from "@shared/schema";
 import { useEffect, useState } from "react";
 
 // Related Articles Component
-function RelatedArticles({ currentArticleId, language }: { currentArticleId: string; language: string }) {
+function RelatedArticles({ currentArticleId, category, language }: { currentArticleId: string; category: string; language: string }) {
   const { data: relatedArticles = [] } = useQuery<Article[]>({
-    queryKey: ['/api/articles', 'related', currentArticleId, language],
+    queryKey: ['/api/articles', 'related', currentArticleId, category, language],
     queryFn: async () => {
       const params = new URLSearchParams();
       params.append('language', language);
-      params.append('category', 'news');
+      params.append('category', category);
       const response = await fetch(`/api/articles?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to fetch articles');
@@ -36,6 +36,26 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
     });
   };
 
+  const getCategoryLabel = (cat: string) => {
+    const categoryMap = {
+      en: {
+        news: 'News',
+        tips: 'Design Tips',
+        projects: 'Project Highlights',
+        'design-trends': 'Design Trends',
+        general: 'General'
+      },
+      vi: {
+        news: 'Tin tức',
+        tips: 'Mẹo thiết kế',
+        projects: 'Dự án nổi bật',
+        'design-trends': 'Xu hướng thiết kế',
+        general: 'Chung'
+      }
+    };
+    return categoryMap[language as 'en' | 'vi'][cat as keyof typeof categoryMap.en] || cat;
+  };
+
   if (relatedArticles.length === 0) {
     return null;
   }
@@ -43,16 +63,18 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
   return (
     <div className="mt-16 py-12">
       <h3 className="text-2xl font-sans font-light mb-8">
-        {language === 'vi' ? 'Những bài viết khác trong News' : 'Other News Articles'}
+        {language === 'vi' 
+          ? `Những bài viết khác trong ${getCategoryLabel(category)}` 
+          : `Other ${getCategoryLabel(category)} Articles`}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {relatedArticles.map((article) => (
           <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-related-article-${article.id}`}>
             <Link href={`/blog/${article.slug}`}>
               <div className="relative">
-                {article.featuredImage ? (
+                {(article.featuredImage || article.featuredImageData) ? (
                   <OptimizedImage
-                    src={article.featuredImage}
+                    src={article.featuredImage || article.featuredImageData || ''}
                     alt={article.title}
                     width={600}
                     height={192}
@@ -75,7 +97,7 @@ function RelatedArticles({ currentArticleId, language }: { currentArticleId: str
                 {article.title}
               </h3>
               <p className="text-muted-foreground mb-3 text-sm" data-testid={`text-category-${article.id}`}>
-                News • {formatDate(String(article.publishedAt || article.createdAt))}
+                {getCategoryLabel(article.category)} • {formatDate(String(article.publishedAt || article.createdAt))}
               </p>
               {article.excerpt && (
                 <p className="text-foreground/80 mb-4 text-sm line-clamp-2" data-testid={`text-excerpt-${article.id}`}>
@@ -365,7 +387,7 @@ export default function BlogDetail() {
         </div>
 
         {/* Related Articles Section */}
-        <RelatedArticles currentArticleId={article.id} language={language} />
+        <RelatedArticles currentArticleId={article.id} category={article.category} language={language} />
       </div>
     </div>
   );
