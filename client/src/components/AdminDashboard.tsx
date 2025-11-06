@@ -235,9 +235,12 @@ const bilingualArticleSchema = z.object({
   status: z.enum(["draft", "published", "archived"]).default("draft"),
   featured: z.boolean().default(false),
   featuredImage: z.string().optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
-  metaKeywords: z.string().optional(),
+  metaTitleEn: z.string().optional(),
+  metaTitleVi: z.string().optional(),
+  metaDescriptionEn: z.string().optional(),
+  metaDescriptionVi: z.string().optional(),
+  metaKeywordsEn: z.string().optional(),
+  metaKeywordsVi: z.string().optional(),
 });
 
 // Bilingual FAQ schema for form
@@ -348,6 +351,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [missionVisionImagePreview, setMissionVisionImagePreview] = useState<string>('');
   const [teamMemberImageFile, setTeamMemberImageFile] = useState<File | null>(null);
   const [teamMemberImagePreview, setTeamMemberImagePreview] = useState<string>('');
+  const [articleImageFile, setArticleImageFile] = useState<File | null>(null);
+  const [articleImagePreview, setArticleImagePreview] = useState<string>('');
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
   const [editingPrinciple, setEditingPrinciple] = useState<AboutCoreValue | null>(null);
   const [isShowcaseServiceDialogOpen, setIsShowcaseServiceDialogOpen] = useState(false);
@@ -630,9 +635,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       status: "draft",
       featured: false,
       featuredImage: "",
-      metaTitle: "",
-      metaDescription: "",
-      metaKeywords: "",
+      metaTitleEn: "",
+      metaTitleVi: "",
+      metaDescriptionEn: "",
+      metaDescriptionVi: "",
+      metaKeywordsEn: "",
+      metaKeywordsVi: "",
     },
   });
 
@@ -1935,10 +1943,21 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       status: article.status as "draft" | "published" | "archived",
       featured: article.featured,
       featuredImage: article.featuredImage || "",
-      metaTitle: article.metaTitle || "",
-      metaDescription: article.metaDescription || "",
-      metaKeywords: article.metaKeywords || "",
+      metaTitleEn: enVersion?.metaTitle || "",
+      metaTitleVi: viVersion?.metaTitle || "",
+      metaDescriptionEn: enVersion?.metaDescription || "",
+      metaDescriptionVi: viVersion?.metaDescription || "",
+      metaKeywordsEn: enVersion?.metaKeywords || "",
+      metaKeywordsVi: viVersion?.metaKeywords || "",
     });
+    
+    // Set image preview if exists
+    if (enVersion?.featuredImageData || article.featuredImageData) {
+      setArticleImagePreview(enVersion?.featuredImageData || article.featuredImageData || '');
+    } else {
+      setArticleImagePreview('');
+    }
+    
     setIsArticleDialogOpen(true);
   };
 
@@ -1955,14 +1974,13 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       slug: slug,
       excerpt: data.excerptEn,
       content: data.contentEn,
-      featuredImage: data.featuredImage,
       category: data.category,
       status: data.status,
       language: 'en',
       featured: data.featured,
-      metaTitle: data.metaTitle,
-      metaDescription: data.metaDescription,
-      metaKeywords: data.metaKeywords,
+      metaTitle: data.metaTitleEn,
+      metaDescription: data.metaDescriptionEn,
+      metaKeywords: data.metaKeywordsEn,
       tags: [],
     };
 
@@ -1972,16 +1990,26 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       slug: slug,
       excerpt: data.excerptVi,
       content: data.contentVi,
-      featuredImage: data.featuredImage,
       category: data.category,
       status: data.status,
       language: 'vi',
       featured: data.featured,
-      metaTitle: data.metaTitle,
-      metaDescription: data.metaDescription,
-      metaKeywords: data.metaKeywords,
+      metaTitle: data.metaTitleVi,
+      metaDescription: data.metaDescriptionVi,
+      metaKeywords: data.metaKeywordsVi,
       tags: [],
     };
+
+    // Handle image upload
+    if (articleImagePreview) {
+      enArticle.featuredImageData = articleImagePreview;
+      enArticle.featuredImage = "";
+      viArticle.featuredImageData = articleImagePreview;
+      viArticle.featuredImage = "";
+    } else if (data.featuredImage) {
+      enArticle.featuredImage = data.featuredImage;
+      viArticle.featuredImage = data.featuredImage;
+    }
 
     if (editingArticle) {
       // Find both versions
@@ -2010,6 +2038,8 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     // Reset form and close dialog
     articleForm.reset();
     setEditingArticle(null);
+    setArticleImagePreview('');
+    setArticleImageFile(null);
     setIsArticleDialogOpen(false);
   };
 
@@ -2198,6 +2228,33 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       reader.onloadend = () => {
         const base64 = reader.result as string;
         setPartnerLogoPreview(base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleArticleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File quá lớn",
+          description: `Kích thước file: ${fileSizeMB}MB. Giới hạn tối đa: ${maxSizeMB}MB. Vui lòng chọn file nhỏ hơn.`,
+          variant: "destructive"
+        });
+        e.target.value = '';
+        return;
+      }
+
+      setArticleImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setArticleImagePreview(base64);
       };
       reader.readAsDataURL(file);
     }
@@ -6116,20 +6173,63 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   {/* Featured Image */}
                   <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4">Images</h3>
-                    <FormField
-                      control={articleForm.control}
-                      name="featuredImage"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Featured Image (Upload from computer)</FormLabel>
-                          <FormControl>
-                            <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="Drag and drop image here or click to select file" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <h3 className="text-lg font-medium mb-4">Featured Image</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Upload Image (PNG, JPG only)</label>
+                        <input
+                          type="file"
+                          accept=".jpg,.jpeg,.png"
+                          onChange={handleArticleImageFileChange}
+                          className="block w-full text-sm text-foreground
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-none file:border-0
+                            file:text-sm file:font-medium
+                            file:bg-primary file:text-primary-foreground
+                            hover:file:bg-primary/90 cursor-pointer"
+                          data-testid="input-article-image-file"
+                        />
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Định dạng: PNG, JPG • Giới hạn: 10MB • Khuyến nghị: 1200x630px (16:9)
+                        </p>
+                        {(articleImagePreview || editingArticle?.featuredImageData || editingArticle?.featuredImage) && (
+                          <div className="mt-4">
+                            <p className="text-sm font-medium mb-2">Preview:</p>
+                            <div className="border rounded p-4 bg-muted">
+                              <img 
+                                src={articleImagePreview || editingArticle?.featuredImageData || editingArticle?.featuredImage || ''} 
+                                alt="Article Image Preview" 
+                                className="w-full max-h-64 object-cover rounded" 
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Or Use URL */}
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                        </div>
+                      </div>
+
+                      <FormField
+                        control={articleForm.control}
+                        name="featuredImage"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Image URL</FormLabel>
+                            <FormControl>
+                              <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="https://example.com/image.jpg" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   {/* Common Fields */}
@@ -6203,51 +6303,101 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   </div>
 
-                  {/* SEO Settings Section */}
+                  {/* SEO Settings Section - Bilingual */}
                   <div className="border-t pt-6">
                     <h3 className="text-lg font-medium mb-4">SEO Settings</h3>
-                    <div className="space-y-4">
-                      <FormField
-                        control={articleForm.control}
-                        name="metaTitle"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Meta Title</FormLabel>
-                            <FormControl>
-                              <Input {...field} value={field.value || ''} data-testid="input-article-meta-title" placeholder="Custom SEO title (optional)" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* English SEO */}
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-medium text-muted-foreground">English SEO</h4>
+                        <FormField
+                          control={articleForm.control}
+                          name="metaTitleEn"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Meta Title (EN)</FormLabel>
+                              <FormControl>
+                                <Input {...field} value={field.value || ''} data-testid="input-article-meta-title-en" placeholder="Custom SEO title in English..." />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                      <FormField
-                        control={articleForm.control}
-                        name="metaDescription"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Meta Description</FormLabel>
-                            <FormControl>
-                              <Textarea {...field} value={field.value || ''} rows={3} data-testid="textarea-article-meta-description" placeholder="Description for search engines (optional)" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <FormField
+                          control={articleForm.control}
+                          name="metaDescriptionEn"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Meta Description (EN)</FormLabel>
+                              <FormControl>
+                                <Textarea {...field} value={field.value || ''} rows={3} data-testid="textarea-article-meta-description-en" placeholder="SEO description in English..." />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                      <FormField
-                        control={articleForm.control}
-                        name="metaKeywords"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Meta Keywords</FormLabel>
-                            <FormControl>
-                              <Input {...field} value={field.value || ''} data-testid="input-article-meta-keywords" placeholder="Comma-separated keywords (optional)" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <FormField
+                          control={articleForm.control}
+                          name="metaKeywordsEn"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Meta Keywords (EN)</FormLabel>
+                              <FormControl>
+                                <Input {...field} value={field.value || ''} data-testid="input-article-meta-keywords-en" placeholder="keyword1, keyword2, keyword3" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Vietnamese SEO */}
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-medium text-muted-foreground">Vietnamese SEO</h4>
+                        <FormField
+                          control={articleForm.control}
+                          name="metaTitleVi"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Meta Title (VI)</FormLabel>
+                              <FormControl>
+                                <Input {...field} value={field.value || ''} data-testid="input-article-meta-title-vi" placeholder="Tiêu đề SEO bằng tiếng Việt..." />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={articleForm.control}
+                          name="metaDescriptionVi"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Meta Description (VI)</FormLabel>
+                              <FormControl>
+                                <Textarea {...field} value={field.value || ''} rows={3} data-testid="textarea-article-meta-description-vi" placeholder="Mô tả SEO bằng tiếng Việt..." />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={articleForm.control}
+                          name="metaKeywordsVi"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Meta Keywords (VI)</FormLabel>
+                              <FormControl>
+                                <Input {...field} value={field.value || ''} data-testid="input-article-meta-keywords-vi" placeholder="từ khóa 1, từ khóa 2, từ khóa 3" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
 
