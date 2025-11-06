@@ -353,6 +353,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [teamMemberImagePreview, setTeamMemberImagePreview] = useState<string>('');
   const [articleImageFile, setArticleImageFile] = useState<File | null>(null);
   const [articleImagePreview, setArticleImagePreview] = useState<string>('');
+  const [articleContentImages, setArticleContentImages] = useState<string[]>([]);
   const [isPrincipleDialogOpen, setIsPrincipleDialogOpen] = useState(false);
   const [editingPrinciple, setEditingPrinciple] = useState<AboutCoreValue | null>(null);
   const [isShowcaseServiceDialogOpen, setIsShowcaseServiceDialogOpen] = useState(false);
@@ -1962,12 +1963,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       metaKeywordsVi: viVersion?.metaKeywords || "",
     });
     
-    // Set image preview if exists
+    // Set featured image preview if exists
     if (enVersion?.featuredImageData || article.featuredImageData) {
       setArticleImagePreview(enVersion?.featuredImageData || article.featuredImageData || '');
     } else {
       setArticleImagePreview('');
     }
+    
+    // Set content images if exists
+    const contentImages = (enVersion?.contentImages || article.contentImages || []) as string[];
+    setArticleContentImages(contentImages);
     
     setIsArticleDialogOpen(true);
   };
@@ -2011,7 +2016,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       tags: [],
     };
 
-    // Handle image upload
+    // Handle featured image upload
     if (articleImagePreview) {
       enArticle.featuredImageData = articleImagePreview;
       enArticle.featuredImage = "";
@@ -2020,6 +2025,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     } else if (data.featuredImage) {
       enArticle.featuredImage = data.featuredImage;
       viArticle.featuredImage = data.featuredImage;
+    }
+
+    // Handle content images (shared between EN and VI)
+    if (articleContentImages.length > 0) {
+      enArticle.contentImages = articleContentImages as any;
+      viArticle.contentImages = articleContentImages as any;
     }
 
     if (editingArticle) {
@@ -2051,6 +2062,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     setEditingArticle(null);
     setArticleImagePreview('');
     setArticleImageFile(null);
+    setArticleContentImages([]);
     setIsArticleDialogOpen(false);
   };
 
@@ -2269,6 +2281,66 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleContentImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const maxSizeMB = 10;
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    const maxImages = 10;
+    
+    if (articleContentImages.length + files.length > maxImages) {
+      toast({
+        title: "Quá giới hạn",
+        description: `Tối đa ${maxImages} ảnh. Hiện có ${articleContentImages.length} ảnh.`,
+        variant: "destructive"
+      });
+      e.target.value = '';
+      return;
+    }
+
+    const validFiles: File[] = [];
+    
+    for (const file of files) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "File quá lớn",
+          description: `${file.name}: ${fileSizeMB}MB. Giới hạn: ${maxSizeMB}MB.`,
+          variant: "destructive"
+        });
+        continue;
+      }
+      
+      validFiles.push(file);
+    }
+
+    if (validFiles.length === 0) {
+      e.target.value = '';
+      return;
+    }
+
+    const newImages: string[] = [];
+    let processed = 0;
+
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newImages.push(reader.result as string);
+        processed++;
+        
+        if (processed === validFiles.length) {
+          setArticleContentImages(prev => [...prev, ...newImages]);
+          e.target.value = '';
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeContentImage = (index: number) => {
+    setArticleContentImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleQualityBgFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -6240,6 +6312,92 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           </FormItem>
                         )}
                       />
+                    </div>
+                  </div>
+
+                  {/* Content Images Upload */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium mb-2">Ảnh Nội Dung (Upload từ máy tính để chèn vào bài viết)</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Ảnh đã upload ({articleContentImages.length}/10):
+                    </p>
+                    
+                    {articleContentImages.length > 0 && (
+                      <div className="space-y-3 mb-4">
+                        {articleContentImages.map((imageData, index) => (
+                          <div key={index} className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
+                            <img 
+                              src={imageData} 
+                              alt={`Content ${index + 1}`} 
+                              className="w-20 h-20 object-cover rounded"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium mb-1">Ảnh {index + 1}</p>
+                              <div className="flex items-center gap-2">
+                                <code className="text-xs bg-background px-2 py-1 rounded border flex-1 truncate">
+                                  {imageData.substring(0, 60)}...
+                                </code>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(imageData);
+                                    toast({
+                                      title: "Đã copy",
+                                      description: "Đường dẫn ảnh đã được copy vào clipboard"
+                                    });
+                                  }}
+                                >
+                                  Copy
+                                </Button>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Click đường dẫn bên trên để copy và chèn vào vị trí bất kỳ trong bài viết
+                              </p>
+                            </div>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => removeContentImage(index)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                      <input
+                        type="file"
+                        multiple
+                        accept=".jpg,.jpeg,.png,.webp"
+                        onChange={handleContentImagesChange}
+                        className="hidden"
+                        id="content-images-upload"
+                        disabled={articleContentImages.length >= 10}
+                      />
+                      <label 
+                        htmlFor="content-images-upload" 
+                        className={`cursor-pointer ${articleContentImages.length >= 10 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <svg className="w-12 h-12 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                          <p className="font-medium">
+                            {articleContentImages.length >= 10 
+                              ? "Đã đạt giới hạn 10 ảnh"
+                              : "Kéo thả ảnh nội dung vào đây (có thể chọn nhiều ảnh cùng lúc)"
+                            }
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Hỗ trợ: JPG, PNG, WebP (tối đa 10MB)
+                          </p>
+                        </div>
+                      </label>
                     </div>
                   </div>
 
