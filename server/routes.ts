@@ -978,7 +978,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // About Page Content routes
+  // About Page Content routes with caching
+  let aboutContentCache: any = null;
+  let aboutContentCacheTime: number = 0;
+  const CACHE_DURATION = 60000; // 1 minute cache
+
   app.get("/api/about-content", async (req, res) => {
     try {
       const content = await storage.getAboutPageContent();
@@ -992,6 +996,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertAboutPageContentSchema.parse(req.body);
       const content = await storage.upsertAboutPageContent(validatedData);
+      
+      // Clear cache when content is updated
+      aboutContentCache = null;
+      aboutContentCacheTime = 0;
+      
       res.json(content);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -1001,10 +1010,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // About Page Content route
   app.get("/api/about-page-content", async (req, res) => {
     try {
+      const now = Date.now();
+      
+      // Return cached data if still valid
+      if (aboutContentCache && (now - aboutContentCacheTime) < CACHE_DURATION) {
+        return res.json(aboutContentCache);
+      }
+      
+      // Fetch fresh data
       const content = await storage.getAboutPageContent();
+      
+      // Update cache
+      aboutContentCache = content;
+      aboutContentCacheTime = now;
+      
       res.json(content);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch about page content" });
