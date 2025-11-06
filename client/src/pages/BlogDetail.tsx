@@ -301,10 +301,6 @@ export default function BlogDetail() {
                 <Calendar className="h-4 w-4" />
                 {formatDate(String(article.publishedAt || article.createdAt))}
               </div>
-              <div className="flex items-center gap-1">
-                <Eye className="h-4 w-4" />
-                {article.viewCount} {language === 'vi' ? 'lượt xem' : 'views'}
-              </div>
               {article.featured && (
                 <Badge className="bg-primary">
                   {language === 'vi' ? 'Nổi bật' : 'Featured'}
@@ -312,7 +308,7 @@ export default function BlogDetail() {
               )}
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-sans font-light mb-6 leading-tight text-white" data-testid="article-title">
+            <h1 className="text-4xl md:text-6xl font-sans font-light mb-6 leading-tight text-white break-words" data-testid="article-title">
               {article.title}
             </h1>
 
@@ -341,16 +337,10 @@ export default function BlogDetail() {
           />
         </article>
 
-        {/* Published By and Share Section */}
+        {/* Share Section */}
         <div className="flex items-center justify-between mt-12 mb-8 border-t border-gray-800 pt-6">
           <div className="text-sm text-muted-foreground">
-            <span>
-              {language === 'vi' ? 'Được xuất bản bởi ' : 'Published by '}
-              <span className="text-primary font-medium">Moderno Interiors Design</span>
-            </span>
-            <div className="mt-1">
-              {formatDate(String(article.publishedAt || article.createdAt))}
-            </div>
+            {formatDate(String(article.publishedAt || article.createdAt))}
           </div>
           <Button
             variant="ghost"

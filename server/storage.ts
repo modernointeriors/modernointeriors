@@ -235,7 +235,7 @@ export class DatabaseStorage implements IStorage {
       ? db.select().from(projects).where(and(...conditions))
       : db.select().from(projects);
     
-    return await query.orderBy(desc(projects.createdAt));
+    return await query.orderBy(desc(projects.createdAt)).limit(100);
   }
 
   async getProject(id: string): Promise<Project | undefined> {
@@ -428,7 +428,9 @@ export class DatabaseStorage implements IStorage {
       ? db.select().from(articles).where(and(...conditions))
       : db.select().from(articles);
     
-    return await query.orderBy(desc(articles.publishedAt), desc(articles.createdAt));
+    return await query
+      .orderBy(desc(articles.publishedAt), desc(articles.createdAt))
+      .limit(100);
   }
 
   async getArticle(id: string): Promise<Article | undefined> {
