@@ -540,29 +540,29 @@
 
   /* Partners scrolling animations - seamless infinite loop */
   @keyframes scroll-right-seamless {
-    from {
-      transform: translateX(-50%);
+    0% {
+      transform: translateX(0);
     }
-    to {
-      transform: translateX(0%);
+    100% {
+      transform: translateX(33.333%);
     }
   }
 
   @keyframes scroll-left-seamless {
-    from {
-      transform: translateX(0%);
+    0% {
+      transform: translateX(0);
     }
-    to {
-      transform: translateX(-50%);
+    100% {
+      transform: translateX(-33.333%);
     }
   }
 
   .animate-scroll-right-seamless {
-    animation: scroll-right-seamless 40s linear infinite;
+    animation: scroll-right-seamless 30s linear infinite;
   }
 
   .animate-scroll-left-seamless {
-    animation: scroll-left-seamless 40s linear infinite;
+    animation: scroll-left-seamless 30s linear infinite;
   }
 
   /* Section title slide-in animations */

@@ -1070,9 +1070,9 @@ export default function Home() {
           <div className="space-y-8">
             {/* First row - scrolling right */}
             <div className="relative overflow-hidden">
-              <div className="flex animate-scroll-right-seamless whitespace-nowrap">
-                {/* Duplicate exactly 2 times - original + copy for seamless loop */}
-                {[0, 1].flatMap((setIndex) =>
+              <div className="inline-flex animate-scroll-right-seamless">
+                {/* Create multiple copies for seamless infinite loop */}
+                {[0, 1, 2].flatMap((setIndex) =>
                   partners
                     .slice(0, Math.ceil(partners.length / 2))
                     .map((partner) => (
@@ -1094,9 +1094,9 @@ export default function Home() {
 
             {/* Second row - scrolling left */}
             <div className="relative overflow-hidden">
-              <div className="flex animate-scroll-left-seamless whitespace-nowrap">
-                {/* Duplicate exactly 2 times - original + copy for seamless loop */}
-                {[0, 1].flatMap((setIndex) =>
+              <div className="inline-flex animate-scroll-left-seamless">
+                {/* Create multiple copies for seamless infinite loop */}
+                {[0, 1, 2].flatMap((setIndex) =>
                   partners
                     .slice(Math.ceil(partners.length / 2))
                     .map((partner) => (
