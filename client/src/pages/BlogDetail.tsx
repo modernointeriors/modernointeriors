@@ -3,7 +3,7 @@ import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Eye, ArrowLeft, Share2, Check } from "lucide-react";
+import { Eye, ArrowLeft, Share2, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import OptimizedImage from "@/components/OptimizedImage";
@@ -320,10 +320,6 @@ export default function BlogDetail() {
               <Badge variant="outline">
                 {getCategoryLabel(article.category)}
               </Badge>
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                {formatDate(String(article.publishedAt || article.createdAt))}
-              </div>
               {article.featured && (
                 <Badge className="bg-white/10 border-white/30 text-white">
                   {language === 'vi' ? 'Nổi bật' : 'Featured'}
