@@ -6380,19 +6380,38 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                               >
                                 <Pencil className="h-4 w-4" />
                               </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={async () => {
-                                  // Delete all versions (en and vi)
-                                  for (const article of articleGroup) {
-                                    await deleteArticleMutation.mutateAsync(article.id);
-                                  }
-                                }}
-                                data-testid={`button-delete-article-${slug}`}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    data-testid={`button-delete-article-${slug}`}
+                                  >
+                                    <Trash2 className="h-4 w-4 text-white" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Delete Article?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      This will permanently delete "{displayArticle.title}" (both EN and VI versions). This action cannot be undone.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={async () => {
+                                        // Delete all versions (en and vi)
+                                        for (const article of articleGroup) {
+                                          await deleteArticleMutation.mutateAsync(article.id);
+                                        }
+                                      }}
+                                    >
+                                      Delete
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
                             </div>
                           </TableCell>
                         </TableRow>
