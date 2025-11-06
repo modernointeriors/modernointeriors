@@ -1071,8 +1071,8 @@ export default function Home() {
             {/* First row - scrolling right */}
             <div className="relative overflow-hidden">
               <div className="flex animate-scroll-right whitespace-nowrap">
-                {/* Multiple duplicates for seamless loop */}
-                {Array.from({ length: 6 }).map((_, setIndex) => (
+                {/* Duplicate exactly 2 times for seamless infinite loop */}
+                {Array.from({ length: 2 }).map((_, setIndex) => (
                   <div key={`set-${setIndex}`} className="flex">
                     {partners
                       .slice(0, Math.ceil(partners.length / 2))
@@ -1097,8 +1097,8 @@ export default function Home() {
             {/* Second row - scrolling left */}
             <div className="relative overflow-hidden">
               <div className="flex animate-scroll-left whitespace-nowrap">
-                {/* Multiple duplicates for seamless loop */}
-                {Array.from({ length: 6 }).map((_, setIndex) => (
+                {/* Duplicate exactly 2 times for seamless infinite loop */}
+                {Array.from({ length: 2 }).map((_, setIndex) => (
                   <div key={`set-${setIndex}`} className="flex">
                     {partners
                       .slice(Math.ceil(partners.length / 2))
