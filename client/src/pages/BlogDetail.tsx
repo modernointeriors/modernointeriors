@@ -273,6 +273,23 @@ export default function BlogDetail() {
           </Link>
         </Button>
 
+        {/* Featured Image Banner - Above Title */}
+        {(article.featuredImage || article.featuredImageData) && (
+          <div className="mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
+            <OptimizedImage
+              src={article.featuredImage || article.featuredImageData || ''} 
+              alt={article.title}
+              width={1200}
+              height={600}
+              wrapperClassName="w-full h-64 md:h-96"
+              className="w-full h-full object-cover"
+              sizes="100vw"
+              priority={true}
+              data-testid="article-featured-image"
+            />
+          </div>
+        )}
+
         {/* Article Header */}
         <article className="prose prose-lg max-w-none">
           <div className="mb-8">
@@ -315,23 +332,6 @@ export default function BlogDetail() {
               </div>
             ) : null}
           </div>
-
-          {/* Featured Image */}
-          {article.featuredImage && (
-            <div className="mb-8">
-              <OptimizedImage
-                src={article.featuredImage} 
-                alt={article.title}
-                width={1200}
-                height={600}
-                wrapperClassName="w-full h-64 md:h-96"
-                className="w-full h-full rounded-lg"
-                sizes="100vw"
-                priority={true}
-                data-testid="article-featured-image"
-              />
-            </div>
-          )}
 
           {/* Article Content */}
           <div 
