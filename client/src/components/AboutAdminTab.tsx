@@ -51,6 +51,7 @@ interface AboutAdminTabProps {
   missionVisionImagePreview: string;
   handleMissionVisionImageFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   teamMemberImagePreview: string;
+  setTeamMemberImagePreview: (preview: string) => void;
   handleTeamMemberImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isTeamMemberDialogOpen: boolean;
   setIsTeamMemberDialogOpen: (open: boolean) => void;
@@ -94,6 +95,7 @@ export default function AboutAdminTab({
   missionVisionImagePreview,
   handleMissionVisionImageFileChange,
   teamMemberImagePreview,
+  setTeamMemberImagePreview,
   handleTeamMemberImageChange,
   isTeamMemberDialogOpen,
   setIsTeamMemberDialogOpen,
@@ -1579,6 +1581,10 @@ export default function AboutAdminTab({
                         onClick={() => {
                           setEditingTeamMember(member);
                           teamMemberForm.reset(member);
+                          // Set preview from existing image
+                          if (member.imageData || member.image) {
+                            setTeamMemberImagePreview(member.imageData || member.image || '');
+                          }
                           setIsTeamMemberDialogOpen(true);
                         }}
                         data-testid={`button-edit-team-member-${member.id}`}

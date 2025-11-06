@@ -4576,6 +4576,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
           missionVisionImagePreview={missionVisionImagePreview}
           handleMissionVisionImageFileChange={handleMissionVisionImageFileChange}
           teamMemberImagePreview={teamMemberImagePreview}
+          setTeamMemberImagePreview={setTeamMemberImagePreview}
           handleTeamMemberImageChange={handleTeamMemberImageChange}
           isTeamMemberDialogOpen={isTeamMemberDialogOpen}
           setIsTeamMemberDialogOpen={setIsTeamMemberDialogOpen}
