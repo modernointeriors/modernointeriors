@@ -1326,14 +1326,14 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Title */}
           <div className="mb-16">
-            <h2 className="text-sm font-light tracking-widest text-white/60 mb-8">
+            <h2 className="text-sm font-light tracking-widest text-white/60 mb-8 scroll-animate">
               {language === "vi"
                 ? (homepageContent?.faqSectionTitleVi || homepageContent?.faqSectionTitle || "CÂU HỎI THƯỜNG GẶP")
                 : (homepageContent?.faqSectionTitle || "FREQUENTLY ASKED QUESTIONS")
               }
             </h2>
             <div className="max-w-4xl">
-              <p className="text-2xl md:text-3xl font-light text-white leading-relaxed">
+              <p className="text-2xl md:text-3xl font-light text-white leading-relaxed scroll-animate">
                 {language === "vi"
                   ? "TÌM HIỂU THÊM VỀ QUY TRÌNH THIẾT KẾ VÀ DỊCH VỤ CỦA CHÚNG TÔI."
                   : "LEARN MORE ABOUT OUR DESIGN PROCESS AND SERVICES."}
@@ -1359,7 +1359,8 @@ export default function Home() {
               faqs.map((faq, index) => (
                 <div
                   key={faq.id}
-                  className="pb-8 group transition-colors cursor-pointer"
+                  className="pb-8 group transition-colors cursor-pointer scroll-animate"
+                  style={{ animationDelay: `${index * 50}ms` }}
                   data-testid={`faq-item-${index + 1}`}
                 >
                   <div
