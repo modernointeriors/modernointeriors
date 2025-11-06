@@ -2993,6 +2993,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                   <FormField
                     control={projectForm.control}
+                    name="slug"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>URL Slug</FormLabel>
+                        <FormControl>
+                          <Input {...field} data-testid="input-project-slug" placeholder="auto-generated from English title" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
                     name="category"
                     render={({ field }) => (
                       <FormItem>
