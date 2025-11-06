@@ -44,6 +44,9 @@ interface AboutAdminTabProps {
   showcaseBannerFile: File | null;
   showcaseBannerPreview: string;
   handleShowcaseBannerFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  historyImageFile: File | null;
+  historyImagePreview: string;
+  handleHistoryImageFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   teamMemberImagePreview: string;
   handleTeamMemberImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isTeamMemberDialogOpen: boolean;
@@ -81,6 +84,9 @@ export default function AboutAdminTab({
   showcaseBannerFile,
   showcaseBannerPreview,
   handleShowcaseBannerFileChange,
+  historyImageFile,
+  historyImagePreview,
+  handleHistoryImageFileChange,
   teamMemberImagePreview,
   handleTeamMemberImageChange,
   isTeamMemberDialogOpen,
@@ -99,6 +105,7 @@ export default function AboutAdminTab({
   const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string>("");
   const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
+  const [cropType, setCropType] = useState<'showcase' | 'history'>('showcase');
 
   const aboutContentForm = useForm<InsertAboutPageContent>({
     resolver: zodResolver(insertAboutPageContentSchema),
@@ -186,9 +193,12 @@ export default function AboutAdminTab({
     }
   }, [aboutContent]);
 
-  const handleEditImage = () => {
+  const handleEditImage = (type: 'showcase' | 'history' = 'showcase') => {
+    setCropType(type);
     // Use preview, base64 data, or URL
-    const currentImage = showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage;
+    const currentImage = type === 'showcase' 
+      ? (showcaseBannerPreview || aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage)
+      : (historyImagePreview || aboutContent?.historyImage);
     if (currentImage) {
       setImageToCrop(currentImage);
       setIsCropDialogOpen(true);
@@ -198,7 +208,8 @@ export default function AboutAdminTab({
   const handleCropComplete = (croppedBlob: Blob) => {
     setIsCropDialogOpen(false);
     
-    const file = new File([croppedBlob], `banner-${Date.now()}.jpg`, { type: 'image/jpeg' });
+    const fileName = cropType === 'showcase' ? `banner-${Date.now()}.jpg` : `history-${Date.now()}.jpg`;
+    const file = new File([croppedBlob], fileName, { type: 'image/jpeg' });
     setCroppedImageFile(file);
     
     const syntheticEvent = {
@@ -207,10 +218,15 @@ export default function AboutAdminTab({
       },
     } as unknown as React.ChangeEvent<HTMLInputElement>;
     
-    handleShowcaseBannerFileChange(syntheticEvent);
+    if (cropType === 'showcase') {
+      handleShowcaseBannerFileChange(syntheticEvent);
+    } else {
+      handleHistoryImageFileChange(syntheticEvent);
+    }
   };
 
-  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'showcase' | 'history' = 'showcase') => {
+    setCropType(type);
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -432,85 +448,77 @@ export default function AboutAdminTab({
                     {/* History Image */}
                     <div className="mt-4">
                       <label className="text-sm font-light mb-2 block">Story Image (Ảnh minh họa)</label>
-                      <div className="space-y-2">
-                        {aboutContentForm.watch("historyImage") ? (
-                          <div className="relative aspect-[4/3] w-full max-w-md border rounded overflow-hidden bg-muted">
-                            <img
-                              src={aboutContentForm.watch("historyImage") || ""}
-                              alt="History"
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600';
-                              }}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => aboutContentForm.setValue("historyImage", "")}
-                              className="absolute top-2 right-2 p-1 bg-black/50 hover:bg-black/70 rounded-full text-white"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="border-2 border-dashed border-muted-foreground/25 p-8 text-center">
-                            <p className="text-sm text-muted-foreground mb-3">Upload image or enter URL</p>
-                            <label 
-                              htmlFor="history-image-upload"
-                              className="inline-flex items-center gap-2 bg-white text-black border px-4 py-2 cursor-pointer hover:bg-gray-100 transition-all text-sm"
-                            >
-                              <Upload className="h-4 w-4" />
-                              Choose File
-                            </label>
-                            <input
-                              id="history-image-upload"
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  const reader = new FileReader();
-                                  reader.onloadend = () => {
-                                    aboutContentForm.setValue("historyImage", reader.result as string);
-                                  };
-                                  reader.readAsDataURL(file);
-                                }
-                              }}
-                              className="hidden"
-                            />
-                          </div>
-                        )}
-                        <div className="flex gap-2">
-                          <Input
-                            {...aboutContentForm.register("historyImage")}
-                            placeholder="Or paste image URL here"
-                            data-testid="input-history-image"
-                          />
-                          <label 
-                            htmlFor="history-image-upload-alt"
-                            className="inline-flex items-center gap-2 bg-white text-black border px-4 py-2 cursor-pointer hover:bg-gray-100 transition-all text-sm whitespace-nowrap"
-                          >
-                            <Upload className="h-4 w-4" />
-                            Upload
-                          </label>
-                          <input
-                            id="history-image-upload-alt"
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const reader = new FileReader();
-                                reader.onloadend = () => {
-                                  aboutContentForm.setValue("historyImage", reader.result as string);
-                                };
-                                reader.readAsDataURL(file);
-                              }
-                            }}
-                            className="hidden"
-                          />
+                      <div>
+                        <div className="relative">
+                          {(historyImagePreview || aboutContent?.historyImage) ? (
+                            <div className="relative group">
+                              <div className="border bg-muted overflow-hidden">
+                                <img 
+                                  src={historyImagePreview || aboutContent?.historyImage || ''} 
+                                  alt="History Preview" 
+                                  className="w-full aspect-[4/3] object-cover" 
+                                />
+                              </div>
+                              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Button
+                                  type="button"
+                                  onClick={() => handleEditImage('history')}
+                                  className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
+                                  data-testid="button-edit-history-image"
+                                >
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  <span className="text-sm font-light">Edit</span>
+                                </Button>
+                                <label 
+                                  htmlFor="history-image-upload" 
+                                  className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 px-4 py-2 cursor-pointer transition-all shadow-xl text-sm font-light"
+                                  data-testid="button-change-history-image"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                  Change
+                                </label>
+                                <input
+                                  id="history-image-upload"
+                                  type="file"
+                                  accept=".jpg,.jpeg,.png"
+                                  onChange={(e) => handleNewImageUpload(e, 'history')}
+                                  className="hidden"
+                                  data-testid="input-history-image-file"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="border-2 border-dashed border-muted-foreground/25 p-12 text-center">
+                              <div className="flex flex-col items-center gap-4">
+                                <div>
+                                  <p className="text-sm font-medium mb-1">Upload History Image</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    PNG, JPG • Max 10MB • Recommended: 800x600px (4:3)
+                                  </p>
+                                </div>
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  className="bg-white text-black hover:bg-white/90"
+                                  onClick={() => document.getElementById('history-image-upload-initial')?.click()}
+                                >
+                                  Choose File
+                                </Button>
+                              </div>
+                              <input
+                                id="history-image-upload-initial"
+                                type="file"
+                                accept=".jpg,.jpeg,.png"
+                                onChange={(e) => handleNewImageUpload(e, 'history')}
+                                className="hidden"
+                                data-testid="input-history-image-file-initial"
+                              />
+                            </div>
+                          )}
                         </div>
-                        <p className="text-xs text-muted-foreground">Upload file or paste image URL (Recommended: 4:3 aspect ratio, 800x600px)</p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Format: PNG, JPG • Max: 10MB • Recommended: 800x600px (4:3) • Auto-crop enabled
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -665,7 +673,7 @@ export default function AboutAdminTab({
                       <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Button
                           type="button"
-                          onClick={handleEditImage}
+                          onClick={() => handleEditImage('showcase')}
                           className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
                           data-testid="button-edit-showcase-banner"
                         >
@@ -684,7 +692,7 @@ export default function AboutAdminTab({
                           id="showcase-banner-upload"
                           type="file"
                           accept=".jpg,.jpeg,.png"
-                          onChange={handleNewImageUpload}
+                          onChange={(e) => handleNewImageUpload(e, 'showcase')}
                           className="hidden"
                           data-testid="input-showcase-banner-file"
                         />
@@ -712,7 +720,7 @@ export default function AboutAdminTab({
                         id="showcase-banner-upload-initial"
                         type="file"
                         accept=".jpg,.jpeg,.png"
-                        onChange={handleNewImageUpload}
+                        onChange={(e) => handleNewImageUpload(e, 'showcase')}
                         className="hidden"
                         data-testid="input-showcase-banner-file-initial"
                       />
@@ -729,8 +737,8 @@ export default function AboutAdminTab({
           <div className="flex justify-end">
             <Button 
               type="submit" 
-              className={`px-8 transition-all ${!aboutContentForm.formState.isDirty && !showcaseBannerFile ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
-              disabled={(!aboutContentForm.formState.isDirty && !showcaseBannerFile) || updateAboutContentMutation.isPending}
+              className={`px-8 transition-all ${!aboutContentForm.formState.isDirty && !showcaseBannerFile && !historyImageFile ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:opacity-90'}`}
+              disabled={(!aboutContentForm.formState.isDirty && !showcaseBannerFile && !historyImageFile) || updateAboutContentMutation.isPending}
               data-testid="button-save-about-content"
             >
               {updateAboutContentMutation.isPending ? "Saving..." : "Save About Content"}
