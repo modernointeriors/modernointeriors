@@ -1901,17 +1901,25 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         
         const promises = [];
         
-        // Update English version if exists
+        // Update or create English version
         if (enVersion) {
           promises.push(
             apiRequest('PATCH', `/api/projects/${enVersion.id}`, enProject)
           );
+        } else {
+          promises.push(
+            createProjectMutation.mutateAsync(enProject)
+          );
         }
         
-        // Update Vietnamese version if exists
+        // Update or create Vietnamese version
         if (viVersion) {
           promises.push(
             apiRequest('PATCH', `/api/projects/${viVersion.id}`, viProject)
+          );
+        } else {
+          promises.push(
+            createProjectMutation.mutateAsync(viProject)
           );
         }
         
