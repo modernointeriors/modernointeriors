@@ -519,13 +519,14 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     }
   }, [clients.length, currentPage, totalPages]);
 
-  // Pagination state for Projects
+  // Pagination state for Projects - show only English version in table
   const [projectsPage, setProjectsPage] = useState(1);
   const projectsPerPage = 10;
-  const projectsTotalPages = Math.ceil(projects.length / projectsPerPage);
+  const englishProjects = projects.filter(p => p.language === 'en');
+  const projectsTotalPages = Math.ceil(englishProjects.length / projectsPerPage);
   const projectsStartIndex = (projectsPage - 1) * projectsPerPage;
   const projectsEndIndex = projectsStartIndex + projectsPerPage;
-  const paginatedProjects = projects.slice(projectsStartIndex, projectsEndIndex);
+  const paginatedProjects = englishProjects.slice(projectsStartIndex, projectsEndIndex);
 
   // Pagination state for Articles - group by slug first, then paginate
   const [articlesPage, setArticlesPage] = useState(1);
