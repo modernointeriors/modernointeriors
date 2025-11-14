@@ -19,7 +19,6 @@ export const projects = pgTable("projects", {
   description: text("description"),
   detailedDescription: text("detailed_description"), // Rich detailed content for project page
   category: varchar("category", { length: 50 }).notNull(), // residential, commercial, architecture
-  status: varchar("status", { length: 20 }).notNull().default("active"), // active, archived
   language: varchar("language", { length: 5 }).default("en"), // en, vi
   location: text("location"),
   area: text("area"),

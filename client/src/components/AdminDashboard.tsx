@@ -1864,7 +1864,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         metaDescription: data.metaDescriptionEn,
         metaKeywords: data.metaKeywordsEn,
         language: 'en' as const,
-        status: 'active' as const,
       };
 
       // Prepare Vietnamese version
@@ -1891,7 +1890,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         metaDescription: data.metaDescriptionVi,
         metaKeywords: data.metaKeywordsVi,
         language: 'vi' as const,
-        status: 'active' as const,
       };
 
       if (editingProject) {
@@ -3739,7 +3737,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead>Project</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Location</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Budget</TableHead>
+                    <TableHead>Year</TableHead>
+                    <TableHead>Style</TableHead>
+                    <TableHead>Area</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -3752,11 +3753,10 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       </TableCell>
                       <TableCell className="capitalize">{project.category}</TableCell>
                       <TableCell>{project.location || "—"}</TableCell>
-                      <TableCell>
-                        <Badge variant={project.status === "active" ? "default" : "secondary"}>
-                          {project.status}
-                        </Badge>
-                      </TableCell>
+                      <TableCell>{project.budget || "—"}</TableCell>
+                      <TableCell>{project.completionYear || "—"}</TableCell>
+                      <TableCell>{project.style || "—"}</TableCell>
+                      <TableCell>{project.area || "—"}</TableCell>
                       <TableCell>{formatDate(project.createdAt)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end space-x-2">
