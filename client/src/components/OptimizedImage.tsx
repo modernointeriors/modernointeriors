@@ -67,6 +67,7 @@ export default function OptimizedImage({
   };
 
   const handleError = () => {
+    console.error('❌ Failed to load image:', src);
     setHasError(true);
     onError?.();
   };
