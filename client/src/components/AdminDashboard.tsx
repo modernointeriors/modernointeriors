@@ -61,13 +61,20 @@ const bilingualProjectSchema = z.object({
   detailedDescriptionVi: z.string().optional(),
   slug: z.string().optional(),
   category: z.string().min(1, "Category is required"),
-  location: z.string().optional(),
-  area: z.string().optional(),
-  duration: z.string().optional(),
-  budget: z.string().optional(),
-  style: z.string().optional(),
-  designer: z.string().optional(),
-  completionYear: z.string().optional(),
+  locationEn: z.string().optional(),
+  locationVi: z.string().optional(),
+  areaEn: z.string().optional(),
+  areaVi: z.string().optional(),
+  durationEn: z.string().optional(),
+  durationVi: z.string().optional(),
+  budgetEn: z.string().optional(),
+  budgetVi: z.string().optional(),
+  styleEn: z.string().optional(),
+  styleVi: z.string().optional(),
+  designerEn: z.string().optional(),
+  designerVi: z.string().optional(),
+  completionYearEn: z.string().optional(),
+  completionYearVi: z.string().optional(),
   coverImages: z.array(z.string()).max(2, "Maximum 2 cover images allowed").default([]),
   contentImages: z.array(z.string()).max(2, "Maximum 2 content images allowed").default([]),
   galleryImages: z.array(z.string()).max(10, "Maximum 10 gallery images allowed").default([]),
@@ -366,6 +373,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [isTeamMemberDialogOpen, setIsTeamMemberDialogOpen] = useState(false);
   const [editingTeamMember, setEditingTeamMember] = useState<AboutTeamMember | null>(null);
   const [togglingFeaturedSlug, setTogglingFeaturedSlug] = useState<string | null>(null);
+  const [isProjectSubmitting, setIsProjectSubmitting] = useState(false);
 
   // Queries
   const { data: stats, isLoading: statsLoading } = useQuery<{
@@ -576,13 +584,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       detailedDescriptionVi: "",
       slug: "",
       category: "residential",
-      location: "",
-      area: "",
-      duration: "",
-      budget: "",
-      style: "",
-      designer: "",
-      completionYear: "",
+      locationEn: "",
+      locationVi: "",
+      areaEn: "",
+      areaVi: "",
+      durationEn: "",
+      durationVi: "",
+      budgetEn: "",
+      budgetVi: "",
+      styleEn: "",
+      styleVi: "",
+      designerEn: "",
+      designerVi: "",
+      completionYearEn: "",
+      completionYearVi: "",
       // New image categories
       coverImages: [],
       contentImages: [],
@@ -1753,13 +1768,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       metaKeywordsVi: viVersion?.metaKeywords || "",
       slug: project.slug || "",
       category: project.category,
-      location: project.location || "",
-      area: project.area || "",
-      duration: project.duration || "",
-      budget: project.budget || "",
-      style: project.style || "",
-      designer: project.designer || "",
-      completionYear: project.completionYear || "",
+      locationEn: enVersion?.location || "",
+      locationVi: viVersion?.location || "",
+      areaEn: enVersion?.area || "",
+      areaVi: viVersion?.area || "",
+      durationEn: enVersion?.duration || "",
+      durationVi: viVersion?.duration || "",
+      budgetEn: enVersion?.budget || "",
+      budgetVi: viVersion?.budget || "",
+      styleEn: enVersion?.style || "",
+      styleVi: viVersion?.style || "",
+      designerEn: enVersion?.designer || "",
+      designerVi: viVersion?.designer || "",
+      completionYearEn: enVersion?.completionYear || "",
+      completionYearVi: viVersion?.completionYear || "",
       // New image categories
       coverImages: Array.isArray(project.coverImages) ? project.coverImages : [],
       contentImages: Array.isArray(project.contentImages) ? project.contentImages : [],
@@ -1809,101 +1831,114 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   };
 
   const onProjectSubmit = async (data: BilingualProjectFormData) => {
-    // Generate slug if not provided
-    const slug = data.slug || data.titleEn
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-
-    // Prepare English version
-    const enProject = {
-      title: data.titleEn,
-      slug: slug,
-      description: data.descriptionEn,
-      detailedDescription: data.detailedDescriptionEn,
-      category: data.category,
-      location: data.location,
-      area: data.area,
-      duration: data.duration,
-      budget: data.budget,
-      style: data.style,
-      designer: data.designer,
-      completionYear: data.completionYear,
-      coverImages: data.coverImages,
-      contentImages: data.contentImages,
-      galleryImages: data.galleryImages,
-      featured: data.featured,
-      heroImage: data.heroImage,
-      images: data.images,
-      metaTitle: data.metaTitleEn,
-      metaDescription: data.metaDescriptionEn,
-      metaKeywords: data.metaKeywordsEn,
-      language: 'en' as const,
-      status: 'active' as const,
-    };
-
-    // Prepare Vietnamese version
-    const viProject = {
-      title: data.titleVi,
-      slug: slug,
-      description: data.descriptionVi,
-      detailedDescription: data.detailedDescriptionVi,
-      category: data.category,
-      location: data.location,
-      area: data.area,
-      duration: data.duration,
-      budget: data.budget,
-      style: data.style,
-      designer: data.designer,
-      completionYear: data.completionYear,
-      coverImages: data.coverImages,
-      contentImages: data.contentImages,
-      galleryImages: data.galleryImages,
-      featured: data.featured,
-      heroImage: data.heroImage,
-      images: data.images,
-      metaTitle: data.metaTitleVi,
-      metaDescription: data.metaDescriptionVi,
-      metaKeywords: data.metaKeywordsVi,
-      language: 'vi' as const,
-      status: 'active' as const,
-    };
-
-    if (editingProject) {
-      // Find both language versions
-      const enVersion = projects.find(p => p.slug === editingProject.slug && p.language === 'en');
-      const viVersion = projects.find(p => p.slug === editingProject.slug && p.language === 'vi');
+    try {
+      setIsProjectSubmitting(true);
       
-      const promises = [];
-      
-      // Update English version if exists
-      if (enVersion) {
-        promises.push(
-          apiRequest('PATCH', `/api/projects/${enVersion.id}`, enProject)
-        );
+      // Generate slug if not provided
+      const slug = data.slug || data.titleEn
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+      // Prepare English version
+      const enProject = {
+        title: data.titleEn,
+        slug: slug,
+        description: data.descriptionEn,
+        detailedDescription: data.detailedDescriptionEn,
+        category: data.category,
+        location: data.locationEn,
+        area: data.areaEn,
+        duration: data.durationEn,
+        budget: data.budgetEn,
+        style: data.styleEn,
+        designer: data.designerEn,
+        completionYear: data.completionYearEn,
+        coverImages: data.coverImages,
+        contentImages: data.contentImages,
+        galleryImages: data.galleryImages,
+        featured: data.featured,
+        heroImage: data.heroImage,
+        images: data.images,
+        metaTitle: data.metaTitleEn,
+        metaDescription: data.metaDescriptionEn,
+        metaKeywords: data.metaKeywordsEn,
+        language: 'en' as const,
+        status: 'active' as const,
+      };
+
+      // Prepare Vietnamese version
+      const viProject = {
+        title: data.titleVi,
+        slug: slug,
+        description: data.descriptionVi,
+        detailedDescription: data.detailedDescriptionVi,
+        category: data.category,
+        location: data.locationVi,
+        area: data.areaVi,
+        duration: data.durationVi,
+        budget: data.budgetVi,
+        style: data.styleVi,
+        designer: data.designerVi,
+        completionYear: data.completionYearVi,
+        coverImages: data.coverImages,
+        contentImages: data.contentImages,
+        galleryImages: data.galleryImages,
+        featured: data.featured,
+        heroImage: data.heroImage,
+        images: data.images,
+        metaTitle: data.metaTitleVi,
+        metaDescription: data.metaDescriptionVi,
+        metaKeywords: data.metaKeywordsVi,
+        language: 'vi' as const,
+        status: 'active' as const,
+      };
+
+      if (editingProject) {
+        // Find both language versions
+        const enVersion = projects.find(p => p.slug === editingProject.slug && p.language === 'en');
+        const viVersion = projects.find(p => p.slug === editingProject.slug && p.language === 'vi');
+        
+        const promises = [];
+        
+        // Update English version if exists
+        if (enVersion) {
+          promises.push(
+            apiRequest('PATCH', `/api/projects/${enVersion.id}`, enProject)
+          );
+        }
+        
+        // Update Vietnamese version if exists
+        if (viVersion) {
+          promises.push(
+            apiRequest('PATCH', `/api/projects/${viVersion.id}`, viProject)
+          );
+        }
+        
+        await Promise.all(promises);
+        queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
+        toast({ title: "Project updated successfully" });
+        
+      } else {
+        // Create both versions
+        await Promise.all([
+          createProjectMutation.mutateAsync(enProject),
+          createProjectMutation.mutateAsync(viProject),
+        ]);
       }
       
-      // Update Vietnamese version if exists
-      if (viVersion) {
-        promises.push(
-          apiRequest('PATCH', `/api/projects/${viVersion.id}`, viProject)
-        );
-      }
-      
-      await Promise.all(promises);
-      queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
-      
-    } else {
-      // Create both versions
-      await Promise.all([
-        createProjectMutation.mutateAsync(enProject),
-        createProjectMutation.mutateAsync(viProject),
-      ]);
+      setIsProjectDialogOpen(false);
+      setEditingProject(null);
+      projectForm.reset();
+    } catch (error: any) {
+      toast({
+        title: "Error saving project",
+        description: error.message || "Failed to save project",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProjectSubmitting(false);
     }
-    
-    setIsProjectDialogOpen(false);
-    setEditingProject(null);
-    projectForm.reset();
   };
 
   const onClientSubmit = async (data: ClientFormData) => {
