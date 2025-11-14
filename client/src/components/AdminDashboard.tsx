@@ -3058,15 +3058,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* Bilingual Location */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={projectForm.control}
-                      name="location"
+                      name="locationEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Location</FormLabel>
+                          <FormLabel>Location (English)</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-project-location" />
+                            <Input {...field} data-testid="input-project-location-en" placeholder="Enter English..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3075,12 +3076,43 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={projectForm.control}
-                      name="area"
+                      name="locationVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Area</FormLabel>
+                          <FormLabel>Location (Vietnamese)</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="e.g. 3,500 sq ft" data-testid="input-project-area" />
+                            <Input {...field} data-testid="input-project-location-vi" placeholder="Nhập tiếng Việt..." />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Area */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="areaEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Area (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Enter English..." data-testid="input-project-area-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="areaVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Area (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-area-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3150,15 +3182,16 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* Bilingual Designer */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={projectForm.control}
-                      name="designer"
+                      name="designerEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Interior Designer</FormLabel>
+                          <FormLabel>Interior Designer (English)</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="e.g. Nicolas Park" data-testid="input-project-designer" />
+                            <Input {...field} placeholder="Enter English..." data-testid="input-project-designer-en" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3167,42 +3200,12 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
                     <FormField
                       control={projectForm.control}
-                      name="completionYear"
+                      name="designerVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Completion Year</FormLabel>
+                          <FormLabel>Interior Designer (Vietnamese)</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="e.g. 2023" data-testid="input-project-year" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={projectForm.control}
-                      name="duration"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Duration</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="e.g. 6 months" data-testid="input-project-duration" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={projectForm.control}
-                      name="budget"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Budget</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="e.g. $50,000" data-testid="input-project-budget" />
+                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-designer-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3210,19 +3213,129 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   </div>
 
-                  <FormField
-                    control={projectForm.control}
-                    name="style"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Style</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="e.g. Modern, Contemporary" data-testid="input-project-style" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Bilingual Completion Year */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="completionYearEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Completion Year (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Enter English..." data-testid="input-project-year-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="completionYearVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Completion Year (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-year-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Duration */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="durationEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Duration (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Enter English..." data-testid="input-project-duration-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="durationVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Duration (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-duration-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Budget */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="budgetEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Budget (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Enter English..." data-testid="input-project-budget-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="budgetVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Budget (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-budget-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Style */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="styleEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Style (English)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Enter English..." data-testid="input-project-style-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="styleVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Style (Vietnamese)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-style-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FormField
                     control={projectForm.control}
@@ -3443,7 +3556,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     </Button>
                     <Button 
                       type="submit"
-                      disabled={createProjectMutation.isPending || updateProjectMutation.isPending}
+                      disabled={isProjectSubmitting || createProjectMutation.isPending}
                       data-testid="button-save-project"
                       className="h-10 px-4"
                     >
