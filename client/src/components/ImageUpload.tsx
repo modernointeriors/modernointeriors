@@ -283,14 +283,6 @@ export default function ImageUpload({
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
-                    
-                    {index === 0 && multiple && (
-                      <div className="absolute top-2 left-2">
-                        <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
-                          Primary
-                        </div>
-                      </div>
-                    )}
                   </div>
                   
                   {metadata && (
