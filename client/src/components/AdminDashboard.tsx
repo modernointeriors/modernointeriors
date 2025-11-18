@@ -1903,7 +1903,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         // Update or create English version
         if (enVersion) {
           promises.push(
-            apiRequest('PATCH', `/api/projects/${enVersion.id}`, enProject)
+            apiRequest('PUT', `/api/projects/${enVersion.id}`, enProject)
           );
         } else {
           promises.push(
@@ -1914,7 +1914,7 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         // Update or create Vietnamese version
         if (viVersion) {
           promises.push(
-            apiRequest('PATCH', `/api/projects/${viVersion.id}`, viProject)
+            apiRequest('PUT', `/api/projects/${viVersion.id}`, viProject)
           );
         } else {
           promises.push(
@@ -3738,7 +3738,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead>Project</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Location</TableHead>
-                    <TableHead>Budget</TableHead>
                     <TableHead>Year</TableHead>
                     <TableHead>Style</TableHead>
                     <TableHead>Area</TableHead>
@@ -3754,7 +3753,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                       </TableCell>
                       <TableCell className="capitalize">{project.category}</TableCell>
                       <TableCell>{project.location || "—"}</TableCell>
-                      <TableCell>{project.budget || "—"}</TableCell>
                       <TableCell>{project.completionYear || "—"}</TableCell>
                       <TableCell>{project.style || "—"}</TableCell>
                       <TableCell>{project.area || "—"}</TableCell>
