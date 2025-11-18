@@ -34,7 +34,6 @@ const projectSchema = z.object({
   location: z.string().optional(),
   area: z.string().optional(),
   duration: z.string().optional(),
-  budget: z.string().optional(),
   style: z.string().optional(),
   designer: z.string().optional(),
   completionYear: z.string().optional(),
@@ -67,8 +66,6 @@ const bilingualProjectSchema = z.object({
   areaVi: z.string().optional(),
   durationEn: z.string().optional(),
   durationVi: z.string().optional(),
-  budgetEn: z.string().optional(),
-  budgetVi: z.string().optional(),
   styleEn: z.string().optional(),
   styleVi: z.string().optional(),
   designerEn: z.string().optional(),
@@ -591,8 +588,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       areaVi: "",
       durationEn: "",
       durationVi: "",
-      budgetEn: "",
-      budgetVi: "",
       styleEn: "",
       styleVi: "",
       designerEn: "",
@@ -1775,8 +1770,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       areaVi: viVersion?.area || "",
       durationEn: enVersion?.duration || "",
       durationVi: viVersion?.duration || "",
-      budgetEn: enVersion?.budget || "",
-      budgetVi: viVersion?.budget || "",
       styleEn: enVersion?.style || "",
       styleVi: viVersion?.style || "",
       designerEn: enVersion?.designer || "",
@@ -1851,7 +1844,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         location: data.locationEn,
         area: data.areaEn,
         duration: data.durationEn,
-        budget: data.budgetEn,
         style: data.styleEn,
         designer: data.designerEn,
         completionYear: data.completionYearEn,
@@ -1877,7 +1869,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         location: data.locationVi,
         area: data.areaVi,
         duration: data.durationVi,
-        budget: data.budgetVi,
         style: data.styleVi,
         designer: data.designerVi,
         completionYear: data.completionYearVi,
@@ -3275,37 +3266,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                           <FormLabel>Duration (Vietnamese)</FormLabel>
                           <FormControl>
                             <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-duration-vi" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Bilingual Budget */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={projectForm.control}
-                      name="budgetEn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Budget (English)</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="Enter English..." data-testid="input-project-budget-en" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={projectForm.control}
-                      name="budgetVi"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Budget (Vietnamese)</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="Nhập tiếng Việt..." data-testid="input-project-budget-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
