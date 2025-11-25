@@ -12,7 +12,6 @@ export const users = pgTable("users", {
   permissions: jsonb("permissions").default([]), // Array of permission strings
   displayName: text("display_name"),
   email: text("email"),
-  active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

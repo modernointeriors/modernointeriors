@@ -774,7 +774,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
       email: "",
       role: "admin",
       permissions: [],
-      active: true,
     },
   });
 
@@ -7667,7 +7666,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
         email: user.email || "",
         role: user.role || "admin",
         permissions: Array.isArray(user.permissions) ? user.permissions : [],
-        active: user.active !== false,
       });
       setIsUserDialogOpen(true);
     };
@@ -7726,7 +7724,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     email: "",
                     role: "admin",
                     permissions: [],
-                    active: true,
                   });
                 }}
                 data-testid="button-add-user"
@@ -7861,24 +7858,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     />
                   )}
 
-                  <FormField
-                    control={userForm.control}
-                    name="active"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center space-x-3">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            data-testid="checkbox-user-active"
-                          />
-                        </FormControl>
-                        <FormLabel className="!mt-0">Active</FormLabel>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   <div className="flex justify-end space-x-2 pt-4">
                     <Button
                       type="button"
@@ -8001,7 +7980,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                     <TableHead>Email</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Permissions</TableHead>
-                    <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -8038,11 +8016,6 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                         ) : (
                           <span className="text-muted-foreground text-sm">No permissions</span>
                         )}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={user.active ? 'default' : 'secondary'}>
-                          {user.active ? 'Active' : 'Inactive'}
-                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end space-x-2">
