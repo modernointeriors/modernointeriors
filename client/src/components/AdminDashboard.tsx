@@ -19,8 +19,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
-import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings } from "lucide-react";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember } from "@shared/schema";
+import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings, Lock, Shield, KeyRound } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember, User } from "@shared/schema";
 import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutCoreValueSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AboutAdminTab from "@/components/AboutAdminTab";
@@ -174,6 +175,31 @@ const partnerSchema = z.object({
   logo: z.string().optional(), // Optional because we can use logoData instead
 });
 
+// User management schema
+const userSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().optional(),
+  displayName: z.string().optional(),
+  email: z.string().email().optional().or(z.literal('')),
+  role: z.enum(["superadmin", "admin", "editor"]).default("admin"),
+  permissions: z.array(z.string()).default([]),
+  active: z.boolean().default(true),
+});
+
+type UserFormData = z.infer<typeof userSchema>;
+
+// Available permissions for dashboard sections
+const AVAILABLE_PERMISSIONS = [
+  { id: 'projects', label: 'Projects', labelVi: 'Dự Án' },
+  { id: 'clients', label: 'CRM / Clients', labelVi: 'CRM / Khách Hàng' },
+  { id: 'inquiries', label: 'Inquiries', labelVi: 'Liên Hệ' },
+  { id: 'articles', label: 'Articles / Blog', labelVi: 'Bài Viết' },
+  { id: 'homepage', label: 'Homepage Content', labelVi: 'Nội Dung Trang Chủ' },
+  { id: 'about', label: 'About Page', labelVi: 'Trang Giới Thiệu' },
+  { id: 'content', label: 'Services / Content', labelVi: 'Dịch Vụ / Nội Dung' },
+  { id: 'partners', label: 'Partners', labelVi: 'Đối Tác' },
+];
+
 const faqSchema = z.object({
   question: z.string().min(1, "Question is required"),
   answer: z.string().min(1, "Answer is required"),
@@ -317,6 +343,15 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
   const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
   const [referralOpen, setReferralOpen] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
+  
+  // User management states
+  const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);
+  const [changePasswordUserId, setChangePasswordUserId] = useState<string | null>(null);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [editingTransaction, setEditingTransaction] = useState<any | null>(null);
   
   // Partner Logo state
@@ -412,6 +447,11 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
 
   const { data: partners = [], isLoading: partnersLoading } = useQuery<Partner[]>({
     queryKey: ['/api/partners'],
+  });
+
+  // Users query (without password)
+  const { data: adminUsers = [], isLoading: usersLoading } = useQuery<any[]>({
+    queryKey: ['/api/users'],
   });
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
@@ -721,6 +761,20 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     defaultValues: {
       name: "",
       logo: "",
+    },
+  });
+
+  // User form
+  const userForm = useForm<UserFormData>({
+    resolver: zodResolver(userSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+      displayName: "",
+      email: "",
+      role: "admin",
+      permissions: [],
+      active: true,
     },
   });
 
@@ -1178,6 +1232,88 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
     onError: (error: any) => {
       toast({
         title: "Error deleting partner",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // User mutations
+  const createUserMutation = useMutation({
+    mutationFn: async (data: UserFormData) => {
+      const response = await apiRequest('POST', '/api/users', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      toast({ title: "User created successfully" });
+      setIsUserDialogOpen(false);
+      setEditingUser(null);
+      userForm.reset();
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error creating user",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateUserMutation = useMutation({
+    mutationFn: async ({ id, ...data }: UserFormData & { id: string }) => {
+      const response = await apiRequest('PUT', `/api/users/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      toast({ title: "User updated successfully" });
+      setIsUserDialogOpen(false);
+      setEditingUser(null);
+      userForm.reset();
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error updating user",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest('DELETE', `/api/users/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      toast({ title: "User deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error deleting user",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const changePasswordMutation = useMutation({
+    mutationFn: async ({ id, currentPassword, newPassword }: { id: string; currentPassword: string; newPassword: string }) => {
+      const response = await apiRequest('POST', `/api/users/${id}/change-password`, { currentPassword, newPassword });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Password changed successfully" });
+      setIsChangePasswordDialogOpen(false);
+      setChangePasswordUserId(null);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error changing password",
         description: error.message,
         variant: "destructive",
       });
@@ -7493,6 +7629,461 @@ export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() => deletePartnerMutation.mutate(partner.id)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Users Management Section
+  if (activeTab === 'users') {
+    const onUserSubmit = (data: UserFormData) => {
+      if (editingUser) {
+        updateUserMutation.mutate({ id: editingUser.id, ...data });
+      } else {
+        createUserMutation.mutate(data);
+      }
+    };
+
+    const handleEditUser = (user: any) => {
+      setEditingUser(user);
+      userForm.reset({
+        username: user.username,
+        password: "",
+        displayName: user.displayName || "",
+        email: user.email || "",
+        role: user.role || "admin",
+        permissions: Array.isArray(user.permissions) ? user.permissions : [],
+        active: user.active !== false,
+      });
+      setIsUserDialogOpen(true);
+    };
+
+    const handleChangePassword = (userId: string) => {
+      setChangePasswordUserId(userId);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setIsChangePasswordDialogOpen(true);
+    };
+
+    const submitPasswordChange = () => {
+      if (!changePasswordUserId) return;
+      if (newPassword !== confirmPassword) {
+        toast({
+          title: "Passwords do not match",
+          description: "New password and confirm password must be the same.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (newPassword.length < 6) {
+        toast({
+          title: "Password too short",
+          description: "Password must be at least 6 characters.",
+          variant: "destructive",
+        });
+        return;
+      }
+      changePasswordMutation.mutate({
+        id: changePasswordUserId,
+        currentPassword,
+        newPassword,
+      });
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-sans font-light">User Management</h2>
+            <p className="text-sm text-white/50 mt-1">
+              Manage admin accounts and permissions
+            </p>
+          </div>
+          <Dialog open={isUserDialogOpen} onOpenChange={setIsUserDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                onClick={() => {
+                  setEditingUser(null);
+                  userForm.reset({
+                    username: "",
+                    password: "",
+                    displayName: "",
+                    email: "",
+                    role: "admin",
+                    permissions: [],
+                    active: true,
+                  });
+                }}
+                data-testid="button-add-user"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add User
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingUser ? "Edit User" : "Add New User"}
+                </DialogTitle>
+              </DialogHeader>
+              <Form {...userForm}>
+                <form onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-4">
+                  <FormField
+                    control={userForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username *</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter username" data-testid="input-user-username" disabled={!!editingUser} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {!editingUser && (
+                    <FormField
+                      control={userForm.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password *</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="password" placeholder="Enter password" data-testid="input-user-password" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <FormField
+                    control={userForm.control}
+                    name="displayName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Display Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter display name" data-testid="input-user-displayname" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={userForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="email" placeholder="Enter email" data-testid="input-user-email" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={userForm.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Role *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-user-role">
+                              <SelectValue placeholder="Select role" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="superadmin">Super Admin (Full Access)</SelectItem>
+                            <SelectItem value="admin">Admin (Custom Permissions)</SelectItem>
+                            <SelectItem value="editor">Editor (Limited Access)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Permissions - only show for admin/editor roles */}
+                  {(userForm.watch('role') === 'admin' || userForm.watch('role') === 'editor') && (
+                    <FormField
+                      control={userForm.control}
+                      name="permissions"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Permissions</FormLabel>
+                          <div className="border border-white/10 rounded-none p-4 space-y-3">
+                            {AVAILABLE_PERMISSIONS.map((perm) => (
+                              <div key={perm.id} className="flex items-center space-x-3">
+                                <Checkbox
+                                  id={`perm-${perm.id}`}
+                                  checked={field.value?.includes(perm.id)}
+                                  onCheckedChange={(checked) => {
+                                    const newPermissions = checked
+                                      ? [...(field.value || []), perm.id]
+                                      : (field.value || []).filter((p: string) => p !== perm.id);
+                                    field.onChange(newPermissions);
+                                  }}
+                                  data-testid={`checkbox-permission-${perm.id}`}
+                                />
+                                <label
+                                  htmlFor={`perm-${perm.id}`}
+                                  className="text-sm font-light cursor-pointer"
+                                >
+                                  {language === 'vi' ? perm.labelVi : perm.label}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <FormField
+                    control={userForm.control}
+                    name="active"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-3">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            data-testid="checkbox-user-active"
+                          />
+                        </FormControl>
+                        <FormLabel className="!mt-0">Active</FormLabel>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="flex justify-end space-x-2 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setIsUserDialogOpen(false);
+                        setEditingUser(null);
+                        userForm.reset();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={createUserMutation.isPending || updateUserMutation.isPending}
+                      data-testid="button-save-user"
+                    >
+                      {editingUser ? "Update" : "Create"} User
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {/* Change Password Dialog */}
+        <Dialog open={isChangePasswordDialogOpen} onOpenChange={setIsChangePasswordDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <KeyRound className="h-5 w-5" />
+                Change Password
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Current Password</label>
+                <Input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="Enter current password"
+                  data-testid="input-current-password"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-2 block">New Password</label>
+                <Input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter new password (min 6 characters)"
+                  data-testid="input-new-password"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-2 block">Confirm New Password</label>
+                <Input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm new password"
+                  data-testid="input-confirm-password"
+                />
+              </div>
+              <div className="flex justify-end space-x-2 pt-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsChangePasswordDialogOpen(false);
+                    setChangePasswordUserId(null);
+                    setCurrentPassword("");
+                    setNewPassword("");
+                    setConfirmPassword("");
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={submitPasswordChange}
+                  disabled={changePasswordMutation.isPending}
+                  data-testid="button-submit-password"
+                >
+                  Change Password
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Users Table */}
+        <Card>
+          <CardContent className="p-0">
+            {usersLoading ? (
+              <div className="p-6">
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex items-center justify-between py-4 animate-pulse">
+                      <div className="space-y-2">
+                        <div className="h-4 bg-muted rounded w-48" />
+                        <div className="h-3 bg-muted rounded w-32" />
+                      </div>
+                      <div className="h-8 bg-muted rounded w-24" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : adminUsers.length === 0 ? (
+              <div className="p-12 text-center">
+                <h3 className="text-lg font-light mb-2">No users found</h3>
+                <p className="text-muted-foreground">Create your first admin user to get started.</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Username</TableHead>
+                    <TableHead>Display Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Permissions</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {adminUsers.map((user: any) => (
+                    <TableRow key={user.id} data-testid={`row-user-${user.id}`}>
+                      <TableCell className="font-medium">{user.username}</TableCell>
+                      <TableCell>{user.displayName || "—"}</TableCell>
+                      <TableCell>{user.email || "—"}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={user.role === 'superadmin' ? 'default' : 'secondary'}
+                          className={user.role === 'superadmin' ? 'bg-amber-500 text-black' : ''}
+                        >
+                          {user.role === 'superadmin' ? 'Super Admin' : user.role === 'admin' ? 'Admin' : 'Editor'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {user.role === 'superadmin' ? (
+                          <span className="text-amber-400 text-sm">Full Access</span>
+                        ) : Array.isArray(user.permissions) && user.permissions.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {user.permissions.slice(0, 3).map((p: string) => (
+                              <Badge key={p} variant="outline" className="text-xs">
+                                {p}
+                              </Badge>
+                            ))}
+                            {user.permissions.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{user.permissions.length - 3}
+                              </Badge>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">No permissions</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={user.active ? 'default' : 'secondary'}>
+                          {user.active ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditUser(user)}
+                            data-testid={`button-edit-user-${user.id}`}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleChangePassword(user.id)}
+                            data-testid={`button-change-password-${user.id}`}
+                          >
+                            <Lock className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                disabled={user.role === 'superadmin' && adminUsers.filter((u: any) => u.role === 'superadmin').length === 1}
+                                data-testid={`button-delete-user-${user.id}`}
+                              >
+                                <Trash2 className="h-4 w-4 text-white" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete User?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will permanently delete the user "{user.username}". This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteUserMutation.mutate(user.id)}
                                 >
                                   Delete
                                 </AlertDialogAction>

@@ -171,6 +171,7 @@ const translations = {
     'admin.overview': 'Overview',
     'admin.crm': 'CRM',
     'admin.content': 'Content',
+    'admin.users': 'Users',
     'admin.manage': 'Manage your projects, clients, and website content',
     'admin.access': 'Admin Access',
     
@@ -398,6 +399,7 @@ const translations = {
     'admin.overview': 'Tổng Quan',
     'admin.crm': 'CRM',
     'admin.content': 'Nội Dung',
+    'admin.users': 'Người Dùng',
     'admin.manage': 'Quản lý dự án, khách hàng và nội dung website của bạn',
     'admin.access': 'Quyền Quản Trị',
     
