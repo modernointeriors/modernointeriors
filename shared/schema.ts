@@ -345,11 +345,6 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
 }));
 
 // Insert schemas
-export const insertUserSchema = createInsertSchema(users).omit({
-  id: true,
-  createdAt: true,
-});
-
 export const insertProjectSchema = createInsertSchema(projects).omit({
   id: true,
   createdAt: true,

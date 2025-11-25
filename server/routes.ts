@@ -5,8 +5,14 @@ import multer from "multer";
 import path from "path";
 import { randomUUID } from "crypto";
 import { storage } from "./storage";
-import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema } from "@shared/schema";
+import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema, insertUserSchema } from "@shared/schema";
 import { z } from "zod";
+import { createHash } from "crypto";
+
+// Simple password hashing function
+function hashPassword(password: string): string {
+  return createHash('sha256').update(password).digest('hex');
+}
 
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
@@ -73,6 +79,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(req.user);
     } else {
       res.status(401).json({ message: "Not authenticated" });
+    }
+  });
+
+  // Users management routes
+  app.get("/api/users", async (req, res) => {
+    try {
+      const users = await storage.getUsers();
+      // Don't return passwords
+      const safeUsers = users.map(({ password, ...user }) => user);
+      res.json(safeUsers);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.get("/api/users/:id", async (req, res) => {
+    try {
+      const user = await storage.getUser(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const { password, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  app.post("/api/users", async (req, res) => {
+    try {
+      const { password, ...rest } = req.body;
+      const validatedData = insertUserSchema.parse({
+        ...rest,
+        password: hashPassword(password),
+      });
+      const user = await storage.createUser(validatedData);
+      const { password: _, ...safeUser } = user;
+      res.status(201).json(safeUser);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create user" });
+    }
+  });
+
+  app.put("/api/users/:id", async (req, res) => {
+    try {
+      const { password, ...rest } = req.body;
+      const updateData: any = { ...rest };
+      
+      // Only update password if provided
+      if (password && password.trim() !== '') {
+        updateData.password = hashPassword(password);
+      }
+      
+      const user = await storage.updateUser(req.params.id, updateData);
+      const { password: _, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update user" });
+    }
+  });
+
+  app.delete("/api/users/:id", async (req, res) => {
+    try {
+      // Prevent deleting the last superadmin
+      const users = await storage.getUsers();
+      const superadmins = users.filter(u => u.role === 'superadmin');
+      const userToDelete = users.find(u => u.id === req.params.id);
+      
+      if (userToDelete?.role === 'superadmin' && superadmins.length === 1) {
+        return res.status(400).json({ message: "Cannot delete the last superadmin" });
+      }
+      
+      await storage.deleteUser(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete user" });
+    }
+  });
+
+  // Change password endpoint
+  app.post("/api/users/:id/change-password", async (req, res) => {
+    try {
+      const { currentPassword, newPassword } = req.body;
+      
+      const user = await storage.getUser(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Verify current password
+      if (hashPassword(currentPassword) !== user.password) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+      
+      await storage.updateUserPassword(req.params.id, hashPassword(newPassword));
+      res.json({ message: "Password changed successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to change password" });
     }
   });
 
