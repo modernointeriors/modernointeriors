@@ -8,8 +8,19 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  role: varchar("role", { length: 20 }).notNull().default("admin"),
+  role: varchar("role", { length: 20 }).notNull().default("admin"), // superadmin, admin, editor
+  permissions: jsonb("permissions").default([]), // Array of permission strings
+  displayName: text("display_name"),
+  email: text("email"),
+  active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 export const projects = pgTable("projects", {
