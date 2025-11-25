@@ -3,8 +3,10 @@ import session from "express-session";
 import ConnectPgSimple from "connect-pg-simple";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { createHash } from "crypto";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { storage } from "./storage";
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
@@ -30,18 +32,28 @@ app.use(session({
   }
 }));
 
+// Hash password helper
+function hashPassword(password: string): string {
+  return createHash('sha256').update(password).digest('hex');
+}
+
 // Passport configuration
 passport.use(new LocalStrategy(
   async (username: string, password: string, done) => {
     try {
-      // Simple hardcoded admin user for demo
-      // In production, this should check against a database
-      if (username === 'admin' && password === 'admin123') {
-        const user = { id: '1', username: 'admin' };
-        return done(null, user);
-      } else {
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
         return done(null, false, { message: 'Invalid credentials' });
       }
+      
+      // Compare hashed password
+      if (hashPassword(password) !== user.password) {
+        return done(null, false, { message: 'Invalid credentials' });
+      }
+      
+      // Return user without password
+      const { password: _, ...safeUser } = user;
+      return done(null, safeUser);
     } catch (error) {
       return done(error);
     }
@@ -52,13 +64,17 @@ passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id: string, done) => {
-  // In production, this should fetch from database
-  if (id === '1') {
-    const user = { id: '1', username: 'admin' };
-    done(null, user);
-  } else {
-    done(null, false);
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const user = await storage.getUser(id);
+    if (!user) {
+      return done(null, false);
+    }
+    // Return user without password
+    const { password: _, ...safeUser } = user;
+    done(null, safeUser);
+  } catch (error) {
+    done(error);
   }
 });
 

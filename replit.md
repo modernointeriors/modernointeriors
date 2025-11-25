@@ -56,9 +56,15 @@ The application manages core entities:
 - **Admin Dashboard**: Comprehensive management interface with tabbed navigation and CRUD operations
 
 ## Authentication & Authorization
-- Basic user system with username/password authentication
-- Role-based access control (admin role)
-- Session management for admin dashboard access
+- **Database-backed Authentication**: Passport.js with LocalStrategy checking against PostgreSQL database
+- **Password Security**: SHA-256 hashed passwords stored in database
+- **User Management System**: Full CRUD operations for admin users
+  - Three role levels: Super Admin (full access), Admin (custom permissions), Editor (limited access)
+  - Granular permissions for: projects, clients, inquiries, services, homepage, about, articles, partners, faqs, crm, users
+  - Password change functionality with current password verification
+  - User account management: username, display name, email, role, permissions
+  - Super Admin protection: Cannot delete last Super Admin account
+- **Session Management**: PostgreSQL-backed session storage for persistent login state
 
 ## Multilingual Support
 - **Language Context**: React Context-based translation system supporting English and Vietnamese
