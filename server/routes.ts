@@ -1378,7 +1378,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.post("/api/about-team-members", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutTeamMemberSchema.parse(req.body);
       const member = await storage.createAboutTeamMember(validatedData);
@@ -1391,7 +1391,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.put("/api/about-team-members/:id", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutTeamMemberSchema.partial().parse(req.body);
       const member = await storage.updateAboutTeamMember(req.params.id, validatedData);
@@ -1404,7 +1404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.delete("/api/about-team-members/:id", requirePermission('about'), async (req, res) => {
     try {
       await storage.deleteAboutTeamMember(req.params.id);
       res.status(204).send();
@@ -1439,7 +1439,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.post("/api/about-core-values", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutCoreValueSchema.parse(req.body);
       const value = await storage.createAboutCoreValue(validatedData);
@@ -1452,7 +1452,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.put("/api/about-core-values/:id", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutCoreValueSchema.partial().parse(req.body);
       const value = await storage.updateAboutCoreValue(req.params.id, validatedData);
@@ -1465,73 +1465,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.delete("/api/about-core-values/:id", requirePermission('about'), async (req, res) => {
     try {
       await storage.deleteAboutCoreValue(req.params.id);
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete core value" });
-    }
-  });
-
-  // About Team Members routes
-  app.get("/api/about-team-members", async (req, res) => {
-    try {
-      const { active } = req.query;
-      const filters: any = {};
-      if (active !== undefined) filters.active = active === 'true';
-      
-      const members = await storage.getAboutTeamMembers(filters);
-      res.json(members);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch team members" });
-    }
-  });
-
-  app.get("/api/about-team-members/:id", async (req, res) => {
-    try {
-      const member = await storage.getAboutTeamMember(req.params.id);
-      if (!member) {
-        return res.status(404).json({ message: "Team member not found" });
-      }
-      res.json(member);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch team member" });
-    }
-  });
-
-  app.post("/api/about-content", requirePermission('crm'), async (req, res) => {
-    try {
-      const validatedData = insertAboutTeamMemberSchema.parse(req.body);
-      const member = await storage.createAboutTeamMember(validatedData);
-      res.status(201).json(member);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to create team member" });
-    }
-  });
-
-  app.put("/api/about-content", requirePermission('crm'), async (req, res) => {
-    try {
-      const validatedData = insertAboutTeamMemberSchema.partial().parse(req.body);
-      const member = await storage.updateAboutTeamMember(req.params.id, validatedData);
-      res.json(member);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Validation error", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to update team member" });
-    }
-  });
-
-  app.delete("/api/about-content", requirePermission('crm'), async (req, res) => {
-    try {
-      await storage.deleteAboutTeamMember(req.params.id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete team member" });
     }
   });
 
