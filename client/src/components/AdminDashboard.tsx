@@ -175,9 +175,9 @@ const partnerSchema = z.object({
   logo: z.string().optional(), // Optional because we can use logoData instead
 });
 
-// User management schema
+// User management schema (flexible for both super admin and non-super admin)
 const userSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
+  username: z.string().min(3, "Username must be at least 3 characters").optional(),
   password: z.string().optional(),
   displayName: z.string().optional(),
   email: z.string().email().optional().or(z.literal('')),
@@ -7705,8 +7705,37 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     }
     const onUserSubmit = (data: UserFormData) => {
       if (editingUser) {
-        updateUserMutation.mutate({ id: editingUser.id, ...data });
+        // If user is not super admin, preserve username, role, and permissions
+        if (user.role !== 'superadmin') {
+          updateUserMutation.mutate({ 
+            id: editingUser.id, 
+            username: editingUser.username,
+            role: editingUser.role,
+            permissions: editingUser.permissions,
+            displayName: data.displayName,
+            email: data.email,
+          });
+        } else {
+          updateUserMutation.mutate({ id: editingUser.id, ...data });
+        }
       } else {
+        // Creating new user - ensure username is provided
+        if (!data.username || data.username.length < 3) {
+          toast({
+            title: "Validation Error",
+            description: "Username is required and must be at least 3 characters",
+            variant: "destructive",
+          });
+          return;
+        }
+        if (!data.password || data.password.length < 6) {
+          toast({
+            title: "Validation Error",
+            description: "Password is required and must be at least 6 characters",
+            variant: "destructive",
+          });
+          return;
+        }
         createUserMutation.mutate(data);
       }
     };
