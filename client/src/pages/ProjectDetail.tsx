@@ -4,16 +4,37 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, MapPin, User, Eye } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, User, Eye, Share2, Check } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@shared/schema";
 
 export default function ProjectDetail() {
   const [, params] = useRoute("/project/:id");
   const projectId = params?.id;
   const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { language } = useLanguage();
+  const { toast } = useToast();
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast({
+        title: language === 'vi' ? 'Đã sao chép liên kết' : 'Link copied',
+        description: language === 'vi' ? 'Liên kết đã được sao chép vào clipboard' : 'Link has been copied to clipboard',
+      });
+    } catch (error) {
+      toast({
+        title: language === 'vi' ? 'Lỗi' : 'Error',
+        description: language === 'vi' ? 'Không thể sao chép liên kết' : 'Failed to copy link',
+        variant: 'destructive',
+      });
+    }
+  };
 
   const { data: project, isLoading, error } = useQuery<Project>({
     queryKey: ['/api/projects', projectId],
@@ -166,6 +187,19 @@ export default function ProjectDetail() {
     <div className="min-h-screen pt-24">
       {/* Main Content Layout */}
       <div className="max-w-7xl mx-auto px-6">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          asChild 
+          className="mb-8"
+          data-testid="button-back-to-portfolio"
+        >
+          <Link href="/portfolio">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {language === 'vi' ? 'Quay lại Danh mục' : 'Back to Portfolio'}
+          </Link>
+        </Button>
+
         {/* Project Title Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-light tracking-wider mb-3 text-white uppercase" data-testid="text-project-title">
@@ -349,6 +383,36 @@ export default function ProjectDetail() {
             </div>
           </div>
         )}
+
+        {/* Share Section */}
+        <div className="flex items-center justify-between mt-16 mb-8 border-t border-gray-800 pt-6">
+          <div className="text-sm text-muted-foreground">
+            <p className="mb-1">
+              {language === 'vi' ? 'Thiết kế bởi' : 'Designed by'} <span className="text-white">{project.designer || 'Moderno Team'}</span>
+            </p>
+            <p>{project.completionYear}</p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleShare}
+            className="border border-white/20 rounded-none px-4 py-2 hover:bg-white/10 hover:text-white transition-all"
+            data-testid="button-share"
+            disabled={copied}
+          >
+            {copied ? (
+              <>
+                <Check className="h-5 w-5 mr-2" />
+                {language === 'vi' ? 'Đã sao chép!' : 'Copied!'}
+              </>
+            ) : (
+              <>
+                <Share2 className="h-5 w-5 mr-2" />
+                {language === 'vi' ? 'Chia sẻ' : 'Share'}
+              </>
+            )}
+          </Button>
+        </div>
 
         {/* OTHER PROJECTS Section - Horizontal Scroll */}
         {allProjects && allProjects.length > 0 && (
