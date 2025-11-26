@@ -61,6 +61,7 @@ export interface IStorage {
   getInquiry(id: string): Promise<Inquiry | undefined>;
   createInquiry(inquiry: InsertInquiry): Promise<Inquiry>;
   updateInquiry(id: string, inquiry: Partial<InsertInquiry>): Promise<Inquiry>;
+  deleteInquiry(id: string): Promise<void>;
 
   // Services
   getServices(): Promise<Service[]>;
@@ -391,6 +392,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(inquiries.id, id))
       .returning();
     return updatedInquiry;
+  }
+
+  async deleteInquiry(id: string): Promise<void> {
+    await db.delete(inquiries).where(eq(inquiries.id, id));
   }
 
   // Services

@@ -379,6 +379,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/inquiries/:id", async (req, res) => {
+    try {
+      await storage.deleteInquiry(req.params.id);
+      res.status(200).json({ message: "Inquiry deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete inquiry" });
+    }
+  });
+
   // Services routes
   app.get("/api/services", async (req, res) => {
     try {
