@@ -1068,13 +1068,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       
       return { previousClients };
     },
-    onError: (err, variables, context) => {
+    onError: (err: any, variables, context) => {
       if (context?.previousClients) {
         queryClient.setQueryData(['/api/clients'], context.previousClients);
       }
       toast({ 
         title: "Error updating client", 
-        description: "Failed to update. Please try again.",
+        description: err.message,
         variant: "destructive" 
       });
     },
@@ -1126,10 +1126,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       
       return { previousInquiries };
     },
-    onError: (err, variables, context) => {
+    onError: (err: any, variables, context) => {
       queryClient.setQueryData(['/api/inquiries'], context?.previousInquiries);
       toast({ 
-        title: "Error updating inquiry", 
+        title: "Error updating inquiry",
+        description: err.message, 
         variant: "destructive" 
       });
     },
