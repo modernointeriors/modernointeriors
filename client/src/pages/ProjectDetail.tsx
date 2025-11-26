@@ -64,7 +64,12 @@ export default function ProjectDetail() {
   }, [project]);
 
   const { data: relatedProjects } = useQuery<Project[]>({
-    queryKey: ['/api/projects'],
+    queryKey: ['/api/projects', language],
+    queryFn: async () => {
+      const response = await fetch(`/api/projects?language=${language}`);
+      if (!response.ok) throw new Error("Failed to fetch projects");
+      return response.json();
+    },
     select: (data) => {
       if (!project?.relatedProjects || !Array.isArray(project.relatedProjects)) return [];
       const relatedIds = project.relatedProjects as string[];
@@ -75,11 +80,16 @@ export default function ProjectDetail() {
 
   // Fetch all projects for "OTHER PROJECTS" section with smart filtering
   const { data: allProjects } = useQuery<Project[]>({
-    queryKey: ['/api/projects'],
+    queryKey: ['/api/projects', 'other', language],
+    queryFn: async () => {
+      const response = await fetch(`/api/projects?language=${language}`);
+      if (!response.ok) throw new Error("Failed to fetch projects");
+      return response.json();
+    },
     select: (data) => {
       if (!project) return [];
       
-      // Filter out current project
+      // Filter out current project and only show same language
       const otherProjects = data.filter(p => p.id !== project.id);
       
       // Sort by priority:
