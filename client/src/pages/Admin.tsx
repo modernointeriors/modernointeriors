@@ -10,6 +10,30 @@ import AdminDashboard from "@/components/AdminDashboard";
 import Layout from "@/components/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+// Map tab IDs to required permissions
+const TAB_PERMISSIONS: Record<string, string> = {
+  overview: 'overview',
+  projects: 'projects',
+  clients: 'crm',
+  inquiries: 'inquiries',
+  articles: 'articles',
+  homepage: 'homepage',
+  about: 'about',
+  content: 'content',
+  users: 'users'
+};
+
+// Helper function to check if user has permission for a specific feature
+function hasPermission(user: any, permission: string): boolean {
+  if (!user) return false;
+  
+  // Admin role always has full access
+  if (user.role === 'admin') return true;
+  
+  // Check if user has the specific permission
+  return user.permissions && Array.isArray(user.permissions) && user.permissions.includes(permission);
+}
+
 function getTabs(t: (key: string) => string) {
   return [
     { id: 'overview', label: t('admin.overview'), icon: BarChart3 },
@@ -31,7 +55,13 @@ export default function Admin() {
   const { user, logout } = useAuth();
   const { toast } = useToast();
   
-  const tabs = getTabs(t);
+  const allTabs = getTabs(t);
+  
+  // Filter tabs based on user permissions
+  const tabs = allTabs.filter(tab => {
+    const permission = TAB_PERMISSIONS[tab.id];
+    return hasPermission(user, permission);
+  });
 
   const handleLogout = () => {
     logout();
@@ -124,7 +154,7 @@ export default function Admin() {
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-white/3 to-white/1 backdrop-blur-xl rounded-none"></div>
             <div className="relative bg-black/30 backdrop-blur-md border border-white/10 rounded-none overflow-hidden">
-              <AdminDashboard activeTab={activeTab} />
+              <AdminDashboard activeTab={activeTab} user={user} hasPermission={hasPermission} />
             </div>
           </div>
         </div>

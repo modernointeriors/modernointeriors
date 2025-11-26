@@ -320,9 +320,11 @@ type TransactionFormData = z.infer<typeof transactionSchema>;
 
 interface AdminDashboardProps {
   activeTab: string;
+  user: any;
+  hasPermission: (user: any, permission: string) => boolean;
 }
 
-export default function AdminDashboard({ activeTab }: AdminDashboardProps) {
+export default function AdminDashboard({ activeTab, user, hasPermission }: AdminDashboardProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { language, t } = useLanguage();
