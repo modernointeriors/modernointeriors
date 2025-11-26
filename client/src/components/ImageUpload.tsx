@@ -18,13 +18,15 @@ interface ImageUploadProps {
   onChange: (urls: string[]) => void;
   multiple?: boolean;
   maxImages?: number;
+  disabled?: boolean;
 }
 
 export default function ImageUpload({ 
   value = [], 
   onChange, 
   multiple = false, 
-  maxImages = 10 
+  maxImages = 10,
+  disabled = false
 }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -73,7 +75,7 @@ export default function ImageUpload({
   };
 
   const handleFileSelect = useCallback(async (files: FileList | null) => {
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0 || disabled) return;
 
     setUploading(true);
     try {
@@ -189,7 +191,7 @@ export default function ImageUpload({
   return (
     <div className="space-y-4">
       {/* Upload Area */}
-      {canUploadMore && (
+      {canUploadMore && !disabled && (
         <Card
           className={`border-2 border-dashed transition-colors ${
             isDragging
@@ -217,13 +219,13 @@ export default function ImageUpload({
               accept="image/*"
               multiple={multiple}
               onChange={handleFileInputChange}
-              disabled={uploading}
+              disabled={uploading || disabled}
             />
             
             <Button
               variant="outline"
               asChild
-              disabled={uploading}
+              disabled={uploading || disabled}
               data-testid="button-browse-images"
             >
               <label htmlFor="file-upload" className="cursor-pointer">
@@ -263,26 +265,28 @@ export default function ImageUpload({
                       sizes="200px"
                     />
                     
-                    <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        type="button"
-                        size="sm"
-                        onClick={() => handleEditImage(url, index)}
-                        className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
-                        data-testid={`button-edit-image-${index}`}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        onClick={() => removeImage(index)}
-                        className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-red-500/50 shadow-xl transition-all"
-                        data-testid={`button-remove-image-${index}`}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    {!disabled && (
+                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => handleEditImage(url, index)}
+                          className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
+                          data-testid={`button-edit-image-${index}`}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => removeImage(index)}
+                          className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-red-500/50 shadow-xl transition-all"
+                          data-testid={`button-remove-image-${index}`}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   
                   {metadata && (

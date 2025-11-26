@@ -3525,6 +3525,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                            disabled={!hasPermission('projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3543,6 +3544,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                            disabled={!hasPermission('projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3561,6 +3563,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                            disabled={!hasPermission('projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3580,6 +3583,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value ? [field.value] : []}
                             onChange={(urls) => field.onChange(urls[0] || "")}
                             multiple={false}
+                            disabled={!hasPermission('projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3598,6 +3602,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                            disabled={!hasPermission('projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -5505,6 +5510,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           editingTeamMember={editingTeamMember}
           setEditingTeamMember={setEditingTeamMember}
           teamMemberForm={teamMemberForm}
+          hasPermission={hasPermission}
         />
       </div>
     );
@@ -5889,12 +5895,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       type="file"
                       accept=".jpg,.jpeg,.png"
                       onChange={handleQualityBgFileChange}
+                      disabled={!hasPermission('homepage')}
                       className="block w-full text-sm text-foreground
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-none file:border-0
                         file:text-sm file:font-medium
                         file:bg-white file:text-black
-                        hover:file:bg-white/90 cursor-pointer"
+                        hover:file:bg-white/90 cursor-pointer
+                        disabled:opacity-50 disabled:cursor-not-allowed"
                       data-testid="input-quality-bg-file"
                     />
                     <p className="text-xs text-muted-foreground mt-2">
@@ -5947,12 +5955,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       type="file"
                       accept=".jpg,.jpeg,.png"
                       onChange={handleQuality2BgFileChange}
+                      disabled={!hasPermission('homepage')}
                       className="block w-full text-sm text-foreground
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-none file:border-0
                         file:text-sm file:font-medium
                         file:bg-white file:text-black
-                        hover:file:bg-white/90 cursor-pointer"
+                        hover:file:bg-white/90 cursor-pointer
+                        disabled:opacity-50 disabled:cursor-not-allowed"
                       data-testid="input-quality2-bg-file"
                     />
                     <p className="text-xs text-muted-foreground mt-2">
@@ -6079,12 +6089,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             type="file"
                             accept=".jpg,.jpeg,.png"
                             onChange={handlePartnerLogoFileChange}
+                            disabled={!hasPermission('partners')}
                             className="block w-full text-sm text-foreground
                               file:mr-4 file:py-2 file:px-4
                               file:rounded-none file:border-0
                               file:text-sm file:font-medium
                               file:bg-primary file:text-primary-foreground
-                              hover:file:bg-primary/90 cursor-pointer"
+                              hover:file:bg-primary/90 cursor-pointer
+                              disabled:opacity-50 disabled:cursor-not-allowed"
                             data-testid="input-partner-logo-file"
                           />
                           <p className="text-xs text-muted-foreground mt-2">
@@ -6980,12 +6992,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           type="file"
                           accept=".jpg,.jpeg,.png"
                           onChange={handleArticleImageFileChange}
+                          disabled={!hasPermission('articles')}
                           className="block w-full text-sm text-foreground
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-none file:border-0
                             file:text-sm file:font-medium
                             file:bg-primary file:text-primary-foreground
-                            hover:file:bg-primary/90 cursor-pointer"
+                            hover:file:bg-primary/90 cursor-pointer
+                            disabled:opacity-50 disabled:cursor-not-allowed"
                           data-testid="input-article-image-file"
                         />
                         <p className="text-xs text-muted-foreground mt-2">
@@ -7090,11 +7104,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         onChange={handleContentImagesChange}
                         className="hidden"
                         id="content-images-upload"
-                        disabled={articleContentImages.length >= 10}
+                        disabled={articleContentImages.length >= 10 || !hasPermission('articles')}
                       />
                       <label 
                         htmlFor="content-images-upload" 
-                        className={`cursor-pointer ${articleContentImages.length >= 10 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`cursor-pointer ${articleContentImages.length >= 10 || !hasPermission('articles') ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="flex flex-col items-center gap-2">
                           <svg className="w-12 h-12 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">

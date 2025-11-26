@@ -430,7 +430,7 @@ export default function AboutAdminTab({
                         type="button"
                         variant="outline"
                         onClick={() => document.getElementById('hero-images-upload')?.click()}
-                        disabled={(aboutContentForm.watch("heroImages") || []).length >= 5 || !hasPermission('about')}
+                        disabled={(aboutContentForm.watch("heroImages") || []).length >= 5}
                         data-testid="button-upload-hero-images"
                       >
                         <Upload className="w-4 h-4 mr-2" />
@@ -438,7 +438,7 @@ export default function AboutAdminTab({
                       </Button>
                       <input
                         id="hero-images-upload"
-                        type="file" disabled={!hasPermission('about')}
+                        type="file"
                         accept="image/*"
                         className="hidden"
                         onChange={async (e) => {
@@ -595,7 +595,7 @@ export default function AboutAdminTab({
                                 </label>
                                 <input
                                   id="history-image-upload"
-                                  type="file" disabled={!hasPermission('about')}
+                                  type="file"
                                   accept=".jpg,.jpeg,.png"
                                   onChange={(e) => handleNewImageUpload(e, 'history')}
                                   className="hidden"
@@ -623,7 +623,7 @@ export default function AboutAdminTab({
                               </div>
                               <input
                                 id="history-image-upload-initial"
-                                type="file" disabled={!hasPermission('about')}
+                                type="file"
                                 accept=".jpg,.jpeg,.png"
                                 onChange={(e) => handleNewImageUpload(e, 'history')}
                                 className="hidden"
@@ -729,7 +729,7 @@ export default function AboutAdminTab({
                           </div>
                           <input
                             id="mission-vision-image-upload"
-                            type="file" disabled={!hasPermission('about')}
+                            type="file"
                             accept=".jpg,.jpeg,.png"
                             onChange={(e) => handleNewImageUpload(e, 'missionVision')}
                             className="hidden"
@@ -757,7 +757,7 @@ export default function AboutAdminTab({
                           </div>
                           <input
                             id="mission-vision-image-upload-initial"
-                            type="file" disabled={!hasPermission('about')}
+                            type="file"
                             accept=".jpg,.jpeg,.png"
                             onChange={(e) => handleNewImageUpload(e, 'missionVision')}
                             className="hidden"
@@ -944,7 +944,7 @@ export default function AboutAdminTab({
                         </label>
                         <input
                           id="showcase-banner-upload"
-                          type="file" disabled={!hasPermission('about')}
+                          type="file"
                           accept=".jpg,.jpeg,.png"
                           onChange={(e) => handleNewImageUpload(e, 'showcase')}
                           className="hidden"
@@ -972,7 +972,7 @@ export default function AboutAdminTab({
                       </div>
                       <input
                         id="showcase-banner-upload-initial"
-                        type="file" disabled={!hasPermission('about')}
+                        type="file"
                         accept=".jpg,.jpeg,.png"
                         onChange={(e) => handleNewImageUpload(e, 'showcase')}
                         className="hidden"
@@ -1563,7 +1563,7 @@ export default function AboutAdminTab({
                       </div>
                     )}
                     <Input
-                      type="file" disabled={!hasPermission('about')}
+                      type="file"
                       accept="image/*"
                       onChange={(e) => handleNewImageUpload(e, 'teamMember')}
                       data-testid="input-team-member-image"
