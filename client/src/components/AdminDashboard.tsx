@@ -2102,42 +2102,46 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onClientSubmit = async (data: ClientFormData) => {
-    // Auto-calculate warranty status based on expiry date
-    let warrantyStatus: "none" | "active" | "expired" = "none";
-    if (data.warrantyExpiry && data.warrantyExpiry.trim() !== "") {
-      const expiryDate = new Date(data.warrantyExpiry);
-      const now = new Date();
-      warrantyStatus = expiryDate < now ? "expired" : "active";
-    }
+    try {
+      // Auto-calculate warranty status based on expiry date
+      let warrantyStatus: "none" | "active" | "expired" = "none";
+      if (data.warrantyExpiry && data.warrantyExpiry.trim() !== "") {
+        const expiryDate = new Date(data.warrantyExpiry);
+        const now = new Date();
+        warrantyStatus = expiryDate < now ? "expired" : "active";
+      }
 
-    // Clean up empty strings for optional date fields
-    const cleanedData = {
-      ...data,
-      warrantyStatus, // Auto-set based on expiry date
-      dateOfBirth: data.dateOfBirth && data.dateOfBirth.trim() !== "" ? data.dateOfBirth : undefined,
-      warrantyExpiry: data.warrantyExpiry && data.warrantyExpiry.trim() !== "" ? data.warrantyExpiry : undefined,
-      phone: data.phone && data.phone.trim() !== "" ? data.phone : undefined,
-      company: data.company && data.company.trim() !== "" ? data.company : undefined,
-      address: data.address && data.address.trim() !== "" ? data.address : undefined,
-      referredById: data.referredById && data.referredById.trim() !== "" ? data.referredById : undefined,
-      notes: data.notes && data.notes.trim() !== "" ? data.notes : undefined,
-    };
+      // Clean up empty strings for optional date fields
+      const cleanedData = {
+        ...data,
+        warrantyStatus, // Auto-set based on expiry date
+        dateOfBirth: data.dateOfBirth && data.dateOfBirth.trim() !== "" ? data.dateOfBirth : undefined,
+        warrantyExpiry: data.warrantyExpiry && data.warrantyExpiry.trim() !== "" ? data.warrantyExpiry : undefined,
+        phone: data.phone && data.phone.trim() !== "" ? data.phone : undefined,
+        company: data.company && data.company.trim() !== "" ? data.company : undefined,
+        address: data.address && data.address.trim() !== "" ? data.address : undefined,
+        referredById: data.referredById && data.referredById.trim() !== "" ? data.referredById : undefined,
+        notes: data.notes && data.notes.trim() !== "" ? data.notes : undefined,
+      };
 
-    if (editingClient) {
-      await updateClientMutation.mutateAsync({ id: editingClient.id, ...cleanedData });
-      setEditingClient(null);
-      setIsClientDialogOpen(false);
-      clientForm.reset();
-    } else {
-      await createClientMutation.mutateAsync(cleanedData);
+      if (editingClient) {
+        await updateClientMutation.mutateAsync({ id: editingClient.id, ...cleanedData });
+        setEditingClient(null);
+        setIsClientDialogOpen(false);
+        clientForm.reset();
+      } else {
+        await createClientMutation.mutateAsync(cleanedData);
+      }
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
   };
 
   const onHomepageContentSubmit = async (data: HomepageContentFormData) => {
     const submitData = { ...data };
     
-    // Handle both quality background images if uploaded
-    const processFiles = async () => {
+    try {
+      // Handle both quality background images if uploaded
       if (qualityBgFile) {
         const reader = new FileReader();
         const base64 = await new Promise<string>((resolve) => {
@@ -2161,9 +2165,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setQualityBgPreview('');
       setQuality2BgFile(null);
       setQuality2BgPreview('');
-    };
-    
-    await processFiles();
+    } catch (error) {
+      // Error is handled by mutation's onError handler
+    }
   };
 
   const handleEditArticle = (article: Article) => {
@@ -2317,29 +2321,33 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onPartnerSubmit = async (data: PartnerFormData) => {
-    const partnerData: any = {
-      name: data.name,
-      order: 0,
-      active: true,
-    };
-    
-    // Add logo fields only if they have values
-    if (partnerLogoPreview) {
-      partnerData.logoData = partnerLogoPreview;
-      partnerData.logo = "";
-    } else if (data.logo) {
-      partnerData.logo = data.logo;
+    try {
+      const partnerData: any = {
+        name: data.name,
+        order: 0,
+        active: true,
+      };
+      
+      // Add logo fields only if they have values
+      if (partnerLogoPreview) {
+        partnerData.logoData = partnerLogoPreview;
+        partnerData.logo = "";
+      } else if (data.logo) {
+        partnerData.logo = data.logo;
+      }
+      
+      if (editingPartner) {
+        await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data: partnerData });
+      } else {
+        await createPartnerMutation.mutateAsync(partnerData);
+      }
+      
+      // Reset file states
+      setPartnerLogoFile(null);
+      setPartnerLogoPreview('');
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
-    
-    if (editingPartner) {
-      await updatePartnerMutation.mutateAsync({ id: editingPartner.id, data: partnerData });
-    } else {
-      await createPartnerMutation.mutateAsync(partnerData);
-    }
-    
-    // Reset file states
-    setPartnerLogoFile(null);
-    setPartnerLogoPreview('');
   };
 
   const handleEditFaq = (group: { en: Faq | null, vi: Faq | null, order: number }) => {
@@ -2356,56 +2364,60 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onFaqSubmit = async (data: BilingualFaqFormData) => {
-    // When creating new FAQ, find the max order and add 1
-    const order = editingFaq ? editingFaq.order : Math.max(0, ...faqs.map(f => f.order)) + 1;
+    try {
+      // When creating new FAQ, find the max order and add 1
+      const order = editingFaq ? editingFaq.order : Math.max(0, ...faqs.map(f => f.order)) + 1;
 
-    const enData = {
-      question: data.questionEn,
-      answer: data.answerEn,
-      page: data.page,
-      language: 'en' as const,
-      order: order,
-      active: true,
-    };
+      const enData = {
+        question: data.questionEn,
+        answer: data.answerEn,
+        page: data.page,
+        language: 'en' as const,
+        order: order,
+        active: true,
+      };
 
-    const viData = {
-      question: data.questionVi,
-      answer: data.answerVi,
-      page: data.page,
-      language: 'vi' as const,
-      order: order,
-      active: true,
-    };
+      const viData = {
+        question: data.questionVi,
+        answer: data.answerVi,
+        page: data.page,
+        language: 'vi' as const,
+        order: order,
+        active: true,
+      };
 
-    if (editingFaq) {
-      // Find both EN and VI versions to update
-      const enFaq = faqs.find(f => f.order === editingFaq.order && f.page === data.page && f.language === 'en');
-      const viFaq = faqs.find(f => f.order === editingFaq.order && f.page === data.page && f.language === 'vi');
+      if (editingFaq) {
+        // Find both EN and VI versions to update
+        const enFaq = faqs.find(f => f.order === editingFaq.order && f.page === data.page && f.language === 'en');
+        const viFaq = faqs.find(f => f.order === editingFaq.order && f.page === data.page && f.language === 'vi');
 
-      const promises = [];
-      if (enFaq) {
-        promises.push(updateFaqMutation.mutateAsync({ id: enFaq.id, data: enData }));
+        const promises = [];
+        if (enFaq) {
+          promises.push(updateFaqMutation.mutateAsync({ id: enFaq.id, data: enData }));
+        } else {
+          promises.push(createFaqMutation.mutateAsync(enData));
+        }
+
+        if (viFaq) {
+          promises.push(updateFaqMutation.mutateAsync({ id: viFaq.id, data: viData }));
+        } else {
+          promises.push(createFaqMutation.mutateAsync(viData));
+        }
+
+        await Promise.all(promises);
       } else {
-        promises.push(createFaqMutation.mutateAsync(enData));
+        // Create both versions
+        await Promise.all([
+          createFaqMutation.mutateAsync(enData),
+          createFaqMutation.mutateAsync(viData),
+        ]);
       }
-
-      if (viFaq) {
-        promises.push(updateFaqMutation.mutateAsync({ id: viFaq.id, data: viData }));
-      } else {
-        promises.push(createFaqMutation.mutateAsync(viData));
-      }
-
-      await Promise.all(promises);
-    } else {
-      // Create both versions
-      await Promise.all([
-        createFaqMutation.mutateAsync(enData),
-        createFaqMutation.mutateAsync(viData),
-      ]);
+      
+      setEditingFaq(null);
+      setIsFaqDialogOpen(false);
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
-    
-    setEditingFaq(null);
-    setIsFaqDialogOpen(false);
   };
 
   const handleEditAdvantage = (advantage: any) => {
@@ -2422,18 +2434,22 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onAdvantageSubmit = async (data: AdvantageFormData) => {
-    // When creating new advantage, find the max order and add 1
-    const order = editingAdvantage ? editingAdvantage.order : Math.max(0, ...advantages.map(a => a.order)) + 1;
-    const advantageData = { ...data, order };
+    try {
+      // When creating new advantage, find the max order and add 1
+      const order = editingAdvantage ? editingAdvantage.order : Math.max(0, ...advantages.map(a => a.order)) + 1;
+      const advantageData = { ...data, order };
 
-    if (editingAdvantage) {
-      await updateAdvantageMutation.mutateAsync({ id: editingAdvantage.id, data: advantageData });
-    } else {
-      await createAdvantageMutation.mutateAsync(advantageData);
+      if (editingAdvantage) {
+        await updateAdvantageMutation.mutateAsync({ id: editingAdvantage.id, data: advantageData });
+      } else {
+        await createAdvantageMutation.mutateAsync(advantageData);
+      }
+      
+      setEditingAdvantage(null);
+      setIsAdvantageDialogOpen(false);
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
-    
-    setEditingAdvantage(null);
-    setIsAdvantageDialogOpen(false);
   };
 
   const handleEditJourneyStep = (journeyStep: JourneyStep) => {
@@ -2450,18 +2466,22 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onJourneyStepSubmit = async (data: JourneyStepFormData) => {
-    // When creating new journey step, find the max order and add 1
-    const order = editingJourneyStep ? editingJourneyStep.order : Math.max(0, ...journeySteps.map(j => j.order)) + 1;
-    const journeyStepData = { ...data, order };
+    try {
+      // When creating new journey step, find the max order and add 1
+      const order = editingJourneyStep ? editingJourneyStep.order : Math.max(0, ...journeySteps.map(j => j.order)) + 1;
+      const journeyStepData = { ...data, order };
 
-    if (editingJourneyStep) {
-      await updateJourneyStepMutation.mutateAsync({ id: editingJourneyStep.id, data: journeyStepData });
-    } else {
-      await createJourneyStepMutation.mutateAsync(journeyStepData);
+      if (editingJourneyStep) {
+        await updateJourneyStepMutation.mutateAsync({ id: editingJourneyStep.id, data: journeyStepData });
+      } else {
+        await createJourneyStepMutation.mutateAsync(journeyStepData);
+      }
+      
+      setEditingJourneyStep(null);
+      setIsJourneyStepDialogOpen(false);
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
-    
-    setEditingJourneyStep(null);
-    setIsJourneyStepDialogOpen(false);
   };
 
   const handlePartnerLogoFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -2885,43 +2905,59 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onAboutContentSubmit = async (data: InsertAboutPageContent) => {
-    const submitData = { ...data };
-    if (showcaseBannerPreview) {
-      // Use uploaded path
-      submitData.showcaseBannerImage = showcaseBannerPreview;
+    try {
+      const submitData = { ...data };
+      if (showcaseBannerPreview) {
+        // Use uploaded path
+        submitData.showcaseBannerImage = showcaseBannerPreview;
+      }
+      if (historyImagePreview) {
+        // Use uploaded path
+        submitData.historyImage = historyImagePreview;
+      }
+      if (missionVisionImagePreview) {
+        // Use uploaded path
+        submitData.missionVisionImage = missionVisionImagePreview;
+      }
+      await updateAboutContentMutation.mutateAsync(submitData);
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
-    if (historyImagePreview) {
-      // Use uploaded path
-      submitData.historyImage = historyImagePreview;
-    }
-    if (missionVisionImagePreview) {
-      // Use uploaded path
-      submitData.missionVisionImage = missionVisionImagePreview;
-    }
-    await updateAboutContentMutation.mutateAsync(submitData);
   };
 
   const onPrincipleSubmit = async (data: InsertAboutCoreValue) => {
-    if (editingPrinciple) {
-      await updatePrincipleMutation.mutateAsync({ id: editingPrinciple.id, data });
-    } else {
-      await createPrincipleMutation.mutateAsync(data);
+    try {
+      if (editingPrinciple) {
+        await updatePrincipleMutation.mutateAsync({ id: editingPrinciple.id, data });
+      } else {
+        await createPrincipleMutation.mutateAsync(data);
+      }
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
   };
 
   const onShowcaseServiceSubmit = async (data: InsertAboutShowcaseService) => {
-    if (editingShowcaseService) {
-      await updateShowcaseServiceMutation.mutateAsync({ id: editingShowcaseService.id, data });
-    } else {
-      await createShowcaseServiceMutation.mutateAsync(data);
+    try {
+      if (editingShowcaseService) {
+        await updateShowcaseServiceMutation.mutateAsync({ id: editingShowcaseService.id, data });
+      } else {
+        await createShowcaseServiceMutation.mutateAsync(data);
+      }
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
   };
 
   const onProcessStepSubmit = async (data: InsertAboutProcessStep) => {
-    if (editingProcessStep) {
-      await updateProcessStepMutation.mutateAsync({ id: editingProcessStep.id, data });
-    } else {
-      await createProcessStepMutation.mutateAsync(data);
+    try {
+      if (editingProcessStep) {
+        await updateProcessStepMutation.mutateAsync({ id: editingProcessStep.id, data });
+      } else {
+        await createProcessStepMutation.mutateAsync(data);
+      }
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
   };
 
@@ -2974,21 +3010,25 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onTeamMemberSubmit = async (data: InsertAboutTeamMember) => {
-    const submitData = { ...data };
-    if (teamMemberImagePreview) {
-      // Use uploaded path
-      submitData.image = teamMemberImagePreview;
+    try {
+      const submitData = { ...data };
+      if (teamMemberImagePreview) {
+        // Use uploaded path
+        submitData.image = teamMemberImagePreview;
+      }
+      
+      if (editingTeamMember) {
+        await updateTeamMemberMutation.mutateAsync({ id: editingTeamMember.id, data: submitData });
+      } else {
+        await createTeamMemberMutation.mutateAsync(submitData);
+      }
+      
+      // Clear image preview after submit
+      setTeamMemberImagePreview('');
+      setTeamMemberImageFile(null);
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
-    
-    if (editingTeamMember) {
-      await updateTeamMemberMutation.mutateAsync({ id: editingTeamMember.id, data: submitData });
-    } else {
-      await createTeamMemberMutation.mutateAsync(submitData);
-    }
-    
-    // Clear image preview after submit
-    setTeamMemberImagePreview('');
-    setTeamMemberImageFile(null);
   };
 
   const handleEditTransaction = (transaction: any) => {
@@ -3007,10 +3047,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   const onTransactionSubmit = async (data: TransactionFormData) => {
-    if (editingTransaction) {
-      await updateTransactionMutation.mutateAsync({ id: editingTransaction.id, data });
-    } else {
-      await createTransactionMutation.mutateAsync(data);
+    try {
+      if (editingTransaction) {
+        await updateTransactionMutation.mutateAsync({ id: editingTransaction.id, data });
+      } else {
+        await createTransactionMutation.mutateAsync(data);
+      }
+    } catch (error) {
+      // Error is handled by mutation's onError handler
     }
   };
 
@@ -7349,6 +7393,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                         featured: !displayArticle.featured 
                                       });
                                     }
+                                  } catch (error) {
+                                    // Error is handled by mutation's onError handler
                                   } finally {
                                     setTogglingFeaturedSlug(null);
                                   }
@@ -7388,9 +7434,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                                     <AlertDialogAction
                                       onClick={async () => {
-                                        // Delete all versions (en and vi)
-                                        for (const article of articleGroup) {
-                                          await deleteArticleMutation.mutateAsync(article.id);
+                                        try {
+                                          // Delete all versions (en and vi)
+                                          for (const article of articleGroup) {
+                                            await deleteArticleMutation.mutateAsync(article.id);
+                                          }
+                                        } catch (error) {
+                                          // Error is handled by mutation's onError handler
                                         }
                                       }}
                                     >
