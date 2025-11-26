@@ -8046,32 +8046,32 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {adminUsers.map((user: any) => (
-                    <TableRow key={user.id} data-testid={`row-user-${user.id}`}>
-                      <TableCell className="font-medium">{user.username}</TableCell>
-                      <TableCell>{user.displayName || "—"}</TableCell>
-                      <TableCell>{user.email || "—"}</TableCell>
+                  {adminUsers.map((tableUser: any) => (
+                    <TableRow key={tableUser.id} data-testid={`row-user-${tableUser.id}`}>
+                      <TableCell className="font-medium">{tableUser.username}</TableCell>
+                      <TableCell>{tableUser.displayName || "—"}</TableCell>
+                      <TableCell>{tableUser.email || "—"}</TableCell>
                       <TableCell>
                         <Badge
-                          variant={user.role === 'superadmin' ? 'default' : 'secondary'}
-                          className={user.role === 'superadmin' ? 'bg-amber-500 text-black' : ''}
+                          variant="secondary"
+                          className="text-white"
                         >
-                          {user.role === 'superadmin' ? 'Super Admin' : user.role === 'admin' ? 'Admin' : 'Editor'}
+                          {tableUser.role === 'superadmin' ? 'Super Admin' : tableUser.role === 'admin' ? 'Admin' : 'Editor'}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {user.role === 'superadmin' ? (
-                          <span className="text-amber-400 text-sm">Full Access</span>
-                        ) : Array.isArray(user.permissions) && user.permissions.length > 0 ? (
+                        {tableUser.role === 'superadmin' ? (
+                          <span className="text-white text-sm">Full Access</span>
+                        ) : Array.isArray(tableUser.permissions) && tableUser.permissions.length > 0 ? (
                           <div className="flex flex-wrap gap-1">
-                            {user.permissions.slice(0, 3).map((p: string) => (
+                            {tableUser.permissions.slice(0, 3).map((p: string) => (
                               <Badge key={p} variant="outline" className="text-xs">
                                 {p}
                               </Badge>
                             ))}
-                            {user.permissions.length > 3 && (
+                            {tableUser.permissions.length > 3 && (
                               <Badge variant="outline" className="text-xs">
-                                +{user.permissions.length - 3}
+                                +{tableUser.permissions.length - 3}
                               </Badge>
                             )}
                           </div>
@@ -8084,47 +8084,50 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleEditUser(user)}
-                            data-testid={`button-edit-user-${user.id}`}
+                            onClick={() => handleEditUser(tableUser)}
+                            data-testid={`button-edit-user-${tableUser.id}`}
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleChangePassword(user.id)}
-                            data-testid={`button-change-password-${user.id}`}
+                            onClick={() => handleChangePassword(tableUser.id)}
+                            data-testid={`button-change-password-${tableUser.id}`}
                           >
                             <Lock className="h-4 w-4" />
                           </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                disabled={user.role === 'superadmin' && adminUsers.filter((u: any) => u.role === 'superadmin').length === 1}
-                                data-testid={`button-delete-user-${user.id}`}
-                              >
-                                <Trash2 className="h-4 w-4 text-white" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete User?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This will permanently delete the user "{user.username}". This action cannot be undone.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => deleteUserMutation.mutate(user.id)}
+                          {/* Only super admin (logged-in user) can delete users */}
+                          {user.role === 'superadmin' && (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  disabled={tableUser.role === 'superadmin' && adminUsers.filter((u: any) => u.role === 'superadmin').length === 1}
+                                  data-testid={`button-delete-user-${tableUser.id}`}
                                 >
-                                  Delete
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                                  <Trash2 className="h-4 w-4 text-white" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete User?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This will permanently delete the user "{tableUser.username}". This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteUserMutation.mutate(tableUser.id)}
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
