@@ -50,7 +50,7 @@ export default function ImageUpload({
     });
   };
 
-  // Mock upload function - in a real app, this would upload to cloud storage
+  // Upload function - uploads to server and returns persistent path
   const uploadImage = async (file: File): Promise<ImageMetadata> => {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
@@ -60,14 +60,23 @@ export default function ImageUpload({
     // Get image dimensions
     const dimensions = await getImageDimensions(file);
     
-    // Simulate upload delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Upload file to server
+    const formData = new FormData();
+    formData.append('file', file);
     
-    // Create a mock URL - in production, this would be the actual uploaded image URL
-    const mockUrl = URL.createObjectURL(file);
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (!response.ok) {
+      throw new Error('Upload failed');
+    }
+    
+    const data = await response.json();
     
     return {
-      url: mockUrl,
+      url: data.path, // Use server path instead of blob URL
       width: dimensions.width,
       height: dimensions.height,
       size: file.size,
@@ -113,6 +122,11 @@ export default function ImageUpload({
         } else {
           onChange([newUrls[0]]);
         }
+        
+        toast({
+          title: "Upload successful",
+          description: `${successfulUploads.length} image(s) uploaded`,
+        });
       }
     } catch (error) {
       console.error("Failed to upload images:", error);
@@ -158,6 +172,7 @@ export default function ImageUpload({
 
   const handleCropComplete = async (croppedBlob: Blob) => {
     setIsCropDialogOpen(false);
+    setUploading(true);
     
     try {
       const file = new File([croppedBlob], `cropped-${Date.now()}.jpg`, { type: 'image/jpeg' });
@@ -171,13 +186,15 @@ export default function ImageUpload({
       newUrls[cropImageIndex] = metadata.url;
       onChange(newUrls);
       
-      toast({ title: "Image cropped successfully" });
+      toast({ title: "Image cropped and uploaded successfully" });
     } catch (error) {
       toast({
         title: "Crop failed",
         description: error instanceof Error ? error.message : "Failed to crop image",
         variant: "destructive",
       });
+    } finally {
+      setUploading(false);
     }
   };
 
