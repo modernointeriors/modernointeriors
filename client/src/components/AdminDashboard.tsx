@@ -7794,34 +7794,39 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </DialogHeader>
               <Form {...userForm}>
                 <form onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-4">
-                  <FormField
-                    control={userForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username *</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Enter username" data-testid="input-user-username" disabled={!!editingUser} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Only super admin can see and edit username, password, role, and permissions */}
+                  {user.role === 'superadmin' && (
+                    <>
+                      <FormField
+                        control={userForm.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Username *</FormLabel>
+                            <FormControl>
+                              <Input {...field} placeholder="Enter username" data-testid="input-user-username" disabled={!!editingUser} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                  {!editingUser && (
-                    <FormField
-                      control={userForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password *</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="password" placeholder="Enter password" data-testid="input-user-password" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                      {!editingUser && (
+                        <FormField
+                          control={userForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Password *</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="password" placeholder="Enter password" data-testid="input-user-password" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       )}
-                    />
+                    </>
                   )}
 
                   <FormField
@@ -7852,31 +7857,34 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     )}
                   />
 
-                  <FormField
-                    control={userForm.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Role *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger data-testid="select-user-role">
-                              <SelectValue placeholder="Select role" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="superadmin">Super Admin (Full Access)</SelectItem>
-                            <SelectItem value="admin">Admin (Custom Permissions)</SelectItem>
-                            <SelectItem value="editor">Editor (Limited Access)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Only super admin can see and edit role */}
+                  {user.role === 'superadmin' && (
+                    <FormField
+                      control={userForm.control}
+                      name="role"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Role *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger data-testid="select-user-role">
+                                <SelectValue placeholder="Select role" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="superadmin">Super Admin (Full Access)</SelectItem>
+                              <SelectItem value="admin">Admin (Custom Permissions)</SelectItem>
+                              <SelectItem value="editor">Editor (Limited Access)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-                  {/* Permissions - only show for admin/editor roles */}
-                  {(userForm.watch('role') === 'admin' || userForm.watch('role') === 'editor') && (
+                  {/* Permissions - only show for admin/editor roles AND only super admin can see/edit */}
+                  {user.role === 'superadmin' && (userForm.watch('role') === 'admin' || userForm.watch('role') === 'editor') && (
                     <FormField
                       control={userForm.control}
                       name="permissions"
