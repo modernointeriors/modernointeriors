@@ -19,14 +19,14 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (req.isAuthenticated()) {
     return next();
   }
-  return res.status(401).json({ message: "Authentication required" });
+  return res.status(401).json({ message: "Yêu cầu đăng nhập" });
 }
 
 // Permission checking middleware
 function requirePermission(permission: string) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Authentication required" });
+      return res.status(401).json({ message: "Yêu cầu đăng nhập" });
     }
     
     const user = req.user as any;
@@ -41,7 +41,7 @@ function requirePermission(permission: string) {
       return next();
     }
     
-    return res.status(403).json({ message: "Permission denied" });
+    return res.status(403).json({ message: "Không đủ quyền hạn" });
   };
 }
 
