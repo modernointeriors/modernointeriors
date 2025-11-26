@@ -272,7 +272,7 @@ export default function BlogDetail() {
           </p>
           <Button asChild>
             <Link href="/blog">
-              {language === 'vi' ? 'Quay lại Blog' : 'Back to Blog'}
+              {language === 'vi' ? 'Quay lại Tin tức' : 'Back to News'}
             </Link>
           </Button>
         </div>
@@ -288,11 +288,11 @@ export default function BlogDetail() {
           variant="ghost" 
           asChild 
           className="mb-8"
-          data-testid="button-back-to-blog"
+          data-testid="button-back-to-news"
         >
           <Link href="/blog">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {language === 'vi' ? 'Quay lại Blog' : 'Back to Blog'}
+            {language === 'vi' ? 'Quay lại Tin tức' : 'Back to News'}
           </Link>
         </Button>
 
