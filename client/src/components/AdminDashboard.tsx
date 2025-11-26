@@ -3253,7 +3253,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         {formatDate(inquiry.createdAt)} • {inquiry.projectType}
                       </p>
                     </div>
-                    <Badge variant={inquiry.status === 'new' ? 'default' : 'secondary'} className="text-sm px-3 py-1">
+                    <Badge variant="outline" className="text-sm px-3 py-1 text-white border-white/30">
                       {inquiry.status}
                     </Badge>
                   </div>
