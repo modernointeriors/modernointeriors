@@ -168,23 +168,17 @@ export default function ProjectDetail() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Project Title Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-light tracking-wider mb-8">
-            <span className="text-zinc-400">
-              {language === 'vi' ? 'DỰ ÁN' : 'PROJECTS'}
-            </span>
-            <span className="text-zinc-600 mx-4">•</span>
-            <span className="text-white uppercase" data-testid="text-project-title">
-              {project.title}
-            </span>
+          <h1 className="text-4xl font-light tracking-wider mb-8 text-white uppercase" data-testid="text-project-title">
+            {project.title}
           </h1>
 
           {/* Designer and Year Info Row */}
           <div className="flex justify-between items-center text-sm text-zinc-400">
             <div data-testid="text-designer">
-              {project.designer && `[${language === 'vi' ? 'Kiến trúc sư nội thất' : 'Interior designer'}] ${project.designer}`}
+              {project.designer}
             </div>
             <div data-testid="text-year">
-              {project.completionYear && `[${language === 'vi' ? 'Năm' : 'Year'}] ${project.completionYear}`}
+              {project.completionYear}
             </div>
           </div>
         </div>
