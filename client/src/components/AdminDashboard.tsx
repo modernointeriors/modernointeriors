@@ -3978,8 +3978,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
-                            variant="outline"
-                            className={project.featured ? "bg-yellow-500/20 border-yellow-500 text-yellow-500 hover:bg-yellow-500/30 hover:border-yellow-500" : ""}
+                            variant="ghost"
+                            className={`border-0 transition-none ${project.featured ? "bg-white text-black hover:bg-white/90" : "hover:bg-white/10"}`}
                             onClick={() => {
                               updateProjectMutation.mutate({
                                 id: project.id,
