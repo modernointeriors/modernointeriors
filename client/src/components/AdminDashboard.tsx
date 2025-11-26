@@ -7422,14 +7422,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
+                            <div className="flex items-center gap-4">
+                              <Star 
+                                className={`h-4 w-4 cursor-pointer ${displayArticle.featured ? 'text-white fill-white' : 'text-white/50 hover:text-white'} ${togglingFeaturedSlug === slug ? "opacity-50" : ""}`}
                                 onClick={async () => {
+                                  if (togglingFeaturedSlug === slug) return;
                                   setTogglingFeaturedSlug(slug);
                                   try {
-                                    // Toggle featured for all versions (en and vi)
                                     for (const article of articleGroup) {
                                       await toggleArticleFeaturedMutation.mutateAsync({ 
                                         id: article.id, 
@@ -7437,34 +7436,23 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                       });
                                     }
                                   } catch (error) {
-                                    // Error is handled by mutation's onError handler
                                   } finally {
                                     setTogglingFeaturedSlug(null);
                                   }
                                 }}
-                                disabled={togglingFeaturedSlug === slug}
-                                className={`transition-all ${displayArticle.featured ? "bg-yellow-500/20 border-yellow-500 hover:bg-yellow-500/30" : ""} ${togglingFeaturedSlug === slug ? "opacity-50" : ""}`}
                                 data-testid={`button-toggle-featured-${slug}`}
-                              >
-                                <Star className={`h-4 w-4 ${displayArticle.featured ? "fill-yellow-500 text-yellow-500" : ""} ${togglingFeaturedSlug === slug ? "animate-pulse" : ""}`} />
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
+                              />
+                              <Pencil 
+                                className="h-4 w-4 cursor-pointer text-white/50 hover:text-white"
                                 onClick={() => handleEditArticle(displayArticle)}
                                 data-testid={`button-edit-article-${slug}`}
-                              >
-                                <Pencil className="h-4 w-4" />
-                              </Button>
+                              />
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                  <Button
-                                    variant="destructive"
-                                    size="sm"
+                                  <Trash2 
+                                    className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
                                     data-testid={`button-delete-article-${slug}`}
-                                  >
-                                    <Trash2 className="h-4 w-4 text-white" />
-                                  </Button>
+                                  />
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
