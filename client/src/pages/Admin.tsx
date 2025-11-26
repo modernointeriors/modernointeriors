@@ -27,6 +27,11 @@ const TAB_PERMISSIONS: Record<string, string> = {
 function hasPermission(user: any, permission: string): boolean {
   if (!user) return false;
   
+  // Overview tab is always accessible to all logged-in users
+  if (permission === 'overview') {
+    return true;
+  }
+  
   // Only super admin can access Users tab
   if (permission === 'users') {
     return user.role === 'superadmin';
@@ -35,10 +40,8 @@ function hasPermission(user: any, permission: string): boolean {
   // Super Admin role always has full access to everything
   if (user.role === 'superadmin') return true;
   
-  // Admin role has full access to all non-user features
-  if (user.role === 'admin') return true;
-  
-  // Editor and other roles: check if user has the specific permission
+  // Admin and Editor roles: check if user has the specific permission in their permissions array
+  // This enables granular permission control for admin users
   return user.permissions && Array.isArray(user.permissions) && user.permissions.includes(permission);
 }
 
