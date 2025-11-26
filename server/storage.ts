@@ -769,8 +769,7 @@ export class DatabaseStorage implements IStorage {
         commission: totalCommission.toString(),
         orderCount: orderCount,
         referralRevenue: totalCommission.toString(),
-        referralCount: commissionCount,
-        updatedAt: new Date()
+        referralCount: commissionCount
       })
       .where(eq(clients.id, clientId));
     
@@ -806,7 +805,7 @@ export class DatabaseStorage implements IStorage {
 
     await db
       .update(clients)
-      .set({ tier, updatedAt: new Date() })
+      .set({ tier })
       .where(eq(clients.id, clientId));
   }
 
