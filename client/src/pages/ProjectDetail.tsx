@@ -78,38 +78,31 @@ export default function ProjectDetail() {
     enabled: !!project,
   });
 
-  // Fetch all projects for "OTHER PROJECTS" section with smart filtering
+  // Fetch projects for "OTHER PROJECTS" section - ONLY same category
   const { data: allProjects } = useQuery<Project[]>({
-    queryKey: ['/api/projects', 'other', language],
+    queryKey: ['/api/projects', 'other', language, project?.category],
     queryFn: async () => {
       const response = await fetch(`/api/projects?language=${language}`);
       if (!response.ok) throw new Error("Failed to fetch projects");
       return response.json();
     },
     select: (data) => {
-      if (!project) return [];
+      if (!project || !project.category) return [];
       
-      // Filter out current project and only show same language
-      const otherProjects = data.filter(p => p.id !== project.id);
+      // Filter: only same category AND not current project
+      const sameCategoryProjects = data.filter(p => 
+        p.id !== project.id && 
+        p.category === project.category
+      );
       
-      // Sort by priority:
-      // 1. Same category first
-      // 2. Then by most recent (createdAt or updatedAt)
-      const sortedProjects = otherProjects.sort((a, b) => {
-        // Priority 1: Same category as current project (both must have categories)
-        const aMatchesCategory = !!project.category && !!a.category && a.category === project.category;
-        const bMatchesCategory = !!project.category && !!b.category && b.category === project.category;
-        
-        if (aMatchesCategory && !bMatchesCategory) return -1;
-        if (!aMatchesCategory && bMatchesCategory) return 1;
-        
-        // Priority 2: Most recent projects (using updatedAt or createdAt)
+      // Sort by most recent
+      const sortedProjects = sameCategoryProjects.sort((a, b) => {
         const aDate = new Date((a as any).updatedAt || (a as any).createdAt || 0);
         const bDate = new Date((b as any).updatedAt || (b as any).createdAt || 0);
         return bDate.getTime() - aDate.getTime();
       });
       
-      // Return exactly 4 projects for consistent layout
+      // Return up to 4 projects
       return sortedProjects.slice(0, 4);
     },
     enabled: !!project,
