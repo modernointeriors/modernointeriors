@@ -168,7 +168,7 @@ export default function ProjectDetail() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Project Title Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-light tracking-wider mb-8 text-white uppercase" data-testid="text-project-title">
+          <h1 className="text-4xl font-light tracking-wider mb-3 text-white uppercase" data-testid="text-project-title">
             {project.title}
           </h1>
 
