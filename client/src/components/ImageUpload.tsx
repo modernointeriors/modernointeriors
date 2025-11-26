@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useId } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Upload, Image as ImageIcon, Edit } from "lucide-react";
@@ -28,6 +28,8 @@ export default function ImageUpload({
   maxImages = 10,
   disabled = false
 }: ImageUploadProps) {
+  const uniqueId = useId();
+  const fileInputId = `file-upload-${uniqueId}`;
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [imageMetadata, setImageMetadata] = useState<Map<string, ImageMetadata>>(new Map());
@@ -231,7 +233,7 @@ export default function ImageUpload({
             
             <input
               type="file"
-              id="file-upload"
+              id={fileInputId}
               className="hidden"
               accept="image/*"
               multiple={multiple}
@@ -241,13 +243,12 @@ export default function ImageUpload({
             
             <Button
               variant="outline"
-              asChild
+              type="button"
               disabled={uploading || disabled}
               data-testid="button-browse-images"
+              onClick={() => document.getElementById(fileInputId)?.click()}
             >
-              <label htmlFor="file-upload" className="cursor-pointer">
-                {uploading ? "Uploading..." : "Browse Images"}
-              </label>
+              {uploading ? "Uploading..." : "Browse Images"}
             </Button>
 
             {multiple && (
