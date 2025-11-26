@@ -1256,7 +1256,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.post("/api/about-showcase-services", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutShowcaseServiceSchema.parse(req.body);
       const service = await storage.createAboutShowcaseService(validatedData);
@@ -1269,7 +1269,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.put("/api/about-showcase-services/:id", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutShowcaseServiceSchema.partial().parse(req.body);
       const service = await storage.updateAboutShowcaseService(req.params.id, validatedData);
@@ -1282,7 +1282,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.delete("/api/about-showcase-services/:id", requirePermission('about'), async (req, res) => {
     try {
       await storage.deleteAboutShowcaseService(req.params.id);
       res.status(204).send();
@@ -1317,7 +1317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.post("/api/about-process-steps", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutProcessStepSchema.parse(req.body);
       const step = await storage.createAboutProcessStep(validatedData);
@@ -1330,7 +1330,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.put("/api/about-process-steps/:id", requirePermission('about'), async (req, res) => {
     try {
       const validatedData = insertAboutProcessStepSchema.partial().parse(req.body);
       const step = await storage.updateAboutProcessStep(req.params.id, validatedData);
@@ -1343,7 +1343,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/about-content", requirePermission('crm'), async (req, res) => {
+  app.delete("/api/about-process-steps/:id", requirePermission('about'), async (req, res) => {
     try {
       await storage.deleteAboutProcessStep(req.params.id);
       res.status(204).send();
