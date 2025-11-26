@@ -174,6 +174,8 @@ const translations = {
     'admin.users': 'Users',
     'admin.manage': 'Manage your projects, clients, and website content',
     'admin.access': 'Admin Access',
+    'admin.permissionDenied': 'Permission Denied',
+    'admin.permissionDeniedMessage': 'You do not have permission to access this feature. Please contact the administrator for access.',
     
     // CRM
     'crm.clientManagement': 'Client Management',
@@ -402,6 +404,8 @@ const translations = {
     'admin.users': 'Người Dùng',
     'admin.manage': 'Quản lý dự án, khách hàng và nội dung website của bạn',
     'admin.access': 'Quyền Quản Trị',
+    'admin.permissionDenied': 'Quyền Hạn Không Đủ',
+    'admin.permissionDeniedMessage': 'Bạn không có quyền truy cập tính năng này. Vui lòng liên hệ quản trị viên để được cấp quyền.',
     
     // CRM
     'crm.clientManagement': 'Quản Lý Khách Hàng',
