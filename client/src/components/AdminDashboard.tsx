@@ -21,7 +21,7 @@ import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
 import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings, Lock, Shield, KeyRound } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember, User } from "@shared/schema";
+import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember, User, Settings as SettingsType } from "@shared/schema";
 import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutCoreValueSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AboutAdminTab from "@/components/AboutAdminTab";
@@ -240,6 +240,15 @@ const dealSchema = z.object({
   lostReason: z.string().optional(),
   assignedTo: z.string().optional(),
   createdBy: z.string().optional(),
+});
+
+const seoSettingsSchema = z.object({
+  siteTitle: z.string().optional(),
+  siteTitleVi: z.string().optional(),
+  metaDescription: z.string().optional(),
+  metaDescriptionVi: z.string().optional(),
+  metaKeywords: z.string().optional(),
+  metaKeywordsVi: z.string().optional(),
 });
 
 const transactionSchema = z.object({
@@ -561,7 +570,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   });
 
   // Settings/Logo query
-  const { data: settings, isLoading: settingsLoading } = useQuery<any>({
+  const { data: settings, isLoading: settingsLoading } = useQuery<SettingsType>({
     queryKey: ['/api/settings'],
   });
 
@@ -789,6 +798,34 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       logo: "",
     },
   });
+
+  // SEO Settings form
+  type SeoSettingsFormData = z.infer<typeof seoSettingsSchema>;
+  const seoSettingsForm = useForm<SeoSettingsFormData>({
+    resolver: zodResolver(seoSettingsSchema),
+    defaultValues: {
+      siteTitle: "",
+      siteTitleVi: "",
+      metaDescription: "",
+      metaDescriptionVi: "",
+      metaKeywords: "",
+      metaKeywordsVi: "",
+    },
+  });
+
+  // Update SEO form when settings load
+  useEffect(() => {
+    if (settings) {
+      seoSettingsForm.reset({
+        siteTitle: settings.siteTitle || "",
+        siteTitleVi: settings.siteTitleVi || "",
+        metaDescription: settings.metaDescription || "",
+        metaDescriptionVi: settings.metaDescriptionVi || "",
+        metaKeywords: settings.metaKeywords || "",
+        metaKeywordsVi: settings.metaKeywordsVi || "",
+      });
+    }
+  }, [settings, seoSettingsForm]);
 
   // User form
   const userForm = useForm<UserFormData>({
@@ -1918,22 +1955,18 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     },
   });
 
-  // Logo settings mutation
+  // Settings mutation (Logo, SEO, etc.)
   const updateSettingsMutation = useMutation({
     mutationFn: async (data: any) => {
       return await apiRequest('PUT', '/api/settings', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/settings'] });
-      toast({
-        title: "Thành công",
-        description: "Đã cập nhật cài đặt logo thành công",
-      });
     },
     onError: () => {
       toast({
-        title: "Lỗi",
-        description: "Không thể cập nhật cài đặt logo",
+        title: language === 'vi' ? "Lỗi" : "Error",
+        description: language === 'vi' ? "Không thể cập nhật cài đặt" : "Failed to update settings",
         variant: "destructive"
       });
     }
@@ -2203,6 +2236,28 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setQuality2BgPreview('');
     } catch (error) {
       // Error is handled by mutation's onError handler
+    }
+  };
+
+  // SEO Settings submit handler
+  const onSeoSettingsSubmit = async (data: SeoSettingsFormData) => {
+    try {
+      const existingSettings = settings || {};
+      await updateSettingsMutation.mutateAsync({
+        ...existingSettings,
+        siteTitle: data.siteTitle,
+        siteTitleVi: data.siteTitleVi,
+        metaDescription: data.metaDescription,
+        metaDescriptionVi: data.metaDescriptionVi,
+        metaKeywords: data.metaKeywords,
+        metaKeywordsVi: data.metaKeywordsVi,
+      });
+      toast({
+        title: language === 'vi' ? "Thành công" : "Success",
+        description: language === 'vi' ? "Đã lưu cài đặt SEO" : "SEO settings saved successfully",
+      });
+    } catch (error) {
+      // Error handled by mutation
     }
   };
 
@@ -5551,83 +5606,152 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     }
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-sans font-light">Content Management</h2>
+        <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản Lý Nội Dung' : 'Content Management'}</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Services</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Manage your service offerings and descriptions.
-              </p>
-              {servicesLoading ? (
-                <div className="space-y-2">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-4 bg-muted rounded animate-pulse" />
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {services.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No services configured</p>
-                  ) : (
-                    services.map((service) => (
-                      <div key={service.id} className="flex justify-between items-center">
-                        <span className="text-sm">{service.title}</span>
-                        <Badge variant={service.active ? "default" : "secondary"}>
-                          {service.active ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+        <Form {...seoSettingsForm}>
+          <form onSubmit={seoSettingsForm.handleSubmit(onSeoSettingsSubmit)} className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>{language === 'vi' ? 'Cài Đặt SEO' : 'SEO Settings'}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {settingsLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="h-10 bg-muted rounded animate-pulse" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={seoSettingsForm.control}
+                        name="siteTitle"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{language === 'vi' ? 'Tiêu Đề Website (EN)' : 'Site Title (EN)'}</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field}
+                                placeholder="Moderno Interiors - Interior Design"
+                                data-testid="input-site-title-en"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={seoSettingsForm.control}
+                        name="siteTitleVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{language === 'vi' ? 'Tiêu Đề Website (VI)' : 'Site Title (VI)'}</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field}
+                                placeholder="Moderno Interiors - Thiết Kế Nội Thất"
+                                data-testid="input-site-title-vi"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Media Library</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Upload and manage project images and media assets.
-              </p>
-              <Button variant="outline" className="w-full" data-testid="button-manage-media">
-                <Plus className="mr-2 h-4 w-4" />
-                Upload Media
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={seoSettingsForm.control}
+                        name="metaDescription"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{language === 'vi' ? 'Mô Tả Meta (EN)' : 'Meta Description (EN)'}</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field}
+                                rows={3}
+                                placeholder="Premium interior design and architecture services..."
+                                data-testid="textarea-meta-description-en"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={seoSettingsForm.control}
+                        name="metaDescriptionVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{language === 'vi' ? 'Mô Tả Meta (VI)' : 'Meta Description (VI)'}</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field}
+                                rows={3}
+                                placeholder="Dịch vụ thiết kế nội thất và kiến trúc cao cấp..."
+                                data-testid="textarea-meta-description-vi"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>SEO Settings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-light mb-2 block">Site Title</label>
-                <Input 
-                  defaultValue="Moderno Interiors - Interior Design" 
-                  data-testid="input-site-title"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-light mb-2 block">Meta Description</label>
-                <Textarea 
-                  rows={3}
-                  defaultValue="Premium interior design and architecture services. Transform your space with our expert design team."
-                  data-testid="textarea-meta-description"
-                />
-              </div>
-              <Button data-testid="button-save-seo">Save SEO Settings</Button>
-            </div>
-          </CardContent>
-        </Card>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={seoSettingsForm.control}
+                        name="metaKeywords"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{language === 'vi' ? 'Từ Khóa Meta (EN)' : 'Meta Keywords (EN)'}</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field}
+                                placeholder="interior design, architecture, modern home..."
+                                data-testid="input-meta-keywords-en"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={seoSettingsForm.control}
+                        name="metaKeywordsVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{language === 'vi' ? 'Từ Khóa Meta (VI)' : 'Meta Keywords (VI)'}</FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field}
+                                placeholder="thiết kế nội thất, kiến trúc, nhà hiện đại..."
+                                data-testid="input-meta-keywords-vi"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      disabled={updateSettingsMutation.isPending}
+                      data-testid="button-save-seo"
+                    >
+                      {updateSettingsMutation.isPending 
+                        ? (language === 'vi' ? 'Đang lưu...' : 'Saving...') 
+                        : (language === 'vi' ? 'Lưu Cài Đặt SEO' : 'Save SEO Settings')
+                      }
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </form>
+        </Form>
       </div>
     );
   }

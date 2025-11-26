@@ -464,6 +464,13 @@ export const settings = pgTable("settings", {
   email: text("email"),
   phone: text("phone"),
   address: text("address"),
+  // SEO Settings (bilingual)
+  siteTitle: text("site_title"),
+  siteTitleVi: text("site_title_vi"),
+  metaDescription: text("meta_description"),
+  metaDescriptionVi: text("meta_description_vi"),
+  metaKeywords: text("meta_keywords"),
+  metaKeywordsVi: text("meta_keywords_vi"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
