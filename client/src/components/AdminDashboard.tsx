@@ -3969,16 +3969,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       <TableCell>{project.area || "—"}</TableCell>
                       <TableCell>{formatDate(project.createdAt)}</TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Button
-                            variant="outline"
+                        <div className="flex justify-end items-center gap-4">
+                          <Pencil 
+                            className="h-4 w-4 cursor-pointer text-white/50 hover:text-white"
                             onClick={() => handleEditProject(project)}
                             data-testid={`button-edit-project-${project.id}`}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
+                          />
                           <Star 
-                            className={`h-5 w-5 cursor-pointer ${project.featured ? 'text-white fill-white' : 'text-white/50 hover:text-white/80'}`}
+                            className={`h-4 w-4 cursor-pointer ${project.featured ? 'text-white fill-white' : 'text-white/50 hover:text-white'}`}
                             onClick={() => {
                               updateProjectMutation.mutate({
                                 id: project.id,
@@ -3988,13 +3986,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             data-testid={`button-toggle-featured-${project.id}`}
                             title={project.featured ? "Remove from featured" : "Mark as featured"}
                           />
-                          <Button
-                            variant="outline"
+                          <Trash2 
+                            className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
                             onClick={() => deleteProjectMutation.mutate(project.id)}
                             data-testid={`button-delete-project-${project.id}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-white" />
-                          </Button>
+                          />
                         </div>
                       </TableCell>
                     </TableRow>
