@@ -205,16 +205,6 @@ export default function ProjectDetail() {
           <h1 className="text-4xl font-light tracking-wider mb-3 text-white uppercase" data-testid="text-project-title">
             {project.title}
           </h1>
-
-          {/* Designer and Year Info Row */}
-          <div className="flex justify-between items-center text-sm text-zinc-400">
-            <div data-testid="text-designer">
-              {project.designer}
-            </div>
-            <div data-testid="text-year">
-              {project.completionYear}
-            </div>
-          </div>
         </div>
 
         {/* Two Large Images Side by Side - Using contentImages (16:9 or 1:1) */}
