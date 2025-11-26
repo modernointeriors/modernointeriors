@@ -1571,6 +1571,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsPrincipleDialogOpen(false);
       principleForm.reset();
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi tạo giá trị cốt lõi", description: error.message, variant: "destructive" });
+    },
   });
 
   const updatePrincipleMutation = useMutation({
@@ -1584,6 +1587,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsPrincipleDialogOpen(false);
       setEditingPrinciple(null);
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi cập nhật giá trị cốt lõi", description: error.message, variant: "destructive" });
+    },
   });
 
   const deletePrincipleMutation = useMutation({
@@ -1593,6 +1599,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/about-core-values'] });
       toast({ title: "Đã xóa giá trị cốt lõi thành công" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi xóa giá trị cốt lõi", description: error.message, variant: "destructive" });
     },
   });
 
@@ -1607,6 +1616,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsShowcaseServiceDialogOpen(false);
       showcaseServiceForm.reset();
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi tạo dịch vụ", description: error.message, variant: "destructive" });
+    },
   });
 
   const updateShowcaseServiceMutation = useMutation({
@@ -1620,6 +1632,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsShowcaseServiceDialogOpen(false);
       setEditingShowcaseService(null);
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi cập nhật dịch vụ", description: error.message, variant: "destructive" });
+    },
   });
 
   const deleteShowcaseServiceMutation = useMutation({
@@ -1629,6 +1644,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/about-showcase-services'] });
       toast({ title: "Đã xóa dịch vụ thành công" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi xóa dịch vụ", description: error.message, variant: "destructive" });
     },
   });
 
@@ -1643,6 +1661,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsProcessStepDialogOpen(false);
       processStepForm.reset();
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi tạo quy trình", description: error.message, variant: "destructive" });
+    },
   });
 
   const updateProcessStepMutation = useMutation({
@@ -1656,6 +1677,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsProcessStepDialogOpen(false);
       setEditingProcessStep(null);
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi cập nhật quy trình", description: error.message, variant: "destructive" });
+    },
   });
 
   const deleteProcessStepMutation = useMutation({
@@ -1665,6 +1689,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/about-process-steps'] });
       toast({ title: "Đã xóa quy trình thành công" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi xóa quy trình", description: error.message, variant: "destructive" });
     },
   });
 
@@ -1679,6 +1706,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsTeamMemberDialogOpen(false);
       teamMemberForm.reset();
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi tạo thành viên", description: error.message, variant: "destructive" });
+    },
   });
 
   const updateTeamMemberMutation = useMutation({
@@ -1692,6 +1722,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       setIsTeamMemberDialogOpen(false);
       setEditingTeamMember(null);
     },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi cập nhật thành viên", description: error.message, variant: "destructive" });
+    },
   });
 
   const deleteTeamMemberMutation = useMutation({
@@ -1701,6 +1734,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/about-team-members'] });
       toast({ title: "Đã xóa thành viên thành công" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Lỗi khi xóa thành viên", description: error.message, variant: "destructive" });
     },
   });
 
