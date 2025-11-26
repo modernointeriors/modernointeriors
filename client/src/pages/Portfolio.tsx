@@ -88,13 +88,14 @@ export default function Portfolio() {
   }, [language]);
 
   const { data: allProjects = [], isLoading } = useQuery<Project[]>({
-    queryKey: ['/api/projects', activeCategory],
+    queryKey: ['/api/projects', activeCategory, language],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (activeCategory !== 'all') {
         params.append('category', activeCategory);
       }
-      const url = `/api/projects${params.toString() ? `?${params.toString()}` : ''}`;
+      params.append('language', language);
+      const url = `/api/projects?${params.toString()}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch projects: ${response.statusText}`);

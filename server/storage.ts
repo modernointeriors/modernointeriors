@@ -42,7 +42,7 @@ export interface IStorage {
   updateUserPassword(id: string, hashedPassword: string): Promise<void>;
 
   // Projects
-  getProjects(filters?: { category?: string; featured?: boolean }): Promise<Project[]>;
+  getProjects(filters?: { category?: string; featured?: boolean; language?: string }): Promise<Project[]>;
   getProject(id: string): Promise<Project | undefined>;
   createProject(project: InsertProject): Promise<Project>;
   updateProject(id: string, project: Partial<InsertProject>): Promise<Project>;
@@ -249,7 +249,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Projects
-  async getProjects(filters?: { category?: string; featured?: boolean }): Promise<Project[]> {
+  async getProjects(filters?: { category?: string; featured?: boolean; language?: string }): Promise<Project[]> {
     const conditions = [];
     
     if (filters?.category) {
@@ -258,6 +258,10 @@ export class DatabaseStorage implements IStorage {
     
     if (filters?.featured !== undefined) {
       conditions.push(eq(projects.featured, filters.featured));
+    }
+    
+    if (filters?.language) {
+      conditions.push(eq(projects.language, filters.language));
     }
     
     const query = conditions.length > 0
