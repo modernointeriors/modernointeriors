@@ -7523,7 +7523,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           </TableCell>
                           <TableCell>
                             <Badge
-                              variant={displayArticle.status === 'published' ? 'default' : 'secondary'}
+                              variant="outline"
+                              className="text-white border-white/30"
                               data-testid={`badge-status-${slug}`}
                             >
                               {displayArticle.status}
