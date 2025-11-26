@@ -318,6 +318,30 @@ type InteractionFormData = z.infer<typeof interactionSchema>;
 type DealFormData = z.infer<typeof dealSchema>;
 type TransactionFormData = z.infer<typeof transactionSchema>;
 
+// Permission Denied Component
+function PermissionDenied({ feature }: { feature: string }) {
+  const { t } = useLanguage();
+  return (
+    <div className="flex items-center justify-center h-96">
+      <Card className="max-w-md w-full">
+        <CardContent className="p-8 text-center space-y-4">
+          <div className="flex justify-center">
+            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center">
+              <Lock className="w-8 h-8 text-red-500" />
+            </div>
+          </div>
+          <div>
+            <h3 className="text-xl font-light text-white mb-2">{t('admin.permissionDenied') || 'Quyền Hạn Không Đủ'}</h3>
+            <p className="text-muted-foreground">
+              {t('admin.permissionDeniedMessage') || `Bạn không có quyền truy cập tính năng ${feature}. Vui lòng liên hệ quản trị viên để được cấp quyền.`}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 interface AdminDashboardProps {
   activeTab: string;
   user: any;
@@ -2999,6 +3023,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   };
 
   if (activeTab === 'overview') {
+    // Overview is accessible to everyone
     return (
       <div className="space-y-6">
         {/* Stats Cards */}
@@ -3106,6 +3131,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'projects') {
+    if (!hasPermission(user, 'projects')) {
+      return <PermissionDenied feature="Projects" />;
+    }
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -3956,6 +3984,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'clients') {
+    if (!hasPermission(user, 'crm')) {
+      return <PermissionDenied feature="CRM / Clients" />;
+    }
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -5237,6 +5268,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'inquiries') {
+    if (!hasPermission(user, 'inquiries')) {
+      return <PermissionDenied feature="Inquiries" />;
+    }
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-sans font-light">Inquiry Management</h2>
@@ -5379,6 +5413,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'about') {
+    if (!hasPermission(user, 'about')) {
+      return <PermissionDenied feature="About Page" />;
+    }
     return (
       <div className="p-6">
         <AboutAdminTab
@@ -5429,6 +5466,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'content') {
+    if (!hasPermission(user, 'content')) {
+      return <PermissionDenied feature="Content / Services" />;
+    }
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-sans font-light">Content Management</h2>
@@ -5513,6 +5553,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'homepage') {
+    if (!hasPermission(user, 'homepage')) {
+      return <PermissionDenied feature="Homepage Content" />;
+    }
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-sans font-light">Homepage Content Management</h2>
@@ -6588,6 +6631,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'articles') {
+    if (!hasPermission(user, 'articles')) {
+      return <PermissionDenied feature="Articles / Blog" />;
+    }
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -7426,6 +7472,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   }
 
   if (activeTab === 'partners') {
+    if (!hasPermission(user, 'partners')) {
+      return <PermissionDenied feature="Partners" />;
+    }
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -7651,6 +7700,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
   // Users Management Section
   if (activeTab === 'users') {
+    if (!hasPermission(user, 'users')) {
+      return <PermissionDenied feature="User Management" />;
+    }
     const onUserSubmit = (data: UserFormData) => {
       if (editingUser) {
         updateUserMutation.mutate({ id: editingUser.id, ...data });
