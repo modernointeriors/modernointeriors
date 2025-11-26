@@ -3977,9 +3977,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            className={`border-0 transition-none ${project.featured ? "bg-white text-black hover:bg-white/90" : "hover:bg-white/10"}`}
+                          <Star 
+                            className={`h-5 w-5 cursor-pointer ${project.featured ? 'text-white fill-white' : 'text-white/50 hover:text-white/80'}`}
                             onClick={() => {
                               updateProjectMutation.mutate({
                                 id: project.id,
@@ -3988,9 +3987,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             }}
                             data-testid={`button-toggle-featured-${project.id}`}
                             title={project.featured ? "Remove from featured" : "Mark as featured"}
-                          >
-                            <Star className={`h-4 w-4 ${project.featured ? 'fill-current' : ''}`} />
-                          </Button>
+                          />
                           <Button
                             variant="outline"
                             onClick={() => deleteProjectMutation.mutate(project.id)}
