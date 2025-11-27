@@ -1,7 +1,7 @@
 import { useState, useCallback, useId } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { X, Upload, Image as ImageIcon, Edit } from "lucide-react";
+import { X, Upload, Image as ImageIcon, Edit, AlertTriangle } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
 import ImageCropDialog from "@/components/ImageCropDialog";
@@ -36,6 +36,7 @@ export default function ImageUpload({
   const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string>("");
   const [cropImageIndex, setCropImageIndex] = useState<number>(-1);
+  const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
@@ -267,38 +268,52 @@ export default function ImageUpload({
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {currentImages.map((url, index) => {
               const metadata = imageMetadata.get(url);
+              const isBroken = brokenImages.has(url);
               return (
                 <div key={index} className="space-y-1">
                   <div
-                    className="relative group rounded-lg overflow-hidden bg-muted aspect-square"
+                    className={`relative group rounded-lg overflow-hidden bg-muted aspect-square ${isBroken ? 'border-2 border-red-500/50' : ''}`}
                     data-testid={`image-preview-${index}`}
                   >
-                    <OptimizedImage
-                      src={url}
-                      alt={`Upload ${index + 1}`}
-                      width={200}
-                      height={200}
-                      wrapperClassName="w-full h-full"
-                      className="w-full h-full"
-                      sizes="200px"
-                    />
+                    {isBroken ? (
+                      <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-red-400 p-2">
+                        <AlertTriangle className="w-8 h-8 mb-2" />
+                        <div className="text-xs text-center">Broken Image</div>
+                        <div className="text-xs text-center text-gray-500 mt-1">Click X to remove</div>
+                      </div>
+                    ) : (
+                      <OptimizedImage
+                        src={url}
+                        alt={`Upload ${index + 1}`}
+                        width={200}
+                        height={200}
+                        wrapperClassName="w-full h-full"
+                        className="w-full h-full"
+                        sizes="200px"
+                        onError={() => {
+                          setBrokenImages(prev => new Set(prev).add(url));
+                        }}
+                      />
+                    )}
                     
                     {!disabled && (
-                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => handleEditImage(url, index)}
-                          className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
-                          data-testid={`button-edit-image-${index}`}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
+                      <div className={`absolute top-2 right-2 flex gap-2 transition-opacity ${isBroken ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                        {!isBroken && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleEditImage(url, index)}
+                            className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
+                            data-testid={`button-edit-image-${index}`}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        )}
                         <Button
                           type="button"
                           size="sm"
                           onClick={() => removeImage(index)}
-                          className="h-8 w-8 p-0 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-red-500/50 shadow-xl transition-all"
+                          className={`h-8 w-8 p-0 backdrop-blur-sm text-white border shadow-xl transition-all ${isBroken ? 'bg-red-600 border-red-500 hover:bg-red-700' : 'bg-black/80 border-white/20 hover:bg-black/90 hover:border-red-500/50'}`}
                           data-testid={`button-remove-image-${index}`}
                         >
                           <X className="h-4 w-4" />
@@ -307,7 +322,7 @@ export default function ImageUpload({
                     )}
                   </div>
                   
-                  {metadata && (
+                  {metadata && !isBroken && (
                     <div className="text-xs text-muted-foreground space-y-0.5">
                       <div className="font-medium">
                         {metadata.width} × {metadata.height} px
