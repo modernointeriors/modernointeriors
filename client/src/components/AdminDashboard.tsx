@@ -3457,9 +3457,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="detailedDescriptionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Detailed Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 1000 characters</span></FormLabel>
+                          <FormLabel>Detailed Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 1500 characters</span></FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={5} maxLength={1000} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
+                            <Textarea {...field} rows={5} maxLength={1500} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3471,9 +3471,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="detailedDescriptionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Detailed Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 1000 ký tự</span></FormLabel>
+                          <FormLabel>Detailed Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 1500 ký tự</span></FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={5} maxLength={1000} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
+                            <Textarea {...field} rows={5} maxLength={1500} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
