@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRoute, Link } from "wouter";
+import { useRoute, Link, useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,8 +11,14 @@ import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@shared/schema";
 
 export default function ProjectDetail() {
-  const [, params] = useRoute("/project/:id");
-  const projectId = params?.id;
+  const [, slugParams] = useRoute("/portfolio/:slug");
+  const [, idParams] = useRoute("/project/:id");
+  const [location, setLocation] = useLocation();
+  
+  const projectSlug = slugParams?.slug;
+  const projectId = idParams?.id;
+  const isSlugRoute = !!projectSlug;
+  
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
   const { language } = useLanguage();
@@ -37,9 +43,29 @@ export default function ProjectDetail() {
   };
 
   const { data: project, isLoading, error } = useQuery<Project>({
-    queryKey: ['/api/projects', projectId],
-    enabled: !!projectId,
+    queryKey: isSlugRoute 
+      ? ['/api/projects/slug', projectSlug, language] 
+      : ['/api/projects', projectId],
+    queryFn: async () => {
+      if (isSlugRoute) {
+        const response = await fetch(`/api/projects/slug/${projectSlug}?language=${language}`);
+        if (!response.ok) throw new Error("Failed to fetch project");
+        return response.json();
+      } else {
+        const response = await fetch(`/api/projects/${projectId}`);
+        if (!response.ok) throw new Error("Failed to fetch project");
+        return response.json();
+      }
+    },
+    enabled: !!(projectSlug || projectId),
   });
+
+  // Redirect to slug-based URL if accessing by ID and project has a slug
+  useEffect(() => {
+    if (project?.slug && !isSlugRoute) {
+      setLocation(`/portfolio/${project.slug}`, { replace: true });
+    }
+  }, [project?.slug, isSlugRoute, setLocation]);
 
   // Set SEO meta tags when project data is loaded
   useEffect(() => {
@@ -413,7 +439,7 @@ export default function ProjectDetail() {
             <div className="overflow-x-auto scrollbar-hide">
               <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
                 {allProjects.map((otherProject) => (
-                  <Link key={otherProject.id} href={`/project/${otherProject.id}`}>
+                  <Link key={otherProject.id} href={otherProject.slug ? `/portfolio/${otherProject.slug}` : `/project/${otherProject.id}`}>
                     <div className="group cursor-pointer w-72 aspect-square flex-shrink-0">
                       <OptimizedImage
                         src={(Array.isArray(otherProject.coverImages) ? otherProject.coverImages[0] : '') || (Array.isArray(otherProject.contentImages) ? otherProject.contentImages[0] : '') || otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 

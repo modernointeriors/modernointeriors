@@ -15,7 +15,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full flex-shrink-0 rounded-none transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-white/10"
       data-index={index}
     >
-      <Link href={`/project/${project.id}`}>
+      <Link href={project.slug ? `/portfolio/${project.slug}` : `/project/${project.id}`}>
         <img 
           src={projectImage}
           alt={project.title}

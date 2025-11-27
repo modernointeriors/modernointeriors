@@ -169,7 +169,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                 <div className="relative h-full flex flex-col justify-between" style={{ zIndex: 10 }}>
                   <div className="flex-1 flex items-center">
                     <Link 
-                      href={`/project/${project.id}`} 
+                      href={project.slug ? `/portfolio/${project.slug}` : `/project/${project.id}`} 
                       className="block"
                       data-testid={`slide-link-${project.id}`}
                     >
