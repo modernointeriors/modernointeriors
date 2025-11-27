@@ -341,43 +341,31 @@ export default function ProjectDetail() {
         {/* Additional Gallery Section - Detailed Content */}
         {expanded && galleryImages.length > 1 && (
           <div id="additional-gallery" className="mt-24 space-y-16" data-testid="section-additional" tabIndex={-1}>
-            {/* Additional detailed text content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-              <div className="space-y-6">
-                <h3 className="text-xl font-light tracking-wider text-white">
-                  {language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy'}
-                </h3>
-                <p className="text-zinc-300 leading-relaxed">
-                  {language === 'vi'
-                    ? 'Dự án thể hiện cách tiếp cận tinh tế đối với thiết kế nội thất hiện đại, nơi mọi yếu tố được tuyển chọn cẩn thận để tạo ra sự cân bằng hài hòa giữa chức năng và tính thẩm mỹ.'
-                    : 'The project embodies a sophisticated approach to modern interior design, where every element is carefully curated to create a harmonious balance between functionality and aesthetic appeal.'
-                  }
-                </p>
-                <p className="text-zinc-300 leading-relaxed">
-                  {language === 'vi'
-                    ? 'Sự chú ý đến từng chi tiết được thể hiện rõ trong việc lựa chọn vật liệu, sự tương tác của ánh sáng và bóng tối, cũng như việc tích hợp chu đảo các yếu tố kiến trúc định hình tính cách của không gian.'
-                    : 'Attention to detail is evident in the selection of materials, the play of light and shadow, and the thoughtful integration of architectural elements that define the character of the space.'
-                  }
-                </p>
+            {/* Additional detailed text content - only show if there's content */}
+            {(project.designPhilosophy || project.materialSelection) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                {project.designPhilosophy && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-light tracking-wider text-white">
+                      {language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy'}
+                    </h3>
+                    <p className="text-zinc-300 leading-relaxed whitespace-pre-line">
+                      {project.designPhilosophy}
+                    </p>
+                  </div>
+                )}
+                {project.materialSelection && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-light tracking-wider text-white">
+                      {language === 'vi' ? 'Lựa chọn vật liệu' : 'Material Selection'}
+                    </h3>
+                    <p className="text-zinc-300 leading-relaxed whitespace-pre-line">
+                      {project.materialSelection}
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className="space-y-6">
-                <h3 className="text-xl font-light tracking-wider text-white">
-                  {language === 'vi' ? 'Lựa chọn vật liệu' : 'Material Selection'}
-                </h3>
-                <p className="text-zinc-300 leading-relaxed">
-                  {language === 'vi'
-                    ? 'Các vật liệu cao cấp được lựa chọn để nâng cao cả độ bền và tác động thị giác. Các kết cấu tự nhiên và lớp hoàn thiện phong phú tạo ra chiều sâu và sự ấm áp trong toàn bộ nội thất.'
-                    : 'Premium materials were selected to enhance both durability and visual impact. Natural textures and rich finishes create depth and warmth throughout the interior.'
-                  }
-                </p>
-                <p className="text-zinc-300 leading-relaxed">
-                  {language === 'vi'
-                    ? 'Sự cân bằng cẩn thận giữa các bề mặt mờ và bóng, kết hợp với việc bố trí ánh sáng chiến lược, tạo ra một bầu không khí phát triển suốt cả ngày.'
-                    : 'The careful balance of matte and glossy surfaces, combined with strategic lighting placement, creates an atmosphere that evolves throughout the day.'
-                  }
-                </p>
-              </div>
-            </div>
+            )}
 
             {/* Additional Gallery Images (16:9 or 1:1 aspect ratio) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
