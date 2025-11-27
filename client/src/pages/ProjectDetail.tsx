@@ -291,14 +291,14 @@ export default function ProjectDetail() {
 
           {/* Right Text Content with Small Image */}
           <div className="space-y-6">
-            {/* Small detail image - from gallery images or cover images */}
+            {/* Detail image - from gallery images or cover images */}
             {(galleryImages[0] || coverImages[0]) && (
-              <div className="w-full max-w-sm">
+              <div className="w-full aspect-video">
                 <OptimizedImage
                   src={galleryImages[0] || coverImages[0]}
                   alt={`${project.title} - Detail`}
-                  width={400}
-                  height={300}
+                  width={600}
+                  height={400}
                   wrapperClassName="w-full h-full"
                   className="w-full h-full object-cover"
                   data-testid="img-detail"
