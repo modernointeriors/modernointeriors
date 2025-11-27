@@ -3735,7 +3735,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaDescriptionVi"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 160 ký tự</span></FormLabel>
+                            <FormLabel>Meta Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Max 160</span></FormLabel>
                             <FormControl>
                               <Textarea {...field} rows={2} maxLength={160} placeholder="Mô tả SEO tiếng Việt..." data-testid="textarea-project-meta-description-vi" />
                             </FormControl>
