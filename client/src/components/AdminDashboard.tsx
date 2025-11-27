@@ -3616,7 +3616,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
-                            disabled={!hasPermission('projects')}
+                            disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3635,7 +3635,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
-                            disabled={!hasPermission('projects')}
+                            disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3654,7 +3654,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
-                            disabled={!hasPermission('projects')}
+                            disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3674,7 +3674,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value ? [field.value] : []}
                             onChange={(urls) => field.onChange(urls[0] || "")}
                             multiple={false}
-                            disabled={!hasPermission('projects')}
+                            disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -3693,7 +3693,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
-                            disabled={!hasPermission('projects')}
+                            disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
                         <FormMessage />
@@ -6048,7 +6048,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       type="file"
                       accept=".jpg,.jpeg,.png"
                       onChange={handleQualityBgFileChange}
-                      disabled={!hasPermission('homepage')}
+                      disabled={!hasPermission(user, 'homepage')}
                       className="block w-full text-sm text-foreground
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-none file:border-0
@@ -6108,7 +6108,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       type="file"
                       accept=".jpg,.jpeg,.png"
                       onChange={handleQuality2BgFileChange}
-                      disabled={!hasPermission('homepage')}
+                      disabled={!hasPermission(user, 'homepage')}
                       className="block w-full text-sm text-foreground
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-none file:border-0
@@ -6242,7 +6242,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             type="file"
                             accept=".jpg,.jpeg,.png"
                             onChange={handlePartnerLogoFileChange}
-                            disabled={!hasPermission('partners')}
+                            disabled={!hasPermission(user, 'partners')}
                             className="block w-full text-sm text-foreground
                               file:mr-4 file:py-2 file:px-4
                               file:rounded-none file:border-0
@@ -7145,7 +7145,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           type="file"
                           accept=".jpg,.jpeg,.png"
                           onChange={handleArticleImageFileChange}
-                          disabled={!hasPermission('articles')}
+                          disabled={!hasPermission(user, 'articles')}
                           className="block w-full text-sm text-foreground
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-none file:border-0
@@ -7257,11 +7257,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         onChange={handleContentImagesChange}
                         className="hidden"
                         id="content-images-upload"
-                        disabled={articleContentImages.length >= 10 || !hasPermission('articles')}
+                        disabled={articleContentImages.length >= 10 || !hasPermission(user, 'articles')}
                       />
                       <label 
                         htmlFor="content-images-upload" 
-                        className={`cursor-pointer ${articleContentImages.length >= 10 || !hasPermission('articles') ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`cursor-pointer ${articleContentImages.length >= 10 || !hasPermission(user, 'articles') ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="flex flex-col items-center gap-2">
                           <svg className="w-12 h-12 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
