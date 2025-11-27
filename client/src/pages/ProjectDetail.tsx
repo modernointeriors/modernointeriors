@@ -343,7 +343,7 @@ export default function ProjectDetail() {
         {expanded && galleryImages.length > 1 && (
           <div id="additional-gallery" className="mt-24 space-y-16" data-testid="section-additional" tabIndex={-1}>
             {/* Additional detailed text content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
               <div className="space-y-6">
                 <h3 className="text-xl font-light tracking-wider text-white">
                   {language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy'}
