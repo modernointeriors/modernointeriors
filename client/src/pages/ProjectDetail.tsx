@@ -328,12 +328,11 @@ export default function ProjectDetail() {
                   });
                 }, 100);
               }}
-              className="border border-zinc-600 text-zinc-300 px-8 py-3 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors inline-flex items-center gap-2" 
+              className="border border-zinc-600 text-zinc-300 px-8 py-3 text-sm uppercase tracking-wider hover:bg-zinc-800 transition-colors" 
               data-testid="button-view-more"
               aria-expanded={expanded}
               aria-controls="additional-gallery"
             >
-              <span className="text-lg">•</span>
               {language === 'vi' ? 'XEM THÊM' : 'VIEW MORE'}
             </button>
           </div>
