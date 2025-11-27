@@ -31,6 +31,8 @@ const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   detailedDescription: z.string().optional(),
+  designPhilosophy: z.string().optional(),
+  materialSelection: z.string().optional(),
   category: z.string().min(1, "Category is required"),
   location: z.string().optional(),
   area: z.string().optional(),
@@ -59,6 +61,10 @@ const bilingualProjectSchema = z.object({
   descriptionVi: z.string().optional(),
   detailedDescriptionEn: z.string().optional(),
   detailedDescriptionVi: z.string().optional(),
+  designPhilosophyEn: z.string().optional(),
+  designPhilosophyVi: z.string().optional(),
+  materialSelectionEn: z.string().optional(),
+  materialSelectionVi: z.string().optional(),
   slug: z.string().optional(),
   category: z.string().min(1, "Category is required"),
   locationEn: z.string().optional(),
@@ -1987,6 +1993,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       descriptionVi: viVersion?.description || "",
       detailedDescriptionEn: enVersion?.detailedDescription || "",
       detailedDescriptionVi: viVersion?.detailedDescription || "",
+      designPhilosophyEn: enVersion?.designPhilosophy || "",
+      designPhilosophyVi: viVersion?.designPhilosophy || "",
+      materialSelectionEn: enVersion?.materialSelection || "",
+      materialSelectionVi: viVersion?.materialSelection || "",
       metaTitleEn: enVersion?.metaTitle || "",
       metaTitleVi: viVersion?.metaTitle || "",
       metaDescriptionEn: enVersion?.metaDescription || "",
@@ -2071,6 +2081,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         slug: slug,
         description: data.descriptionEn,
         detailedDescription: data.detailedDescriptionEn,
+        designPhilosophy: data.designPhilosophyEn,
+        materialSelection: data.materialSelectionEn,
         category: data.category,
         location: data.locationEn,
         area: data.areaEn,
@@ -2096,6 +2108,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         slug: slug,
         description: data.descriptionVi,
         detailedDescription: data.detailedDescriptionVi,
+        designPhilosophy: data.designPhilosophyVi,
+        materialSelection: data.materialSelectionVi,
         category: data.category,
         location: data.locationVi,
         area: data.areaVi,
@@ -3474,6 +3488,68 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <FormLabel>Detailed Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 1500 ký tự</span></FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={5} maxLength={1500} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Design Philosophy */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="designPhilosophyEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Design Philosophy (English) <span className="text-muted-foreground text-xs font-normal">- Max 800 chars</span></FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={4} maxLength={800} placeholder="Enter design philosophy content in English..." data-testid="textarea-project-design-philosophy-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="designPhilosophyVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Design Philosophy (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Max 800</span></FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={4} maxLength={800} placeholder="Nhập nội dung triết lý thiết kế tiếng Việt..." data-testid="textarea-project-design-philosophy-vi" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Bilingual Material Selection */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={projectForm.control}
+                      name="materialSelectionEn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Material Selection (English) <span className="text-muted-foreground text-xs font-normal">- Max 800 chars</span></FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={4} maxLength={800} placeholder="Enter material selection content in English..." data-testid="textarea-project-material-selection-en" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={projectForm.control}
+                      name="materialSelectionVi"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Material Selection (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Max 800</span></FormLabel>
+                          <FormControl>
+                            <Textarea {...field} rows={4} maxLength={800} placeholder="Nhập nội dung lựa chọn vật liệu tiếng Việt..." data-testid="textarea-project-material-selection-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
