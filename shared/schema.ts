@@ -28,6 +28,8 @@ export const projects = pgTable("projects", {
   slug: text("slug"),
   description: text("description"),
   detailedDescription: text("detailed_description"), // Rich detailed content for project page
+  designPhilosophy: text("design_philosophy"), // Design Philosophy section content
+  materialSelection: text("material_selection"), // Material Selection section content
   category: varchar("category", { length: 50 }).notNull(), // residential, commercial, architecture
   language: varchar("language", { length: 5 }).default("en"), // en, vi
   location: text("location"),
