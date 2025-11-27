@@ -3616,6 +3616,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                            maxImages={2}
                             disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
@@ -3635,6 +3636,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             value={field.value}
                             onChange={field.onChange}
                             multiple
+                            maxImages={2}
                             disabled={!hasPermission(user, 'projects')}
                           />
                         </FormControl>
