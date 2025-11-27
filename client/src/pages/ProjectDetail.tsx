@@ -432,7 +432,7 @@ export default function ProjectDetail() {
 
         {/* OTHER PROJECTS Section - Horizontal Scroll */}
         {allProjects && allProjects.length > 0 && (
-          <div className="mt-12 pt-8">
+          <div className="mt-4">
             <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">
               {language === 'vi' ? 'DỰ ÁN KHÁC' : 'OTHER PROJECTS'}
             </div>
