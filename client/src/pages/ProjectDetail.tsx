@@ -275,10 +275,10 @@ export default function ProjectDetail() {
           );
         })()}
 
-        {/* Content Text Below Images */}
+        {/* Content Text Below Images - Balanced like cover images */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-16">
           {/* Left Text Content */}
-          <div className="flex items-start">
+          <div>
             <p className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
               {project.detailedDescription || project.description || 
                 (language === 'vi' 
@@ -289,23 +289,8 @@ export default function ProjectDetail() {
             </p>
           </div>
 
-          {/* Right Content with Image */}
-          <div className="space-y-6">
-            {/* Detail image - from gallery images or cover images */}
-            {(galleryImages[0] || coverImages[0]) && (
-              <div className="w-full aspect-[4/3]">
-                <OptimizedImage
-                  src={galleryImages[0] || coverImages[0]}
-                  alt={`${project.title} - Detail`}
-                  width={600}
-                  height={450}
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full object-cover"
-                  data-testid="img-detail"
-                />
-              </div>
-            )}
-            
+          {/* Right Text Content */}
+          <div>
             <p className="text-zinc-300 leading-relaxed text-base">
               {language === 'vi' 
                 ? 'Lò sưởi trang nhã với thiết kế laconic tạo ra bầu không khí ấm cúng và phong cách, trở thành điểm nhấn.'
