@@ -3681,6 +3681,27 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     />
                   </div>
 
+                  {/* Card Image - displayed on project cards in portfolio list */}
+                  <FormField
+                    control={projectForm.control}
+                    name="images"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Card Image (Hình ảnh hiển thị trên Card dự án)</FormLabel>
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value}
+                            onChange={field.onChange}
+                            multiple={false}
+                            maxImages={1}
+                            disabled={!hasPermission(user, 'projects')}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={projectForm.control}
                     name="coverImages"
