@@ -276,9 +276,9 @@ export default function ProjectDetail() {
         })()}
 
         {/* Content Text Below Images */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-16">
           {/* Left Text Content */}
-          <div className="space-y-6">
+          <div className="flex items-start">
             <p className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
               {project.detailedDescription || project.description || 
                 (language === 'vi' 
@@ -289,16 +289,16 @@ export default function ProjectDetail() {
             </p>
           </div>
 
-          {/* Right Text Content with Small Image */}
+          {/* Right Content with Image */}
           <div className="space-y-6">
             {/* Detail image - from gallery images or cover images */}
             {(galleryImages[0] || coverImages[0]) && (
-              <div className="w-full aspect-video">
+              <div className="w-full aspect-[4/3]">
                 <OptimizedImage
                   src={galleryImages[0] || coverImages[0]}
                   alt={`${project.title} - Detail`}
                   width={600}
-                  height={400}
+                  height={450}
                   wrapperClassName="w-full h-full"
                   className="w-full h-full object-cover"
                   data-testid="img-detail"
@@ -432,7 +432,7 @@ export default function ProjectDetail() {
 
         {/* OTHER PROJECTS Section - Horizontal Scroll */}
         {allProjects && allProjects.length > 0 && (
-          <div className="mt-32 pt-16">
+          <div className="mt-12 pt-8">
             <div className="text-sm text-zinc-500 uppercase tracking-wider mb-8">
               {language === 'vi' ? 'DỰ ÁN KHÁC' : 'OTHER PROJECTS'}
             </div>
