@@ -3306,9 +3306,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title (English) *</FormLabel>
+                          <FormLabel>Title (English) * <span className="text-muted-foreground text-xs font-normal">- Max 100 chars</span></FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-project-title-en" placeholder="Enter English title..." />
+                            <Input {...field} maxLength={100} data-testid="input-project-title-en" placeholder="Enter English title..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3320,9 +3320,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title (Vietnamese) *</FormLabel>
+                          <FormLabel>Title (Vietnamese) * <span className="text-muted-foreground text-xs font-normal">- Tối đa 100 ký tự</span></FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-project-title-vi" placeholder="Nhập tiêu đề tiếng Việt..." />
+                            <Input {...field} maxLength={100} data-testid="input-project-title-vi" placeholder="Nhập tiêu đề tiếng Việt..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3426,9 +3426,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="descriptionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description (English)</FormLabel>
+                          <FormLabel>Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 200 characters</span></FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={3} data-testid="textarea-project-description-en" placeholder="Enter English description..." />
+                            <Textarea {...field} rows={3} maxLength={200} data-testid="textarea-project-description-en" placeholder="Enter English description..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3440,9 +3440,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="descriptionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description (Vietnamese)</FormLabel>
+                          <FormLabel>Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 200 ký tự</span></FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={3} data-testid="textarea-project-description-vi" placeholder="Nhập mô tả tiếng Việt..." />
+                            <Textarea {...field} rows={3} maxLength={200} data-testid="textarea-project-description-vi" placeholder="Nhập mô tả tiếng Việt..." />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3457,9 +3457,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="detailedDescriptionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Detailed Description (English)</FormLabel>
+                          <FormLabel>Detailed Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 1000 characters</span></FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={5} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
+                            <Textarea {...field} rows={5} maxLength={1000} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3471,9 +3471,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="detailedDescriptionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Detailed Description (Vietnamese)</FormLabel>
+                          <FormLabel>Detailed Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 1000 ký tự</span></FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={5} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
+                            <Textarea {...field} rows={5} maxLength={1000} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -3664,45 +3664,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     )}
                   />
 
-                  {/* Legacy fields for backward compatibility */}
-                  <FormField
-                    control={projectForm.control}
-                    name="heroImage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Hero Image (Legacy - For Compatibility)</FormLabel>
-                        <FormControl>
-                          <ImageUpload
-                            value={field.value ? [field.value] : []}
-                            onChange={(urls) => field.onChange(urls[0] || "")}
-                            multiple={false}
-                            disabled={!hasPermission(user, 'projects')}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={projectForm.control}
-                    name="images"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Legacy Images (Compatibility)</FormLabel>
-                        <FormControl>
-                          <ImageUpload
-                            value={field.value}
-                            onChange={field.onChange}
-                            multiple
-                            disabled={!hasPermission(user, 'projects')}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   {/* Bilingual SEO Settings */}
                   <div className="space-y-4 border-t pt-4">
                     <h4 className="text-sm font-light">SEO Settings</h4>
@@ -3729,9 +3690,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaTitleEn"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Title (English)</FormLabel>
+                            <FormLabel>Meta Title (English) <span className="text-muted-foreground text-xs font-normal">- Max 60 chars</span></FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="SEO title in English..." data-testid="input-project-meta-title-en" />
+                              <Input {...field} maxLength={60} placeholder="SEO title in English..." data-testid="input-project-meta-title-en" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3743,9 +3704,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaTitleVi"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Title (Vietnamese)</FormLabel>
+                            <FormLabel>Meta Title (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 60 ký tự</span></FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Tiêu đề SEO tiếng Việt..." data-testid="input-project-meta-title-vi" />
+                              <Input {...field} maxLength={60} placeholder="Tiêu đề SEO tiếng Việt..." data-testid="input-project-meta-title-vi" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3760,9 +3721,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaDescriptionEn"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Description (English)</FormLabel>
+                            <FormLabel>Meta Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 160 chars</span></FormLabel>
                             <FormControl>
-                              <Textarea {...field} rows={2} placeholder="SEO description in English..." data-testid="textarea-project-meta-description-en" />
+                              <Textarea {...field} rows={2} maxLength={160} placeholder="SEO description in English..." data-testid="textarea-project-meta-description-en" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3774,9 +3735,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaDescriptionVi"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Description (Vietnamese)</FormLabel>
+                            <FormLabel>Meta Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 160 ký tự</span></FormLabel>
                             <FormControl>
-                              <Textarea {...field} rows={2} placeholder="Mô tả SEO tiếng Việt..." data-testid="textarea-project-meta-description-vi" />
+                              <Textarea {...field} rows={2} maxLength={160} placeholder="Mô tả SEO tiếng Việt..." data-testid="textarea-project-meta-description-vi" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3791,9 +3752,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaKeywordsEn"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Keywords (English)</FormLabel>
+                            <FormLabel>Meta Keywords (English) <span className="text-muted-foreground text-xs font-normal">- Max 200 chars</span></FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="keyword1, keyword2, keyword3..." data-testid="input-project-meta-keywords-en" />
+                              <Input {...field} maxLength={200} placeholder="keyword1, keyword2, keyword3..." data-testid="input-project-meta-keywords-en" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3805,9 +3766,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="metaKeywordsVi"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Meta Keywords (Vietnamese)</FormLabel>
+                            <FormLabel>Meta Keywords (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 200 ký tự</span></FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="từ khóa 1, từ khóa 2, từ khóa 3..." data-testid="input-project-meta-keywords-vi" />
+                              <Input {...field} maxLength={200} placeholder="từ khóa 1, từ khóa 2, từ khóa 3..." data-testid="input-project-meta-keywords-vi" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
