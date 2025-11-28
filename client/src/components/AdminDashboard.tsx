@@ -3454,65 +3454,75 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
 
                   {/* Bilingual Description */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={projectForm.control}
-                      name="descriptionEn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 200 characters</span></FormLabel>
-                          <FormControl>
-                            <Textarea {...field} rows={3} maxLength={200} data-testid="textarea-project-description-en" placeholder="Enter English description..." />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <div className="space-y-3">
+                    <div className="text-xs text-muted-foreground">
+                      Format: *text* = bold, **text** = heading, ***text*** = heading + bold
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={projectForm.control}
+                        name="descriptionEn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 200 characters</span></FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={3} maxLength={200} data-testid="textarea-project-description-en" placeholder="Enter English description..." />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={projectForm.control}
-                      name="descriptionVi"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 200 ký tự</span></FormLabel>
-                          <FormControl>
-                            <Textarea {...field} rows={3} maxLength={200} data-testid="textarea-project-description-vi" placeholder="Nhập mô tả tiếng Việt..." />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={projectForm.control}
+                        name="descriptionVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 200 ký tự</span></FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={3} maxLength={200} data-testid="textarea-project-description-vi" placeholder="Nhập mô tả tiếng Việt..." />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   {/* Bilingual Detailed Description */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={projectForm.control}
-                      name="detailedDescriptionEn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Detailed Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 1500 characters</span></FormLabel>
-                          <FormControl>
-                            <Textarea {...field} rows={5} maxLength={1500} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <div className="space-y-3">
+                    <div className="text-xs text-muted-foreground">
+                      Format: *text* = bold, **text** = heading, ***text*** = heading + bold
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={projectForm.control}
+                        name="detailedDescriptionEn"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Detailed Description (English) <span className="text-muted-foreground text-xs font-normal">- Max 1500 characters</span></FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={5} maxLength={1500} placeholder="Enter detailed English content..." data-testid="textarea-project-detailed-description-en" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={projectForm.control}
-                      name="detailedDescriptionVi"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Detailed Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 1500 ký tự</span></FormLabel>
-                          <FormControl>
-                            <Textarea {...field} rows={5} maxLength={1500} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={projectForm.control}
+                        name="detailedDescriptionVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Detailed Description (Vietnamese) <span className="text-muted-foreground text-xs font-normal">- Tối đa 1500 ký tự</span></FormLabel>
+                            <FormControl>
+                              <Textarea {...field} rows={5} maxLength={1500} placeholder="Nhập nội dung chi tiết tiếng Việt..." data-testid="textarea-project-detailed-description-vi" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
 
                   {/* Bilingual Design Philosophy */}
