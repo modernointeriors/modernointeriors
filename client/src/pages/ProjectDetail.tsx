@@ -10,6 +10,63 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@shared/schema";
 
+function parseFormattedText(text: string): JSX.Element[] {
+  const elements: JSX.Element[] = [];
+  const regex = /(\*\*\*([^*]+)\*\*\*|\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+  
+  let lastIndex = 0;
+  let match;
+  let keyIndex = 0;
+  
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      const normalText = text.slice(lastIndex, match.index);
+      if (normalText.trim()) {
+        elements.push(
+          <span key={keyIndex++} className="text-zinc-300 leading-relaxed">
+            {normalText}
+          </span>
+        );
+      }
+    }
+    
+    if (match[2]) {
+      elements.push(
+        <h4 key={keyIndex++} className="text-lg font-semibold text-white mt-6 mb-3 tracking-wide">
+          {match[2]}
+        </h4>
+      );
+    } else if (match[3]) {
+      elements.push(
+        <h4 key={keyIndex++} className="text-lg font-light text-white mt-6 mb-3 tracking-wide">
+          {match[3]}
+        </h4>
+      );
+    } else if (match[4]) {
+      elements.push(
+        <span key={keyIndex++} className="font-semibold text-white">
+          {match[4]}
+        </span>
+      );
+    }
+    
+    lastIndex = match.index + match[0].length;
+  }
+  
+  if (lastIndex < text.length) {
+    const remainingText = text.slice(lastIndex);
+    if (remainingText.trim()) {
+      elements.push(
+        <span key={keyIndex++} className="text-zinc-300 leading-relaxed">
+          {remainingText}
+        </span>
+      );
+    }
+  }
+  
+  return elements;
+}
+
 export default function ProjectDetail() {
   const [, slugParams] = useRoute("/portfolio/:slug");
   const [, idParams] = useRoute("/project/:id");
@@ -345,23 +402,23 @@ export default function ProjectDetail() {
             {(project.designPhilosophy || project.materialSelection) && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                 {project.designPhilosophy && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-light tracking-wider text-white">
-                      {language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy'}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-light tracking-wider text-white uppercase">
+                      {project.designPhilosophyTitle || (language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy')}
                     </h3>
-                    <p className="text-zinc-300 leading-relaxed whitespace-pre-line">
-                      {project.designPhilosophy}
-                    </p>
+                    <div className="text-zinc-300 leading-relaxed">
+                      {parseFormattedText(project.designPhilosophy)}
+                    </div>
                   </div>
                 )}
                 {project.materialSelection && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-light tracking-wider text-white">
-                      {language === 'vi' ? 'Lựa chọn vật liệu' : 'Material Selection'}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-light tracking-wider text-white uppercase">
+                      {project.materialSelectionTitle || (language === 'vi' ? 'Lựa chọn vật liệu' : 'Material Selection')}
                     </h3>
-                    <p className="text-zinc-300 leading-relaxed whitespace-pre-line">
-                      {project.materialSelection}
-                    </p>
+                    <div className="text-zinc-300 leading-relaxed">
+                      {parseFormattedText(project.materialSelection)}
+                    </div>
                   </div>
                 )}
               </div>
