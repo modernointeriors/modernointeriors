@@ -335,15 +335,13 @@ export default function ProjectDetail() {
         {/* Content Text Below Images */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {/* Left Text Content */}
-          <div>
-            <p className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
-              {project.detailedDescription || project.description || 
-                (language === 'vi' 
-                  ? 'Một không gian nội thất nơi những sắc thái than chì nghiêm ngặt được kết hợp với sự ấm áp của đồ nội thất màu đất nung và các kết cấu mềm mại.'
-                  : 'An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures.'
-                )
-              }
-            </p>
+          <div className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
+            {parseFormattedText(project.detailedDescription || project.description || 
+              (language === 'vi' 
+                ? 'Một không gian nội thất nơi những sắc thái than chì nghiêm ngặt được kết hợp với sự ấm áp của đồ nội thất màu đất nung và các kết cấu mềm mại.'
+                : 'An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures.'
+              )
+            )}
           </div>
 
           {/* Right Content with Image */}
