@@ -11,58 +11,111 @@ import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@shared/schema";
 
 function parseFormattedText(text: string): JSX.Element[] {
-  const elements: JSX.Element[] = [];
-  const regex = /(\*\*\*([^*]+)\*\*\*|\*\*([^*]+)\*\*|\*([^*]+)\*)/g;
+  if (!text) return [];
   
-  let lastIndex = 0;
-  let match;
+  const elements: JSX.Element[] = [];
   let keyIndex = 0;
   
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      const normalText = text.slice(lastIndex, match.index);
-      if (normalText.trim()) {
-        elements.push(
-          <span key={keyIndex++} className="text-zinc-300 leading-relaxed">
-            {normalText}
-          </span>
-        );
-      }
-    }
-    
-    if (match[2]) {
-      elements.push(
-        <h4 key={keyIndex++} className="text-lg font-semibold text-white mt-6 mb-3 tracking-wide">
-          {match[2]}
-        </h4>
-      );
-    } else if (match[3]) {
-      elements.push(
-        <h4 key={keyIndex++} className="text-lg font-light text-white mt-6 mb-3 tracking-wide">
-          {match[3]}
-        </h4>
-      );
-    } else if (match[4]) {
-      elements.push(
-        <span key={keyIndex++} className="font-semibold text-white">
-          {match[4]}
-        </span>
-      );
-    }
-    
-    lastIndex = match.index + match[0].length;
-  }
+  // Split by paragraphs first (double newline or single newline)
+  const paragraphs = text.split(/\n+/);
   
-  if (lastIndex < text.length) {
-    const remainingText = text.slice(lastIndex);
-    if (remainingText.trim()) {
-      elements.push(
-        <span key={keyIndex++} className="text-zinc-300 leading-relaxed">
-          {remainingText}
-        </span>
-      );
-    }
-  }
+  paragraphs.forEach((paragraph, pIndex) => {
+    if (!paragraph.trim()) return;
+    
+    const parts: JSX.Element[] = [];
+    let remaining = paragraph;
+    let partIndex = 0;
+    
+    // Process formatting patterns: ***text***, **text**, *text*
+    // Must process *** first, then **, then *
+    const processPattern = (str: string): JSX.Element[] => {
+      const result: JSX.Element[] = [];
+      
+      // Pattern for ***text*** (heading + bold)
+      const tripleRegex = /\*\*\*([^*]+)\*\*\*/g;
+      // Pattern for **text** (heading)
+      const doubleRegex = /\*\*([^*]+)\*\*/g;
+      // Pattern for *text* (bold)
+      const singleRegex = /\*([^*]+)\*/g;
+      
+      let processed = str;
+      const replacements: { start: number; end: number; element: JSX.Element }[] = [];
+      
+      // Find all *** matches
+      let match;
+      tripleRegex.lastIndex = 0;
+      while ((match = tripleRegex.exec(str)) !== null) {
+        replacements.push({
+          start: match.index,
+          end: match.index + match[0].length,
+          element: <strong key={`t-${keyIndex++}`} className="font-bold text-white text-lg block mt-4 mb-2">{match[1]}</strong>
+        });
+      }
+      
+      // Find all ** matches (not already covered by ***)
+      doubleRegex.lastIndex = 0;
+      while ((match = doubleRegex.exec(str)) !== null) {
+        const overlaps = replacements.some(r => 
+          (match!.index >= r.start && match!.index < r.end) ||
+          (match!.index + match![0].length > r.start && match!.index + match![0].length <= r.end)
+        );
+        if (!overlaps) {
+          replacements.push({
+            start: match.index,
+            end: match.index + match[0].length,
+            element: <span key={`d-${keyIndex++}`} className="font-semibold text-white text-lg block mt-4 mb-2">{match[1]}</span>
+          });
+        }
+      }
+      
+      // Find all * matches (not already covered)
+      singleRegex.lastIndex = 0;
+      while ((match = singleRegex.exec(str)) !== null) {
+        const overlaps = replacements.some(r => 
+          (match!.index >= r.start && match!.index < r.end) ||
+          (match!.index + match![0].length > r.start && match!.index + match![0].length <= r.end)
+        );
+        if (!overlaps) {
+          replacements.push({
+            start: match.index,
+            end: match.index + match[0].length,
+            element: <strong key={`s-${keyIndex++}`} className="font-semibold text-white">{match[1]}</strong>
+          });
+        }
+      }
+      
+      // Sort replacements by position
+      replacements.sort((a, b) => a.start - b.start);
+      
+      // Build result
+      let lastEnd = 0;
+      replacements.forEach((r, i) => {
+        if (r.start > lastEnd) {
+          const textBefore = str.slice(lastEnd, r.start);
+          if (textBefore) {
+            result.push(<span key={`n-${keyIndex++}`}>{textBefore}</span>);
+          }
+        }
+        result.push(r.element);
+        lastEnd = r.end;
+      });
+      
+      if (lastEnd < str.length) {
+        const textAfter = str.slice(lastEnd);
+        if (textAfter) {
+          result.push(<span key={`n-${keyIndex++}`}>{textAfter}</span>);
+        }
+      }
+      
+      return result.length > 0 ? result : [<span key={`p-${keyIndex++}`}>{str}</span>];
+    };
+    
+    elements.push(
+      <p key={`para-${pIndex}`} className="mb-3 break-words">
+        {processPattern(paragraph)}
+      </p>
+    );
+  });
   
   return elements;
 }
@@ -334,14 +387,16 @@ export default function ProjectDetail() {
 
         {/* Content Text Below Images */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {/* Left Text Content */}
-          <div className="text-zinc-300 leading-relaxed text-base" data-testid="text-description">
-            {parseFormattedText(project.detailedDescription || project.description || 
-              (language === 'vi' 
-                ? 'Một không gian nội thất nơi những sắc thái than chì nghiêm ngặt được kết hợp với sự ấm áp của đồ nội thất màu đất nung và các kết cấu mềm mại.'
-                : 'An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures.'
-              )
-            )}
+          {/* Left Text Content - Description */}
+          <div className="text-zinc-300 leading-relaxed text-base overflow-hidden" data-testid="text-description">
+            <div className="break-words whitespace-pre-wrap">
+              {parseFormattedText(project.description || 
+                (language === 'vi' 
+                  ? 'Một không gian nội thất nơi những sắc thái than chì nghiêm ngặt được kết hợp với sự ấm áp của đồ nội thất màu đất nung và các kết cấu mềm mại.'
+                  : 'An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures.'
+                )
+              )}
+            </div>
           </div>
 
           {/* Right Content with Image */}
@@ -361,12 +416,12 @@ export default function ProjectDetail() {
               </div>
             )}
             
-            <p className="text-zinc-300 leading-relaxed text-base">
-              {language === 'vi' 
-                ? 'Lò sưởi trang nhã với thiết kế laconic tạo ra bầu không khí ấm cúng và phong cách, trở thành điểm nhấn.'
-                : 'Elegant fireplace with laconic design creates an atmosphere of coziness and style, becoming an accent piece.'
-              }
-            </p>
+            {/* Detailed Description */}
+            {project.detailedDescription && (
+              <div className="text-zinc-300 leading-relaxed text-base break-words whitespace-pre-wrap" data-testid="text-detailed-description">
+                {parseFormattedText(project.detailedDescription)}
+              </div>
+            )}
           </div>
         </div>
 
