@@ -499,7 +499,7 @@ export default function Layout({ children }: LayoutProps) {
                     <p className="text-white/80 font-light text-sm">Ho Chi Minh City, Vietnam</p>
                   </>
                 )}
-                <p className="text-white/80 font-light text-sm mt-6 font-medium">094 367 9879</p>
+                <p className="text-white/80 font-light text-sm mt-6">094 367 9879</p>
               </div>
             </div>
             
