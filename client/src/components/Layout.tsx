@@ -15,7 +15,6 @@ const getNavigation = (t: (key: string) => string) => {
     { name: t('nav.home'), href: `/`, key: 'home' },
     { name: t('nav.news'), href: `/blog`, key: 'news' },
     { name: t('nav.about'), href: `/about`, key: 'about' },
-    { name: t('nav.services'), href: `/services`, key: 'services' },
     { name: t('nav.projects'), href: `/portfolio`, key: 'portfolio' },
     { name: t('nav.contacts'), href: `/contact`, key: 'contact' }
   ];
@@ -527,15 +526,6 @@ export default function Layout({ children }: LayoutProps) {
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     {language === 'vi' ? 'GIỚI THIỆU' : 'ABOUT'}
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href={`/services`} 
-                    className="text-white/80 hover:text-white transition-colors font-light text-sm"
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  >
-                    {language === 'vi' ? 'DỊCH VỤ' : 'SERVICES'}
                   </Link>
                 </li>
                 <li>

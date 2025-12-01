@@ -12,7 +12,6 @@ import Portfolio from "@/pages/Portfolio";
 import ProjectDetail from "@/pages/ProjectDetail";
 import Blog from "@/pages/Blog";
 import BlogDetail from "@/pages/BlogDetail";
-import Services from "@/pages/Services";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
@@ -36,7 +35,6 @@ function Router() {
             <Route path="/project/:id" component={ProjectDetail} />
             <Route path="/blog" component={Blog} />
             <Route path="/blog/:slug" component={BlogDetail} />
-            <Route path="/services" component={Services} />
             <Route path="/about" component={About} />
             <Route path="/contact" component={Contact} />
             <Route path="/cookie-policy" component={CookiePolicy} />
