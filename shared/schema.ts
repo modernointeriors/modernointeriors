@@ -220,6 +220,7 @@ export const partners = pgTable("partners", {
 export const categories = pgTable("categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
+  nameVi: text("name_vi"), // Vietnamese name for bilingual support
   slug: text("slug").notNull(),
   type: varchar("type", { length: 20 }).notNull(), // "project" or "article"
   description: text("description"),

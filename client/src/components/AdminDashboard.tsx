@@ -385,6 +385,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const [isPartnerDialogOpen, setIsPartnerDialogOpen] = useState(false);
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryNameVi, setNewCategoryNameVi] = useState("");
   const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
   const [referralOpen, setReferralOpen] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
@@ -1874,7 +1875,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   });
 
   const createCategoryMutation = useMutation({
-    mutationFn: async (data: { name: string; type: string; slug: string }) => {
+    mutationFn: async (data: { name: string; nameVi?: string; type: string; slug: string }) => {
       const response = await apiRequest('POST', '/api/categories', data);
       return response.json();
     },
@@ -1882,6 +1883,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
       toast({ title: "Đã tạo danh mục thành công" });
       setNewCategoryName("");
+      setNewCategoryNameVi("");
       setIsCategoryDialogOpen(false);
     },
     onError: (error: any) => {
@@ -4036,12 +4038,21 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium">Category Name</label>
+                        <label className="text-sm font-medium">Category Name (English)</label>
                         <Input
                           value={newCategoryName}
                           onChange={(e) => setNewCategoryName(e.target.value)}
-                          placeholder="Enter category name"
+                          placeholder="Enter category name in English"
                           data-testid="input-category-name"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Category Name (Vietnamese)</label>
+                        <Input
+                          value={newCategoryNameVi}
+                          onChange={(e) => setNewCategoryNameVi(e.target.value)}
+                          placeholder="Nhập tên danh mục tiếng Việt"
+                          data-testid="input-category-name-vi"
                         />
                       </div>
                       <div className="flex justify-end space-x-2">
@@ -4050,6 +4061,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           onClick={() => {
                             setIsCategoryDialogOpen(false);
                             setNewCategoryName("");
+                            setNewCategoryNameVi("");
                           }}
                         >
                           Cancel
@@ -4063,6 +4075,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 .replace(/^-+|-+$/g, '');
                               createCategoryMutation.mutate({
                                 name: newCategoryName,
+                                nameVi: newCategoryNameVi || newCategoryName,
                                 type: 'project',
                                 slug,
                               });
@@ -4089,7 +4102,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       .filter(cat => cat.type === 'project' && cat.active)
                       .map((category) => (
                         <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
-                          <span className="text-sm font-light">{category.name}</span>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-light">{category.name}</span>
+                            {category.nameVi && (
+                              <span className="text-xs text-muted-foreground">{category.nameVi}</span>
+                            )}
+                          </div>
                           <Button
                             variant="ghost"
                             size="sm"
