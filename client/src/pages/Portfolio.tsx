@@ -1,23 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProjectCard from "@/components/ProjectCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react';
-import type { Project } from "@shared/schema";
-
-const categories = [
-  { value: 'all', label: 'All Projects' },
-  { value: 'residential', label: 'Residential' },
-  { value: 'commercial', label: 'Commercial' },
-  { value: 'architecture', label: 'Architecture' }
-];
+import type { Project, Category } from "@shared/schema";
 
 export default function Portfolio() {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
+
+  const { data: dbCategories = [] } = useQuery<Category[]>({
+    queryKey: ['/api/categories'],
+  });
+
+  const categories = useMemo(() => {
+    const projectCategories = dbCategories.filter(cat => cat.type === 'project' && cat.active);
+    return [
+      { value: 'all', label: 'All Projects', labelVi: 'Tất Cả Dự Án' },
+      ...projectCategories.map(cat => ({
+        value: cat.slug,
+        label: cat.name,
+        labelVi: cat.nameVi || cat.name
+      }))
+    ];
+  }, [dbCategories]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -360,12 +369,7 @@ export default function Portfolio() {
               }`}
               data-testid={`filter-${category.value}`}
             >
-              {language === 'vi' ? {
-                'all': 'TẤT CẢ DỰ ÁN',
-                'residential': 'NHÀ Ở',
-                'commercial': 'THƯƠNG MẠI', 
-                'architecture': 'KIẾN TRÚC'
-              }[category.value] : category.label.toUpperCase()}
+              {(language === 'vi' ? category.labelVi : category.label).toUpperCase()}
             </button>
           ))}
         </div>
@@ -392,7 +396,9 @@ export default function Portfolio() {
             <p className="text-muted-foreground">
               {activeCategory === 'all' 
                 ? (language === 'vi' ? 'Hiện tại chưa có dự án nào.' : 'No projects are available at the moment.')
-                : (language === 'vi' ? `Không có dự án ${activeCategory === 'residential' ? 'nhà ở' : activeCategory === 'commercial' ? 'thương mại' : 'kiến trúc'} nào.` : `No ${activeCategory} projects are available.`)
+                : (language === 'vi' 
+                    ? `Không có dự án ${categories.find(c => c.value === activeCategory)?.labelVi?.toLowerCase() || activeCategory} nào.` 
+                    : `No ${categories.find(c => c.value === activeCategory)?.label?.toLowerCase() || activeCategory} projects are available.`)
               }
             </p>
           </div>

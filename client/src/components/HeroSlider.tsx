@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'wouter';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
-import type { Project } from '@shared/schema';
+import type { Project, Category } from '@shared/schema';
 import { ChevronRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useQuery } from '@tanstack/react-query';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -21,6 +22,20 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   const [showLoading, setShowLoading] = useState(true);
   const swiperRef = useRef<any>(null);
   const { language } = useLanguage();
+
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ['/api/categories'],
+  });
+
+  const getCategoryName = (categorySlug: string) => {
+    const category = categories.find(cat => 
+      cat.slug === categorySlug || cat.name.toLowerCase() === categorySlug.toLowerCase()
+    );
+    if (category) {
+      return language === 'vi' && category.nameVi ? category.nameVi : category.name;
+    }
+    return categorySlug;
+  };
 
   // Restart progress animation when slide changes
   const handleSlideChange = () => {
@@ -195,12 +210,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       <span>{language === 'vi' ? 'bởi' : 'by'} {project.designer || 'MODERNO INTERIORS Design'}</span>
                       <span>{project.completionYear || new Date().getFullYear()}</span>
                       <span className="capitalize">
-                        {language === 'vi' 
-                          ? (project.category === 'residential' ? 'nhà ở' 
-                            : project.category === 'commercial' ? 'thương mại' 
-                            : project.category === 'architecture' ? 'kiến trúc' 
-                            : project.category)
-                          : project.category}
+                        {getCategoryName(project.category)}
                       </span>
                     </div>
                     
