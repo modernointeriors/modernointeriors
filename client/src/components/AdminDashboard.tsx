@@ -386,6 +386,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryNameVi, setNewCategoryNameVi] = useState("");
+  const [editingCategory, setEditingCategory] = useState<{ id: string; name: string; nameVi: string | null } | null>(null);
+  const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState(false);
   const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
   const [referralOpen, setReferralOpen] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
@@ -1906,6 +1908,26 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     onError: (error: any) => {
       toast({
         title: "Lỗi khi xóa danh mục",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: async (data: { id: string; name: string; nameVi?: string }) => {
+      const response = await apiRequest('PATCH', `/api/categories/${data.id}`, { name: data.name, nameVi: data.nameVi });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      toast({ title: "Đã cập nhật danh mục thành công" });
+      setEditingCategory(null);
+      setIsEditCategoryDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Lỗi khi cập nhật danh mục",
         description: error.message,
         variant: "destructive",
       });
@@ -4108,17 +4130,30 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                               <span className="text-xs text-muted-foreground">{category.nameVi}</span>
                             )}
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setDeleteCategoryData({ id: category.id, name: category.name });
-                              setIsDeleteCategoryAlertOpen(true);
-                            }}
-                            data-testid={`button-delete-category-${category.slug}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-white" />
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setEditingCategory({ id: category.id, name: category.name, nameVi: category.nameVi || null });
+                                setIsEditCategoryDialogOpen(true);
+                              }}
+                              data-testid={`button-edit-category-${category.slug}`}
+                            >
+                              <Pencil className="h-4 w-4 text-white" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setDeleteCategoryData({ id: category.id, name: category.name });
+                                setIsDeleteCategoryAlertOpen(true);
+                              }}
+                              data-testid={`button-delete-category-${category.slug}`}
+                            >
+                              <Trash2 className="h-4 w-4 text-white" />
+                            </Button>
+                          </div>
                         </div>
                       ))
                   )}
@@ -4165,6 +4200,64 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Edit Category Dialog */}
+        <Dialog open={isEditCategoryDialogOpen} onOpenChange={(open) => {
+          setIsEditCategoryDialogOpen(open);
+          if (!open) setEditingCategory(null);
+        }}>
+          <DialogContent className="bg-black border border-white/20 rounded-none">
+            <DialogHeader>
+              <DialogTitle>Edit Project Category</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Category Name (English)</label>
+                <Input
+                  value={editingCategory?.name || ""}
+                  onChange={(e) => setEditingCategory(prev => prev ? { ...prev, name: e.target.value } : null)}
+                  placeholder="Enter category name in English"
+                  data-testid="input-edit-category-name"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Category Name (Vietnamese)</label>
+                <Input
+                  value={editingCategory?.nameVi || ""}
+                  onChange={(e) => setEditingCategory(prev => prev ? { ...prev, nameVi: e.target.value } : null)}
+                  placeholder="Nhập tên danh mục tiếng Việt"
+                  data-testid="input-edit-category-name-vi"
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditCategoryDialogOpen(false);
+                    setEditingCategory(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (editingCategory && editingCategory.name.trim()) {
+                      updateCategoryMutation.mutate({
+                        id: editingCategory.id,
+                        name: editingCategory.name,
+                        nameVi: editingCategory.nameVi || undefined,
+                      });
+                    }
+                  }}
+                  disabled={!editingCategory?.name.trim() || updateCategoryMutation.isPending}
+                  data-testid="button-update-category"
+                >
+                  Update Category
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <Card>
           <CardContent className="p-0">
