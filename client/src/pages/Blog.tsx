@@ -6,21 +6,29 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import OptimizedImage from "@/components/OptimizedImage";
-import type { Article } from "@shared/schema";
+import type { Article, Category } from "@shared/schema";
 import { useState, useEffect, useMemo } from "react";
 import { FormattedText } from "@/lib/textUtils";
-
-const categories = [
-  { value: 'all', label: 'All Articles' },
-  { value: 'news', label: 'News' },
-  { value: 'tips', label: 'Design Tips' },
-  { value: 'projects', label: 'Project Highlights' },
-  { value: 'design-trends', label: 'Design Trends' }
-];
 
 export default function Blog() {
   const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
+
+  const { data: dbCategories = [] } = useQuery<Category[]>({
+    queryKey: ['/api/categories'],
+  });
+
+  const categories = useMemo(() => {
+    const articleCategories = dbCategories.filter(cat => cat.type === 'article' && cat.active);
+    return [
+      { value: 'all', label: 'All Articles', labelVi: 'Tất Cả Bài Viết' },
+      ...articleCategories.map(cat => ({
+        value: cat.slug,
+        label: cat.name,
+        labelVi: cat.nameVi || cat.name
+      }))
+    ];
+  }, [dbCategories]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('all');
@@ -341,24 +349,12 @@ export default function Blog() {
     });
   };
 
-  const getCategoryLabel = (category: string) => {
-    const categoryMap: Record<string, Record<string, string>> = {
-      en: {
-        news: 'News',
-        tips: 'Design Tips',
-        projects: 'Project Highlights',
-        'design-trends': 'Design Trends',
-        general: 'General'
-      },
-      vi: {
-        news: 'Tin tức',
-        tips: 'Mẹo thiết kế',
-        projects: 'Dự án nổi bật',
-        'design-trends': 'Xu hướng thiết kế',
-        general: 'Chung'
-      }
-    };
-    return categoryMap[language]?.[category] || category;
+  const getCategoryLabel = (categorySlug: string) => {
+    const foundCategory = categories.find(c => c.value === categorySlug);
+    if (foundCategory) {
+      return language === 'vi' ? foundCategory.labelVi : foundCategory.label;
+    }
+    return categorySlug;
   };
 
   return (
@@ -428,13 +424,7 @@ export default function Blog() {
               }`}
               data-testid={`filter-${category.value}`}
             >
-              {language === 'vi' ? {
-                'all': 'TẤT CẢ BÀI VIẾT',
-                'news': 'TIN TỨC',
-                'tips': 'MẸO THIẾT KẾ',
-                'projects': 'DỰ ÁN NỔI BẬT',
-                'design-trends': 'XU HƯỚNG THIẾT KẾ'
-              }[category.value] : category.label.toUpperCase()}
+              {(language === 'vi' ? category.labelVi : category.label).toUpperCase()}
             </button>
           ))}
         </div>

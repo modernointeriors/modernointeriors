@@ -7163,12 +7163,21 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium">Category Name</label>
+                        <label className="text-sm font-medium">Category Name (English)</label>
                         <Input
                           value={newCategoryName}
                           onChange={(e) => setNewCategoryName(e.target.value)}
-                          placeholder="Enter category name"
+                          placeholder="Enter category name in English"
                           data-testid="input-category-name"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Category Name (Vietnamese)</label>
+                        <Input
+                          value={newCategoryNameVi}
+                          onChange={(e) => setNewCategoryNameVi(e.target.value)}
+                          placeholder="Nhập tên danh mục tiếng Việt"
+                          data-testid="input-category-name-vi"
                         />
                       </div>
                       <div className="flex justify-end space-x-2">
@@ -7177,6 +7186,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           onClick={() => {
                             setIsCategoryDialogOpen(false);
                             setNewCategoryName("");
+                            setNewCategoryNameVi("");
                           }}
                         >
                           Cancel
@@ -7190,6 +7200,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 .replace(/^-+|-+$/g, '');
                               createCategoryMutation.mutate({
                                 name: newCategoryName,
+                                nameVi: newCategoryNameVi || newCategoryName,
                                 type: 'article',
                                 slug,
                               });
@@ -7216,18 +7227,36 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       .filter(cat => cat.type === 'article' && cat.active)
                       .map((category) => (
                         <div key={category.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition-colors">
-                          <span className="text-sm font-light">{category.name}</span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setDeleteCategoryData({ id: category.id, name: category.name });
-                              setIsDeleteCategoryAlertOpen(true);
-                            }}
-                            data-testid={`button-delete-category-${category.slug}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-white" />
-                          </Button>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-light">{category.name}</span>
+                            {category.nameVi && (
+                              <span className="text-xs text-muted-foreground">{category.nameVi}</span>
+                            )}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setEditingCategory({ id: category.id, name: category.name, nameVi: category.nameVi || null });
+                                setIsEditCategoryDialogOpen(true);
+                              }}
+                              data-testid={`button-edit-category-${category.slug}`}
+                            >
+                              <Pencil className="h-4 w-4 text-white" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setDeleteCategoryData({ id: category.id, name: category.name });
+                                setIsDeleteCategoryAlertOpen(true);
+                              }}
+                              data-testid={`button-delete-category-${category.slug}`}
+                            >
+                              <Trash2 className="h-4 w-4 text-white" />
+                            </Button>
+                          </div>
                         </div>
                       ))
                   )}
