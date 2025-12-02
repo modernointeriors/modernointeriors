@@ -27,6 +27,7 @@ import type {
   Article,
   Partner,
   JourneyStep,
+  Category,
 } from "@shared/schema";
 
 export default function Home() {
@@ -250,6 +251,19 @@ export default function Home() {
       return response.json();
     },
   });
+
+  const { data: dbCategories = [] } = useQuery<Category[]>({
+    queryKey: ['/api/categories'],
+  });
+
+  const getCategoryLabel = (categorySlug: string) => {
+    const projectCategories = dbCategories.filter(cat => cat.type === 'project' && cat.active);
+    const foundCategory = projectCategories.find(c => c.slug === categorySlug);
+    if (foundCategory) {
+      return language === 'vi' ? (foundCategory.nameVi || foundCategory.name) : foundCategory.name;
+    }
+    return categorySlug;
+  };
 
   const {
     data: faqs = [],
@@ -699,7 +713,7 @@ export default function Home() {
                             className="text-white/80 text-sm uppercase tracking-wide mb-1"
                             data-testid={`text-category-${project.id}`}
                           >
-                            {project.category}
+                            {getCategoryLabel(project.category)}
                           </p>
                           {project.area && (
                             <p className="text-white/60 text-xs" data-testid={`text-area-${project.id}`}>
