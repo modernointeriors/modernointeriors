@@ -5,6 +5,7 @@ import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import type { Project } from '@shared/schema';
 import { ChevronRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -19,6 +20,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
   const swiperRef = useRef<any>(null);
+  const { language } = useLanguage();
 
   // Restart progress animation when slide changes
   const handleSlideChange = () => {
@@ -189,10 +191,17 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   {/* Hero Footer */}
                   <div className="flex justify-between items-end pb-8">
                     <div className="flex items-center gap-6 text-white text-sm font-light">
-                      <span>Article</span>
-                      <span>by {project.designer || 'MODERNO INTERIORS Design'}</span>
+                      <span>{language === 'vi' ? 'Bài viết' : 'Article'}</span>
+                      <span>{language === 'vi' ? 'bởi' : 'by'} {project.designer || 'MODERNO INTERIORS Design'}</span>
                       <span>{project.completionYear || new Date().getFullYear()}</span>
-                      <span className="capitalize">{project.category}</span>
+                      <span className="capitalize">
+                        {language === 'vi' 
+                          ? (project.category === 'residential' ? 'nhà ở' 
+                            : project.category === 'commercial' ? 'thương mại' 
+                            : project.category === 'architecture' ? 'kiến trúc' 
+                            : project.category)
+                          : project.category}
+                      </span>
                     </div>
                     
                     {/* Navigation Arrows */}
