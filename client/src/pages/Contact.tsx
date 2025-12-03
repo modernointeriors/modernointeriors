@@ -127,7 +127,7 @@ export default function Contact() {
       } else {
         clearInterval(interval);
       }
-    }, 10);
+    }, 20);
 
     return () => clearInterval(interval);
   }, [expandedFaqIndex]);
