@@ -1057,7 +1057,7 @@ export default function Home() {
           </div>
 
           {/* Advantages Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20 items-stretch">
             {advantagesLoading ? (
               // Loading skeleton
               Array.from({ length: 4 }).map((_, i) => (
@@ -1085,18 +1085,18 @@ export default function Home() {
                   return (
                     <div 
                       key={advantage.id} 
-                      className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-95 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none"
+                      className="group advantage-card scroll-animate transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-95 hover:shadow-2xl hover:shadow-white/10 p-6 rounded-none h-full flex flex-col"
                       data-testid={`advantage-card-${index + 1}`}
                     >
-                      <div className="mb-6">
+                      <div className="mb-6 flex-shrink-0">
                         <div className="w-16 h-16 flex items-center justify-center">
                           <IconComponent className="w-8 h-8 text-white/40 group-hover:text-white transition-colors duration-300" />
                         </div>
                       </div>
-                      <h4 className="text-lg font-light text-white/60 group-hover:text-white mb-4 uppercase tracking-wide transition-colors duration-300">
+                      <h4 className="text-lg font-light text-white/60 group-hover:text-white mb-4 uppercase tracking-wide transition-colors duration-300 flex-shrink-0 min-h-[3.5rem]">
                         {title}
                       </h4>
-                      <p className="text-white/50 group-hover:text-white/90 font-light text-sm leading-relaxed transition-colors duration-300">
+                      <p className="text-white/50 group-hover:text-white/90 font-light text-sm leading-relaxed transition-colors duration-300 flex-1">
                         {description}
                       </p>
                     </div>
