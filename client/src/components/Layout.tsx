@@ -153,10 +153,10 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen relative">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
+      <header className={`fixed top-0 left-12 md:left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
       }`}>
-        <div className="flex items-center justify-between py-4 px-6">
+        <div className="flex items-center justify-between py-3 px-3 md:py-4 md:px-6">
           {/* Logo */}
           <Link 
             href="/" 
@@ -166,7 +166,7 @@ export default function Layout({ children }: LayoutProps) {
             <img 
               src={logoSrc} 
               alt="MODERNO INTERIORS DESIGN" 
-              className="h-10 w-auto hover:opacity-80 transition-opacity"
+              className="h-8 md:h-10 w-auto hover:opacity-80 transition-opacity"
             />
           </Link>
           
@@ -227,7 +227,7 @@ export default function Layout({ children }: LayoutProps) {
       />
 
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-16 z-40 bg-black flex flex-col items-center justify-center">
+      <aside className="fixed top-0 left-0 h-screen w-12 md:w-16 z-40 bg-black flex flex-col items-center justify-center">
         {/* Hamburger Menu at Center */}
         <Sheet open={true} modal={false} onOpenChange={() => {
           // Keep always open to maintain DOM presence for smooth animations
@@ -236,7 +236,7 @@ export default function Layout({ children }: LayoutProps) {
             <Button 
               variant="ghost" 
               size="lg"
-              className="group text-white hover:text-primary w-14 h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
+              className="group text-white hover:text-primary w-10 h-10 md:w-14 md:h-14 rounded-none hover:bg-transparent flex items-center justify-center transform-gpu will-change-transform will-change-opacity"
               aria-label="Open navigation menu"
               data-testid="button-main-menu"
               onClick={(e) => {
@@ -283,7 +283,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               {/* Classic hamburger icon - rotated 90 degrees with click animation */}
               <div 
-                className={`flex flex-col justify-center items-center space-y-2 w-10 h-8 transition-all duration-[1000ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
+                className={`flex flex-col justify-center items-center space-y-1.5 md:space-y-2 w-7 h-6 md:w-10 md:h-8 transition-all duration-[1000ms] ease-in-out group-hover:scale-110 transform-gpu will-change-transform ${
                   isClicked || showSidebar ? 'rotate-180' : 'rotate-90'
                 } ${isAnimating ? 'pointer-events-none opacity-70' : ''}`}
                 style={{
@@ -291,9 +291,9 @@ export default function Layout({ children }: LayoutProps) {
                   perspective: '1000px'
                 }}
               >
-                <div className="w-8 h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
-                <div className="w-8 h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
-                <div className="w-8 h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-5 md:w-8 h-0.5 md:h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-5 md:w-8 h-0.5 md:h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
+                <div className="w-5 md:w-8 h-0.5 md:h-1 bg-white transition-all duration-300 ease-out group-hover:bg-primary transform-gpu"></div>
               </div>
             </Button>
           </SheetTrigger>
@@ -472,12 +472,12 @@ export default function Layout({ children }: LayoutProps) {
 
 
       {/* Main Content - Adjusted for header and sidebar */}
-      <main className="pl-16 pb-8 md:pb-6 mb-4">{children}</main>
+      <main className="pl-12 md:pl-16 pb-8 md:pb-6 mb-4">{children}</main>
 
       {/* Footer - Updated with dark design matching the provided image */}
-      <footer className="bg-black text-white pt-10 pb-12 border-t border-gray-800">
+      <footer className="bg-black text-white pt-10 pb-12 border-t border-gray-800 ml-12 md:ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-20 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20 mb-8">
             {/* Corporate Office */}
             <div>
               <h4 className="text-sm tracking-widest text-white mb-8 font-light uppercase">
