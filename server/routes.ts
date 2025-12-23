@@ -76,6 +76,82 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Sitemap.xml endpoint
+  app.get("/sitemap.xml", async (req, res) => {
+    try {
+      const baseUrl = process.env.REPLIT_DEV_DOMAIN 
+        ? `https://${process.env.REPLIT_DEV_DOMAIN}`
+        : process.env.REPLIT_DEPLOYMENT_URL || 'https://example.com';
+      
+      // Static pages
+      const staticPages = [
+        { url: '/', priority: '1.0', changefreq: 'weekly' },
+        { url: '/about', priority: '0.8', changefreq: 'monthly' },
+        { url: '/projects', priority: '0.9', changefreq: 'weekly' },
+        { url: '/blog', priority: '0.9', changefreq: 'weekly' },
+        { url: '/contact', priority: '0.7', changefreq: 'monthly' },
+      ];
+      
+      // Get dynamic content
+      const projects = await storage.getProjects();
+      const articles = await storage.getArticles();
+      
+      // Filter for English versions only (to avoid duplicate URLs)
+      const englishProjects = projects.filter(p => p.language === 'en' && p.status === 'completed');
+      const publishedArticles = articles.filter(a => a.status === 'published');
+      
+      const today = new Date().toISOString().split('T')[0];
+      
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`;
+      
+      // Add static pages
+      for (const page of staticPages) {
+        xml += `  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>
+`;
+      }
+      
+      // Add project pages
+      for (const project of englishProjects) {
+        xml += `  <url>
+    <loc>${baseUrl}/projects/${project.slug}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+      }
+      
+      // Add article pages
+      for (const article of publishedArticles) {
+        const lastmod = article.publishedAt 
+          ? new Date(article.publishedAt).toISOString().split('T')[0]
+          : today;
+        xml += `  <url>
+    <loc>${baseUrl}/blog/${article.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+`;
+      }
+      
+      xml += `</urlset>`;
+      
+      res.set('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error('Error generating sitemap:', error);
+      res.status(500).send('Error generating sitemap');
+    }
+  });
+
   // File upload endpoint
   app.post("/api/upload", upload.single('file'), (req, res) => {
     try {
