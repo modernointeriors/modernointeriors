@@ -765,7 +765,7 @@ export default function Home() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60" />
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+        <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
             <div className="text-white space-y-6 scroll-animate">
               <p className="text-3xl md:text-5xl font-light leading-relaxed">
@@ -923,7 +923,7 @@ export default function Home() {
 
         <div className="relative h-full flex items-center">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center h-full">
               {/* Left side text */}
               <p className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed text-white scroll-animate">
                 {homepageContent?.quality2LeftText || (language === "vi"
