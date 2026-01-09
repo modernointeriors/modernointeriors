@@ -1570,32 +1570,76 @@ export default function AboutAdminTab({
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Image (Max 10MB)</label>
-                    {(teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image) && (
-                      <div className="border bg-muted overflow-hidden mb-2 relative">
+                    {(teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image) ? (
+                      <div className="border bg-muted overflow-hidden mb-2 relative group">
                         <img 
                           src={teamMemberImagePreview || editingTeamMember?.imageData || editingTeamMember?.image || ''} 
                           alt="Team Member Preview" 
                           className="w-full max-w-md aspect-square object-cover"
                         />
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          size="sm"
-                          className="absolute top-2 right-2"
-                          onClick={() => handleEditImage('teamMember')}
-                          data-testid="button-edit-team-member-image"
-                        >
-                          <Edit className="h-4 w-4 mr-1" />
-                          Edit
-                        </Button>
+                        <div className="absolute top-2 right-2 flex gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
+                            onClick={() => handleEditImage('teamMember')}
+                            data-testid="button-edit-team-member-image"
+                          >
+                            <Edit className="h-4 w-4 mr-1" />
+                            Edit
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
+                            onClick={() => document.getElementById('team-member-image-upload')?.click()}
+                            disabled={!hasPermission('about')}
+                            data-testid="button-change-team-member-image"
+                          >
+                            <Pencil className="h-4 w-4 mr-1" />
+                            Change
+                          </Button>
+                        </div>
+                        <input
+                          id="team-member-image-upload"
+                          type="file"
+                          disabled={!hasPermission('about')}
+                          accept=".jpg,.jpeg,.png,.webp,.gif"
+                          onChange={(e) => handleNewImageUpload(e, 'teamMember')}
+                          className="hidden"
+                          data-testid="input-team-member-image"
+                        />
+                      </div>
+                    ) : (
+                      <div className="border-2 border-dashed border-muted-foreground/25 p-8 text-center">
+                        <div className="flex flex-col items-center gap-4">
+                          <Upload className="h-8 w-8 text-muted-foreground" />
+                          <div>
+                            <p className="text-sm font-medium mb-1">Upload Team Member Image</p>
+                            <p className="text-xs text-muted-foreground">
+                              PNG, JPG • Max 10MB • Recommended: Square (1:1)
+                            </p>
+                          </div>
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            onClick={() => document.getElementById('team-member-image-upload-initial')?.click()}
+                            disabled={!hasPermission('about')}
+                          >
+                            Choose File
+                          </Button>
+                        </div>
+                        <input
+                          id="team-member-image-upload-initial"
+                          type="file"
+                          disabled={!hasPermission('about')}
+                          accept=".jpg,.jpeg,.png,.webp,.gif"
+                          onChange={(e) => handleNewImageUpload(e, 'teamMember')}
+                          className="hidden"
+                          data-testid="input-team-member-image-initial"
+                        />
                       </div>
                     )}
-                    <Input
-                      type="file" disabled={!hasPermission('about')}
-                      accept="image/*"
-                      onChange={(e) => handleNewImageUpload(e, 'teamMember')}
-                      data-testid="input-team-member-image"
-                    />
                   </div>
                   <FormField
                     control={teamMemberForm.control}
