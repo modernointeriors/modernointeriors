@@ -5877,7 +5877,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           editingTeamMember={editingTeamMember}
           setEditingTeamMember={setEditingTeamMember}
           teamMemberForm={teamMemberForm}
-          hasPermission={hasPermission}
+          hasPermission={(perm) => hasPermission(user, perm)}
         />
       </div>
     );
