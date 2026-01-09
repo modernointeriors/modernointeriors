@@ -191,7 +191,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       data-testid={`slide-link-${project.id}`}
                     >
                       <div className="max-w-4xl">
-                        <h2 className="heading-0 js-slider-slide-title break-words" style={{ position: 'relative', zIndex: 20 }}>
+                        <h2 className="heading-0 js-slider-slide-title break-words text-[48px]" style={{ position: 'relative', zIndex: 20 }}>
                           {project.title}
                         </h2>
                         
