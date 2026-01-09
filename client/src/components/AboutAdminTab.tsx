@@ -604,18 +604,21 @@ export default function AboutAdminTab({
                                   <Edit className="h-4 w-4 mr-2" />
                                   <span className="text-sm font-light">Edit</span>
                                 </Button>
-                                <label 
-                                  htmlFor="history-image-upload" 
-                                  className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 px-4 py-2 cursor-pointer transition-all shadow-xl text-sm font-light"
+                                <Button
+                                  type="button"
+                                  onClick={() => document.getElementById('history-image-upload')?.click()}
+                                  disabled={!hasPermission('about')}
+                                  className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
                                   data-testid="button-change-history-image"
                                 >
-                                  <Pencil className="h-4 w-4" />
-                                  Change
-                                </label>
+                                  <Pencil className="h-4 w-4 mr-2" />
+                                  <span className="text-sm font-light">Change</span>
+                                </Button>
                                 <input
                                   id="history-image-upload"
-                                  type="file" disabled={!hasPermission('about')}
-                                  accept=".jpg,.jpeg,.png"
+                                  type="file"
+                                  disabled={!hasPermission('about')}
+                                  accept=".jpg,.jpeg,.png,.webp,.gif"
                                   onChange={(e) => handleNewImageUpload(e, 'history')}
                                   className="hidden"
                                   data-testid="input-history-image-file"
@@ -737,19 +740,22 @@ export default function AboutAdminTab({
                               <Edit className="h-4 w-4 mr-2" />
                               <span className="text-sm font-light">Edit</span>
                             </Button>
-                            <label 
-                              htmlFor="mission-vision-image-upload" 
-                              className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 px-4 py-2 cursor-pointer transition-all shadow-xl text-sm font-light"
+                            <Button
+                              type="button"
+                              onClick={() => document.getElementById('mission-vision-image-upload')?.click()}
+                              disabled={!hasPermission('about')}
+                              className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
                               data-testid="button-change-mission-vision-image"
                             >
-                              <Pencil className="h-4 w-4" />
-                              Change
-                            </label>
+                              <Pencil className="h-4 w-4 mr-2" />
+                              <span className="text-sm font-light">Change</span>
+                            </Button>
                           </div>
                           <input
                             id="mission-vision-image-upload"
-                            type="file" disabled={!hasPermission('about')}
-                            accept=".jpg,.jpeg,.png"
+                            type="file"
+                            disabled={!hasPermission('about')}
+                            accept=".jpg,.jpeg,.png,.webp,.gif"
                             onChange={(e) => handleNewImageUpload(e, 'missionVision')}
                             className="hidden"
                             data-testid="input-mission-vision-image-file"
@@ -953,18 +959,21 @@ export default function AboutAdminTab({
                           <Edit className="h-4 w-4 mr-2" />
                           <span className="text-sm font-light">Edit</span>
                         </Button>
-                        <label 
-                          htmlFor="showcase-banner-upload" 
-                          className="inline-flex items-center gap-2 bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 px-4 py-2 cursor-pointer transition-all shadow-xl text-sm font-light"
+                        <Button
+                          type="button"
+                          onClick={() => document.getElementById('showcase-banner-upload')?.click()}
+                          disabled={!hasPermission('about')}
+                          className="bg-black/80 backdrop-blur-sm text-white border border-white/20 hover:bg-black/90 hover:border-[#D4AF37]/50 shadow-xl transition-all"
                           data-testid="button-change-showcase-banner"
                         >
-                          <Pencil className="h-4 w-4" />
-                          Change
-                        </label>
+                          <Pencil className="h-4 w-4 mr-2" />
+                          <span className="text-sm font-light">Change</span>
+                        </Button>
                         <input
                           id="showcase-banner-upload"
-                          type="file" disabled={!hasPermission('about')}
-                          accept=".jpg,.jpeg,.png"
+                          type="file"
+                          disabled={!hasPermission('about')}
+                          accept=".jpg,.jpeg,.png,.webp,.gif"
                           onChange={(e) => handleNewImageUpload(e, 'showcase')}
                           className="hidden"
                           data-testid="input-showcase-banner-file"
