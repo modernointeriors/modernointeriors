@@ -3057,16 +3057,16 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     try {
       const submitData = { ...data };
       if (showcaseBannerPreview) {
-        // Use uploaded path
         submitData.showcaseBannerImage = showcaseBannerPreview;
+        submitData.showcaseBannerImageData = null;
       }
       if (historyImagePreview) {
-        // Use uploaded path
         submitData.historyImage = historyImagePreview;
+        submitData.historyImageData = null;
       }
       if (missionVisionImagePreview) {
-        // Use uploaded path
         submitData.missionVisionImage = missionVisionImagePreview;
+        submitData.missionVisionImageData = null;
       }
       await updateAboutContentMutation.mutateAsync(submitData);
     } catch (error) {
