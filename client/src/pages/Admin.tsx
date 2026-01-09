@@ -54,7 +54,7 @@ function getTabs(t: (key: string) => string) {
     { id: 'articles', label: t('admin.articles'), icon: Newspaper },
     { id: 'homepage', label: 'Homepage', icon: Home },
     { id: 'about', label: 'About', icon: Image },
-    { id: 'content', label: t('admin.content'), icon: Edit3 },
+    { id: 'content', label: t('admin.seo'), icon: Edit3 },
     { id: 'users', label: t('admin.users'), icon: Shield }
   ];
 }
