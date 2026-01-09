@@ -3162,8 +3162,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     try {
       const submitData = { ...data };
       if (teamMemberImagePreview) {
-        // Use uploaded path
         submitData.image = teamMemberImagePreview;
+        submitData.imageData = null;
       }
       
       if (editingTeamMember) {
@@ -3172,7 +3172,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         await createTeamMemberMutation.mutateAsync(submitData);
       }
       
-      // Clear image preview after submit
       setTeamMemberImagePreview('');
       setTeamMemberImageFile(null);
     } catch (error) {
