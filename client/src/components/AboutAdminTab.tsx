@@ -438,30 +438,39 @@ export default function AboutAdminTab({
                       </Button>
                       <input
                         id="hero-images-upload"
-                        type="file" disabled={!hasPermission('about')}
+                        type="file" 
+                        disabled={!hasPermission('about')}
                         accept="image/*"
+                        multiple
                         className="hidden"
                         onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
+                          const files = e.target.files;
+                          if (files && files.length > 0) {
                             const currentImages = aboutContentForm.getValues("heroImages") || [];
-                            if (currentImages.length < 5) {
-                              // Upload to server
-                              const formData = new FormData();
-                              formData.append('file', file);
+                            const availableSlots = 5 - currentImages.length;
+                            
+                            if (availableSlots > 0) {
+                              const filesToUpload = Array.from(files).slice(0, availableSlots);
                               
-                              try {
+                              const uploadPromises = filesToUpload.map(async (file) => {
+                                const formData = new FormData();
+                                formData.append('file', file);
+                                
                                 const response = await fetch('/api/upload', {
                                   method: 'POST',
                                   body: formData
                                 });
                                 
                                 if (!response.ok) throw new Error('Upload failed');
-                                
-                                const data = await response.json();
-                                aboutContentForm.setValue("heroImages", [...currentImages, data.path], { shouldDirty: true });
+                                return response.json();
+                              });
+                              
+                              try {
+                                const results = await Promise.all(uploadPromises);
+                                const newPaths = results.map(r => r.path);
+                                aboutContentForm.setValue("heroImages", [...currentImages, ...newPaths], { shouldDirty: true });
                               } catch (error) {
-                                console.error('Failed to upload hero image:', error);
+                                console.error('Failed to upload hero images:', error);
                               }
                             }
                           }
