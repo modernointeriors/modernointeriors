@@ -618,10 +618,8 @@ export default function Home() {
           </div>
         </div>
       )}
-
       {/* Hero Slider Section - IIDA Style */}
       <HeroSlider projects={allProjects || []} />
-
       {/* Featured Projects Section */}
       <section id="featured-projects" className="py-16 bg-card">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -756,7 +754,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
       {/* Quality Hero Section */}
       <section className="relative h-[70vh] min-h-[600px] overflow-hidden scroll-animate">
         <img
@@ -768,7 +765,7 @@ export default function Home() {
         <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
             <div className="text-white space-y-6 scroll-animate">
-              <p className="text-3xl md:text-5xl font-light leading-relaxed">
+              <p className="md:text-5xl font-light text-[36px]">
                 {homepageContent?.qualityLeftText || (language === "vi"
                   ? "Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và trông hoàn hảo."
                   : "Each detail is selected so that the interior will serve for a long time and look impeccable.")}
@@ -784,7 +781,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Featured News Section */}
       <section id="featured-news" className="py-16 bg-background">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -907,7 +903,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
       {/* Quality Materials Hero Section */}
       <section className="relative h-[70vh] bg-black overflow-hidden">
         <div
@@ -941,7 +936,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Process Section */}
       <section
         className="py-16 bg-black"
@@ -1036,7 +1030,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Why Choose Us Section */}
       <section className="py-8 bg-black">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -1060,16 +1053,16 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20 items-stretch">
             {advantagesLoading ? (
               // Loading skeleton
-              Array.from({ length: 4 }).map((_, i) => (
+              (Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="p-6 animate-pulse">
                   <div className="w-16 h-16 bg-white/10 rounded mb-6" />
                   <div className="h-6 bg-white/10 rounded mb-4" />
                   <div className="h-24 bg-white/10 rounded" />
                 </div>
-              ))
+              )))
             ) : advantages.length > 0 ? (
               // Dynamic advantages from API
-              advantages
+              (advantages
                 .sort((a: any, b: any) => a.order - b.order)
                 .map((advantage: any, index: number) => {
                   // Dynamic icon rendering
@@ -1101,17 +1094,15 @@ export default function Home() {
                       </p>
                     </div>
                   );
-                })
+                }))
             ) : (
               // Fallback if no advantages available
-              <div className="col-span-full text-center text-white/50 py-8">
-                No advantages available
-              </div>
+              (<div className="col-span-full text-center text-white/50 py-8">No advantages available
+                              </div>)
             )}
           </div>
         </div>
       </section>
-
       {/* Partners Section */}
       <section className="py-16 bg-black overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
@@ -1207,7 +1198,6 @@ export default function Home() {
           </div>
         )}
       </section>
-
       {/* Quick Contact Section */}
       <section className="py-16 bg-black">
         <div
@@ -1383,7 +1373,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* FAQ Section */}
       <section
         className="py-16 bg-black"
