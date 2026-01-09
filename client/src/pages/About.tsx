@@ -106,7 +106,7 @@ export default function About() {
               <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                   <div>
-                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-tight text-white uppercase tracking-wide">
+                    <h1 className="md:text-6xl lg:text-7xl font-light text-white uppercase tracking-wide text-[48px]">
                       {language === "vi" ? aboutContent.heroTitleVi : aboutContent.heroTitleEn}
                     </h1>
                   </div>
@@ -122,7 +122,6 @@ export default function About() {
           )}
         </div>
       </section>
-
       {/* Principles Section */}
       {principles.length > 0 && aboutContent && (
         <section className="py-20 bg-black -ml-16">
@@ -151,7 +150,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Architecture Showcase Section */}
       {((aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) || showcaseServices.length > 0) && (
         <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden -ml-16">
@@ -197,7 +195,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Stats Section */}
       {aboutContent && (
         <section className="py-20 bg-black -ml-16">
@@ -239,7 +236,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Company History Section */}
       {aboutContent?.historyContentEn && aboutContent?.historyContentVi && (
         <section className="py-20 bg-black -ml-16">
@@ -275,7 +271,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Mission & Vision Section - Image LEFT, Content RIGHT */}
       {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
         <section className="py-20 bg-black -ml-16">
@@ -324,7 +319,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Core Values Section */}
       {coreValues.length > 0 && aboutContent && (
         <section className="py-20 bg-black -ml-16">
@@ -353,7 +347,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Team Members Section */}
       {teamMembers.length > 0 && aboutContent && (
         <section className="py-20 bg-black -ml-16 overflow-hidden">
@@ -489,7 +482,6 @@ export default function About() {
           </div>
         </section>
       )}
-
       {/* Process Section */}
       {processSteps.length > 0 && aboutContent && (
         <section className="py-20 bg-black -ml-16">
