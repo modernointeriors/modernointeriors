@@ -440,7 +440,7 @@ export default function AboutAdminTab({
                         id="hero-images-upload"
                         type="file" 
                         disabled={!hasPermission('about')}
-                        accept="image/*"
+                        accept=".jpg,.jpeg,.png,.webp,.gif"
                         multiple
                         className="hidden"
                         onChange={async (e) => {
@@ -452,25 +452,35 @@ export default function AboutAdminTab({
                             if (availableSlots > 0) {
                               const filesToUpload = Array.from(files).slice(0, availableSlots);
                               
-                              const uploadPromises = filesToUpload.map(async (file) => {
-                                const formData = new FormData();
-                                formData.append('file', file);
-                                
-                                const response = await fetch('/api/upload', {
-                                  method: 'POST',
-                                  body: formData
-                                });
-                                
-                                if (!response.ok) throw new Error('Upload failed');
-                                return response.json();
-                              });
+                              const uploadResults = await Promise.allSettled(
+                                filesToUpload.map(async (file) => {
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  
+                                  const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    body: formData
+                                  });
+                                  
+                                  if (!response.ok) {
+                                    const error = await response.json().catch(() => ({}));
+                                    throw new Error(error.message || 'Upload failed');
+                                  }
+                                  return response.json();
+                                })
+                              );
                               
-                              try {
-                                const results = await Promise.all(uploadPromises);
-                                const newPaths = results.map(r => r.path);
-                                aboutContentForm.setValue("heroImages", [...currentImages, ...newPaths], { shouldDirty: true });
-                              } catch (error) {
-                                console.error('Failed to upload hero images:', error);
+                              const successfulUploads = uploadResults
+                                .filter((r): r is PromiseFulfilledResult<{path: string}> => r.status === 'fulfilled')
+                                .map(r => r.value.path);
+                              
+                              if (successfulUploads.length > 0) {
+                                aboutContentForm.setValue("heroImages", [...currentImages, ...successfulUploads], { shouldDirty: true });
+                              }
+                              
+                              const failedCount = uploadResults.filter(r => r.status === 'rejected').length;
+                              if (failedCount > 0) {
+                                console.warn(`${failedCount} image(s) failed to upload`);
                               }
                             }
                           }
