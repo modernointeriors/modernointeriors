@@ -112,7 +112,7 @@ export default function About() {
                   </div>
 
                   <div className="lg:text-right">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-white uppercase tracking-wider leading-tight">
+                    <h2 className="md:text-4xl lg:text-5xl font-light text-white uppercase tracking-wider text-[36px]">
                       {language === "vi" ? aboutContent.heroSubtitleVi : aboutContent.heroSubtitleEn}
                     </h2>
                   </div>
