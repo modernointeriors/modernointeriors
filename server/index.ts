@@ -13,8 +13,8 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Serve static files from dist/public folder
-app.use(express.static('dist/public'));
+// Serve attached_assets from root folder (persists across builds)
+app.use('/attached_assets', express.static('attached_assets'));
 
 // Session configuration
 const PgSession = ConnectPgSimple(session);
