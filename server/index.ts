@@ -13,8 +13,8 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Serve static files from public folder
-app.use(express.static('public'));
+// Serve static files from dist/public folder
+app.use(express.static('dist/public'));
 
 // Session configuration
 const PgSession = ConnectPgSimple(session);

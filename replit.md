@@ -95,12 +95,12 @@ The application manages core entities:
 - **React Hook Form**: Performance-optimized form library with validation integration
 
 ## Image Handling
-- **File System Storage**: All images stored in `public/attached_assets` directory via `/api/upload` endpoint
+- **File System Storage**: All images stored in `dist/public/attached_assets` directory via `/api/upload` endpoint
   - Partner logos, quality backgrounds, showcase banners, hero slider images
   - History images, mission/vision images, team member portraits
   - Article featured images and content images
   - Images stored as actual files with UUID filenames (e.g., `/attached_assets/abc123.jpg`)
-  - Files physically stored in `public/attached_assets/` folder
+  - Files physically stored in `dist/public/attached_assets/` folder
   - Public folder is served as static files, works in both dev and production modes
   - Database stores short file paths, not base64 data
   - 10MB file size limit per image upload

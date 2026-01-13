@@ -48,7 +48,7 @@ function requirePermission(permission: string) {
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/attached_assets/');
+    cb(null, 'dist/public/attached_assets/');
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
