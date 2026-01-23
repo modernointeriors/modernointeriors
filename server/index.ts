@@ -5,6 +5,7 @@ import ConnectPgSimple from "connect-pg-simple";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { createHash } from "crypto";
+import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
@@ -13,8 +14,9 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Serve static files from attached_assets
-app.use('/attached_assets', express.static('attached_assets'));
+// Serve static files from attached_assets (use absolute path for production)
+const attachedAssetsPath = path.resolve(import.meta.dirname, '..', 'attached_assets');
+app.use('/attached_assets', express.static(attachedAssetsPath));
 
 // Session configuration
 const PgSession = ConnectPgSimple(session);
