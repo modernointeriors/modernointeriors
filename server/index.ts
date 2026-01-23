@@ -21,8 +21,12 @@ const distPublicAssetsPath = path.join(process.cwd(), 'dist', 'public', 'attache
 
 if (process.env.NODE_ENV === 'production') {
   if (!fs.existsSync(distPublicAssetsPath) && fs.existsSync(attachedAssetsPath)) {
-    fs.cpSync(attachedAssetsPath, distPublicAssetsPath, { recursive: true });
-    console.log('Copied attached_assets to dist/public/attached_assets');
+    try {
+      fs.cpSync(attachedAssetsPath, distPublicAssetsPath, { recursive: true });
+      console.log('Copied attached_assets to dist/public/attached_assets');
+    } catch (err) {
+      console.error('Error copying attached_assets:', err);
+    }
   }
 }
 
