@@ -102,5 +102,16 @@ The application manages core entities:
   - Images stored as actual files with UUID filenames (e.g., `/attached_assets/abc123.jpg`)
   - Database stores short file paths, not base64 data
   - 10MB file size limit per image upload
+- **Organized Image Folder API**: Images can be organized in folders under `/attached_assets/images/`
+  - Pre-created folders: `projects`, `team`, `partners`, `hero`, `about`, `articles`, `services`
+  - API endpoints:
+    - `GET /api/images/folders` - List all folders with image counts (requires auth)
+    - `POST /api/images/folders` - Create new folder (requires auth)
+    - `DELETE /api/images/folders/:folder` - Delete empty folder (requires auth)
+    - `GET /api/images/:folder` - List images in a folder (public)
+    - `POST /api/images/:folder` - Upload single image to folder (requires auth)
+    - `POST /api/images/:folder/batch` - Upload multiple images (up to 20) to folder (requires auth)
+    - `DELETE /api/images/:folder/:filename` - Delete an image (requires auth)
+  - Images accessible at: `/attached_assets/images/{folder}/{filename}`
 - **Unsplash**: External image service for placeholder content
 - **Custom Upload Component**: File upload interface with drag-and-drop support

@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import passport from "passport";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { randomUUID } from "crypto";
 import { storage } from "./storage";
 import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema, insertUserSchema } from "@shared/schema";
@@ -165,6 +166,176 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ path: filePath });
     } catch (error) {
       res.status(500).json({ message: "Failed to upload file" });
+    }
+  });
+
+  // === IMAGE FOLDER API ===
+  const imagesBasePath = path.resolve(import.meta.dirname, '..', 'attached_assets', 'images');
+
+  // Configure multer for folder-based uploads
+  const folderUploadStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const folder = req.params.folder;
+      const folderPath = path.join(imagesBasePath, folder);
+      if (!fs.existsSync(folderPath)) {
+        fs.mkdirSync(folderPath, { recursive: true });
+      }
+      cb(null, folderPath);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      const filename = `${randomUUID()}${ext}`;
+      cb(null, filename);
+    }
+  });
+
+  const folderUpload = multer({
+    storage: folderUploadStorage,
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowedExtensions = /\.(jpeg|jpg|png|webp|gif)$/i;
+      const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+      const mimetype = file.mimetype.startsWith('image/');
+      if (extname || mimetype) {
+        return cb(null, true);
+      }
+      cb(new Error('Only images are allowed'));
+    }
+  });
+
+  // Get all image folders
+  app.get("/api/images/folders", requireAuth, (req, res) => {
+    try {
+      if (!fs.existsSync(imagesBasePath)) {
+        fs.mkdirSync(imagesBasePath, { recursive: true });
+      }
+      const folders = fs.readdirSync(imagesBasePath, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => {
+          const folderPath = path.join(imagesBasePath, dirent.name);
+          const files = fs.readdirSync(folderPath).filter(f => /\.(jpeg|jpg|png|webp|gif)$/i.test(f));
+          return {
+            name: dirent.name,
+            imageCount: files.length
+          };
+        });
+      res.json(folders);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get folders" });
+    }
+  });
+
+  // Create a new folder
+  app.post("/api/images/folders", requireAuth, (req, res) => {
+    try {
+      const { name } = req.body;
+      if (!name || typeof name !== 'string') {
+        return res.status(400).json({ message: "Folder name is required" });
+      }
+      const sanitizedName = name.replace(/[^a-zA-Z0-9-_]/g, '').toLowerCase();
+      if (!sanitizedName) {
+        return res.status(400).json({ message: "Invalid folder name" });
+      }
+      const folderPath = path.join(imagesBasePath, sanitizedName);
+      if (fs.existsSync(folderPath)) {
+        return res.status(400).json({ message: "Folder already exists" });
+      }
+      fs.mkdirSync(folderPath, { recursive: true });
+      res.json({ name: sanitizedName, imageCount: 0 });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create folder" });
+    }
+  });
+
+  // Delete a folder (must be empty)
+  app.delete("/api/images/folders/:folder", requireAuth, (req, res) => {
+    try {
+      const { folder } = req.params;
+      const folderPath = path.join(imagesBasePath, folder);
+      if (!fs.existsSync(folderPath)) {
+        return res.status(404).json({ message: "Folder not found" });
+      }
+      const files = fs.readdirSync(folderPath);
+      if (files.length > 0) {
+        return res.status(400).json({ message: "Folder is not empty" });
+      }
+      fs.rmdirSync(folderPath);
+      res.json({ message: "Folder deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete folder" });
+    }
+  });
+
+  // Get images in a folder
+  app.get("/api/images/:folder", (req, res) => {
+    try {
+      const { folder } = req.params;
+      const folderPath = path.join(imagesBasePath, folder);
+      if (!fs.existsSync(folderPath)) {
+        return res.status(404).json({ message: "Folder not found" });
+      }
+      const files = fs.readdirSync(folderPath)
+        .filter(f => /\.(jpeg|jpg|png|webp|gif)$/i.test(f))
+        .map(filename => ({
+          filename,
+          path: `/attached_assets/images/${folder}/${filename}`,
+          url: `/attached_assets/images/${folder}/${filename}`
+        }));
+      res.json(files);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get images" });
+    }
+  });
+
+  // Upload image to a folder
+  app.post("/api/images/:folder", requireAuth, folderUpload.single('file'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      const { folder } = req.params;
+      const filePath = `/attached_assets/images/${folder}/${req.file.filename}`;
+      res.json({
+        filename: req.file.filename,
+        path: filePath,
+        url: filePath
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to upload image" });
+    }
+  });
+
+  // Upload multiple images to a folder
+  app.post("/api/images/:folder/batch", requireAuth, folderUpload.array('files', 20), (req, res) => {
+    try {
+      const files = req.files as Express.Multer.File[];
+      if (!files || files.length === 0) {
+        return res.status(400).json({ message: "No files uploaded" });
+      }
+      const { folder } = req.params;
+      const results = files.map(file => ({
+        filename: file.filename,
+        path: `/attached_assets/images/${folder}/${file.filename}`,
+        url: `/attached_assets/images/${folder}/${file.filename}`
+      }));
+      res.json(results);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to upload images" });
+    }
+  });
+
+  // Delete an image from a folder
+  app.delete("/api/images/:folder/:filename", requireAuth, (req, res) => {
+    try {
+      const { folder, filename } = req.params;
+      const filePath = path.join(imagesBasePath, folder, filename);
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: "Image not found" });
+      }
+      fs.unlinkSync(filePath);
+      res.json({ message: "Image deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete image" });
     }
   });
 
