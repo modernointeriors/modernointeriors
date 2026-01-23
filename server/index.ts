@@ -6,6 +6,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { createHash } from "crypto";
 import path from "path";
+import fs from "fs";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
@@ -14,8 +15,18 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Serve static files from attached_assets (use process.cwd() for production compatibility)
+// In production, copy attached_assets to dist/public if not exists
 const attachedAssetsPath = path.join(process.cwd(), 'attached_assets');
+const distPublicAssetsPath = path.join(process.cwd(), 'dist', 'public', 'attached_assets');
+
+if (process.env.NODE_ENV === 'production') {
+  if (!fs.existsSync(distPublicAssetsPath) && fs.existsSync(attachedAssetsPath)) {
+    fs.cpSync(attachedAssetsPath, distPublicAssetsPath, { recursive: true });
+    console.log('Copied attached_assets to dist/public/attached_assets');
+  }
+}
+
+// Serve static files from attached_assets
 app.use('/attached_assets', express.static(attachedAssetsPath));
 
 // Session configuration
