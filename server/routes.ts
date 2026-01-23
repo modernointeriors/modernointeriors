@@ -82,6 +82,27 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Debug endpoint to check paths on server
+  app.get("/api/debug-paths", (req, res) => {
+    const testFile = "logo.white.png";
+    const possiblePaths = [
+      path.join(__dirname, '..', 'attached_assets', testFile),
+      path.join(__dirname, '..', '..', 'attached_assets', testFile),
+      path.join(process.cwd(), 'attached_assets', testFile),
+    ];
+    
+    const results = possiblePaths.map(p => ({
+      path: p,
+      exists: fs.existsSync(p)
+    }));
+    
+    res.json({
+      __dirname,
+      cwd: process.cwd(),
+      paths: results
+    });
+  });
+
   // API route to serve images from attached_assets folder (supports subdirectories)
   app.get("/api/assets/*", (req, res) => {
     const relativePath = req.params[0];
