@@ -86,6 +86,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/debug-paths", (req, res) => {
     const testFile = "logo.white.png";
     const possiblePaths = [
+      path.join('/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets', testFile),
       path.join(__dirname, '..', 'attached_assets', testFile),
       path.join(__dirname, '..', '..', 'attached_assets', testFile),
       path.join(process.cwd(), 'attached_assets', testFile),
@@ -114,9 +115,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     // Try multiple possible locations for attached_assets folder
     const possiblePaths = [
-      path.join(__dirname, '..', 'attached_assets', relativePath),  // Development: server/../attached_assets
-      path.join(__dirname, '..', '..', 'attached_assets', relativePath),  // Production: dist/server/../../attached_assets
-      path.join(process.cwd(), 'attached_assets', relativePath),  // Fallback: current working directory
+      // Production server path (Plesk)
+      path.join('/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets', relativePath),
+      // Development paths
+      path.join(__dirname, '..', 'attached_assets', relativePath),
+      path.join(__dirname, '..', '..', 'attached_assets', relativePath),
+      path.join(process.cwd(), 'attached_assets', relativePath),
     ];
     
     // Find the first path that exists
