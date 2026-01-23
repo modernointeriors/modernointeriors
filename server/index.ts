@@ -14,8 +14,8 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Serve static files from attached_assets (use absolute path for production)
-const attachedAssetsPath = path.resolve(import.meta.dirname, '..', 'attached_assets');
+// Serve static files from attached_assets (use process.cwd() for production compatibility)
+const attachedAssetsPath = path.join(process.cwd(), 'attached_assets');
 app.use('/attached_assets', express.static(attachedAssetsPath));
 
 // Session configuration
