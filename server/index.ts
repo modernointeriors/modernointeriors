@@ -15,12 +15,14 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// In production, copy attached_assets to dist/public if not exists
+// Serve static files from attached_assets
+// In production, prioritize dist/public/attached_assets, fallback to root attached_assets
 const attachedAssetsPath = path.join(process.cwd(), 'attached_assets');
 const distPublicAssetsPath = path.join(process.cwd(), 'dist', 'public', 'attached_assets');
 
 if (process.env.NODE_ENV === 'production') {
-  if (!fs.existsSync(distPublicAssetsPath) && fs.existsSync(attachedAssetsPath)) {
+  // Copy attached_assets to dist/public if source exists and dest doesn't
+  if (fs.existsSync(attachedAssetsPath) && !fs.existsSync(distPublicAssetsPath)) {
     try {
       fs.cpSync(attachedAssetsPath, distPublicAssetsPath, { recursive: true });
       console.log('Copied attached_assets to dist/public/attached_assets');
@@ -28,10 +30,12 @@ if (process.env.NODE_ENV === 'production') {
       console.error('Error copying attached_assets:', err);
     }
   }
+  // Serve from dist/public/attached_assets in production
+  app.use('/attached_assets', express.static(distPublicAssetsPath));
+} else {
+  // Serve from root attached_assets in development
+  app.use('/attached_assets', express.static(attachedAssetsPath));
 }
-
-// Serve static files from attached_assets
-app.use('/attached_assets', express.static(attachedAssetsPath));
 
 // Session configuration
 const PgSession = ConnectPgSimple(session);
