@@ -1037,7 +1037,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         qualityBackgroundImage: homepageContent.qualityBackgroundImage || "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
         qualityLeftText: homepageContent.qualityLeftText || "Each detail is selected so that the interior will serve for a long time and look impeccable.",
         qualityRightText: homepageContent.qualityRightText || "We use only high-quality materials and furniture from trusted manufacturers.",
-        quality2BackgroundImage: homepageContent.quality2BackgroundImage || "/attached_assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg",
+        quality2BackgroundImage: homepageContent.quality2BackgroundImage || "/api/assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg",
         quality2LeftText: homepageContent.quality2LeftText || "Each detail is selected so that the interior will serve for a long time and look impeccable.",
         quality2RightText: homepageContent.quality2RightText || "We use only high-quality materials and furniture from trusted manufacturers.",
         ctaTitle: homepageContent.ctaTitle || undefined,

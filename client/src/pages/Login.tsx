@@ -77,7 +77,7 @@ export default function Login() {
                 {/* Logo */}
                 <div className="mx-auto mb-6">
                   <img 
-                    src="/attached_assets/logo.white.png" 
+                    src="/api/assets/logo.white.png" 
                     alt="Moderno Interiors" 
                     className="h-12 w-auto mx-auto opacity-90"
                   />

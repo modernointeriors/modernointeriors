@@ -607,7 +607,7 @@ export default function Home() {
           <div className="text-center">
             <div className="mb-8">
               <img
-                src="/attached_assets/logo.white.png"
+                src="/api/assets/logo.white.png"
                 alt="Moderno Interiors"
                 className="h-24 md:h-32 w-auto mx-auto"
               />
@@ -910,7 +910,7 @@ export default function Home() {
           style={{
             backgroundImage: homepageContent?.quality2BackgroundImage 
               ? `url(${homepageContent.quality2BackgroundImage})`
-              : 'url("/attached_assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg")',
+              : 'url("/api/assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg")',
           }}
         >
           <div className="absolute inset-0 bg-black/40" />

@@ -15,27 +15,7 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Serve static files from attached_assets
-// In production, prioritize dist/public/attached_assets, fallback to root attached_assets
-const attachedAssetsPath = path.join(process.cwd(), 'attached_assets');
-const distPublicAssetsPath = path.join(process.cwd(), 'dist', 'public', 'attached_assets');
-
-if (process.env.NODE_ENV === 'production') {
-  // Copy attached_assets to dist/public if source exists and dest doesn't
-  if (fs.existsSync(attachedAssetsPath) && !fs.existsSync(distPublicAssetsPath)) {
-    try {
-      fs.cpSync(attachedAssetsPath, distPublicAssetsPath, { recursive: true });
-      console.log('Copied attached_assets to dist/public/attached_assets');
-    } catch (err) {
-      console.error('Error copying attached_assets:', err);
-    }
-  }
-  // Serve from dist/public/attached_assets in production
-  app.use('/attached_assets', express.static(distPublicAssetsPath));
-} else {
-  // Serve from root attached_assets in development
-  app.use('/attached_assets', express.static(attachedAssetsPath));
-}
+// Images are now served via API route /api/assets/:filename in routes.ts
 
 // Session configuration
 const PgSession = ConnectPgSimple(session);

@@ -63,7 +63,7 @@ export default function Layout({ children }: LayoutProps) {
     queryKey: ['/api/settings'],
   });
 
-  const logoSrc = settings?.logoData || settings?.logoUrl || '/attached_assets/logo.white.png';
+  const logoSrc = settings?.logoData || settings?.logoUrl || '/api/assets/logo.white.png';
 
   // Animation timing constants - Ultra-Smooth (Auto-scales to 240fps on supported displays)
   const OPENING_DURATION = 900; // 0.9s for bars 1→2→3 (sync with CSS --bar-dur)

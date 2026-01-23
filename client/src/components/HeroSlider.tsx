@@ -76,7 +76,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
           <div className="text-center">
             <div className="mb-8">
               <img 
-                src="/attached_assets/logo.white.png" 
+                src="/api/assets/logo.white.png" 
                 alt="MODERNO INTERIORS" 
                 className="h-24 md:h-32 w-auto mx-auto"
               />
@@ -100,7 +100,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
         <div className="text-center">
           <div className="mb-4">
             <img 
-              src="/attached_assets/logo.white.png" 
+              src="/api/assets/logo.white.png" 
               alt="MODERNO INTERIORS" 
               className="h-24 md:h-32 w-auto mx-auto"
             />

@@ -77,6 +77,24 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // API route to serve images from attached_assets folder (supports subdirectories)
+  app.get("/api/assets/*", (req, res) => {
+    const relativePath = req.params[0];
+    
+    // Security: prevent directory traversal
+    if (relativePath.includes('..')) {
+      return res.status(400).json({ error: 'Invalid path' });
+    }
+    
+    const filePath = path.join(process.cwd(), 'attached_assets', relativePath);
+    
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(404).json({ error: 'Image not found' });
+      }
+    });
+  });
+
   // Sitemap.xml endpoint
   app.get("/sitemap.xml", async (req, res) => {
     try {
@@ -160,8 +178,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No file uploaded" });
       }
       
-      // Return short path (works in both dev and prod)
-      const filePath = `/attached_assets/${req.file.filename}`;
+      // Return API path (works in both dev and prod)
+      const filePath = `/api/assets/${req.file.filename}`;
       res.json({ path: filePath });
     } catch (error) {
       res.status(500).json({ message: "Failed to upload file" });
