@@ -3,7 +3,12 @@ import { createServer, type Server } from "http";
 import passport from "passport";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { randomUUID } from "crypto";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { storage } from "./storage";
 import { insertProjectSchema, insertClientSchema, insertInquirySchema, insertServiceSchema, insertArticleSchema, insertHomepageContentSchema, insertPartnerSchema, insertCategorySchema, insertInteractionSchema, insertDealSchema, insertTransactionSchema, insertSettingsSchema, insertFaqSchema, insertAdvantageSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutCoreValueSchema, insertAboutTeamMemberSchema, insertCrmPipelineStageSchema, insertCrmCustomerTierSchema, insertCrmStatusSchema, insertUserSchema } from "@shared/schema";
 import { z } from "zod";
@@ -86,10 +91,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(400).json({ error: 'Invalid path' });
     }
     
-    const filePath = path.join(process.cwd(), 'attached_assets', relativePath);
+    // Try multiple possible locations for attached_assets folder
+    const possiblePaths = [
+      path.join(__dirname, '..', 'attached_assets', relativePath),  // Development: server/../attached_assets
+      path.join(__dirname, '..', '..', 'attached_assets', relativePath),  // Production: dist/server/../../attached_assets
+      path.join(process.cwd(), 'attached_assets', relativePath),  // Fallback: current working directory
+    ];
+    
+    // Find the first path that exists
+    let filePath = possiblePaths[0];
+    for (const p of possiblePaths) {
+      if (fs.existsSync(p)) {
+        filePath = p;
+        break;
+      }
+    }
     
     res.sendFile(filePath, (err) => {
       if (err) {
+        console.error(`Image not found. Tried paths:`, possiblePaths);
         res.status(404).json({ error: 'Image not found' });
       }
     });
