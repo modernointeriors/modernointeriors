@@ -619,7 +619,7 @@ export default function Home() {
         </div>
       )}
       {/* Hero Slider Section - IIDA Style */}
-      <HeroSlider projects={allProjects || []} />
+      <HeroSlider projects={featuredProjects || []} />
       {/* Featured Projects Section */}
       <section id="featured-projects" className="py-16 bg-card">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
