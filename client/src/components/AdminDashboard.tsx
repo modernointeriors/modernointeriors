@@ -4325,7 +4325,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           />
                           <Trash2 
                             className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
-                            onClick={() => deleteProjectMutation.mutate(project.id)}
+                            onClick={() => {
+                              if (window.confirm(language === 'vi' ? `Bạn có chắc chắn muốn xóa dự án "${project.title}"?` : `Are you sure you want to delete project "${project.title}"?`)) {
+                                deleteProjectMutation.mutate(project.id);
+                              }
+                            }}
                             data-testid={`button-delete-project-${project.id}`}
                           />
                         </div>
