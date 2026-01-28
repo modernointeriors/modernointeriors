@@ -1087,10 +1087,25 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const deleteProjectMutation = useMutation({
     mutationFn: async (id: string) => {
       await apiRequest('DELETE', `/api/projects/${id}`);
+      return id;
     },
-    onSuccess: () => {
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: ['/api/projects'] });
+      const previousProjects = queryClient.getQueryData(['/api/projects']);
+      queryClient.setQueryData(['/api/projects'], (old: any) => 
+        old?.filter((p: any) => p.id !== id) || []
+      );
+      return { previousProjects };
+    },
+    onError: (err, id, context) => {
+      queryClient.setQueryData(['/api/projects'], context?.previousProjects);
+      toast({ title: "Lỗi khi xóa dự án", variant: "destructive" });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
+    },
+    onSuccess: () => {
       toast({ title: "Đã xóa dự án thành công" });
     },
   });
