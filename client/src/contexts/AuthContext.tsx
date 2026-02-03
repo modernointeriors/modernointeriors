@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { queryClient, apiRequest } from '@/lib/queryClient';
+import { queryClient, apiRequest, getQueryFn } from '@/lib/queryClient';
 
 interface User {
   id: string;
@@ -23,21 +23,22 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   // Check if user is authenticated on app load
-  const { data: userData } = useQuery({
+  const { data: userData, isLoading: queryLoading, isFetched } = useQuery<User | null>({
     queryKey: ['/api/auth/me'],
+    queryFn: getQueryFn({ on401: 'returnNull' }),
     retry: false,
-    enabled: true,
+    staleTime: 0,
   });
 
   useEffect(() => {
-    if (userData) {
-      setUser(userData as User);
+    if (isFetched) {
+      setUser(userData || null);
     }
-    setIsLoading(false);
-  }, [userData]);
+  }, [userData, isFetched]);
+
+  const isLoading = queryLoading || !isFetched;
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
