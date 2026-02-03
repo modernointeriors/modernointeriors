@@ -27,21 +27,22 @@ const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
   store: new PgSession({
     conString: process.env.DATABASE_URL,
-    tableName: 'session'
+    tableName: 'session',
+    createTableIfMissing: true
   }),
   name: 'moderno.sid',
-  secret: process.env.SESSION_SECRET || 'your-secret-key-here',
-  resave: false,
+  secret: process.env.SESSION_SECRET || 'moderno-secret-key-2024',
+  resave: true,
   saveUninitialized: false,
-  rolling: true, // Refresh session on each request
+  rolling: true,
   cookie: {
-    secure: true,
+    secure: isProduction,
     httpOnly: true,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    sameSite: 'none',
+    sameSite: 'lax',
     path: '/'
   },
-  proxy: isProduction
+  proxy: true
 }));
 
 // Hash password helper
