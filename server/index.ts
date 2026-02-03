@@ -42,7 +42,7 @@ app.use(session({
   saveUninitialized: false,
   rolling: true,
   cookie: {
-    secure: isProduction,
+    secure: false, // Temporarily disable for testing
     httpOnly: true,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     sameSite: 'lax',
