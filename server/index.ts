@@ -24,6 +24,12 @@ app.set('trust proxy', 1);
 const PgSession = ConnectPgSimple(session);
 const isProduction = process.env.NODE_ENV === 'production';
 
+console.log('[Session Config]', {
+  NODE_ENV: process.env.NODE_ENV,
+  isProduction,
+  hasSessionSecret: !!process.env.SESSION_SECRET
+});
+
 app.use(session({
   store: new PgSession({
     conString: process.env.DATABASE_URL,
