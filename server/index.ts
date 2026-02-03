@@ -41,7 +41,8 @@ app.use(session({
     httpOnly: true,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     sameSite: 'lax',
-    path: '/'
+    path: '/',
+    domain: isProduction ? '.moderno.com.vn' : undefined
   },
   proxy: isProduction
 }));
