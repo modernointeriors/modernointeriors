@@ -37,7 +37,7 @@ app.use(session({
     createTableIfMissing: true
   }),
   name: 'moderno.sid',
-  secret: process.env.SESSION_SECRET || 'moderno-secret-key-2024',
+  secret: process.env.SESSION_SECRET || 'U/jU2wbJ9Rm7t+W+m5/N47ihf+DIkzzKXFv5z0/2Xsn5WrltM9NTAps9xnWJBWHYEeqDhph/xait8kLvWDed7g==',
   resave: true,
   saveUninitialized: false,
   rolling: true,
