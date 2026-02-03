@@ -24,21 +24,26 @@ if (process.env.NODE_ENV === 'production') {
 
 // Session configuration
 const PgSession = ConnectPgSimple(session);
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(session({
   store: new PgSession({
     conString: process.env.DATABASE_URL,
     tableName: 'session'
   }),
+  name: 'moderno.sid',
   secret: process.env.SESSION_SECRET || 'your-secret-key-here',
   resave: false,
   saveUninitialized: false,
+  rolling: true, // Refresh session on each request
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProduction,
     httpOnly: true,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax'
+    sameSite: 'lax',
+    path: '/'
   },
-  proxy: process.env.NODE_ENV === 'production'
+  proxy: isProduction
 }));
 
 // Hash password helper
