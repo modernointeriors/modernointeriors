@@ -17,6 +17,11 @@ app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
 // Images are now served via API route /api/assets/:filename in routes.ts
 
+// Trust proxy for production (Plesk/Nginx)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Session configuration
 const PgSession = ConnectPgSimple(session);
 app.use(session({
@@ -30,8 +35,10 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-  }
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    sameSite: process.env.NODE_ENV === 'production' ? 'lax' : 'lax'
+  },
+  proxy: process.env.NODE_ENV === 'production'
 }));
 
 // Hash password helper
