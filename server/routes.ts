@@ -233,7 +233,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Authentication routes
   app.post("/api/auth/login", passport.authenticate('local'), (req, res) => {
-    res.json(req.user);
+    console.log('[Login Success]', {
+      sessionID: req.sessionID,
+      user: req.user,
+      cookieHeader: res.getHeader('Set-Cookie')
+    });
+    // Force session save
+    req.session.save((err) => {
+      if (err) {
+        console.log('[Session Save Error]', err);
+      }
+      res.json(req.user);
+    });
   });
 
   app.post("/api/auth/logout", (req, res) => {
