@@ -7152,7 +7152,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-sans font-light">Articles Management</h2>
+          <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản Lý Bài Viết' : 'Articles Management'}</h2>
           <Button
             variant="outline"
             onClick={() => setIsCategoryManagementDialogOpen(true)}
@@ -7160,7 +7160,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             className="h-10 px-4"
           >
             <Settings className="mr-2 h-4 w-4" />
-            Category Settings
+            {language === 'vi' ? 'Cài đặt danh mục' : 'Category Settings'}
           </Button>
         </div>
 
@@ -7168,7 +7168,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         <Dialog open={isCategoryManagementDialogOpen} onOpenChange={setIsCategoryManagementDialogOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-light">Article Categories Management</DialogTitle>
+              <DialogTitle className="text-2xl font-light">{language === 'vi' ? 'Quản Lý Danh Mục Bài Viết' : 'Article Categories Management'}</DialogTitle>
             </DialogHeader>
             <div className="space-y-6">
               <div className="flex justify-end">
@@ -7176,25 +7176,25 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   <DialogTrigger asChild>
                     <Button data-testid="button-add-category">
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Article Category
+                      {language === 'vi' ? 'Thêm danh mục' : 'Add Article Category'}
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Add New Article Category</DialogTitle>
+                      <DialogTitle>{language === 'vi' ? 'Thêm Danh Mục Bài Viết Mới' : 'Add New Article Category'}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium">Category Name (English)</label>
+                        <label className="text-sm font-medium">{language === 'vi' ? 'Tên danh mục (Tiếng Anh)' : 'Category Name (English)'}</label>
                         <Input
                           value={newCategoryName}
                           onChange={(e) => setNewCategoryName(e.target.value)}
-                          placeholder="Enter category name in English"
+                          placeholder={language === 'vi' ? 'Nhập tên danh mục tiếng Anh' : 'Enter category name in English'}
                           data-testid="input-category-name"
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium">Category Name (Vietnamese)</label>
+                        <label className="text-sm font-medium">{language === 'vi' ? 'Tên danh mục (Tiếng Việt)' : 'Category Name (Vietnamese)'}</label>
                         <Input
                           value={newCategoryNameVi}
                           onChange={(e) => setNewCategoryNameVi(e.target.value)}
@@ -7211,7 +7211,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             setNewCategoryNameVi("");
                           }}
                         >
-                          Cancel
+                          {language === 'vi' ? 'Hủy' : 'Cancel'}
                         </Button>
                         <Button
                           onClick={() => {
@@ -7231,7 +7231,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
                           data-testid="button-save-category"
                         >
-                          Create Category
+                          {language === 'vi' ? 'Tạo danh mục' : 'Create Category'}
                         </Button>
                       </div>
                     </div>
@@ -7240,10 +7240,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </div>
 
               <div>
-                <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Article Categories</h3>
+                <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">{language === 'vi' ? 'Danh mục bài viết' : 'Article Categories'}</h3>
                 <div className="space-y-2">
                   {categories.filter(cat => cat.type === 'article' && cat.active).length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No article categories</p>
+                    <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Chưa có danh mục bài viết' : 'No article categories'}</p>
                   ) : (
                     categories
                       .filter(cat => cat.type === 'article' && cat.active)
@@ -7292,11 +7292,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         <AlertDialog open={isDeleteCategoryAlertOpen} onOpenChange={setIsDeleteCategoryAlertOpen}>
           <AlertDialogContent className="bg-black border border-white/20 rounded-none">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-xl font-light">Confirm Category Deletion</AlertDialogTitle>
+              <AlertDialogTitle className="text-xl font-light">{language === 'vi' ? 'Xác nhận xóa danh mục' : 'Confirm Category Deletion'}</AlertDialogTitle>
               <AlertDialogDescription className="text-white/70">
-                Are you sure you want to delete the category <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?
-                <br /><br />
-                <span className="text-red-400">This action cannot be undone.</span> Please confirm to proceed.
+                {language === 'vi' ? (
+                  <>Bạn có chắc chắn muốn xóa danh mục <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?<br /><br /><span className="text-red-400">Hành động này không thể hoàn tác.</span> Vui lòng xác nhận để tiếp tục.</>
+                ) : (
+                  <>Are you sure you want to delete the category <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?<br /><br /><span className="text-red-400">This action cannot be undone.</span> Please confirm to proceed.</>
+                )}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -7307,7 +7309,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   setIsDeleteCategoryAlertOpen(false);
                 }}
               >
-                Cancel
+                {language === 'vi' ? 'Hủy' : 'Cancel'}
               </AlertDialogCancel>
               <AlertDialogAction
                 className="bg-red-600 hover:bg-red-700 text-white rounded-none"
@@ -7320,7 +7322,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 }}
                 data-testid="button-confirm-delete-category"
               >
-                Delete Category
+                {language === 'vi' ? 'Xóa danh mục' : 'Delete Category'}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -7329,7 +7331,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         <Card>
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>Articles</CardTitle>
+              <CardTitle>{language === 'vi' ? 'Bài viết' : 'Articles'}</CardTitle>
               <Dialog open={isArticleDialogOpen} onOpenChange={setIsArticleDialogOpen}>
                 <DialogTrigger asChild>
                   <Button 
@@ -7358,7 +7360,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     data-testid="button-add-article"
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Article
+                    {language === 'vi' ? 'Thêm bài viết' : 'Add Article'}
                   </Button>
                 </DialogTrigger>
               </Dialog>
@@ -7369,7 +7371,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <DialogContent className="max-w-4xl max-h-[85vh] flex flex-col">
               <DialogHeader>
                 <DialogTitle>
-                  {editingArticle ? "Edit Article" : "Add New Article"}
+                  {editingArticle ? (language === 'vi' ? 'Chỉnh sửa bài viết' : 'Edit Article') : (language === 'vi' ? 'Thêm bài viết mới' : 'Add New Article')}
                 </DialogTitle>
               </DialogHeader>
               <div className="overflow-y-auto flex-1 px-1">
@@ -7383,7 +7385,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title (English) *</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Tiêu đề (Tiếng Anh) *' : 'Title (English) *'}</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-article-title-en" placeholder="Enter English title..." />
                           </FormControl>
@@ -7397,7 +7399,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title (Vietnamese) *</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Tiêu đề (Tiếng Việt) *' : 'Title (Vietnamese) *'}</FormLabel>
                           <FormControl>
                             <Input {...field} data-testid="input-article-title-vi" placeholder="Nhập tiêu đề tiếng Việt..." />
                           </FormControl>
@@ -7414,7 +7416,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="excerptEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Excerpt (English)</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Mô tả ngắn (Tiếng Anh)' : 'Excerpt (English)'}</FormLabel>
                           <FormControl>
                             <Textarea {...field} value={field.value || ''} rows={4} data-testid="textarea-article-excerpt-en" placeholder="Brief description in English..." />
                           </FormControl>
@@ -7428,7 +7430,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="excerptVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Excerpt (Vietnamese)</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Mô tả ngắn (Tiếng Việt)' : 'Excerpt (Vietnamese)'}</FormLabel>
                           <FormControl>
                             <Textarea {...field} value={field.value || ''} rows={4} data-testid="textarea-article-excerpt-vi" placeholder="Mô tả ngắn bằng tiếng Việt..." />
                           </FormControl>
@@ -7445,7 +7447,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="contentEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Content (English) *</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Nội dung (Tiếng Anh) *' : 'Content (English) *'}</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={10} data-testid="textarea-article-content-en" placeholder="Write your content in English..." />
                           </FormControl>
@@ -7459,7 +7461,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="contentVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Content (Vietnamese) *</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Nội dung (Tiếng Việt) *' : 'Content (Vietnamese) *'}</FormLabel>
                           <FormControl>
                             <Textarea {...field} rows={10} data-testid="textarea-article-content-vi" placeholder="Viết nội dung bằng tiếng Việt..." />
                           </FormControl>
@@ -7471,10 +7473,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
                   {/* Featured Image */}
                   <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4">Featured Image</h3>
+                    <h3 className="text-lg font-medium mb-4">{language === 'vi' ? 'Ảnh đại diện' : 'Featured Image'}</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Upload Image (PNG, JPG only)</label>
+                        <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Tải ảnh lên (chỉ PNG, JPG)' : 'Upload Image (PNG, JPG only)'}</label>
                         <input
                           type="file"
                           accept=".jpg,.jpeg,.png"
@@ -7494,7 +7496,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         </p>
                         {articleImagePreview && (
                           <div className="mt-4">
-                            <p className="text-sm font-medium mb-2">Preview:</p>
+                            <p className="text-sm font-medium mb-2">{language === 'vi' ? 'Xem trước:' : 'Preview:'}</p>
                             <div className="border rounded p-4 bg-muted">
                               <img 
                                 src={articleImagePreview} 
@@ -7512,7 +7514,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <span className="w-full border-t" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                          <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                          <span className="bg-background px-2 text-muted-foreground">{language === 'vi' ? 'Hoặc dùng URL' : 'Or use URL'}</span>
                         </div>
                       </div>
 
@@ -7521,7 +7523,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="featuredImage"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Image URL</FormLabel>
+                            <FormLabel>{language === 'vi' ? 'Đường dẫn ảnh' : 'Image URL'}</FormLabel>
                             <FormControl>
                               <Input {...field} value={field.value || ''} data-testid="input-article-featured-image" placeholder="https://example.com/image.jpg" />
                             </FormControl>
@@ -7617,7 +7619,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
                   {/* Common Fields */}
                   <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4">General Information</h3>
+                    <h3 className="text-lg font-medium mb-4">{language === 'vi' ? 'Thông tin chung' : 'General Information'}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <FormField
                         control={articleForm.control}
@@ -7638,11 +7640,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="category"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Category *</FormLabel>
+                            <FormLabel>{language === 'vi' ? 'Danh mục *' : 'Category *'}</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger data-testid="select-article-category">
-                                  <SelectValue placeholder="Select a category" />
+                                  <SelectValue placeholder={language === 'vi' ? 'Chọn danh mục' : 'Select a category'} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -7665,7 +7667,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="status"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Status *</FormLabel>
+                            <FormLabel>{language === 'vi' ? 'Trạng thái *' : 'Status *'}</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger data-testid="select-article-status">
@@ -7673,9 +7675,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="draft">Draft</SelectItem>
-                                <SelectItem value="published">Published</SelectItem>
-                                <SelectItem value="archived">Archived</SelectItem>
+                                <SelectItem value="draft">{language === 'vi' ? 'Bản nháp' : 'Draft'}</SelectItem>
+                                <SelectItem value="published">{language === 'vi' ? 'Đã xuất bản' : 'Published'}</SelectItem>
+                                <SelectItem value="archived">{language === 'vi' ? 'Lưu trữ' : 'Archived'}</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -7688,11 +7690,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
                   {/* SEO Settings Section - Bilingual */}
                   <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4">SEO Settings</h3>
+                    <h3 className="text-lg font-medium mb-4">{language === 'vi' ? 'Cài đặt SEO' : 'SEO Settings'}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* English SEO */}
                       <div className="space-y-4">
-                        <h4 className="text-sm font-medium text-muted-foreground">English SEO</h4>
+                        <h4 className="text-sm font-medium text-muted-foreground">{language === 'vi' ? 'SEO Tiếng Anh' : 'English SEO'}</h4>
                         <FormField
                           control={articleForm.control}
                           name="metaTitleEn"
@@ -7738,7 +7740,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
                       {/* Vietnamese SEO */}
                       <div className="space-y-4">
-                        <h4 className="text-sm font-medium text-muted-foreground">Vietnamese SEO</h4>
+                        <h4 className="text-sm font-medium text-muted-foreground">{language === 'vi' ? 'SEO Tiếng Việt' : 'Vietnamese SEO'}</h4>
                         <FormField
                           control={articleForm.control}
                           name="metaTitleVi"
@@ -7795,14 +7797,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       }}
                       data-testid="button-cancel-article"
                     >
-                      Cancel
+                      {language === 'vi' ? 'Hủy' : 'Cancel'}
                     </Button>
                     <Button
                       type="submit"
                       disabled={createArticleMutation.isPending || updateArticleMutation.isPending}
                       data-testid="button-save-article"
                     >
-                      {editingArticle ? "Update Article" : "Create Article"}
+                      {editingArticle ? (language === 'vi' ? 'Cập nhật bài viết' : 'Update Article') : (language === 'vi' ? 'Tạo bài viết' : 'Create Article')}
                     </Button>
                   </div>
                   </form>
@@ -7820,13 +7822,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Languages</TableHead>
-                    <TableHead>Published</TableHead>
+                    <TableHead>{language === 'vi' ? 'Tiêu đề' : 'Title'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Danh mục' : 'Category'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Trạng thái' : 'Status'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Ngôn ngữ' : 'Languages'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Ngày đăng' : 'Published'}</TableHead>
                     <TableHead>SEO</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -7846,8 +7848,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <TableCell className="font-medium">
                             <div>
                               <p>{displayArticle.title}</p>
-                              {!hasEn && <p className="text-xs text-yellow-500">Missing EN</p>}
-                              {!hasVi && <p className="text-xs text-yellow-500">Missing VI</p>}
+                              {!hasEn && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu EN' : 'Missing EN'}</p>}
+                              {!hasVi && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu VI' : 'Missing VI'}</p>}
                             </div>
                           </TableCell>
                           <TableCell>
@@ -7915,13 +7917,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>Delete Article?</AlertDialogTitle>
+                                    <AlertDialogTitle>{language === 'vi' ? 'Xóa bài viết?' : 'Delete Article?'}</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      This will permanently delete "{displayArticle.title}" (both EN and VI versions). This action cannot be undone.
+                                      {language === 'vi' ? `Thao tác này sẽ xóa vĩnh viễn "${displayArticle.title}" (cả phiên bản EN và VI). Hành động này không thể hoàn tác.` : `This will permanently delete "${displayArticle.title}" (both EN and VI versions). This action cannot be undone.`}
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>{language === 'vi' ? 'Hủy' : 'Cancel'}</AlertDialogCancel>
                                     <AlertDialogAction
                                       onClick={async () => {
                                         try {
@@ -7934,7 +7936,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                         }
                                       }}
                                     >
-                                      Delete
+                                      {language === 'vi' ? 'Xóa' : 'Delete'}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -7958,7 +7960,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     disabled={articlesPage === 1}
                     className="text-xs"
                   >
-                    FIRST
+                    {language === 'vi' ? 'ĐẦU' : 'FIRST'}
                   </Button>
                   <Button
                     variant="ghost"
@@ -7967,7 +7969,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     disabled={articlesPage === 1}
                     className="text-xs"
                   >
-                    PREV
+                    {language === 'vi' ? 'TRƯỚC' : 'PREV'}
                   </Button>
                   {Array.from({ length: articlesTotalPages }, (_, i) => i + 1).map((page) => (
                     <Button
@@ -7987,7 +7989,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     disabled={articlesPage === articlesTotalPages}
                     className="text-xs"
                   >
-                    NEXT
+                    {language === 'vi' ? 'SAU' : 'NEXT'}
                   </Button>
                   <Button
                     variant="ghost"
@@ -7996,12 +7998,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     disabled={articlesPage === articlesTotalPages}
                     className="text-xs"
                   >
-                    LAST
+                    {language === 'vi' ? 'CUỐI' : 'LAST'}
                   </Button>
                 </div>
                 <div className="text-center mt-2">
                   <span className="text-xs text-muted-foreground">
-                    Showing {articlesStartIndex + 1}-{Math.min(articlesEndIndex, uniqueArticleSlugs.length)} of {uniqueArticleSlugs.length} articles
+                    {language === 'vi' ? `Hiển thị ${articlesStartIndex + 1}-${Math.min(articlesEndIndex, uniqueArticleSlugs.length)} trên ${uniqueArticleSlugs.length} bài viết` : `Showing ${articlesStartIndex + 1}-${Math.min(articlesEndIndex, uniqueArticleSlugs.length)} of ${uniqueArticleSlugs.length} articles`}
                   </span>
                 </div>
               </div>
