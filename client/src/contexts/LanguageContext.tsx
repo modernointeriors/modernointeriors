@@ -399,7 +399,7 @@ const translations = {
     'admin.clients': 'Khách Hàng',
     'admin.inquiries': 'Yêu Cầu',
     'admin.overview': 'Tổng Quan',
-    'admin.crm': 'CRM',
+    'admin.crm': 'Khách Hàng',
     'admin.seo': 'SEO',
     'admin.users': 'Người Dùng',
     'admin.manage': 'Quản lý dự án, khách hàng và nội dung website của bạn',
