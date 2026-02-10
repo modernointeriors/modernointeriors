@@ -3346,7 +3346,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-sans font-light">Projects Management</h2>
+          <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản lý dự án' : 'Projects Management'}</h2>
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -3355,19 +3355,19 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               className="h-10 px-4"
             >
               <Settings className="mr-2 h-4 w-4" />
-              Category Settings
+              {language === 'vi' ? 'Cài đặt danh mục' : 'Category Settings'}
             </Button>
             <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
               <DialogTrigger asChild>
                 <Button data-testid="button-add-project" className="h-10 px-4">
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Project
+                  {language === 'vi' ? 'Thêm dự án' : 'Add Project'}
                 </Button>
               </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
-                  {editingProject ? "Edit Project" : "Add New Project"}
+                  {editingProject ? (language === 'vi' ? "Chỉnh sửa dự án" : "Edit Project") : (language === 'vi' ? "Thêm dự án mới" : "Add New Project")}
                 </DialogTitle>
               </DialogHeader>
               <Form {...projectForm}>
@@ -4036,7 +4036,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       }}
                       className="h-10 px-4"
                     >
-                      Cancel
+                      {language === 'vi' ? 'Hủy' : 'Cancel'}
                     </Button>
                     <Button 
                       type="submit"
@@ -4044,7 +4044,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       data-testid="button-save-project"
                       className="h-10 px-4"
                     >
-                      {editingProject ? "Update" : "Create"} Project
+                      {editingProject ? (language === 'vi' ? "Cập nhật dự án" : "Update Project") : (language === 'vi' ? "Tạo dự án" : "Create Project")}
                     </Button>
                   </div>
                 </form>
@@ -4058,7 +4058,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         <Dialog open={isCategoryManagementDialogOpen} onOpenChange={setIsCategoryManagementDialogOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-black border border-white/20 rounded-none">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-light">Project Categories Management</DialogTitle>
+              <DialogTitle className="text-2xl font-light">{language === 'vi' ? 'Quản lý danh mục dự án' : 'Project Categories Management'}</DialogTitle>
             </DialogHeader>
             <div className="space-y-6">
               <div className="flex justify-end">
@@ -4066,12 +4066,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   <DialogTrigger asChild>
                     <Button data-testid="button-add-category">
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Project Category
+                      {language === 'vi' ? 'Thêm danh mục' : 'Add Project Category'}
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Add New Project Category</DialogTitle>
+                      <DialogTitle>{language === 'vi' ? 'Thêm danh mục dự án mới' : 'Add New Project Category'}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
@@ -4101,7 +4101,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             setNewCategoryNameVi("");
                           }}
                         >
-                          Cancel
+                          {language === 'vi' ? 'Hủy' : 'Cancel'}
                         </Button>
                         <Button
                           onClick={() => {
@@ -4121,7 +4121,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           disabled={!newCategoryName.trim() || createCategoryMutation.isPending}
                           data-testid="button-save-category"
                         >
-                          Create Category
+                          {language === 'vi' ? 'Tạo danh mục' : 'Create Category'}
                         </Button>
                       </div>
                     </div>
@@ -4130,10 +4130,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </div>
 
               <div>
-                <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">Project Categories</h3>
+                <h3 className="text-sm font-medium mb-2 uppercase tracking-wide">{language === 'vi' ? 'Danh mục dự án' : 'Project Categories'}</h3>
                 <div className="space-y-2">
                   {categories.filter(cat => cat.type === 'project' && cat.active).length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No project categories</p>
+                    <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Không có danh mục dự án' : 'No project categories'}</p>
                   ) : (
                     categories
                       .filter(cat => cat.type === 'project' && cat.active)
@@ -4182,11 +4182,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         <AlertDialog open={isDeleteCategoryAlertOpen} onOpenChange={setIsDeleteCategoryAlertOpen}>
           <AlertDialogContent className="bg-black border border-white/20 rounded-none">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-xl font-light">Confirm Category Deletion</AlertDialogTitle>
+              <AlertDialogTitle className="text-xl font-light">{language === 'vi' ? 'Xác nhận xóa danh mục' : 'Confirm Category Deletion'}</AlertDialogTitle>
               <AlertDialogDescription className="text-white/70">
-                Are you sure you want to delete the category <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?
-                <br /><br />
-                <span className="text-red-400">This action cannot be undone.</span> Please confirm to proceed.
+                {language === 'vi' ? (
+                  <>Bạn có chắc chắn muốn xóa danh mục <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?<br /><br /><span className="text-red-400">Hành động này không thể hoàn tác.</span> Vui lòng xác nhận để tiếp tục.</>
+                ) : (
+                  <>Are you sure you want to delete the category <span className="font-medium text-white">"{deleteCategoryData?.name}"</span>?<br /><br /><span className="text-red-400">This action cannot be undone.</span> Please confirm to proceed.</>
+                )}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -4197,7 +4199,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   setIsDeleteCategoryAlertOpen(false);
                 }}
               >
-                Cancel
+                {language === 'vi' ? 'Hủy' : 'Cancel'}
               </AlertDialogCancel>
               <AlertDialogAction
                 className="bg-red-600 hover:bg-red-700 text-white rounded-none"
@@ -4210,7 +4212,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 }}
                 data-testid="button-confirm-delete-category"
               >
-                Delete Category
+                {language === 'vi' ? 'Xóa danh mục' : 'Delete Category'}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -4223,7 +4225,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         }}>
           <DialogContent className="bg-black border border-white/20 rounded-none">
             <DialogHeader>
-              <DialogTitle>Edit Project Category</DialogTitle>
+              <DialogTitle>{language === 'vi' ? 'Chỉnh sửa danh mục dự án' : 'Edit Project Category'}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
@@ -4252,7 +4254,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     setEditingCategory(null);
                   }}
                 >
-                  Cancel
+                  {language === 'vi' ? 'Hủy' : 'Cancel'}
                 </Button>
                 <Button
                   onClick={() => {
@@ -4267,7 +4269,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   disabled={!editingCategory?.name.trim() || updateCategoryMutation.isPending}
                   data-testid="button-update-category"
                 >
-                  Update Category
+                  {language === 'vi' ? 'Cập nhật danh mục' : 'Update Category'}
                 </Button>
               </div>
             </div>
@@ -4292,21 +4294,21 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </div>
             ) : projects.length === 0 ? (
               <div className="p-12 text-center">
-                <h3 className="text-lg font-light mb-2">No projects found</h3>
-                <p className="text-muted-foreground">Create your first project to get started.</p>
+                <h3 className="text-lg font-light mb-2">{language === 'vi' ? 'Không tìm thấy dự án' : 'No projects found'}</h3>
+                <p className="text-muted-foreground">{language === 'vi' ? 'Tạo dự án đầu tiên để bắt đầu.' : 'Create your first project to get started.'}</p>
               </div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Project</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Year</TableHead>
-                    <TableHead>Style</TableHead>
-                    <TableHead>Area</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{language === 'vi' ? 'Dự án' : 'Project'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Danh mục' : 'Category'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Vị trí' : 'Location'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Năm' : 'Year'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Phong cách' : 'Style'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Diện tích' : 'Area'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Ngày tạo' : 'Created'}</TableHead>
+                    <TableHead className="text-right">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -4337,7 +4339,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                               });
                             }}
                             data-testid={`button-toggle-featured-${project.id}`}
-                            title={project.featured ? "Remove from featured" : "Mark as featured"}
+                            title={project.featured ? (language === 'vi' ? "Bỏ nổi bật" : "Remove from featured") : (language === 'vi' ? "Đánh dấu nổi bật" : "Mark as featured")}
                           />
                           <Trash2 
                             className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
