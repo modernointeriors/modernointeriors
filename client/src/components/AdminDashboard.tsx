@@ -3283,9 +3283,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-light text-muted-foreground">Revenue (YTD)</p>
+                  <p className="text-sm font-light text-muted-foreground">{language === 'vi' ? 'Doanh thu' : 'Revenue'}</p>
                   <p className="text-2xl font-light" data-testid="stat-revenue">
-                    {statsLoading ? "..." : stats?.revenue || "$0"}
+                    {statsLoading ? "..." : `${(parseFloat(stats?.revenue || "0")).toLocaleString('vi-VN')} VND`}
                   </p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-white/70" />
@@ -5384,7 +5384,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tổng khách hàng</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Tổng khách hàng' : 'Total Clients'}</p>
                   <p className="text-2xl font-semibold mt-1">{clients.length}</p>
                 </div>
                 <Users className="h-8 w-8 text-muted-foreground" />
@@ -5396,7 +5396,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tổng doanh thu</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Tổng doanh thu' : 'Total Revenue'}</p>
                   <p className="text-2xl font-semibold mt-1">
                     {allTransactions.reduce((sum, t) => {
                       if (t.status !== "completed") return sum;
@@ -5416,7 +5416,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Hoa hồng chi</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Hoa hồng chi' : 'Commission Paid'}</p>
                   <p className="text-2xl font-semibold mt-1">
                     {allTransactions.reduce((sum, t) => {
                       if (t.status !== "completed" || t.type !== "commission") return sum;
@@ -5433,7 +5433,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tổng số lần thanh toán</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Tổng số lần thanh toán' : 'Total Transactions'}</p>
                   <p className="text-2xl font-semibold mt-1">
                     {allTransactions.length}
                   </p>
@@ -5485,7 +5485,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         </TableHead>
                         <TableHead className="w-[110px]">
                           <div>{t('crm.totalSpending')}</div>
-                          <div className="text-xs font-normal text-muted-foreground mt-0.5">Hoa hồng</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">{language === 'vi' ? 'Hoa hồng' : 'Commission'}</div>
                         </TableHead>
                         <TableHead className="w-[110px] text-center">{t('crm.warrantyStatus')}</TableHead>
                         <TableHead className="w-[110px] text-center">{t('crm.pipelineStage')}</TableHead>

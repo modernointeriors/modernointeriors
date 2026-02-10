@@ -1148,17 +1148,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard stats
   app.get("/api/dashboard/stats", async (req, res) => {
     try {
-      const [allProjects, activeClients, newInquiries] = await Promise.all([
+      const [allProjects, activeClients, newInquiries, allTransactions] = await Promise.all([
         storage.getProjects(),
         storage.getClients("active"),
-        storage.getInquiries("new")
+        storage.getInquiries("new"),
+        storage.getTransactions()
       ]);
+
+      const totalRevenue = allTransactions.reduce((sum: number, t: any) => {
+        if (t.status !== "completed") return sum;
+        const amount = parseFloat(t.amount || "0");
+        if (t.type === "payment") return sum + amount;
+        if (t.type === "refund") return sum - amount;
+        return sum;
+      }, 0);
 
       res.json({
         totalProjects: allProjects.length,
         activeClients: activeClients.length,
         newInquiries: newInquiries.length,
-        revenue: "$2.4M" // This would come from project budgets in a real app
+        revenue: totalRevenue
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch dashboard stats" });
