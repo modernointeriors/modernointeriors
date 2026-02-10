@@ -2263,7 +2263,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         phone: data.phone && data.phone.trim() !== "" ? data.phone : undefined,
         company: data.company && data.company.trim() !== "" ? data.company : undefined,
         address: data.address && data.address.trim() !== "" ? data.address : undefined,
-        referredById: data.referredById && data.referredById.trim() !== "" ? data.referredById : undefined,
+        referredById: data.referredById && data.referredById.trim() !== "" ? data.referredById : null,
         notes: data.notes && data.notes.trim() !== "" ? data.notes : undefined,
       };
 

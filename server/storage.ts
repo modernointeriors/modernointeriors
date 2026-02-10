@@ -127,6 +127,8 @@ export interface IStorage {
 
   // CRM: Analytics & Reporting
   getClientReferrals(clientId: string): Promise<Client[]>;
+  getClientTransactions(clientId: string): Promise<Transaction[]>;
+  getClientsReferredBy(clientId: string): Promise<Client[]>;
   updateClientTier(clientId: string): Promise<void>;
 
   // Settings/Branding
@@ -796,6 +798,18 @@ export class DatabaseStorage implements IStorage {
       .from(clients)
       .where(eq(clients.referredById, clientId))
       .orderBy(desc(clients.createdAt));
+  }
+
+  async getClientTransactions(clientId: string): Promise<Transaction[]> {
+    return await db.select()
+      .from(transactions)
+      .where(eq(transactions.clientId, clientId));
+  }
+
+  async getClientsReferredBy(clientId: string): Promise<Client[]> {
+    return await db.select()
+      .from(clients)
+      .where(eq(clients.referredById, clientId));
   }
 
   async updateClientTier(clientId: string): Promise<void> {

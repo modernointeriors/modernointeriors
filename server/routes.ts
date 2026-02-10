@@ -503,7 +503,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/clients/:id", requirePermission('clients'), requirePermission('crm'), async (req, res) => {
     try {
-      await storage.deleteClient(req.params.id);
+      const clientId = req.params.id;
+
+      const [clientTransactions, referredClients] = await Promise.all([
+        storage.getClientTransactions(clientId),
+        storage.getClientsReferredBy(clientId),
+      ]);
+
+      if (clientTransactions.length > 0) {
+        return res.status(400).json({ message: "Không thể xóa khách hàng này vì đã có giao dịch liên quan." });
+      }
+
+      if (referredClients.length > 0) {
+        return res.status(400).json({ message: "Không thể xóa khách hàng này vì đang là người giới thiệu cho khách hàng khác." });
+      }
+
+      await storage.deleteClient(clientId);
       res.status(200).json({ message: "Client deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete client" });
