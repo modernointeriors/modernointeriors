@@ -6067,23 +6067,23 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     }
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-sans font-light">Homepage Content Management</h2>
+        <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản Lý Nội Dung Trang Chủ' : 'Homepage Content Management'}</h2>
         
         <Form {...homepageContentForm}>
           <form onSubmit={homepageContentForm.handleSubmit(onHomepageContentSubmit)} className="space-y-6">
             <Card>
           <CardHeader>
-            <CardTitle>Section Titles Management</CardTitle>
+            <CardTitle>{language === 'vi' ? 'Quản Lý Tiêu Đề Các Phần' : 'Section Titles Management'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {/* Featured Projects */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Featured Projects Section</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Dự Án Nổi Bật' : 'Featured Projects Section'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Title (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề (EN)' : 'Title (EN)'}</label>
                       <Input 
                         {...homepageContentForm.register("featuredBadge")}
                         placeholder="e.g., FEATURED PROJECTS"
@@ -6091,7 +6091,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Subtitle (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề (EN)' : 'Subtitle (EN)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("featuredDescription")}
                         placeholder="e.g., Discover our latest projects where innovation meets elegance."
@@ -6102,7 +6102,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Title (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề (VI)' : 'Title (VI)'}</label>
                       <Input 
                         {...homepageContentForm.register("featuredBadgeVi")}
                         placeholder="e.g., DỰ ÁN NỔI BẬT"
@@ -6110,7 +6110,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Subtitle (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề (VI)' : 'Subtitle (VI)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("featuredDescriptionVi")}
                         placeholder="e.g., Khám phá các dự án mới nhất của chúng tôi nơi sự đổi mới gặp gỡ sự thanh lịch."
@@ -6124,11 +6124,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
               {/* Featured News */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Featured News Section</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Tin Tức Nổi Bật' : 'Featured News Section'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Title (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề (EN)' : 'Title (EN)'}</label>
                       <Input 
                         {...homepageContentForm.register("featuredNewsTitle")}
                         placeholder="e.g., FEATURED NEWS"
@@ -6136,7 +6136,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Subtitle (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề (EN)' : 'Subtitle (EN)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("featuredNewsSubtitle")}
                         placeholder="e.g., Discover the latest design trends and expert insights from our professional team."
@@ -6147,7 +6147,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Title (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề (VI)' : 'Title (VI)'}</label>
                       <Input 
                         {...homepageContentForm.register("featuredNewsTitleVi")}
                         placeholder="e.g., TIN TỨC NỔI BẬT"
@@ -6155,7 +6155,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Subtitle (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề (VI)' : 'Subtitle (VI)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("featuredNewsSubtitleVi")}
                         placeholder="e.g., Khám phá xu hướng thiết kế mới nhất và những hiểu biết chuyên sâu từ đội ngũ chuyên nghiệp của chúng tôi."
@@ -6169,11 +6169,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
               {/* CTA/Questions */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">CTA/Questions Section</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần CTA/Câu Hỏi' : 'CTA/Questions Section'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Title (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề (EN)' : 'Title (EN)'}</label>
                       <Input 
                         {...homepageContentForm.register("faqSectionTitle")}
                         placeholder="e.g., GOT QUESTIONS?"
@@ -6181,7 +6181,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Subtitle (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề (EN)' : 'Subtitle (EN)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("ctaSubtitle")}
                         placeholder="e.g., Leave a request for a free consultation and we will contact you as soon as possible."
@@ -6192,7 +6192,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Title (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề (VI)' : 'Title (VI)'}</label>
                       <Input 
                         {...homepageContentForm.register("faqSectionTitleVi")}
                         placeholder="e.g., CÓ CÂU HỎI?"
@@ -6200,7 +6200,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Subtitle (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề (VI)' : 'Subtitle (VI)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("ctaSubtitleVi")}
                         placeholder="e.g., Để lại yêu cầu tư vấn miễn phí và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
@@ -6214,11 +6214,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
               {/* Journey Steps */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Journey Steps Section</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Hành Trình' : 'Journey Steps Section'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Journey Title (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề hành trình (EN)' : 'Journey Title (EN)'}</label>
                       <Input 
                         {...homepageContentForm.register("journeyTitle")}
                         placeholder="e.g., THE JOURNEY TO YOUR DREAM SPACE"
@@ -6226,7 +6226,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Journey Description (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Mô tả hành trình (EN)' : 'Journey Description (EN)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("journeyDescription")}
                         rows={3}
@@ -6237,7 +6237,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Journey Title (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề hành trình (VI)' : 'Journey Title (VI)'}</label>
                       <Input 
                         {...homepageContentForm.register("journeyTitleVi")}
                         placeholder="e.g., HÀNH TRÌNH ĐẾN KHÔNG GIAN MONG ƯỚC"
@@ -6245,7 +6245,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Journey Description (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Mô tả hành trình (VI)' : 'Journey Description (VI)'}</label>
                       <Textarea 
                         {...homepageContentForm.register("journeyDescriptionVi")}
                         rows={3}
@@ -6259,11 +6259,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
               {/* Advantages */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Advantages Section</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Ưu Điểm' : 'Advantages Section'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Advantages Title (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề ưu điểm (EN)' : 'Advantages Title (EN)'}</label>
                       <Input 
                         {...homepageContentForm.register("advantagesTitle")}
                         placeholder="e.g., ADVANTAGES"
@@ -6271,7 +6271,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Advantages Subtitle (EN)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề ưu điểm (EN)' : 'Advantages Subtitle (EN)'}</label>
                       <Input 
                         {...homepageContentForm.register("advantagesSubtitle")}
                         placeholder="e.g., Why Choose Moderno Interiors"
@@ -6281,7 +6281,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-light mb-2 block">Advantages Title (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề ưu điểm (VI)' : 'Advantages Title (VI)'}</label>
                       <Input 
                         {...homepageContentForm.register("advantagesTitleVi")}
                         placeholder="e.g., ƯU ĐIỂM"
@@ -6289,7 +6289,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-light mb-2 block">Advantages Subtitle (VI)</label>
+                      <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Phụ đề ưu điểm (VI)' : 'Advantages Subtitle (VI)'}</label>
                       <Input 
                         {...homepageContentForm.register("advantagesSubtitleVi")}
                         placeholder="e.g., Tại Sao Chọn Moderno Interiors"
@@ -6302,10 +6302,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
               {/* Partners */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Partners Section</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Đối Tác' : 'Partners Section'}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-light mb-2 block">Partners Title (EN)</label>
+                    <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề đối tác (EN)' : 'Partners Title (EN)'}</label>
                     <Input 
                       {...homepageContentForm.register("partnersTitle")}
                       placeholder="e.g., OUR PARTNERS"
@@ -6313,7 +6313,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-light mb-2 block">Partners Title (VI)</label>
+                    <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Tiêu đề đối tác (VI)' : 'Partners Title (VI)'}</label>
                     <Input 
                       {...homepageContentForm.register("partnersTitleVi")}
                       placeholder="e.g., ĐỐI TÁC CỦA CHÚNG TÔI"
@@ -6330,7 +6330,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 disabled={(!homepageContentForm.formState.isDirty && !qualityBgFile && !quality2BgFile) || updateHomepageContentMutation.isPending}
                 data-testid="button-save-section-titles"
               >
-                {updateHomepageContentMutation.isPending ? "Saving..." : "Save Section Titles"}
+                {updateHomepageContentMutation.isPending ? (language === 'vi' ? "Đang lưu..." : "Saving...") : (language === 'vi' ? "Lưu tiêu đề các phần" : "Save Section Titles")}
               </Button>
             </div>
           </CardContent>
@@ -6338,17 +6338,17 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
         <Card>
           <CardHeader>
-            <CardTitle>Quality/Banner Sections</CardTitle>
+            <CardTitle>{language === 'vi' ? 'Phần Chất Lượng/Banner' : 'Quality/Banner Sections'}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
               {/* Section 1 */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Banner Section 1</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Banner 1' : 'Banner Section 1'}</h3>
                 <div className="space-y-4">
                   {/* Background Image Upload */}
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Background Image</label>
+                    <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Ảnh nền' : 'Background Image'}</label>
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png"
@@ -6364,11 +6364,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       data-testid="input-quality-bg-file"
                     />
                     <p className="text-xs text-muted-foreground mt-2">
-                      Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
+                      {language === 'vi' ? 'Định dạng: PNG, JPG • Tối đa: 10MB • Khuyến nghị: 1920x600px' : 'Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px'}
                     </p>
                     {(qualityBgPreview || homepageContent?.qualityBackgroundImage) && (
                       <div className="mt-4">
-                        <p className="text-sm font-medium mb-2">Preview:</p>
+                        <p className="text-sm font-medium mb-2">{language === 'vi' ? 'Xem trước:' : 'Preview:'}</p>
                         <div className="border p-4 bg-muted">
                           <img 
                             src={qualityBgPreview || homepageContent?.qualityBackgroundImage || ''} 
@@ -6381,7 +6381,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
 
                   <div>
-                    <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
+                    <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Văn bản bên trái (Lớn)' : 'Left Text (Large)'}</label>
                     <Textarea 
                       {...homepageContentForm.register("qualityLeftText")}
                       placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
@@ -6391,7 +6391,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
 
                   <div>
-                    <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
+                    <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Văn bản bên phải (Nhỏ)' : 'Right Text (Small)'}</label>
                     <Textarea 
                       {...homepageContentForm.register("qualityRightText")}
                       placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
@@ -6404,11 +6404,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
               {/* Section 2 */}
               <div className="p-4">
-                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">Banner Section 2</h3>
+                <h3 className="text-sm font-medium mb-4 uppercase tracking-wider">{language === 'vi' ? 'Phần Banner 2' : 'Banner Section 2'}</h3>
                 <div className="space-y-4">
                   {/* Background Image Upload */}
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Background Image</label>
+                    <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Ảnh nền' : 'Background Image'}</label>
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png"
@@ -6424,11 +6424,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       data-testid="input-quality2-bg-file"
                     />
                     <p className="text-xs text-muted-foreground mt-2">
-                      Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px
+                      {language === 'vi' ? 'Định dạng: PNG, JPG • Tối đa: 10MB • Khuyến nghị: 1920x600px' : 'Format: PNG, JPG • Max: 10MB • Recommended: 1920x600px'}
                     </p>
                     {(quality2BgPreview || homepageContent?.quality2BackgroundImage) && (
                       <div className="mt-4">
-                        <p className="text-sm font-medium mb-2">Preview:</p>
+                        <p className="text-sm font-medium mb-2">{language === 'vi' ? 'Xem trước:' : 'Preview:'}</p>
                         <div className="border p-4 bg-muted">
                           <img 
                             src={quality2BgPreview || homepageContent?.quality2BackgroundImage || ''} 
@@ -6441,7 +6441,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
 
                   <div>
-                    <label className="text-sm font-light mb-2 block">Left Text (Large)</label>
+                    <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Văn bản bên trái (Lớn)' : 'Left Text (Large)'}</label>
                     <Textarea 
                       {...homepageContentForm.register("quality2LeftText")}
                       placeholder="e.g., Each detail is selected so that the interior will serve for a long time and look impeccable."
@@ -6451,7 +6451,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </div>
 
                   <div>
-                    <label className="text-sm font-light mb-2 block">Right Text (Small)</label>
+                    <label className="text-sm font-light mb-2 block">{language === 'vi' ? 'Văn bản bên phải (Nhỏ)' : 'Right Text (Small)'}</label>
                     <Textarea 
                       {...homepageContentForm.register("quality2RightText")}
                       placeholder="e.g., We use only high-quality materials and furniture from trusted manufacturers."
@@ -6471,7 +6471,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 disabled={(!homepageContentForm.formState.isDirty && !qualityBgFile && !quality2BgFile) || updateHomepageContentMutation.isPending}
                 data-testid="button-save-banner-sections"
               >
-                {updateHomepageContentMutation.isPending ? "Saving..." : "Save Banner Sections"}
+                {updateHomepageContentMutation.isPending ? (language === 'vi' ? "Đang lưu..." : "Saving...") : (language === 'vi' ? "Lưu phần banner" : "Save Banner Sections")}
               </Button>
             </div>
           </CardContent>
@@ -6484,9 +6484,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           <CardHeader>
             <div className="flex justify-between items-center">
               <div>
-                <CardTitle className="text-white">Partners Management</CardTitle>
+                <CardTitle className="text-white">{language === 'vi' ? 'Quản Lý Đối Tác' : 'Partners Management'}</CardTitle>
                 <p className="text-sm text-white/50 mt-1">
-                  {partners.length} / 24 partners • Maximum 24 partners allowed
+                  {partners.length} / 24 {language === 'vi' ? 'đối tác • Tối đa 24 đối tác' : 'partners • Maximum 24 partners allowed'}
                 </p>
               </div>
               <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
@@ -6496,8 +6496,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       if (partners.length >= 24) {
                         e.preventDefault();
                         toast({
-                          title: "Maximum partners reached",
-                          description: "You have reached the maximum limit of 24 partners. Please delete an existing partner to add a new one.",
+                          title: language === 'vi' ? "Đã đạt giới hạn đối tác" : "Maximum partners reached",
+                          description: language === 'vi' ? "Bạn đã đạt giới hạn 24 đối tác. Vui lòng xóa đối tác hiện có để thêm mới." : "You have reached the maximum limit of 24 partners. Please delete an existing partner to add a new one.",
                           variant: "destructive"
                         });
                         return;
@@ -6514,13 +6514,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     data-testid="button-add-partner"
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Partner
+                    {language === 'vi' ? 'Thêm đối tác' : 'Add Partner'}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingPartner ? "Edit Partner" : "Add New Partner"}
+                      {editingPartner ? (language === 'vi' ? "Chỉnh sửa đối tác" : "Edit Partner") : (language === 'vi' ? "Thêm đối tác mới" : "Add New Partner")}
                     </DialogTitle>
                   </DialogHeader>
                   <Form {...partnerForm}>
@@ -6530,7 +6530,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Partner Name *</FormLabel>
+                            <FormLabel>{language === 'vi' ? 'Tên đối tác *' : 'Partner Name *'}</FormLabel>
                             <FormControl>
                               <Input {...field} placeholder="Enter partner name" data-testid="input-partner-name" />
                             </FormControl>
@@ -6542,7 +6542,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       {/* Partner Logo Upload */}
                       <div className="space-y-4">
                         <div>
-                          <label className="text-sm font-medium mb-2 block">Upload Logo (PNG, JPG only)</label>
+                          <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Tải logo (chỉ PNG, JPG)' : 'Upload Logo (PNG, JPG only)'}</label>
                           <input
                             type="file"
                             accept=".jpg,.jpeg,.png"
@@ -6562,7 +6562,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           </p>
                           {(partnerLogoPreview || editingPartner?.logoData || editingPartner?.logo) && (
                             <div className="mt-4">
-                              <p className="text-sm font-medium mb-2">Preview:</p>
+                              <p className="text-sm font-medium mb-2">{language === 'vi' ? 'Xem trước:' : 'Preview:'}</p>
                               <div className="border rounded p-4 bg-muted flex items-center justify-center">
                                 <img 
                                   src={partnerLogoPreview || editingPartner?.logoData || editingPartner?.logo || ''} 
@@ -6580,7 +6580,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             <span className="w-full border-t" />
                           </div>
                           <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-background px-2 text-muted-foreground">Or use URL</span>
+                            <span className="bg-background px-2 text-muted-foreground">{language === 'vi' ? 'Hoặc dùng URL' : 'Or use URL'}</span>
                           </div>
                         </div>
 
@@ -6589,7 +6589,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           name="logo"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Logo URL</FormLabel>
+                              <FormLabel>{language === 'vi' ? 'Đường dẫn logo' : 'Logo URL'}</FormLabel>
                               <FormControl>
                                 <Input {...field} placeholder="https://example.com/logo.png" data-testid="input-partner-logo" />
                               </FormControl>
@@ -6605,7 +6605,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         className="w-full"
                         data-testid="button-submit-partner"
                       >
-                        {editingPartner ? "Update Partner" : "Add Partner"}
+                        {editingPartner ? (language === 'vi' ? "Cập nhật đối tác" : "Update Partner") : (language === 'vi' ? "Thêm đối tác" : "Add Partner")}
                       </Button>
                     </form>
                   </Form>
@@ -6615,14 +6615,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           </CardHeader>
           <CardContent>
             {partnersLoading ? (
-              <div className="text-white/70">Loading partners...</div>
+              <div className="text-white/70">{language === 'vi' ? 'Đang tải đối tác...' : 'Loading partners...'}</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-white/70 w-24">Logo</TableHead>
-                    <TableHead className="text-white/70">Name</TableHead>
-                    <TableHead className="text-white/70 w-32">Actions</TableHead>
+                    <TableHead className="text-white/70">{language === 'vi' ? 'Tên' : 'Name'}</TableHead>
+                    <TableHead className="text-white/70 w-32">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -6663,17 +6663,17 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Partner?</AlertDialogTitle>
+                                <AlertDialogTitle>{language === 'vi' ? 'Xóa đối tác?' : 'Delete Partner?'}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  This will permanently delete "{partner.name}". This action cannot be undone.
+                                  {language === 'vi' ? `Thao tác này sẽ xóa vĩnh viễn "${partner.name}". Không thể hoàn tác.` : `This will permanently delete "${partner.name}". This action cannot be undone.`}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>{language === 'vi' ? 'Hủy' : 'Cancel'}</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() => deletePartnerMutation.mutate(partner.id)}
                                 >
-                                  Delete
+                                  {language === 'vi' ? 'Xóa' : 'Delete'}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -6691,27 +6691,27 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         {/* FAQ Management Section */}
         <Card className="bg-black border-white/10">
           <CardHeader>
-            <CardTitle className="text-white">FAQ Management</CardTitle>
+            <CardTitle className="text-white">{language === 'vi' ? 'Quản Lý Câu Hỏi Thường Gặp' : 'FAQ Management'}</CardTitle>
           </CardHeader>
           <CardContent>
             <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingFaq ? "Edit FAQ" : "Add New FAQ"}
+                      {editingFaq ? (language === 'vi' ? "Chỉnh sửa FAQ" : "Edit FAQ") : (language === 'vi' ? "Thêm FAQ mới" : "Add New FAQ")}
                     </DialogTitle>
                   </DialogHeader>
                   <Form {...faqForm}>
                     <form onSubmit={faqForm.handleSubmit(onFaqSubmit)} className="space-y-4">
                       <div className="space-y-4">
                         <div className="border p-4 space-y-4">
-                          <h3 className="font-medium text-sm text-muted-foreground">English Version</h3>
+                          <h3 className="font-medium text-sm text-muted-foreground">{language === 'vi' ? 'Phiên bản tiếng Anh' : 'English Version'}</h3>
                           <FormField
                             control={faqForm.control}
                             name="questionEn"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Question (EN) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Câu hỏi (EN) *' : 'Question (EN) *'}</FormLabel>
                                 <FormControl>
                                   <Input {...field} data-testid="input-faq-question-en" />
                                 </FormControl>
@@ -6725,7 +6725,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="answerEn"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Answer (EN) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Trả lời (EN) *' : 'Answer (EN) *'}</FormLabel>
                                 <FormControl>
                                   <Textarea {...field} rows={4} data-testid="textarea-faq-answer-en" />
                                 </FormControl>
@@ -6736,13 +6736,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         </div>
 
                         <div className="border p-4 space-y-4">
-                          <h3 className="font-medium text-sm text-muted-foreground">Vietnamese Version</h3>
+                          <h3 className="font-medium text-sm text-muted-foreground">{language === 'vi' ? 'Phiên bản tiếng Việt' : 'Vietnamese Version'}</h3>
                           <FormField
                             control={faqForm.control}
                             name="questionVi"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Question (VI) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Câu hỏi (VI) *' : 'Question (VI) *'}</FormLabel>
                                 <FormControl>
                                   <Input {...field} data-testid="input-faq-question-vi" />
                                 </FormControl>
@@ -6756,7 +6756,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="answerVi"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Answer (VI) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Trả lời (VI) *' : 'Answer (VI) *'}</FormLabel>
                                 <FormControl>
                                   <Textarea {...field} rows={4} data-testid="textarea-faq-answer-vi" />
                                 </FormControl>
@@ -6773,7 +6773,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         disabled={!faqForm.formState.isDirty || createFaqMutation.isPending || updateFaqMutation.isPending}
                         data-testid="button-submit-faq"
                       >
-                        {createFaqMutation.isPending || updateFaqMutation.isPending ? "Saving..." : "Save"}
+                        {createFaqMutation.isPending || updateFaqMutation.isPending ? (language === 'vi' ? "Đang lưu..." : "Saving...") : (language === 'vi' ? "Lưu" : "Save")}
                       </Button>
                     </form>
                   </Form>
@@ -6781,14 +6781,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </Dialog>
 
             {faqsLoading ? (
-              <div className="text-white/70">Loading FAQs...</div>
+              <div className="text-white/70">{language === 'vi' ? 'Đang tải FAQ...' : 'Loading FAQs...'}</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70 w-20">Order</TableHead>
-                    <TableHead className="text-white/70">Question (EN / VI)</TableHead>
-                    <TableHead className="text-white/70 w-32">Actions</TableHead>
+                    <TableHead className="text-white/70 w-20">{language === 'vi' ? 'Thứ tự' : 'Order'}</TableHead>
+                    <TableHead className="text-white/70">{language === 'vi' ? 'Câu hỏi (EN / VI)' : 'Question (EN / VI)'}</TableHead>
+                    <TableHead className="text-white/70 w-32">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -6855,7 +6855,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         {/* Advantages Management Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Advantages Management (Why Choose Us)</CardTitle>
+            <CardTitle>{language === 'vi' ? 'Quản Lý Ưu Điểm (Tại Sao Chọn Chúng Tôi)' : 'Advantages Management (Why Choose Us)'}</CardTitle>
           </CardHeader>
           <CardContent>
             <Dialog open={isAdvantageDialogOpen} onOpenChange={(open) => {
@@ -6867,7 +6867,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             }}>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>{editingAdvantage ? "Edit Advantage" : "Add New Advantage"}</DialogTitle>
+                    <DialogTitle>{editingAdvantage ? (language === 'vi' ? "Chỉnh sửa ưu điểm" : "Edit Advantage") : (language === 'vi' ? "Thêm ưu điểm mới" : "Add New Advantage")}</DialogTitle>
                   </DialogHeader>
                   <Form {...advantageForm}>
                     <form onSubmit={advantageForm.handleSubmit(onAdvantageSubmit)} className="space-y-4">
@@ -6876,7 +6876,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="icon"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Lucide Icon Name *</FormLabel>
+                            <FormLabel>{language === 'vi' ? 'Tên biểu tượng Lucide *' : 'Lucide Icon Name *'}</FormLabel>
                             <FormControl>
                               <Input {...field} placeholder="e.g. Sparkles, Headset, Users, Store" data-testid="input-advantage-icon" />
                             </FormControl>
@@ -6892,7 +6892,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="titleEn"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Title (EN) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Tiêu đề (EN) *' : 'Title (EN) *'}</FormLabel>
                                 <FormControl>
                                   <Input {...field} data-testid="input-advantage-title-en" />
                                 </FormControl>
@@ -6906,7 +6906,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="descriptionEn"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Description (EN) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Mô tả (EN) *' : 'Description (EN) *'}</FormLabel>
                                 <FormControl>
                                   <Textarea {...field} rows={3} data-testid="textarea-advantage-description-en" />
                                 </FormControl>
@@ -6922,7 +6922,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="titleVi"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Title (VI) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Tiêu đề (VI) *' : 'Title (VI) *'}</FormLabel>
                                 <FormControl>
                                   <Input {...field} data-testid="input-advantage-title-vi" />
                                 </FormControl>
@@ -6936,7 +6936,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="descriptionVi"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Description (VI) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Mô tả (VI) *' : 'Description (VI) *'}</FormLabel>
                                 <FormControl>
                                   <Textarea {...field} rows={3} data-testid="textarea-advantage-description-vi" />
                                 </FormControl>
@@ -6953,7 +6953,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         disabled={!advantageForm.formState.isDirty || createAdvantageMutation.isPending || updateAdvantageMutation.isPending}
                         data-testid="button-submit-advantage"
                       >
-                        {createAdvantageMutation.isPending || updateAdvantageMutation.isPending ? "Saving..." : "Save"}
+                        {createAdvantageMutation.isPending || updateAdvantageMutation.isPending ? (language === 'vi' ? "Đang lưu..." : "Saving...") : (language === 'vi' ? "Lưu" : "Save")}
                       </Button>
                     </form>
                   </Form>
@@ -6961,14 +6961,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </Dialog>
 
             {advantagesLoading ? (
-              <div className="text-white/70">Loading advantages...</div>
+              <div className="text-white/70">{language === 'vi' ? 'Đang tải ưu điểm...' : 'Loading advantages...'}</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70 w-20">Order</TableHead>
-                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
-                    <TableHead className="text-white/70 w-32">Actions</TableHead>
+                    <TableHead className="text-white/70 w-20">{language === 'vi' ? 'Thứ tự' : 'Order'}</TableHead>
+                    <TableHead className="text-white/70">{language === 'vi' ? 'Tiêu đề (EN / VI)' : 'Title (EN / VI)'}</TableHead>
+                    <TableHead className="text-white/70 w-32">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -7007,7 +7007,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         {/* Journey Steps Management Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Journey Steps Management (Design Process)</CardTitle>
+            <CardTitle>{language === 'vi' ? 'Quản Lý Hành Trình (Quy Trình Thiết Kế)' : 'Journey Steps Management (Design Process)'}</CardTitle>
           </CardHeader>
           <CardContent>
             <Dialog open={isJourneyStepDialogOpen} onOpenChange={(open) => {
@@ -7019,7 +7019,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             }}>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>{editingJourneyStep ? "Edit Journey Step" : "Add New Journey Step"}</DialogTitle>
+                    <DialogTitle>{editingJourneyStep ? (language === 'vi' ? "Chỉnh sửa bước hành trình" : "Edit Journey Step") : (language === 'vi' ? "Thêm bước hành trình mới" : "Add New Journey Step")}</DialogTitle>
                   </DialogHeader>
                   <Form {...journeyStepForm}>
                     <form onSubmit={journeyStepForm.handleSubmit(onJourneyStepSubmit)} className="space-y-4">
@@ -7030,7 +7030,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="titleEn"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Title (EN) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Tiêu đề (EN) *' : 'Title (EN) *'}</FormLabel>
                                 <FormControl>
                                   <Input {...field} data-testid="input-journey-step-title-en" />
                                 </FormControl>
@@ -7044,7 +7044,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="descriptionEn"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Description (EN) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Mô tả (EN) *' : 'Description (EN) *'}</FormLabel>
                                 <FormControl>
                                   <Textarea {...field} rows={3} data-testid="textarea-journey-step-description-en" />
                                 </FormControl>
@@ -7060,7 +7060,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="titleVi"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Title (VI) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Tiêu đề (VI) *' : 'Title (VI) *'}</FormLabel>
                                 <FormControl>
                                   <Input {...field} data-testid="input-journey-step-title-vi" />
                                 </FormControl>
@@ -7074,7 +7074,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             name="descriptionVi"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Description (VI) *</FormLabel>
+                                <FormLabel>{language === 'vi' ? 'Mô tả (VI) *' : 'Description (VI) *'}</FormLabel>
                                 <FormControl>
                                   <Textarea {...field} rows={3} data-testid="textarea-journey-step-description-vi" />
                                 </FormControl>
@@ -7091,7 +7091,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         disabled={!journeyStepForm.formState.isDirty || createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending}
                         data-testid="button-submit-journey-step"
                       >
-                        {createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending ? "Saving..." : "Save"}
+                        {createJourneyStepMutation.isPending || updateJourneyStepMutation.isPending ? (language === 'vi' ? "Đang lưu..." : "Saving...") : (language === 'vi' ? "Lưu" : "Save")}
                       </Button>
                     </form>
                   </Form>
@@ -7099,14 +7099,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </Dialog>
 
             {journeyStepsLoading ? (
-              <div className="text-white/70">Loading journey steps...</div>
+              <div className="text-white/70">{language === 'vi' ? 'Đang tải hành trình...' : 'Loading journey steps...'}</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-white/70 w-20">Order</TableHead>
-                    <TableHead className="text-white/70">Title (EN / VI)</TableHead>
-                    <TableHead className="text-white/70 w-32">Actions</TableHead>
+                    <TableHead className="text-white/70 w-20">{language === 'vi' ? 'Thứ tự' : 'Order'}</TableHead>
+                    <TableHead className="text-white/70">{language === 'vi' ? 'Tiêu đề (EN / VI)' : 'Title (EN / VI)'}</TableHead>
+                    <TableHead className="text-white/70 w-32">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -8333,9 +8333,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-sans font-light">User Management</h2>
+            <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản Lý Người Dùng' : 'User Management'}</h2>
             <p className="text-sm text-white/50 mt-1">
-              Manage admin accounts and permissions
+              {language === 'vi' ? 'Quản lý tài khoản admin và quyền hạn' : 'Manage admin accounts and permissions'}
             </p>
           </div>
           <Dialog open={isUserDialogOpen} onOpenChange={setIsUserDialogOpen}>
@@ -8355,13 +8355,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 data-testid="button-add-user"
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Add User
+                {language === 'vi' ? 'Thêm người dùng' : 'Add User'}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
-                  {editingUser ? "Edit User" : "Add New User"}
+                  {editingUser ? (language === 'vi' ? 'Chỉnh sửa người dùng' : 'Edit User') : (language === 'vi' ? 'Thêm người dùng mới' : 'Add New User')}
                 </DialogTitle>
               </DialogHeader>
               <Form {...userForm}>
@@ -8374,9 +8374,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         name="username"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Username *</FormLabel>
+                            <FormLabel>{language === 'vi' ? 'Tên đăng nhập *' : 'Username *'}</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Enter username" data-testid="input-user-username" disabled={!!editingUser} />
+                              <Input {...field} placeholder={language === 'vi' ? 'Nhập tên đăng nhập' : 'Enter username'} data-testid="input-user-username" disabled={!!editingUser} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -8389,9 +8389,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           name="password"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Password *</FormLabel>
+                              <FormLabel>{language === 'vi' ? 'Mật khẩu *' : 'Password *'}</FormLabel>
                               <FormControl>
-                                <Input {...field} type="password" placeholder="Enter password" data-testid="input-user-password" />
+                                <Input {...field} type="password" placeholder={language === 'vi' ? 'Nhập mật khẩu' : 'Enter password'} data-testid="input-user-password" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -8406,9 +8406,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     name="displayName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Display Name</FormLabel>
+                        <FormLabel>{language === 'vi' ? 'Tên hiển thị' : 'Display Name'}</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter display name" data-testid="input-user-displayname" />
+                          <Input {...field} placeholder={language === 'vi' ? 'Nhập tên hiển thị' : 'Enter display name'} data-testid="input-user-displayname" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -8422,7 +8422,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input {...field} type="email" placeholder="Enter email" data-testid="input-user-email" />
+                          <Input {...field} type="email" placeholder={language === 'vi' ? 'Nhập email' : 'Enter email'} data-testid="input-user-email" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -8436,17 +8436,17 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="role"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Role *</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Vai trò *' : 'Role *'}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger data-testid="select-user-role">
-                                <SelectValue placeholder="Select role" />
+                                <SelectValue placeholder={language === 'vi' ? 'Chọn vai trò' : 'Select role'} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="superadmin">Super Admin (Full Access)</SelectItem>
-                              <SelectItem value="admin">Admin (Custom Permissions)</SelectItem>
-                              <SelectItem value="editor">Editor (Limited Access)</SelectItem>
+                              <SelectItem value="superadmin">{language === 'vi' ? 'Super Admin (Toàn quyền)' : 'Super Admin (Full Access)'}</SelectItem>
+                              <SelectItem value="admin">{language === 'vi' ? 'Admin (Quyền tùy chỉnh)' : 'Admin (Custom Permissions)'}</SelectItem>
+                              <SelectItem value="editor">{language === 'vi' ? 'Editor (Quyền hạn chế)' : 'Editor (Limited Access)'}</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -8462,7 +8462,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="permissions"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Permissions</FormLabel>
+                          <FormLabel>{language === 'vi' ? 'Quyền hạn' : 'Permissions'}</FormLabel>
                           <div className="border border-white/10 rounded-none p-4 space-y-3">
                             {AVAILABLE_PERMISSIONS.map((perm) => (
                               <div key={perm.id} className="flex items-center space-x-3">
@@ -8502,14 +8502,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         userForm.reset();
                       }}
                     >
-                      Cancel
+                      {language === 'vi' ? 'Hủy' : 'Cancel'}
                     </Button>
                     <Button
                       type="submit"
                       disabled={createUserMutation.isPending || updateUserMutation.isPending}
                       data-testid="button-save-user"
                     >
-                      {editingUser ? "Update" : "Create"} User
+                      {editingUser ? (language === 'vi' ? 'Cập nhật' : 'Update') : (language === 'vi' ? 'Tạo' : 'Create')} {language === 'vi' ? 'người dùng' : 'User'}
                     </Button>
                   </div>
                 </form>
@@ -8524,37 +8524,37 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <KeyRound className="h-5 w-5" />
-                Change Password
+                {language === 'vi' ? 'Đổi mật khẩu' : 'Change Password'}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Current Password</label>
+                <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Mật khẩu hiện tại' : 'Current Password'}</label>
                 <Input
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Enter current password"
+                  placeholder={language === 'vi' ? 'Nhập mật khẩu hiện tại' : 'Enter current password'}
                   data-testid="input-current-password"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium mb-2 block">New Password</label>
+                <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Mật khẩu mới' : 'New Password'}</label>
                 <Input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Enter new password (min 6 characters)"
+                  placeholder={language === 'vi' ? 'Nhập mật khẩu mới (tối thiểu 6 ký tự)' : 'Enter new password (min 6 characters)'}
                   data-testid="input-new-password"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium mb-2 block">Confirm New Password</label>
+                <label className="text-sm font-medium mb-2 block">{language === 'vi' ? 'Xác nhận mật khẩu mới' : 'Confirm New Password'}</label>
                 <Input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm new password"
+                  placeholder={language === 'vi' ? 'Xác nhận mật khẩu mới' : 'Confirm new password'}
                   data-testid="input-confirm-password"
                 />
               </div>
@@ -8569,14 +8569,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     setConfirmPassword("");
                   }}
                 >
-                  Cancel
+                  {language === 'vi' ? 'Hủy' : 'Cancel'}
                 </Button>
                 <Button
                   onClick={submitPasswordChange}
                   disabled={changePasswordMutation.isPending}
                   data-testid="button-submit-password"
                 >
-                  Change Password
+                  {language === 'vi' ? 'Đổi mật khẩu' : 'Change Password'}
                 </Button>
               </div>
             </div>
@@ -8602,19 +8602,19 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               </div>
             ) : adminUsers.length === 0 ? (
               <div className="p-12 text-center">
-                <h3 className="text-lg font-light mb-2">No users found</h3>
-                <p className="text-muted-foreground">Create your first admin user to get started.</p>
+                <h3 className="text-lg font-light mb-2">{language === 'vi' ? 'Không tìm thấy người dùng' : 'No users found'}</h3>
+                <p className="text-muted-foreground">{language === 'vi' ? 'Tạo tài khoản admin đầu tiên để bắt đầu.' : 'Create your first admin user to get started.'}</p>
               </div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Username</TableHead>
-                    <TableHead>Display Name</TableHead>
+                    <TableHead>{language === 'vi' ? 'Tên đăng nhập' : 'Username'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Tên hiển thị' : 'Display Name'}</TableHead>
                     <TableHead>Email</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Permissions</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{language === 'vi' ? 'Vai trò' : 'Role'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Quyền hạn' : 'Permissions'}</TableHead>
+                    <TableHead className="text-right">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -8633,7 +8633,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       </TableCell>
                       <TableCell>
                         {tableUser.role === 'superadmin' ? (
-                          <span className="text-white text-sm">Full Access</span>
+                          <span className="text-white text-sm">{language === 'vi' ? 'Toàn quyền' : 'Full Access'}</span>
                         ) : Array.isArray(tableUser.permissions) && tableUser.permissions.length > 0 ? (
                           <div className="flex flex-wrap gap-1">
                             {tableUser.permissions.slice(0, 3).map((p: string) => (
@@ -8648,7 +8648,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             )}
                           </div>
                         ) : (
-                          <span className="text-muted-foreground text-sm">No permissions</span>
+                          <span className="text-muted-foreground text-sm">{language === 'vi' ? 'Không có quyền' : 'No permissions'}</span>
                         )}
                       </TableCell>
                       <TableCell className="text-right">
@@ -8684,17 +8684,17 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                               </AlertDialogTrigger>
                               <AlertDialogContent>
                                 <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete User?</AlertDialogTitle>
+                                  <AlertDialogTitle>{language === 'vi' ? 'Xóa người dùng?' : 'Delete User?'}</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    This will permanently delete the user "{tableUser.username}". This action cannot be undone.
+                                    {language === 'vi' ? `Thao tác này sẽ xóa vĩnh viễn người dùng "${tableUser.username}". Không thể hoàn tác.` : `This will permanently delete the user "${tableUser.username}". This action cannot be undone.`}
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogCancel>{language === 'vi' ? 'Hủy' : 'Cancel'}</AlertDialogCancel>
                                   <AlertDialogAction
                                     onClick={() => deleteUserMutation.mutate(tableUser.id)}
                                   >
-                                    Delete
+                                    {language === 'vi' ? 'Xóa' : 'Delete'}
                                   </AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
@@ -8715,7 +8715,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
   return (
     <div className="flex items-center justify-center py-12">
-      <p className="text-muted-foreground">Select a tab to view content</p>
+      <p className="text-muted-foreground">{language === 'vi' ? 'Chọn tab để xem nội dung' : 'Select a tab to view content'}</p>
     </div>
   );
 }
