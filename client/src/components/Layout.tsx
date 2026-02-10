@@ -404,7 +404,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
       {/* Main Content - Adjusted for header and sidebar */}
-      <main className="pl-12 md:pl-16 pb-8 md:pb-6 mb-4">{children}</main>
+      <main className={`pl-12 md:pl-16 ${isAdminPage ? 'pb-0 mb-0' : 'pb-8 md:pb-6 mb-4'}`}>{children}</main>
 
       {/* Footer - Hidden on admin pages */}
       {!isAdminPage && <footer className="bg-black text-white pt-10 pb-12 border-t border-gray-800 ml-12 md:ml-16">
