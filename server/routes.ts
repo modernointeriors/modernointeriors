@@ -548,32 +548,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/inquiries", requirePermission('inquiries'), requirePermission('crm'), async (req, res) => {
+  app.post("/api/inquiries/public", async (req, res) => {
     try {
       const validatedData = insertInquirySchema.parse(req.body);
       
-      // Check if client already exists by email
-      let clientId = null;
-      const existingClient = await storage.getClientByEmail(validatedData.email);
-      
-      if (existingClient) {
-        clientId = existingClient.id;
-      } else {
-        // Create new client from inquiry data
-        const newClient = await storage.createClient({
-          firstName: validatedData.firstName,
-          lastName: validatedData.lastName,
-          email: validatedData.email,
-          phone: validatedData.phone || null,
-          status: "lead"
-        });
-        clientId = newClient.id;
-      }
-
       const inquiry = await storage.createInquiry({
         ...validatedData,
-        clientId
+        clientId: null
       });
+      
+      res.status(201).json(inquiry);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create inquiry" });
+    }
+  });
+
+  app.post("/api/inquiries", requirePermission('inquiries'), requirePermission('crm'), async (req, res) => {
+    try {
+      const validatedData = insertInquirySchema.parse(req.body);
+
+      const inquiry = await storage.createInquiry(validatedData);
       
       res.status(201).json(inquiry);
     } catch (error) {

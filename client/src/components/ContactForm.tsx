@@ -42,7 +42,7 @@ export default function ContactForm() {
 
   const submitInquiry = useMutation({
     mutationFn: async (data: ContactFormData) => {
-      const response = await apiRequest('POST', '/api/inquiries', data);
+      const response = await apiRequest('POST', '/api/inquiries/public', data);
       return response.json();
     },
     onSuccess: () => {
