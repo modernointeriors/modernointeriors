@@ -5769,7 +5769,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="new">{language === 'vi' ? 'Mới' : 'New'}</SelectItem>
-                            <SelectItem value="reviewed">{language === 'vi' ? 'Đã xem' : 'Reviewed'}</SelectItem>
                             <SelectItem value="contacted">{language === 'vi' ? 'Đã liên hệ' : 'Contacted'}</SelectItem>
                             <SelectItem value="converted">{language === 'vi' ? 'Đã chuyển đổi' : 'Converted'}</SelectItem>
                           </SelectContent>

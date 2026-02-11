@@ -184,16 +184,22 @@ export default function Contact() {
       return;
     }
 
-    const projectTypeLabel = projectTypeOptions.find(o => o.value === formData.projectType)?.label || formData.projectType;
+    const projectTypeLabel = projectTypeOptions.find(o => o.value === formData.projectType)?.label || '';
+
+    const messageParts = [];
+    if (formData.address) messageParts.push(`${language === 'vi' ? 'Địa chỉ' : 'Address'}: ${formData.address}`);
+    if (projectTypeLabel) messageParts.push(`${language === 'vi' ? 'Loại hình' : 'Type'}: ${projectTypeLabel}`);
+    if (formData.budget) messageParts.push(`${language === 'vi' ? 'Ngân sách' : 'Budget'}: ${formData.budget}`);
+    if (formData.requirements) messageParts.push(`\n${language === 'vi' ? 'Yêu cầu' : 'Requirements'}: ${formData.requirements}`);
 
     const inquiryData = {
       firstName: formData.name.split(' ')[0] || formData.name,
       lastName: formData.name.split(' ').slice(1).join(' ') || '',
       email: formData.email,
       phone: formData.phone,
-      projectType: formData.projectType || 'consultation',
+      projectType: formData.projectType || '',
       budget: formData.budget || undefined,
-      message: `${language === 'vi' ? 'Địa chỉ' : 'Address'}: ${formData.address}\n${language === 'vi' ? 'Loại hình' : 'Type'}: ${projectTypeLabel}\n${language === 'vi' ? 'Ngân sách' : 'Budget'}: ${formData.budget || 'N/A'}\n\n${language === 'vi' ? 'Yêu cầu' : 'Requirements'}: ${formData.requirements}`
+      message: messageParts.join('\n') || ''
     };
 
     mutation.mutate(inquiryData);
