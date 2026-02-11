@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -16,17 +17,32 @@ export default function Contact() {
     email: '',
     phone: '',
     address: '',
+    budget: '',
+    projectType: '',
     requirements: ''
   });
   const { toast } = useToast();
   const [expandedFaqIndex, setExpandedFaqIndex] = useState<number | null>(null);
   
+  const projectTypeOptions = [
+    { value: 'apartment', label: t('contact.form.projectType.apartment') },
+    { value: 'house', label: t('contact.form.projectType.house') },
+    { value: 'villa', label: t('contact.form.projectType.villa') },
+    { value: 'restaurant', label: t('contact.form.projectType.restaurant') },
+    { value: 'cafe', label: t('contact.form.projectType.cafe') },
+    { value: 'office', label: t('contact.form.projectType.office') },
+    { value: 'hotel', label: t('contact.form.projectType.hotel') },
+    { value: 'shop', label: t('contact.form.projectType.shop') },
+    { value: 'other', label: t('contact.form.projectType.other') },
+  ];
+
   // Typing animation for placeholders
   const [placeholders, setPlaceholders] = useState({
     name: '',
     email: '',
     phone: '',
     address: '',
+    budget: '',
     requirements: ''
   });
 
@@ -39,6 +55,7 @@ export default function Contact() {
       email: t('contact.form.email'),
       phone: t('contact.form.phone'),
       address: t('contact.form.address'),
+      budget: t('contact.form.budget'),
       requirements: t('contact.form.requirements')
     };
 
@@ -47,7 +64,8 @@ export default function Contact() {
       email: 200,
       phone: 400,
       address: 600,
-      requirements: 800
+      budget: 800,
+      requirements: 1000
     };
 
     const timeouts: NodeJS.Timeout[] = [];
@@ -73,6 +91,7 @@ export default function Contact() {
     typeText('email', texts.email, delays.email);
     typeText('phone', texts.phone, delays.phone);
     typeText('address', texts.address, delays.address);
+    typeText('budget', texts.budget, delays.budget);
     typeText('requirements', texts.requirements, delays.requirements);
 
     return () => {
@@ -134,14 +153,14 @@ export default function Contact() {
 
   const mutation = useMutation({
     mutationFn: async (data: InsertInquiry) => {
-      return await apiRequest('POST', '/api/inquiries', data);
+      return await apiRequest('POST', '/api/inquiries/public', data);
     },
     onSuccess: () => {
       toast({
         title: t('contact.form.success'),
         description: t('contact.form.successDesc')
       });
-      setFormData({ name: '', email: '', phone: '', address: '', requirements: '' });
+      setFormData({ name: '', email: '', phone: '', address: '', budget: '', projectType: '', requirements: '' });
       queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
     },
     onError: () => {
@@ -165,13 +184,16 @@ export default function Contact() {
       return;
     }
 
+    const projectTypeLabel = projectTypeOptions.find(o => o.value === formData.projectType)?.label || formData.projectType;
+
     const inquiryData = {
       firstName: formData.name.split(' ')[0] || formData.name,
       lastName: formData.name.split(' ').slice(1).join(' ') || '',
       email: formData.email,
       phone: formData.phone,
-      projectType: 'consultation' as const,
-      message: `Address: ${formData.address}\n\nRequirements: ${formData.requirements}`
+      projectType: formData.projectType || 'consultation',
+      budget: formData.budget || undefined,
+      message: `${language === 'vi' ? 'Địa chỉ' : 'Address'}: ${formData.address}\n${language === 'vi' ? 'Loại hình' : 'Type'}: ${projectTypeLabel}\n${language === 'vi' ? 'Ngân sách' : 'Budget'}: ${formData.budget || 'N/A'}\n\n${language === 'vi' ? 'Yêu cầu' : 'Requirements'}: ${formData.requirements}`
     };
 
     mutation.mutate(inquiryData);
@@ -241,7 +263,41 @@ export default function Contact() {
                 </div>
               </div>
               
-              {/* Third row - Requirements */}
+              {/* Third row - Budget and Project Type */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Input
+                    type="text"
+                    placeholder={placeholders.budget}
+                    value={formData.budget}
+                    onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
+                    className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0"
+                    data-testid="input-budget"
+                  />
+                </div>
+                <div>
+                  <Select
+                    value={formData.projectType}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, projectType: value }))}
+                  >
+                    <SelectTrigger 
+                      className="bg-transparent border-0 border-b border-gray-600 rounded-none px-0 py-4 text-white placeholder-gray-400 focus:border-white focus-visible:ring-0 h-auto"
+                      data-testid="select-project-type"
+                    >
+                      <SelectValue placeholder={t('contact.form.projectType')} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black border border-white/20 rounded-none">
+                      {projectTypeOptions.map(option => (
+                        <SelectItem key={option.value} value={option.value} className="text-white hover:bg-white/10">
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Fourth row - Requirements */}
               <div>
                 <Textarea
                   placeholder={placeholders.requirements}
