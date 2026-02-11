@@ -56,6 +56,9 @@ export interface IStorage {
   createClient(client: InsertClient): Promise<Client>;
   updateClient(id: string, client: Partial<InsertClient>): Promise<Client>;
   deleteClient(id: string): Promise<void>;
+  unlinkInquiriesFromClient(clientId: string): Promise<void>;
+  deleteClientInteractions(clientId: string): Promise<void>;
+  deleteClientDeals(clientId: string): Promise<void>;
 
   // Inquiries
   getInquiries(status?: string): Promise<Inquiry[]>;
@@ -380,6 +383,18 @@ export class DatabaseStorage implements IStorage {
 
   async deleteClient(id: string): Promise<void> {
     await db.delete(clients).where(eq(clients.id, id));
+  }
+
+  async unlinkInquiriesFromClient(clientId: string): Promise<void> {
+    await db.update(inquiries).set({ clientId: null }).where(eq(inquiries.clientId, clientId));
+  }
+
+  async deleteClientInteractions(clientId: string): Promise<void> {
+    await db.delete(interactions).where(eq(interactions.clientId, clientId));
+  }
+
+  async deleteClientDeals(clientId: string): Promise<void> {
+    await db.delete(deals).where(eq(deals.clientId, clientId));
   }
 
   // Inquiries

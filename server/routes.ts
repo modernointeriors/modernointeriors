@@ -518,6 +518,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Không thể xóa khách hàng này vì đang là người giới thiệu cho khách hàng khác." });
       }
 
+      await storage.unlinkInquiriesFromClient(clientId);
+      await storage.deleteClientInteractions(clientId);
+      await storage.deleteClientDeals(clientId);
       await storage.deleteClient(clientId);
       res.status(200).json({ message: "Client deleted successfully" });
     } catch (error) {
