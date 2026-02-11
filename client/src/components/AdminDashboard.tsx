@@ -614,6 +614,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const projectsEndIndex = projectsStartIndex + projectsPerPage;
   const paginatedProjects = allProjects.slice(projectsStartIndex, projectsEndIndex);
 
+  // Pagination state for Inquiries
+  const [inquiriesPage, setInquiriesPage] = useState(1);
+  const inquiriesPerPage = 10;
+  const inquiriesTotalPages = Math.ceil(inquiries.length / inquiriesPerPage);
+  const inquiriesStartIndex = (inquiriesPage - 1) * inquiriesPerPage;
+  const inquiriesEndIndex = inquiriesStartIndex + inquiriesPerPage;
+  const paginatedInquiries = inquiries.slice(inquiriesStartIndex, inquiriesEndIndex);
+
   // Pagination state for Articles - group by slug first, then paginate
   const [articlesPage, setArticlesPage] = useState(1);
   const articlesPerPage = 10;
@@ -4381,62 +4389,62 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             )}
             {projects.length > 10 && (
               <div className="p-4 border-t border-white/10">
-                  <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setProjectsPage(1)}
+                    disabled={projectsPage === 1}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'ĐẦU' : 'FIRST'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setProjectsPage(prev => Math.max(1, prev - 1))}
+                    disabled={projectsPage === 1}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'TRƯỚC' : 'PREV'}
+                  </Button>
+                  {Array.from({ length: projectsTotalPages }, (_, i) => i + 1).map((page) => (
                     <Button
-                      variant="ghost"
+                      key={page}
+                      variant={projectsPage === page ? "default" : "ghost"}
                       size="sm"
-                      onClick={() => setProjectsPage(1)}
-                      disabled={projectsPage === 1}
-                      className="text-xs"
+                      onClick={() => setProjectsPage(page)}
+                      className="text-xs min-w-[32px]"
                     >
-                      FIRST
+                      {page}
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setProjectsPage(prev => Math.max(1, prev - 1))}
-                      disabled={projectsPage === 1}
-                      className="text-xs"
-                    >
-                      PREV
-                    </Button>
-                    {Array.from({ length: projectsTotalPages }, (_, i) => i + 1).map((page) => (
-                      <Button
-                        key={page}
-                        variant={projectsPage === page ? "default" : "ghost"}
-                        size="sm"
-                        onClick={() => setProjectsPage(page)}
-                        className="text-xs min-w-[32px]"
-                      >
-                        {page}
-                      </Button>
-                    ))}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setProjectsPage(prev => Math.min(projectsTotalPages, prev + 1))}
-                      disabled={projectsPage === projectsTotalPages}
-                      className="text-xs"
-                    >
-                      NEXT
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setProjectsPage(projectsTotalPages)}
-                      disabled={projectsPage === projectsTotalPages}
-                      className="text-xs"
-                    >
-                      LAST
-                    </Button>
-                  </div>
-                  <div className="text-center mt-2">
-                    <span className="text-xs text-muted-foreground">
-                      Showing {projectsStartIndex + 1}-{Math.min(projectsEndIndex, projects.length)} of {projects.length} projects
-                    </span>
-                  </div>
+                  ))}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setProjectsPage(prev => Math.min(projectsTotalPages, prev + 1))}
+                    disabled={projectsPage === projectsTotalPages}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'SAU' : 'NEXT'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setProjectsPage(projectsTotalPages)}
+                    disabled={projectsPage === projectsTotalPages}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'CUỐI' : 'LAST'}
+                  </Button>
                 </div>
-              )}
+                <div className="text-center mt-2">
+                  <span className="text-xs text-muted-foreground">
+                    {language === 'vi' ? `Hiển thị ${projectsStartIndex + 1}-${Math.min(projectsEndIndex, projects.length)} trên ${projects.length} dự án` : `Showing ${projectsStartIndex + 1}-${Math.min(projectsEndIndex, projects.length)} of ${projects.length} projects`}
+                  </span>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -5638,7 +5646,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       disabled={currentPage === 1}
                       className="text-xs"
                     >
-                      FIRST
+                      {language === 'vi' ? 'ĐẦU' : 'FIRST'}
                     </Button>
                     <Button
                       variant="ghost"
@@ -5647,7 +5655,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       disabled={currentPage === 1}
                       className="text-xs"
                     >
-                      PREV
+                      {language === 'vi' ? 'TRƯỚC' : 'PREV'}
                     </Button>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                       <Button
@@ -5667,7 +5675,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       disabled={currentPage === totalPages}
                       className="text-xs"
                     >
-                      NEXT
+                      {language === 'vi' ? 'SAU' : 'NEXT'}
                     </Button>
                     <Button
                       variant="ghost"
@@ -5676,12 +5684,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       disabled={currentPage === totalPages}
                       className="text-xs"
                     >
-                      LAST
+                      {language === 'vi' ? 'CUỐI' : 'LAST'}
                     </Button>
                   </div>
                   <div className="text-center mt-2">
                     <span className="text-xs text-muted-foreground">
-                      Showing {startIndex + 1}-{Math.min(endIndex, clients.length)} of {clients.length} clients
+                      {language === 'vi' ? `Hiển thị ${startIndex + 1}-${Math.min(endIndex, clients.length)} trên ${clients.length} khách hàng` : `Showing ${startIndex + 1}-${Math.min(endIndex, clients.length)} of ${clients.length} clients`}
                     </span>
                   </div>
                 </div>
@@ -5744,7 +5752,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {inquiries.map((inquiry) => (
+                  {paginatedInquiries.map((inquiry) => (
                     <TableRow key={inquiry.id} data-testid={`row-inquiry-${inquiry.id}`}>
                       <TableCell>
                         <div>
@@ -5843,6 +5851,64 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   ))}
                 </TableBody>
               </Table>
+            )}
+            {inquiries.length > 10 && (
+              <div className="p-4 border-t border-white/10">
+                <div className="flex items-center justify-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setInquiriesPage(1)}
+                    disabled={inquiriesPage === 1}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'ĐẦU' : 'FIRST'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setInquiriesPage(prev => Math.max(1, prev - 1))}
+                    disabled={inquiriesPage === 1}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'TRƯỚC' : 'PREV'}
+                  </Button>
+                  {Array.from({ length: inquiriesTotalPages }, (_, i) => i + 1).map((page) => (
+                    <Button
+                      key={page}
+                      variant={inquiriesPage === page ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setInquiriesPage(page)}
+                      className="text-xs min-w-[32px]"
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setInquiriesPage(prev => Math.min(inquiriesTotalPages, prev + 1))}
+                    disabled={inquiriesPage === inquiriesTotalPages}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'SAU' : 'NEXT'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setInquiriesPage(inquiriesTotalPages)}
+                    disabled={inquiriesPage === inquiriesTotalPages}
+                    className="text-xs"
+                  >
+                    {language === 'vi' ? 'CUỐI' : 'LAST'}
+                  </Button>
+                </div>
+                <div className="text-center mt-2">
+                  <span className="text-xs text-muted-foreground">
+                    {language === 'vi' ? `Hiển thị ${inquiriesStartIndex + 1}-${Math.min(inquiriesEndIndex, inquiries.length)} trên ${inquiries.length} yêu cầu` : `Showing ${inquiriesStartIndex + 1}-${Math.min(inquiriesEndIndex, inquiries.length)} of ${inquiries.length} inquiries`}
+                  </span>
+                </div>
+              </div>
             )}
           </CardContent>
         </Card>
