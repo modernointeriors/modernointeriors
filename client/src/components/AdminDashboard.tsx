@@ -4301,13 +4301,25 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>{language === 'vi' ? 'Dự án' : 'Project'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Danh mục' : 'Category'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Vị trí' : 'Location'}</TableHead>
+                    <TableHead>
+                      <div>
+                        <span>{language === 'vi' ? 'Dự án' : 'Project'}</span>
+                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Ngày tạo' : 'Created'}</p>
+                      </div>
+                    </TableHead>
+                    <TableHead>
+                      <div>
+                        <span>{language === 'vi' ? 'Danh mục' : 'Category'}</span>
+                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Phong cách' : 'Style'}</p>
+                      </div>
+                    </TableHead>
+                    <TableHead>
+                      <div>
+                        <span>{language === 'vi' ? 'Vị trí' : 'Location'}</span>
+                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Diện tích' : 'Area'}</p>
+                      </div>
+                    </TableHead>
                     <TableHead>{language === 'vi' ? 'Năm' : 'Year'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Phong cách' : 'Style'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Diện tích' : 'Area'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Ngày tạo' : 'Created'}</TableHead>
                     <TableHead className="text-right">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -4315,14 +4327,24 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   {paginatedProjects.map((project) => (
                     <TableRow key={project.id} data-testid={`row-project-${project.id}`}>
                       <TableCell>
-                        <p className="font-light">{project.title}</p>
+                        <div>
+                          <p className="font-light">{project.title}</p>
+                          <p className="text-sm text-muted-foreground">{formatDate(project.createdAt)}</p>
+                        </div>
                       </TableCell>
-                      <TableCell className="capitalize">{project.category}</TableCell>
-                      <TableCell>{project.location || "—"}</TableCell>
+                      <TableCell>
+                        <div>
+                          <p className="capitalize">{project.category}</p>
+                          <p className="text-sm text-muted-foreground">{project.style || "—"}</p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <p>{project.location || "—"}</p>
+                          <p className="text-sm text-muted-foreground">{project.area || "—"}</p>
+                        </div>
+                      </TableCell>
                       <TableCell>{project.completionYear || "—"}</TableCell>
-                      <TableCell>{project.style || "—"}</TableCell>
-                      <TableCell>{project.area || "—"}</TableCell>
-                      <TableCell>{formatDate(project.createdAt)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end items-center gap-4">
                           <Pencil 
@@ -7799,13 +7821,21 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>{language === 'vi' ? 'Tiêu đề' : 'Title'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Danh mục' : 'Category'}</TableHead>
+                    <TableHead>
+                      <div>
+                        <span>{language === 'vi' ? 'Tiêu đề' : 'Title'}</span>
+                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Ngày đăng' : 'Published'}</p>
+                      </div>
+                    </TableHead>
+                    <TableHead>
+                      <div>
+                        <span>{language === 'vi' ? 'Danh mục' : 'Category'}</span>
+                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Ngôn ngữ' : 'Languages'}</p>
+                      </div>
+                    </TableHead>
                     <TableHead>{language === 'vi' ? 'Trạng thái' : 'Status'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Ngôn ngữ' : 'Languages'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Ngày đăng' : 'Published'}</TableHead>
                     <TableHead>SEO</TableHead>
-                    <TableHead>{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
+                    <TableHead className="text-right">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -7825,14 +7855,23 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <TableCell className="font-medium">
                             <div>
                               <p>{displayArticle.title}</p>
+                              <p className="text-sm text-muted-foreground" data-testid={`text-published-${slug}`}>
+                                {displayArticle.publishedAt ? formatDate(displayArticle.publishedAt) : '-'}
+                              </p>
                               {!hasEn && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu EN' : 'Missing EN'}</p>}
                               {!hasVi && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu VI' : 'Missing VI'}</p>}
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge variant="outline" data-testid={`badge-category-${slug}`}>
-                              {displayArticle.category}
-                            </Badge>
+                            <div>
+                              <Badge variant="outline" data-testid={`badge-category-${slug}`}>
+                                {displayArticle.category}
+                              </Badge>
+                              <div className="flex space-x-1 mt-1">
+                                {hasEn && <Badge variant="outline" className="text-xs">EN</Badge>}
+                                {hasVi && <Badge variant="outline" className="text-xs">VI</Badge>}
+                              </div>
+                            </div>
                           </TableCell>
                           <TableCell>
                             <Badge
@@ -7845,22 +7884,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           </TableCell>
                           <TableCell>
                             <div className="flex space-x-1">
-                              {hasEn && <Badge variant="outline" className="text-xs">EN</Badge>}
-                              {hasVi && <Badge variant="outline" className="text-xs">VI</Badge>}
-                            </div>
-                          </TableCell>
-                          <TableCell data-testid={`text-published-${slug}`}>
-                            {displayArticle.publishedAt ? formatDate(displayArticle.publishedAt) : '-'}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex space-x-1">
                               {displayArticle.metaTitle && <Badge variant="outline" className="text-xs">Title</Badge>}
                               {displayArticle.metaDescription && <Badge variant="outline" className="text-xs">Desc</Badge>}
                               {displayArticle.metaKeywords && <Badge variant="outline" className="text-xs">Keywords</Badge>}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-4">
+                          <TableCell className="text-right">
+                            <div className="flex justify-end items-center gap-4">
                               <Star 
                                 className={`h-4 w-4 cursor-pointer ${displayArticle.featured ? 'text-white fill-white' : 'text-white/50 hover:text-white'} ${togglingFeaturedSlug === slug ? "opacity-50" : ""}`}
                                 onClick={async () => {
