@@ -5739,11 +5739,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 <TableHeader>
                   <TableRow>
                     <TableHead>{language === 'vi' ? 'Liên hệ' : 'Contact'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Số điện thoại' : 'Phone'}</TableHead>
                     <TableHead>{language === 'vi' ? 'Loại dự án' : 'Project Type'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Ngân sách' : 'Budget'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Trạng thái' : 'Status'}</TableHead>
-                    <TableHead>{language === 'vi' ? 'Ngày' : 'Date'}</TableHead>
-                    <TableHead className="text-right">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
+                    <TableHead className="text-right">{language === 'vi' ? 'Trạng thái' : 'Status'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -5754,29 +5753,18 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <p className="font-light">
                             {inquiry.firstName} {inquiry.lastName}
                           </p>
+                          <p className="text-sm text-muted-foreground">{formatDate(inquiry.createdAt)}</p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <p className="font-light">{inquiry.phone || "—"}</p>
                           <p className="text-sm text-muted-foreground">{inquiry.email}</p>
                         </div>
                       </TableCell>
-                      <TableCell className="capitalize">{inquiry.projectType}</TableCell>
-                      <TableCell>{inquiry.budget || "—"}</TableCell>
+                      <TableCell className="capitalize">{inquiry.projectType || "—"}</TableCell>
                       <TableCell>
-                        <Select
-                          value={inquiry.status}
-                          onValueChange={(value) => updateInquiryMutation.mutate({ id: inquiry.id, status: value })}
-                        >
-                          <SelectTrigger className="w-32" data-testid={`select-inquiry-status-${inquiry.id}`}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="new">{language === 'vi' ? 'Mới' : 'New'}</SelectItem>
-                            <SelectItem value="contacted">{language === 'vi' ? 'Đã liên hệ' : 'Contacted'}</SelectItem>
-                            <SelectItem value="converted">{language === 'vi' ? 'Đã chuyển đổi' : 'Converted'}</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </TableCell>
-                      <TableCell>{formatDate(inquiry.createdAt)}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                        <div className="flex gap-2">
                           <Dialog>
                             <DialogTrigger asChild>
                               <Button variant="outline" size="sm" data-testid={`button-view-inquiry-${inquiry.id}`}>
@@ -5797,7 +5785,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 <div>
                                   <h4 className="font-light mb-1">{language === 'vi' ? 'Chi tiết dự án' : 'Project Details'}</h4>
                                   <p>{language === 'vi' ? 'Loại' : 'Type'}: {inquiry.projectType}</p>
-                                  {inquiry.budget && <p>{language === 'vi' ? 'Ngân sách' : 'Budget'}: {inquiry.budget}</p>}
                                 </div>
                                 <div>
                                   <h4 className="font-light mb-1">{language === 'vi' ? 'Tin nhắn' : 'Message'}</h4>
@@ -5838,6 +5825,21 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             </AlertDialogContent>
                           </AlertDialog>
                         </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Select
+                          value={inquiry.status}
+                          onValueChange={(value) => updateInquiryMutation.mutate({ id: inquiry.id, status: value })}
+                        >
+                          <SelectTrigger className="w-32 ml-auto" data-testid={`select-inquiry-status-${inquiry.id}`}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">{language === 'vi' ? 'Mới' : 'New'}</SelectItem>
+                            <SelectItem value="contacted">{language === 'vi' ? 'Đã liên hệ' : 'Contacted'}</SelectItem>
+                            <SelectItem value="converted">{language === 'vi' ? 'Đã chuyển đổi' : 'Converted'}</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </TableCell>
                     </TableRow>
                   ))}
