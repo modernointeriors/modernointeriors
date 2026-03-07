@@ -17,6 +17,13 @@ Preferred communication style: Simple, everyday language.
 - **Internationalization**: Comprehensive Vietnamese translation system with useLanguage hook
 - **Build Tool**: Vite for development and production builds
 
+## Database Connection
+- **Custom PostgreSQL**: Connected to user's own PostgreSQL server (host: 103.138.88.63)
+- **Driver**: Standard `pg` (node-postgres) driver via `drizzle-orm/node-postgres`
+- **Config**: Hardcoded connection params in `server/db.ts` (host, port, database, user, password)
+- **Fallback env var**: `CUSTOM_DATABASE_URL` or `DATABASE_URL` still checked at startup
+- **SSL**: Disabled (`ssl: false`) for compatibility with user's server
+
 ## Backend Architecture
 - **Express.js**: RESTful API server with structured routing and middleware
 - **Database ORM**: Drizzle ORM with PostgreSQL dialect for type-safe database operations
