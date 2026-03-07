@@ -282,7 +282,6 @@ const bilingualArticleSchema = z.object({
   contentVi: z.string().min(1, "Vietnamese content is required"),
   slug: z.string().optional(),
   category: z.string().min(1, "Category is required"),
-  status: z.enum(["draft", "published", "archived"]).default("draft"),
   featured: z.boolean().default(false),
   featuredImage: z.string().optional(),
   metaTitleEn: z.string().optional(),
@@ -772,7 +771,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       contentVi: "",
       slug: "",
       category: "news",
-      status: "draft",
       featured: false,
       featuredImage: "",
       metaTitleEn: "",
@@ -2364,7 +2362,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       contentVi: viVersion?.content || "",
       slug: article.slug,
       category: article.category,
-      status: article.status as "draft" | "published" | "archived",
       featured: article.featured,
       featuredImage: article.featuredImage || "",
       metaTitleEn: enVersion?.metaTitle || "",
@@ -2405,7 +2402,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         excerpt: data.excerptEn,
         content: data.contentEn,
         category: data.category,
-        status: data.status,
+        status: 'published',
         language: 'en',
         featured: data.featured,
         metaTitle: data.metaTitleEn,
@@ -2421,7 +2418,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         excerpt: data.excerptVi,
         content: data.contentVi,
         category: data.category,
-        status: data.status,
+        status: 'published',
         language: 'vi',
         featured: data.featured,
         metaTitle: data.metaTitleVi,
@@ -7551,7 +7548,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   {/* Common Fields */}
                   <div className="border-t pt-6">
                     <h3 className="text-lg font-medium mb-4">{language === 'vi' ? 'Thông tin chung' : 'General Information'}</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={articleForm.control}
                         name="slug"
@@ -7593,28 +7590,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         )}
                       />
 
-                      <FormField
-                        control={articleForm.control}
-                        name="status"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{language === 'vi' ? 'Trạng thái *' : 'Status *'}</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger data-testid="select-article-status">
-                                  <SelectValue />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="draft">{language === 'vi' ? 'Bản nháp' : 'Draft'}</SelectItem>
-                                <SelectItem value="published">{language === 'vi' ? 'Đã xuất bản' : 'Published'}</SelectItem>
-                                <SelectItem value="archived">{language === 'vi' ? 'Lưu trữ' : 'Archived'}</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                     </div>
 
                   </div>
