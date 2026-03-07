@@ -417,6 +417,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
   const [isAdvantageDialogOpen, setIsAdvantageDialogOpen] = useState(false);
   const [editingAdvantage, setEditingAdvantage] = useState<any | null>(null);
+
+  // Delete confirmation dialogs
+  const [deleteProjectConfirm, setDeleteProjectConfirm] = useState<{ slug: string; title: string; ids: string[] } | null>(null);
+  const [deleteProjectInput, setDeleteProjectInput] = useState('');
+  const [deleteArticleConfirm, setDeleteArticleConfirm] = useState<{ slug: string; title: string; group: Article[] } | null>(null);
+  const [deleteArticleInput, setDeleteArticleInput] = useState('');
   
   // Journey Step state
   const [isJourneyStepDialogOpen, setIsJourneyStepDialogOpen] = useState(false);
@@ -3354,6 +3360,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       return <PermissionDenied feature="Projects" />;
     }
     return (
+      <>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản lý dự án' : 'Projects Management'}</h2>
@@ -4324,11 +4331,13 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <Trash2 
                             className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
                             onClick={() => {
-                              if (window.confirm(language === 'vi' ? `Bạn có chắc chắn muốn xóa dự án "${project.title}"?` : `Are you sure you want to delete project "${project.title}"?`)) {
-                                // Delete both EN and VI versions by slug
-                                const allVersions = projects.filter(p => p.slug === project.slug);
-                                allVersions.forEach(p => deleteProjectMutation.mutate(p.id));
-                              }
+                              const allVersions = projects.filter(p => p.slug === project.slug);
+                              setDeleteProjectConfirm({
+                                slug: project.slug,
+                                title: project.title,
+                                ids: allVersions.map(p => p.id),
+                              });
+                              setDeleteProjectInput('');
                             }}
                             data-testid={`button-delete-project-${project.id}`}
                           />
@@ -4401,6 +4410,53 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Project Confirmation Dialog */}
+      <Dialog open={!!deleteProjectConfirm} onOpenChange={(open) => { if (!open) { setDeleteProjectConfirm(null); setDeleteProjectInput(''); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-red-400">{language === 'vi' ? 'Xác nhận xóa dự án' : 'Confirm Project Deletion'}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <p className="text-sm text-muted-foreground">
+              {language === 'vi'
+                ? <>Bạn sắp xóa vĩnh viễn dự án <span className="text-foreground font-medium">"{deleteProjectConfirm?.title}"</span> (cả phiên bản EN và VI). Hành động này <span className="text-red-400 font-medium">không thể hoàn tác</span>.</>
+                : <>You are about to permanently delete project <span className="text-foreground font-medium">"{deleteProjectConfirm?.title}"</span> (both EN and VI versions). This action <span className="text-red-400 font-medium">cannot be undone</span>.</>
+              }
+            </p>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">
+                {language === 'vi' ? <>Gõ <span className="text-red-400 font-bold">XÓA</span> để xác nhận:</> : <>Type <span className="text-red-400 font-bold">DELETE</span> to confirm:</>}
+              </label>
+              <Input
+                value={deleteProjectInput}
+                onChange={(e) => setDeleteProjectInput(e.target.value)}
+                placeholder={language === 'vi' ? 'XÓA' : 'DELETE'}
+                className="border-red-400/50 focus-visible:ring-red-400"
+                autoFocus
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => { setDeleteProjectConfirm(null); setDeleteProjectInput(''); }}>
+              {language === 'vi' ? 'Hủy' : 'Cancel'}
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={deleteProjectInput !== (language === 'vi' ? 'XÓA' : 'DELETE') || deleteProjectMutation.isPending}
+              onClick={() => {
+                if (!deleteProjectConfirm) return;
+                deleteProjectConfirm.ids.forEach(id => deleteProjectMutation.mutate(id));
+                setDeleteProjectConfirm(null);
+                setDeleteProjectInput('');
+              }}
+            >
+              {language === 'vi' ? 'Xóa vĩnh viễn' : 'Delete Permanently'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      </>
     );
   }
 
@@ -7071,6 +7127,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       return <PermissionDenied feature="Articles / Blog" />;
     }
     return (
+      <>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-sans font-light">{language === 'vi' ? 'Quản Lý Bài Viết' : 'Articles Management'}</h2>
@@ -7803,39 +7860,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 onClick={() => handleEditArticle(displayArticle)}
                                 data-testid={`button-edit-article-${slug}`}
                               />
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Trash2 
-                                    className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
-                                    data-testid={`button-delete-article-${slug}`}
-                                  />
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>{language === 'vi' ? 'Xóa bài viết?' : 'Delete Article?'}</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      {language === 'vi' ? `Thao tác này sẽ xóa vĩnh viễn "${displayArticle.title}" (cả phiên bản EN và VI). Hành động này không thể hoàn tác.` : `This will permanently delete "${displayArticle.title}" (both EN and VI versions). This action cannot be undone.`}
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>{language === 'vi' ? 'Hủy' : 'Cancel'}</AlertDialogCancel>
-                                    <AlertDialogAction
-                                      onClick={async () => {
-                                        try {
-                                          // Delete all versions (en and vi)
-                                          for (const article of articleGroup) {
-                                            await deleteArticleMutation.mutateAsync(article.id);
-                                          }
-                                        } catch (error) {
-                                          // Error is handled by mutation's onError handler
-                                        }
-                                      }}
-                                    >
-                                      {language === 'vi' ? 'Xóa' : 'Delete'}
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
+                              <Trash2 
+                                className="h-4 w-4 cursor-pointer text-white/50 hover:text-red-400"
+                                data-testid={`button-delete-article-${slug}`}
+                                onClick={() => {
+                                  setDeleteArticleConfirm({ slug, title: displayArticle.title, group: articleGroup });
+                                  setDeleteArticleInput('');
+                                }}
+                              />
                             </div>
                           </TableCell>
                         </TableRow>
@@ -7906,6 +7938,59 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Article Confirmation Dialog */}
+      <Dialog open={!!deleteArticleConfirm} onOpenChange={(open) => { if (!open) { setDeleteArticleConfirm(null); setDeleteArticleInput(''); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-red-400">{language === 'vi' ? 'Xác nhận xóa bài viết' : 'Confirm Article Deletion'}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <p className="text-sm text-muted-foreground">
+              {language === 'vi'
+                ? <>Bạn sắp xóa vĩnh viễn bài viết <span className="text-foreground font-medium">"{deleteArticleConfirm?.title}"</span> (cả phiên bản EN và VI). Hành động này <span className="text-red-400 font-medium">không thể hoàn tác</span>.</>
+                : <>You are about to permanently delete article <span className="text-foreground font-medium">"{deleteArticleConfirm?.title}"</span> (both EN and VI versions). This action <span className="text-red-400 font-medium">cannot be undone</span>.</>
+              }
+            </p>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">
+                {language === 'vi' ? <>Gõ <span className="text-red-400 font-bold">XÓA</span> để xác nhận:</> : <>Type <span className="text-red-400 font-bold">DELETE</span> to confirm:</>}
+              </label>
+              <Input
+                value={deleteArticleInput}
+                onChange={(e) => setDeleteArticleInput(e.target.value)}
+                placeholder={language === 'vi' ? 'XÓA' : 'DELETE'}
+                className="border-red-400/50 focus-visible:ring-red-400"
+                autoFocus
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => { setDeleteArticleConfirm(null); setDeleteArticleInput(''); }}>
+              {language === 'vi' ? 'Hủy' : 'Cancel'}
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={deleteArticleInput !== (language === 'vi' ? 'XÓA' : 'DELETE') || deleteArticleMutation.isPending}
+              onClick={async () => {
+                if (!deleteArticleConfirm) return;
+                try {
+                  for (const article of deleteArticleConfirm.group) {
+                    await deleteArticleMutation.mutateAsync(article.id);
+                  }
+                } catch (error) {
+                } finally {
+                  setDeleteArticleConfirm(null);
+                  setDeleteArticleInput('');
+                }
+              }}
+            >
+              {language === 'vi' ? 'Xóa vĩnh viễn' : 'Delete Permanently'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      </>
     );
   }
 
