@@ -4300,14 +4300,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       </TableCell>
                       <TableCell>{project.completionYear || "—"}</TableCell>
                       <TableCell>
-                        <div className="flex gap-1">
-                          {hasEN && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">EN</span>
-                          )}
-                          {hasVI && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">VI</span>
-                          )}
-                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {[hasEN && 'EN', hasVI && 'VI'].filter(Boolean).join(' / ')}
+                        </span>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end items-center gap-4">
