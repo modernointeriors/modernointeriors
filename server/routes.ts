@@ -1191,10 +1191,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard stats
   app.get("/api/dashboard/stats", async (req, res) => {
     try {
-      const [allProjects, activeClients, newInquiries, allTransactions] = await Promise.all([
+      const [allProjects, activeClients, allInquiries, allTransactions] = await Promise.all([
         storage.getProjects(),
         storage.getClients("active"),
-        storage.getInquiries("new"),
+        storage.getInquiries(),
         storage.getTransactions()
       ]);
 
@@ -1211,7 +1211,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         totalProjects: uniqueProjectSlugs.size,
         activeClients: activeClients.length,
-        newInquiries: newInquiries.length,
+        newInquiries: allInquiries.length,
         revenue: totalRevenue
       });
     } catch (error) {

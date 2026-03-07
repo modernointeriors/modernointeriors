@@ -3282,7 +3282,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-light text-muted-foreground">{language === 'vi' ? 'Yêu cầu mới' : 'New Inquiries'}</p>
+                  <p className="text-sm font-light text-muted-foreground">{language === 'vi' ? 'Tổng yêu cầu' : 'Total Inquiries'}</p>
                   <p className="text-2xl font-light" data-testid="stat-new-inquiries">
                     {statsLoading ? "..." : stats?.newInquiries || 0}
                   </p>
