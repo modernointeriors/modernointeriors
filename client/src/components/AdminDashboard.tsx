@@ -3445,7 +3445,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                               .filter(cat => cat.type === 'project' && cat.active)
                               .map((category) => (
                                 <SelectItem key={category.id} value={category.slug}>
-                                  {category.name}
+                                  {language === 'vi' ? (category.nameVi || category.name) : category.name}
                                 </SelectItem>
                               ))}
                           </SelectContent>
@@ -7578,7 +7578,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                   .filter(cat => cat.type === 'article' && cat.active)
                                   .map((category) => (
                                     <SelectItem key={category.id} value={category.slug}>
-                                      {category.name}
+                                      {language === 'vi' ? (category.nameVi || category.name) : category.name}
                                     </SelectItem>
                                   ))}
                               </SelectContent>
