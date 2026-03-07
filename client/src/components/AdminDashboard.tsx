@@ -389,7 +389,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const [editingCategory, setEditingCategory] = useState<{ id: string; name: string; nameVi: string | null } | null>(null);
   const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState(false);
   const [newCategoryType, setNewCategoryType] = useState<"project" | "article">("article");
-  const [referralOpen, setReferralOpen] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
   
   // User management states
@@ -4709,76 +4708,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     )}
                   />
 
-                  <FormField
-                    control={clientForm.control}
-                    name="referredById"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Người giới thiệu (Referral)</FormLabel>
-                        <Popover open={referralOpen} onOpenChange={setReferralOpen}>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                data-testid="select-client-referral"
-                                className="justify-between bg-black border-white/10 hover:border-white/30 hover:bg-white/10 rounded-none"
-                              >
-                                {field.value
-                                  ? (() => {
-                                      const client = clients.find((c) => c.id === field.value);
-                                      return client ? `${client.firstName} ${client.lastName} (${client.email})` : "-- Không có --";
-                                    })()
-                                  : "-- Không có --"}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[400px] p-0 bg-black/95 backdrop-blur-xl border-white/10 rounded-none">
-                            <Command className="bg-transparent">
-                              <CommandInput placeholder="Tìm kiếm người giới thiệu..." className="border-b border-white/10" />
-                              <CommandEmpty>Không tìm thấy.</CommandEmpty>
-                              <CommandGroup className="max-h-64 overflow-auto">
-                                <CommandItem
-                                  value="none"
-                                  onSelect={() => {
-                                    field.onChange(undefined);
-                                    setReferralOpen(false);
-                                  }}
-                                  className="hover:bg-white/10"
-                                >
-                                  <Check
-                                    className={`mr-2 h-4 w-4 ${!field.value ? "opacity-100" : "opacity-0"}`}
-                                  />
-                                  -- Không có --
-                                </CommandItem>
-                                {clients
-                                  .filter(c => !editingClient || c.id !== editingClient.id)
-                                  .map((client) => (
-                                    <CommandItem
-                                      key={client.id}
-                                      value={`${client.firstName} ${client.lastName} ${client.email}`}
-                                      onSelect={() => {
-                                        field.onChange(client.id);
-                                        setReferralOpen(false);
-                                      }}
-                                      className="hover:bg-white/10"
-                                    >
-                                      <Check
-                                        className={`mr-2 h-4 w-4 ${field.value === client.id ? "opacity-100" : "opacity-0"}`}
-                                      />
-                                      {client.firstName} {client.lastName} ({client.email})
-                                    </CommandItem>
-                                  ))}
-                              </CommandGroup>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   {/* Transaction Management - Only show when editing */}
                   {editingClient && (
                     <div className="border-t border-white/30 pt-6 mt-6">
@@ -5062,33 +4991,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         <label className="text-sm font-medium text-muted-foreground">Refund Amount</label>
                         <p className="text-base mt-1 font-semibold text-white">
                           {viewingClient.refundAmount ? `${parseFloat(String(viewingClient.refundAmount)).toLocaleString('vi-VN')} đ` : "0 đ"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Referral Information */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium border-b pb-2">{t('crm.referralInfo')}</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">Được giới thiệu bởi</label>
-                        <p className="text-base mt-1">
-                          {(() => {
-                            if (!viewingClient.referredById) return "—";
-                            const referrer = clients.find(c => c.id === viewingClient.referredById);
-                            return referrer ? `${referrer.firstName} ${referrer.lastName}` : "—";
-                          })()}
-                        </p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">{t('crm.referralCount')}</label>
-                        <p className="text-base mt-1">{viewingClient.referralCount || 0}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">{t('crm.referralRevenue')}</label>
-                        <p className="text-base mt-1">
-                          {viewingClient.referralRevenue ? `${parseFloat(viewingClient.referralRevenue).toLocaleString('vi-VN')} đ` : "0 đ"}
                         </p>
                       </div>
                     </div>
