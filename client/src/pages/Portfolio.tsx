@@ -376,14 +376,14 @@ export default function Portfolio() {
 
         {/* Projects Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-white/10 h-[28rem] rounded-none mb-4" />
-                <div className="space-y-2">
-                  <div className="h-4 bg-white/10 rounded w-3/4" />
-                  <div className="h-3 bg-white/10 rounded w-1/2" />
-                  <div className="h-3 bg-white/10 rounded w-2/3" />
+              <div key={i} className="animate-pulse flex gap-6">
+                <div className="bg-white/10 h-64 w-96 flex-shrink-0 rounded-none" />
+                <div className="flex-1 space-y-3 py-4">
+                  <div className="h-5 bg-white/10 rounded w-1/2" />
+                  <div className="h-4 bg-white/10 rounded w-1/3" />
+                  <div className="h-4 bg-white/10 rounded w-2/3" />
                 </div>
               </div>
             ))}
@@ -404,7 +404,7 @@ export default function Portfolio() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 gap-6">
               {projects.map((project, index) => (
                 <ProjectCard key={project.id} project={project} index={index} />
               ))}
