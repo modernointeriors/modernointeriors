@@ -365,12 +365,6 @@ export default function Blog() {
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-blog">
             {language === 'vi' ? 'TIN TỨC & CẢM HỨNG' : 'NEWS & INSPIRATION'}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {language === 'vi' 
-              ? 'Khám phá những xu hướng thiết kế mới nhất, mẹo hay và những dự án truyền cảm hứng từ Moderno Interiors Design'
-              : 'Discover the latest design trends, helpful tips, and inspiring projects from Moderno Interiors Design'
-            }
-          </p>
         </div>
 
         {/* Search Box with Year Filter */}
