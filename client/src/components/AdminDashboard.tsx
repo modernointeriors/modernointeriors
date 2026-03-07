@@ -5259,14 +5259,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Tổng doanh thu' : 'Total Revenue'}</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Tổng thanh toán' : 'Total Payments'}</p>
                   <p className="text-2xl font-semibold mt-1">
                     {allTransactions.reduce((sum, t) => {
                       if (t.status !== "completed") return sum;
-                      const amount = parseFloat(t.amount || "0");
-                      if (t.type === "payment") return sum + amount;
-                      if (t.type === "refund") return sum - amount;
-                      return sum;
+                      return sum + parseFloat(t.amount || "0");
                     }, 0).toLocaleString('vi-VN')} đ
                   </p>
                 </div>
