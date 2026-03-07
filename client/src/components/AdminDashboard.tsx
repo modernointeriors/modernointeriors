@@ -7730,20 +7730,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>
-                      <div>
-                        <span>{language === 'vi' ? 'Tiêu đề' : 'Title'}</span>
-                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Ngày đăng' : 'Published'}</p>
-                      </div>
-                    </TableHead>
-                    <TableHead>
-                      <div>
-                        <span>{language === 'vi' ? 'Danh mục' : 'Category'}</span>
-                        <p className="text-xs font-normal text-muted-foreground">{language === 'vi' ? 'Ngôn ngữ' : 'Languages'}</p>
-                      </div>
-                    </TableHead>
-                    <TableHead>{language === 'vi' ? 'Trạng thái' : 'Status'}</TableHead>
-                    <TableHead>SEO</TableHead>
+                    <TableHead>{language === 'vi' ? 'Tiêu đề' : 'Title'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Ngày đăng' : 'Published'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Danh mục' : 'Category'}</TableHead>
+                    <TableHead>{language === 'vi' ? 'Ngôn ngữ' : 'Languages'}</TableHead>
                     <TableHead className="text-right">{language === 'vi' ? 'Thao tác' : 'Actions'}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -7764,40 +7754,27 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <TableCell className="font-medium">
                             <div>
                               <p>{displayArticle.title}</p>
-                              <p className="text-sm text-muted-foreground" data-testid={`text-published-${slug}`}>
-                                {displayArticle.publishedAt ? formatDate(displayArticle.publishedAt) : '-'}
-                              </p>
                               {!hasEn && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu EN' : 'Missing EN'}</p>}
                               {!hasVi && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu VI' : 'Missing VI'}</p>}
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div>
-                              <span data-testid={`badge-category-${slug}`} className="text-sm">
-                                {(() => {
-                                  const cat = categories.find(c => c.slug === displayArticle.category);
-                                  return cat ? (language === 'vi' ? (cat.nameVi || cat.name) : cat.name) : displayArticle.category;
-                                })()}
-                              </span>
-                              <div className="flex space-x-1 mt-1">
-                                {hasEn && <span className="text-xs text-muted-foreground">EN</span>}
-                                {hasVi && <span className="text-xs text-muted-foreground">VI</span>}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <span
-                              data-testid={`badge-status-${slug}`}
-                              className="text-sm"
-                            >
-                              {displayArticle.status}
+                            <span className="text-sm text-muted-foreground" data-testid={`text-published-${slug}`}>
+                              {displayArticle.publishedAt ? formatDate(displayArticle.publishedAt) : '-'}
                             </span>
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-1 text-xs text-muted-foreground">
-                              {displayArticle.metaTitle && <span>Title</span>}
-                              {displayArticle.metaDescription && <span>Desc</span>}
-                              {displayArticle.metaKeywords && <span>Keywords</span>}
+                            <span data-testid={`badge-category-${slug}`} className="text-sm">
+                              {(() => {
+                                const cat = categories.find(c => c.slug === displayArticle.category);
+                                return cat ? (language === 'vi' ? (cat.nameVi || cat.name) : cat.name) : displayArticle.category;
+                              })()}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-1">
+                              {hasEn && <span className="text-xs text-muted-foreground">EN</span>}
+                              {hasVi && <span className="text-xs text-muted-foreground">VI</span>}
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
