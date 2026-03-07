@@ -3365,9 +3365,22 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
               <Settings className="mr-2 h-4 w-4" />
               {language === 'vi' ? 'Cài đặt danh mục' : 'Category Settings'}
             </Button>
-            <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
+            <Dialog open={isProjectDialogOpen} onOpenChange={(open) => {
+              setIsProjectDialogOpen(open);
+              if (!open) {
+                setEditingProject(null);
+                projectForm.reset();
+              }
+            }}>
               <DialogTrigger asChild>
-                <Button data-testid="button-add-project" className="h-10 px-4">
+                <Button
+                  data-testid="button-add-project"
+                  className="h-10 px-4"
+                  onClick={() => {
+                    setEditingProject(null);
+                    projectForm.reset();
+                  }}
+                >
                   <Plus className="mr-2 h-4 w-4" />
                   {language === 'vi' ? 'Thêm dự án' : 'Add Project'}
                 </Button>
@@ -7397,42 +7410,49 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>{language === 'vi' ? 'Bài viết' : 'Articles'}</CardTitle>
-              <Dialog open={isArticleDialogOpen} onOpenChange={setIsArticleDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    onClick={() => {
-                      setEditingArticle(null);
-                      articleForm.reset({
-                        titleEn: "",
-                        titleVi: "",
-                        excerptEn: "",
-                        excerptVi: "",
-                        contentEn: "",
-                        contentVi: "",
-                        slug: "",
-                        category: "news",
-                        status: "draft",
-                        featured: false,
-                        featuredImage: "",
-                        metaTitleEn: "",
-                        metaTitleVi: "",
-                        metaDescriptionEn: "",
-                        metaDescriptionVi: "",
-                        metaKeywordsEn: "",
-                        metaKeywordsVi: "",
-                      });
-                    }}
-                    data-testid="button-add-article"
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    {language === 'vi' ? 'Thêm bài viết' : 'Add Article'}
-                  </Button>
-                </DialogTrigger>
-              </Dialog>
+              <Button
+                onClick={() => {
+                  setEditingArticle(null);
+                  setArticleImagePreview('');
+                  setArticleContentImages([]);
+                  articleForm.reset({
+                    titleEn: "",
+                    titleVi: "",
+                    excerptEn: "",
+                    excerptVi: "",
+                    contentEn: "",
+                    contentVi: "",
+                    slug: "",
+                    category: "news",
+                    status: "draft",
+                    featured: false,
+                    featuredImage: "",
+                    metaTitleEn: "",
+                    metaTitleVi: "",
+                    metaDescriptionEn: "",
+                    metaDescriptionVi: "",
+                    metaKeywordsEn: "",
+                    metaKeywordsVi: "",
+                  });
+                  setIsArticleDialogOpen(true);
+                }}
+                data-testid="button-add-article"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                {language === 'vi' ? 'Thêm bài viết' : 'Add Article'}
+              </Button>
             </div>
           </CardHeader>
           <CardContent>
-            <Dialog open={isArticleDialogOpen} onOpenChange={setIsArticleDialogOpen}>
+            <Dialog open={isArticleDialogOpen} onOpenChange={(open) => {
+              setIsArticleDialogOpen(open);
+              if (!open) {
+                setEditingArticle(null);
+                setArticleImagePreview('');
+                setArticleContentImages([]);
+                articleForm.reset();
+              }
+            }}>
             <DialogContent className="max-w-4xl max-h-[85vh] flex flex-col">
               <DialogHeader>
                 <DialogTitle>
@@ -7858,6 +7878,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       onClick={() => {
                         setIsArticleDialogOpen(false);
                         setEditingArticle(null);
+                        setArticleImagePreview('');
+                        setArticleContentImages([]);
                         articleForm.reset();
                       }}
                       data-testid="button-cancel-article"
