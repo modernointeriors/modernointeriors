@@ -163,7 +163,9 @@ export default function Admin() {
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-white/3 to-white/1 backdrop-blur-xl rounded-none"></div>
             <div className="relative bg-black/30 backdrop-blur-md border border-white/10 rounded-none overflow-hidden">
-              <AdminDashboard activeTab={activeTab} user={user} hasPermission={hasPermission} />
+              <div className="p-6">
+                <AdminDashboard activeTab={activeTab} user={user} hasPermission={hasPermission} />
+              </div>
             </div>
           </div>
         </div>
