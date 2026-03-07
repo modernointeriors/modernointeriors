@@ -709,7 +709,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/articles", requirePermission('articles'), async (req, res) => {
     try {
+      console.log("[POST /api/articles] body keys:", Object.keys(req.body));
+      console.log("[POST /api/articles] body:", JSON.stringify(req.body).substring(0, 500));
       const validatedData = insertArticleSchema.parse(req.body);
+      console.log("[POST /api/articles] validated OK, slug:", validatedData.slug, "language:", validatedData.language);
       
       // Generate slug if not provided
       if (!validatedData.slug) {
@@ -730,7 +733,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to create article" });
+      console.error("Create article error:", error);
+      res.status(500).json({ message: "Failed to create article", detail: String(error) });
     }
   });
 
