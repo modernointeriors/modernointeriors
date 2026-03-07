@@ -12,21 +12,22 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const { language } = useLanguage();
   const [, navigate] = useLocation();
 
-  const defaultImage = `https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1200`;
-  const projectImage = (Array.isArray(project.images) && project.images[0]) || defaultImage;
+  const projectImage = Array.isArray(project.images) && project.images[0] ? project.images[0] : null;
 
   return (
     <div
-      className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full rounded-none"
+      className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full rounded-none bg-black"
       data-index={index}
       onClick={() => navigate(project.slug ? `${getRoute('portfolio', language)}/${project.slug}` : `/project/${project.id}`)}
     >
-      <img
-        src={projectImage}
-        alt={project.title}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        data-testid={`img-project-${project.id}`}
-      />
+      {projectImage && (
+        <img
+          src={projectImage}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          data-testid={`img-project-${project.id}`}
+        />
+      )}
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500" />
 
       <div className="absolute inset-0 p-6 pb-10 flex flex-col justify-between">
