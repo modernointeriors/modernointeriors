@@ -7793,29 +7793,28 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           </TableCell>
                           <TableCell>
                             <div>
-                              <Badge variant="outline" data-testid={`badge-category-${slug}`}>
+                              <span data-testid={`badge-category-${slug}`} className="text-sm">
                                 {displayArticle.category}
-                              </Badge>
+                              </span>
                               <div className="flex space-x-1 mt-1">
-                                {hasEn && <Badge variant="outline" className="text-xs">EN</Badge>}
-                                {hasVi && <Badge variant="outline" className="text-xs">VI</Badge>}
+                                {hasEn && <span className="text-xs text-muted-foreground">EN</span>}
+                                {hasVi && <span className="text-xs text-muted-foreground">VI</span>}
                               </div>
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge
-                              variant="outline"
-                              className="text-white border-white/30"
+                            <span
                               data-testid={`badge-status-${slug}`}
+                              className="text-sm"
                             >
                               {displayArticle.status}
-                            </Badge>
+                            </span>
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-1">
-                              {displayArticle.metaTitle && <Badge variant="outline" className="text-xs">Title</Badge>}
-                              {displayArticle.metaDescription && <Badge variant="outline" className="text-xs">Desc</Badge>}
-                              {displayArticle.metaKeywords && <Badge variant="outline" className="text-xs">Keywords</Badge>}
+                            <div className="flex space-x-1 text-xs text-muted-foreground">
+                              {displayArticle.metaTitle && <span>Title</span>}
+                              {displayArticle.metaDescription && <span>Desc</span>}
+                              {displayArticle.metaKeywords && <span>Keywords</span>}
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
