@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import ImageUpload from "@/components/ImageUpload";
-import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings, Lock, Shield, KeyRound } from "lucide-react";
+import { Pencil, Trash2, Eye, Plus, Users, Briefcase, Mail, TrendingUp, Star, Check, ChevronsUpDown, X, Settings, Lock, Shield, KeyRound, FileText } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Project, Client, Inquiry, Service, HomepageContent, Article, InsertArticle, Partner, Category, Interaction, Deal, Faq, InsertFaq, JourneyStep, InsertJourneyStep, AboutPageContent, AboutCoreValue, AboutShowcaseService, AboutProcessStep, AboutTeamMember, InsertAboutPageContent, InsertAboutCoreValue, InsertAboutShowcaseService, InsertAboutProcessStep, InsertAboutTeamMember, User, Settings as SettingsType } from "@shared/schema";
 import { insertArticleSchema, insertFaqSchema, insertJourneyStepSchema, insertAboutPageContentSchema, insertAboutCoreValueSchema, insertAboutShowcaseServiceSchema, insertAboutProcessStepSchema, insertAboutTeamMemberSchema } from "@shared/schema";
@@ -3268,6 +3268,20 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
+                  <p className="text-sm font-light text-muted-foreground">{language === 'vi' ? 'Tổng bài viết' : 'Total Articles'}</p>
+                  <p className="text-2xl font-light" data-testid="stat-total-articles">
+                    {uniqueArticleSlugs.length}
+                  </p>
+                </div>
+                <FileText className="h-8 w-8 text-white/70" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
                   <p className="text-sm font-light text-muted-foreground">{language === 'vi' ? 'Khách hàng hoạt động' : 'Active Clients'}</p>
                   <p className="text-2xl font-light" data-testid="stat-active-clients">
                     {statsLoading ? "..." : stats?.activeClients || 0}
@@ -3288,20 +3302,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   </p>
                 </div>
                 <Mail className="h-8 w-8 text-white/70" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-light text-muted-foreground">{language === 'vi' ? 'Doanh thu' : 'Revenue'}</p>
-                  <p className="text-2xl font-light" data-testid="stat-revenue">
-                    {statsLoading ? "..." : `${(parseFloat(stats?.revenue || "0")).toLocaleString('vi-VN')} VND`}
-                  </p>
-                </div>
-                <TrendingUp className="h-8 w-8 text-white/70" />
               </div>
             </CardContent>
           </Card>
