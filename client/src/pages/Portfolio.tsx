@@ -310,12 +310,6 @@ export default function Portfolio() {
           <h1 className="text-4xl md:text-6xl font-sans font-light mb-6" data-testid="heading-portfolio">
             {language === 'vi' ? 'DỰ ÁN' : 'PROJECT'}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {language === 'vi' 
-              ? 'Khám phá bộ sưu tập toàn diện các dự án thiết kế nội thất của chúng tôi qua nhiều danh mục khác nhau'
-              : 'Explore our comprehensive collection of interior design projects across various categories'
-            }
-          </p>
         </div>
 
         {/* Search Box with Year Filter */}
