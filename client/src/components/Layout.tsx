@@ -152,7 +152,7 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen flex flex-col relative">
       {/* Top Header with Navigation */}
       <header className={`fixed top-0 left-12 md:left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
@@ -404,7 +404,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
       {/* Main Content - Adjusted for header and sidebar */}
-      <main className={`pl-12 md:pl-16 ${isAdminPage ? 'pb-0 mb-0' : 'pb-8 md:pb-6 mb-4'}`}>{children}</main>
+      <main className={`pl-12 md:pl-16 flex-1 ${isAdminPage ? 'pb-0 mb-0' : 'pb-8 md:pb-6 mb-4'}`}>{children}</main>
 
       {/* Footer - Hidden on admin pages */}
       {!isAdminPage && <footer className="bg-black text-white pt-10 pb-12 border-t border-gray-800 ml-12 md:ml-16">
