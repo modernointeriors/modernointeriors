@@ -136,57 +136,67 @@ export default function BlogDetail() {
   // Update document title and meta tags for SEO
   useEffect(() => {
     if (article) {
-      document.title = article.metaTitle || `${article.title} | Moderno Interiors Design`;
-      
-      // Update meta description
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', article.metaDescription || article.excerpt || '');
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = article.metaDescription || article.excerpt || '';
-        document.head.appendChild(meta);
-      }
+      const title = article.metaTitle || `${article.title} | Moderno Interiors Design`;
+      const description = article.metaDescription || article.excerpt || '';
+      const pageUrl = window.location.href;
 
-      // Update meta keywords
-      if (article.metaKeywords) {
-        let metaKeywords = document.querySelector('meta[name="keywords"]');
-        if (metaKeywords) {
-          metaKeywords.setAttribute('content', article.metaKeywords);
-        } else {
-          const meta = document.createElement('meta');
-          meta.name = 'keywords';
-          meta.content = article.metaKeywords;
-          document.head.appendChild(meta);
-        }
-      }
+      // Resolve image to absolute URL
+      const resolveUrl = (path: string) =>
+        path.startsWith('http') ? path : `${window.location.origin}${path.startsWith('/') ? '' : '/'}${path}`;
 
-      // Open Graph tags
-      const updateOgTag = (property: string, content: string) => {
-        let ogTag = document.querySelector(`meta[property="${property}"]`);
-        if (ogTag) {
-          ogTag.setAttribute('content', content);
-        } else {
-          const meta = document.createElement('meta');
-          meta.setAttribute('property', property);
-          meta.content = content;
-          document.head.appendChild(meta);
+      const ogImage = article.featuredImage ? resolveUrl(article.featuredImage) : '';
+
+      document.title = title;
+
+      // Helper: upsert <meta name="...">
+      const setMetaName = (name: string, content: string) => {
+        let tag = document.querySelector(`meta[name="${name}"]`);
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('name', name);
+          document.head.appendChild(tag);
         }
+        tag.setAttribute('content', content);
       };
 
-      updateOgTag('og:title', article.title);
-      updateOgTag('og:description', article.excerpt || '');
-      updateOgTag('og:type', 'article');
-      updateOgTag('og:url', window.location.href);
-      if (article.featuredImage) {
-        updateOgTag('og:image', article.featuredImage);
-      }
+      // Helper: upsert <meta property="...">
+      const setMetaProp = (property: string, content: string) => {
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('property', property);
+          document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+      };
+
+      // Basic SEO
+      setMetaName('description', description);
+      if (article.metaKeywords) setMetaName('keywords', article.metaKeywords);
+
+      // Open Graph
+      setMetaProp('og:type', 'article');
+      setMetaProp('og:site_name', 'Moderno Interiors Design Studio');
+      setMetaProp('og:url', pageUrl);
+      setMetaProp('og:title', title);
+      setMetaProp('og:description', description);
+      if (ogImage) setMetaProp('og:image', ogImage);
+
+      // Twitter Card
+      setMetaName('twitter:card', ogImage ? 'summary_large_image' : 'summary');
+      setMetaName('twitter:title', title);
+      setMetaName('twitter:description', description);
+      if (ogImage) setMetaName('twitter:image', ogImage);
     }
 
     return () => {
-      // Reset title when leaving
-      document.title = 'Moderno Interiors Design';
+      document.title = 'Moderno Interiors Design Studio';
+      ['og:type','og:site_name','og:url','og:title','og:description','og:image'].forEach(p => {
+        document.querySelector(`meta[property="${p}"]`)?.remove();
+      });
+      ['twitter:card','twitter:title','twitter:description','twitter:image'].forEach(n => {
+        document.querySelector(`meta[name="${n}"]`)?.remove();
+      });
     };
   }, [article]);
 

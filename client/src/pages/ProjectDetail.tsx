@@ -181,42 +181,71 @@ export default function ProjectDetail() {
   useEffect(() => {
     if (project) {
       const title = project.metaTitle || `${project.title} | Moderno Interiors Design Studio`;
-      const description = project.metaDescription || project.detailedDescription || project.description || `Interior design project by Moderno Interiors Design Studio`;
-      
+      const description = project.metaDescription || project.description || `Dự án thiết kế nội thất bởi Moderno Interiors Design Studio`;
+      const pageUrl = window.location.href;
+
+      // Resolve image to absolute URL
+      const resolveUrl = (path: string) =>
+        path.startsWith('http') ? path : `${window.location.origin}${path.startsWith('/') ? '' : '/'}${path}`;
+
+      // Pick best image: coverImages first, then heroImage, then galleryImages
+      const coverImgs = Array.isArray(project.coverImages) ? project.coverImages : [];
+      const galleryImgs = Array.isArray(project.galleryImages) ? project.galleryImages : [];
+      const rawImage = coverImgs[0] || (project as any).heroImage || galleryImgs[0] || '';
+      const ogImage = rawImage ? resolveUrl(rawImage) : '';
+
       document.title = title;
-      
-      // Update meta description
-      let metaDesc = document.querySelector('meta[name="description"]');
-      if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.setAttribute('name', 'description');
-        document.head.appendChild(metaDesc);
-      }
-      metaDesc.setAttribute('content', description);
-      
-      // Add Open Graph meta tags
-      const updateMetaTag = (property: string, content: string) => {
-        let metaTag = document.querySelector(`meta[property="${property}"]`);
-        if (!metaTag) {
-          metaTag = document.createElement('meta');
-          metaTag.setAttribute('property', property);
-          document.head.appendChild(metaTag);
+
+      // Helper: upsert <meta name="...">
+      const setMetaName = (name: string, content: string) => {
+        let tag = document.querySelector(`meta[name="${name}"]`);
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('name', name);
+          document.head.appendChild(tag);
         }
-        metaTag.setAttribute('content', content);
+        tag.setAttribute('content', content);
       };
-      
-      updateMetaTag('og:title', title);
-      updateMetaTag('og:description', description);
-      updateMetaTag('og:type', 'article');
-      const firstGalleryImage = Array.isArray(project.galleryImages) ? project.galleryImages[0] : undefined;
-      if (project.heroImage || firstGalleryImage) {
-        updateMetaTag('og:image', project.heroImage || firstGalleryImage || '');
-      }
+
+      // Helper: upsert <meta property="...">
+      const setMetaProp = (property: string, content: string) => {
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('property', property);
+          document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+      };
+
+      // Basic SEO
+      setMetaName('description', description);
+      if (project.metaKeywords) setMetaName('keywords', project.metaKeywords);
+
+      // Open Graph
+      setMetaProp('og:type', 'article');
+      setMetaProp('og:site_name', 'Moderno Interiors Design Studio');
+      setMetaProp('og:url', pageUrl);
+      setMetaProp('og:title', title);
+      setMetaProp('og:description', description);
+      if (ogImage) setMetaProp('og:image', ogImage);
+
+      // Twitter Card
+      setMetaName('twitter:card', ogImage ? 'summary_large_image' : 'summary');
+      setMetaName('twitter:title', title);
+      setMetaName('twitter:description', description);
+      if (ogImage) setMetaName('twitter:image', ogImage);
     }
-    
-    // Cleanup function to reset title when component unmounts
+
+    // Cleanup: reset title & remove dynamic tags on unmount
     return () => {
       document.title = 'Moderno Interiors Design Studio';
+      ['og:type','og:site_name','og:url','og:title','og:description','og:image'].forEach(p => {
+        document.querySelector(`meta[property="${p}"]`)?.remove();
+      });
+      ['twitter:card','twitter:title','twitter:description','twitter:image'].forEach(n => {
+        document.querySelector(`meta[name="${n}"]`)?.remove();
+      });
     };
   }, [project]);
 
