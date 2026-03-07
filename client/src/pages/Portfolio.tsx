@@ -372,11 +372,7 @@ export default function Portfolio() {
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="animate-pulse flex flex-col gap-3">
-                <div className="bg-white/10 aspect-[4/3] w-full rounded-none" />
-                <div className="h-4 bg-white/10 rounded w-3/4" />
-                <div className="h-3 bg-white/10 rounded w-1/2" />
-              </div>
+              <div key={i} className="animate-pulse bg-white/10 h-[28rem] w-full rounded-none" />
             ))}
           </div>
         ) : projects.length === 0 ? (
