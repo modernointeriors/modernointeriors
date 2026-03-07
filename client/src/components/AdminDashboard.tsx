@@ -437,6 +437,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const [isDeleteCategoryAlertOpen, setIsDeleteCategoryAlertOpen] = useState(false);
 
   // About Page states
+  const [heroImages, setHeroImages] = useState<string[]>([]);
   const [showcaseBannerFile, setShowcaseBannerFile] = useState<File | null>(null);
   const [showcaseBannerPreview, setShowcaseBannerPreview] = useState<string>('');
   const [historyImageFile, setHistoryImageFile] = useState<File | null>(null);
@@ -1011,6 +1012,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   useEffect(() => {
     if (aboutContent && !aboutContentForm.formState.isDirty) {
       aboutContentForm.reset(aboutContent);
+      if (aboutContent.heroImages && aboutContent.heroImages.length > 0) {
+        setHeroImages(aboutContent.heroImages);
+      }
     }
   }, [aboutContent, aboutContentForm]);
 
@@ -3082,9 +3086,37 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     }
   };
 
+  const handleHeroImageAdd = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const maxSizeBytes = 10 * 1024 * 1024;
+    if (file.size > maxSizeBytes) {
+      toast({ title: "File too large", description: "Maximum: 10MB", variant: "destructive" });
+      e.target.value = '';
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const response = await fetch('/api/upload', { method: 'POST', body: formData });
+      if (!response.ok) throw new Error('Upload failed');
+      const data = await response.json();
+      setHeroImages(prev => [...prev, data.path]);
+      toast({ title: "Upload successful", description: "Hero image added" });
+    } catch (error) {
+      toast({ title: "Lỗi upload", description: "Failed to upload image", variant: "destructive" });
+    }
+    e.target.value = '';
+  };
+
+  const handleHeroImageRemove = (index: number) => {
+    setHeroImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const onAboutContentSubmit = async (data: InsertAboutPageContent) => {
     try {
       const submitData = { ...data };
+      submitData.heroImages = heroImages;
       if (showcaseBannerPreview) {
         submitData.showcaseBannerImage = showcaseBannerPreview;
         submitData.showcaseBannerImageData = null;
@@ -5809,6 +5841,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           updateTeamMemberMutation={updateTeamMemberMutation}
           deleteTeamMemberMutation={deleteTeamMemberMutation}
           updateAboutContentMutation={updateAboutContentMutation}
+          heroImages={heroImages}
+          handleHeroImageAdd={handleHeroImageAdd}
+          handleHeroImageRemove={handleHeroImageRemove}
           showcaseBannerFile={showcaseBannerFile}
           showcaseBannerPreview={showcaseBannerPreview}
           handleShowcaseBannerFileChange={handleShowcaseBannerFileChange}

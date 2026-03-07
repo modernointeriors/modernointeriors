@@ -41,6 +41,9 @@ interface AboutAdminTabProps {
   updateTeamMemberMutation: any;
   deleteTeamMemberMutation: any;
   updateAboutContentMutation: any;
+  heroImages: string[];
+  handleHeroImageAdd: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleHeroImageRemove: (index: number) => void;
   showcaseBannerFile: File | null;
   showcaseBannerPreview: string;
   handleShowcaseBannerFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -86,6 +89,9 @@ export default function AboutAdminTab({
   updateTeamMemberMutation,
   deleteTeamMemberMutation,
   updateAboutContentMutation,
+  heroImages,
+  handleHeroImageAdd,
+  handleHeroImageRemove,
   showcaseBannerFile,
   showcaseBannerPreview,
   handleShowcaseBannerFileChange,
@@ -759,6 +765,64 @@ export default function AboutAdminTab({
                     <Input {...aboutContentForm.register("statsCountriesLabelVi")} placeholder="Quốc gia" data-testid="input-stats-countries-label-vi" />
                   </div>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Hero Section Images */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Hero Section Images (Slider)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Ảnh nền cho slider ở đầu trang Giới thiệu. Có thể thêm nhiều ảnh, tự động chuyển sau 5 giây.
+              </p>
+              {heroImages.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                  {heroImages.map((img, idx) => (
+                    <div key={idx} className="relative group border bg-muted overflow-hidden">
+                      <img
+                        src={img}
+                        alt={`Hero ${idx + 1}`}
+                        className="w-full aspect-video object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => handleHeroImageRemove(idx)}
+                        >
+                          Xóa
+                        </Button>
+                      </div>
+                      <span className="absolute top-1 left-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded">
+                        {idx + 1}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!hasPermission('about')}
+                  onClick={() => document.getElementById('hero-image-upload')?.click()}
+                  className="w-full"
+                  data-testid="button-add-hero-image"
+                >
+                  + Thêm ảnh Hero
+                </Button>
+                <input
+                  id="hero-image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleHeroImageAdd}
+                />
               </div>
             </CardContent>
           </Card>
