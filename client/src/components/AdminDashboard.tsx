@@ -4412,46 +4412,33 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       </div>
 
       {/* Delete Project Confirmation Dialog */}
-      <Dialog open={!!deleteProjectConfirm} onOpenChange={(open) => { if (!open) { setDeleteProjectConfirm(null); setDeleteProjectInput(''); } }}>
-        <DialogContent className="max-w-md">
+      <Dialog open={!!deleteProjectConfirm} onOpenChange={(open) => { if (!open) setDeleteProjectConfirm(null); }}>
+        <DialogContent className="max-w-md bg-black/95 backdrop-blur-xl border border-white/20 rounded-none">
           <DialogHeader>
-            <DialogTitle className="text-red-400">{language === 'vi' ? 'Xác nhận xóa dự án' : 'Confirm Project Deletion'}</DialogTitle>
+            <DialogTitle className="font-light">{language === 'vi' ? 'Xác nhận xóa dự án' : 'Confirm Project Deletion'}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <p className="text-sm text-muted-foreground">
+          <div className="py-2">
+            <p className="text-sm text-white/70">
               {language === 'vi'
-                ? <>Bạn sắp xóa vĩnh viễn dự án <span className="text-foreground font-medium">"{deleteProjectConfirm?.title}"</span> (cả phiên bản EN và VI). Hành động này <span className="text-red-400 font-medium">không thể hoàn tác</span>.</>
-                : <>You are about to permanently delete project <span className="text-foreground font-medium">"{deleteProjectConfirm?.title}"</span> (both EN and VI versions). This action <span className="text-red-400 font-medium">cannot be undone</span>.</>
+                ? <>Bạn có chắc chắn muốn xóa dự án <span className="text-white font-medium">"{deleteProjectConfirm?.title}"</span>? Cả phiên bản EN và VI sẽ bị xóa vĩnh viễn và không thể hoàn tác.</>
+                : <>Are you sure you want to delete project <span className="text-white font-medium">"{deleteProjectConfirm?.title}"</span>? Both EN and VI versions will be permanently deleted and cannot be undone.</>
               }
             </p>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {language === 'vi' ? <>Gõ <span className="text-red-400 font-bold">XÓA</span> để xác nhận:</> : <>Type <span className="text-red-400 font-bold">DELETE</span> to confirm:</>}
-              </label>
-              <Input
-                value={deleteProjectInput}
-                onChange={(e) => setDeleteProjectInput(e.target.value)}
-                placeholder={language === 'vi' ? 'XÓA' : 'DELETE'}
-                className="border-red-400/50 focus-visible:ring-red-400"
-                autoFocus
-              />
-            </div>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => { setDeleteProjectConfirm(null); setDeleteProjectInput(''); }}>
+            <Button variant="outline" className="rounded-none border-white/30 hover:border-white hover:bg-white/10" onClick={() => setDeleteProjectConfirm(null)}>
               {language === 'vi' ? 'Hủy' : 'Cancel'}
             </Button>
             <Button
-              variant="destructive"
-              disabled={deleteProjectInput !== (language === 'vi' ? 'XÓA' : 'DELETE') || deleteProjectMutation.isPending}
+              className="rounded-none bg-white text-black hover:bg-white/90"
+              disabled={deleteProjectMutation.isPending}
               onClick={() => {
                 if (!deleteProjectConfirm) return;
                 deleteProjectConfirm.ids.forEach(id => deleteProjectMutation.mutate(id));
                 setDeleteProjectConfirm(null);
-                setDeleteProjectInput('');
               }}
             >
-              {language === 'vi' ? 'Xóa vĩnh viễn' : 'Delete Permanently'}
+              {language === 'vi' ? 'Xóa' : 'Delete'}
             </Button>
           </div>
         </DialogContent>
@@ -7940,38 +7927,26 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       </div>
 
       {/* Delete Article Confirmation Dialog */}
-      <Dialog open={!!deleteArticleConfirm} onOpenChange={(open) => { if (!open) { setDeleteArticleConfirm(null); setDeleteArticleInput(''); } }}>
-        <DialogContent className="max-w-md">
+      <Dialog open={!!deleteArticleConfirm} onOpenChange={(open) => { if (!open) setDeleteArticleConfirm(null); }}>
+        <DialogContent className="max-w-md bg-black/95 backdrop-blur-xl border border-white/20 rounded-none">
           <DialogHeader>
-            <DialogTitle className="text-red-400">{language === 'vi' ? 'Xác nhận xóa bài viết' : 'Confirm Article Deletion'}</DialogTitle>
+            <DialogTitle className="font-light">{language === 'vi' ? 'Xác nhận xóa bài viết' : 'Confirm Article Deletion'}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <p className="text-sm text-muted-foreground">
+          <div className="py-2">
+            <p className="text-sm text-white/70">
               {language === 'vi'
-                ? <>Bạn sắp xóa vĩnh viễn bài viết <span className="text-foreground font-medium">"{deleteArticleConfirm?.title}"</span> (cả phiên bản EN và VI). Hành động này <span className="text-red-400 font-medium">không thể hoàn tác</span>.</>
-                : <>You are about to permanently delete article <span className="text-foreground font-medium">"{deleteArticleConfirm?.title}"</span> (both EN and VI versions). This action <span className="text-red-400 font-medium">cannot be undone</span>.</>
+                ? <>Bạn có chắc chắn muốn xóa bài viết <span className="text-white font-medium">"{deleteArticleConfirm?.title}"</span>? Cả phiên bản EN và VI sẽ bị xóa vĩnh viễn và không thể hoàn tác.</>
+                : <>Are you sure you want to delete article <span className="text-white font-medium">"{deleteArticleConfirm?.title}"</span>? Both EN and VI versions will be permanently deleted and cannot be undone.</>
               }
             </p>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {language === 'vi' ? <>Gõ <span className="text-red-400 font-bold">XÓA</span> để xác nhận:</> : <>Type <span className="text-red-400 font-bold">DELETE</span> to confirm:</>}
-              </label>
-              <Input
-                value={deleteArticleInput}
-                onChange={(e) => setDeleteArticleInput(e.target.value)}
-                placeholder={language === 'vi' ? 'XÓA' : 'DELETE'}
-                className="border-red-400/50 focus-visible:ring-red-400"
-                autoFocus
-              />
-            </div>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => { setDeleteArticleConfirm(null); setDeleteArticleInput(''); }}>
+            <Button variant="outline" className="rounded-none border-white/30 hover:border-white hover:bg-white/10" onClick={() => setDeleteArticleConfirm(null)}>
               {language === 'vi' ? 'Hủy' : 'Cancel'}
             </Button>
             <Button
-              variant="destructive"
-              disabled={deleteArticleInput !== (language === 'vi' ? 'XÓA' : 'DELETE') || deleteArticleMutation.isPending}
+              className="rounded-none bg-white text-black hover:bg-white/90"
+              disabled={deleteArticleMutation.isPending}
               onClick={async () => {
                 if (!deleteArticleConfirm) return;
                 try {
@@ -7981,11 +7956,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                 } catch (error) {
                 } finally {
                   setDeleteArticleConfirm(null);
-                  setDeleteArticleInput('');
                 }
               }}
             >
-              {language === 'vi' ? 'Xóa vĩnh viễn' : 'Delete Permanently'}
+              {language === 'vi' ? 'Xóa' : 'Delete'}
             </Button>
           </div>
         </DialogContent>
