@@ -420,6 +420,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/projects", requirePermission('projects'), requirePermission('crm'), async (req, res) => {
     try {
       const validatedData = insertProjectSchema.parse(req.body);
+
+      // Generate slug if not provided
+      if (!validatedData.slug) {
+        validatedData.slug = validatedData.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+
+      // Check for duplicate slug + language combination
+      const existingProject = await storage.getProjectBySlug(validatedData.slug, validatedData.language);
+      if (existingProject) {
+        return res.status(409).json({ message: `URL '${validatedData.slug}' đã được sử dụng bởi dự án khác. Vui lòng chọn URL khác.` });
+      }
+
       const project = await storage.createProject(validatedData);
       res.status(201).json(project);
     } catch (error) {
@@ -433,6 +448,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/projects/:id", requirePermission('projects'), requirePermission('crm'), async (req, res) => {
     try {
       const validatedData = insertProjectSchema.partial().parse(req.body);
+
+      // Check for slug conflict only if slug is being changed
+      if (validatedData.slug) {
+        const currentProject = await storage.getProject(req.params.id);
+        if (currentProject && validatedData.slug !== currentProject.slug) {
+          const existingWithSlug = await storage.getProjectBySlug(validatedData.slug, currentProject.language);
+          if (existingWithSlug) {
+            return res.status(409).json({ message: `URL '${validatedData.slug}' đã được sử dụng bởi dự án khác. Vui lòng chọn URL khác.` });
+          }
+        }
+      }
+
       const project = await storage.updateProject(req.params.id, validatedData);
       res.json(project);
     } catch (error) {
@@ -709,11 +736,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/articles", requirePermission('articles'), async (req, res) => {
     try {
-      console.log("[POST /api/articles] body keys:", Object.keys(req.body));
-      console.log("[POST /api/articles] body:", JSON.stringify(req.body).substring(0, 500));
       const validatedData = insertArticleSchema.parse(req.body);
-      console.log("[POST /api/articles] validated OK, slug:", validatedData.slug, "language:", validatedData.language);
-      
+
       // Generate slug if not provided
       if (!validatedData.slug) {
         validatedData.slug = validatedData.title
@@ -721,12 +745,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-+|-+$/g, '');
       }
-      
+
+      // Check for duplicate slug + language combination
+      const existingArticle = await storage.getArticleBySlug(validatedData.slug, validatedData.language);
+      if (existingArticle) {
+        return res.status(409).json({ message: `URL '${validatedData.slug}' đã được sử dụng bởi bài viết khác. Vui lòng chọn URL khác.` });
+      }
+
       // Set publishedAt if status is published and not already set
       if (validatedData.status === 'published' && !validatedData.publishedAt) {
         validatedData.publishedAt = new Date();
       }
-      
+
       const article = await storage.createArticle(validatedData);
       res.status(201).json(article);
     } catch (error) {
@@ -734,22 +764,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
       }
       console.error("Create article error:", error);
-      res.status(500).json({ message: "Failed to create article", detail: String(error) });
+      res.status(500).json({ message: "Failed to create article" });
     }
   });
 
   app.put("/api/articles/:id", requirePermission('articles'), async (req, res) => {
     try {
       const validatedData = insertArticleSchema.partial().parse(req.body);
-      
+
+      const currentArticle = await storage.getArticle(req.params.id);
+
+      // Check for slug conflict only if slug is being changed
+      if (validatedData.slug && currentArticle && validatedData.slug !== currentArticle.slug) {
+        const existingWithSlug = await storage.getArticleBySlug(validatedData.slug, currentArticle.language);
+        if (existingWithSlug) {
+          return res.status(409).json({ message: `URL '${validatedData.slug}' đã được sử dụng bởi bài viết khác. Vui lòng chọn URL khác.` });
+        }
+      }
+
       // Update publishedAt if status is being set to published
       if (validatedData.status === 'published') {
-        const currentArticle = await storage.getArticle(req.params.id);
         if (currentArticle && currentArticle.status !== 'published') {
           validatedData.publishedAt = new Date();
         }
       }
-      
+
       const article = await storage.updateArticle(req.params.id, validatedData);
       res.json(article);
     } catch (error) {
