@@ -46,19 +46,6 @@ export default function About() {
     select: (data) => data.filter(m => m.active).sort((a, b) => a.order - b.order),
   });
 
-  const getFallbackImage = (category: string) => {
-    switch (category) {
-      case 'residential':
-        return 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-      case 'commercial':
-        return 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-      case 'architecture':
-        return 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-      default:
-        return 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080';
-    }
-  };
-
   const getIconComponent = (iconName: string) => {
     const Icon = (LucideIcons as any)[iconName];
     return Icon || LucideIcons.Circle;
@@ -88,8 +75,7 @@ export default function About() {
                     loading={index === 0 ? "eager" : "lazy"}
                     decoding="async"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200';
+                      (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
                 </SwiperSlide>
@@ -241,8 +227,7 @@ export default function About() {
                     alt={language === "vi" ? "Lịch sử công ty" : "Company History"}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600';
+                      (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
                 </div>
@@ -264,8 +249,7 @@ export default function About() {
                     alt={language === "vi" ? "Sứ mệnh và Tầm nhìn" : "Mission and Vision"}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=1600';
+                      (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
                 </div>
