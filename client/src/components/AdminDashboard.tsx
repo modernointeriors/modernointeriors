@@ -1075,9 +1075,6 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/projects'] });
       queryClient.invalidateQueries({ queryKey: ['/api/dashboard/stats'] });
-      toast({ title: "Đã tạo dự án thành công" });
-      projectForm.reset();
-      setIsProjectDialogOpen(false);
     },
     onError: (error: any) => {
       toast({
@@ -2244,6 +2241,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
           createProjectMutation.mutateAsync(enProject),
           createProjectMutation.mutateAsync(viProject),
         ]);
+        toast({ title: "Đã tạo dự án thành công" });
       }
       
       setIsProjectDialogOpen(false);
