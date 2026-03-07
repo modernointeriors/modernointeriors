@@ -756,12 +756,14 @@ export default function Home() {
         </div>
       </section>
       {/* Quality Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] overflow-hidden scroll-animate">
-        <img
-          src={homepageContent?.qualityBackgroundImage || "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"}
-          alt="Quality Interior Design"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      <section className="relative h-[70vh] min-h-[600px] overflow-hidden scroll-animate bg-black">
+        {homepageContent?.qualityBackgroundImage && (
+          <img
+            src={homepageContent.qualityBackgroundImage}
+            alt="Quality Interior Design"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60" />
         <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
@@ -906,16 +908,14 @@ export default function Home() {
       </section>
       {/* Quality Materials Hero Section */}
       <section className="relative h-[70vh] bg-black overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: homepageContent?.quality2BackgroundImage 
-              ? `url(${homepageContent.quality2BackgroundImage})`
-              : 'url("/api/assets/stock_images/contemporary_bedroom_e9bd2ed1.jpg")',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
+        {homepageContent?.quality2BackgroundImage && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${homepageContent.quality2BackgroundImage})` }}
+          >
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
+        )}
 
         <div className="relative h-full flex items-center">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
