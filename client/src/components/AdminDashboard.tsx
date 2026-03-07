@@ -5296,9 +5296,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Tổng số lần thanh toán' : 'Total Transactions'}</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Đang Bảo Hành' : 'Active Warranty'}</p>
                   <p className="text-2xl font-semibold mt-1">
-                    {allTransactions.length}
+                    {clients.filter(c => c.warrantyStatus === 'active').length}
                   </p>
                 </div>
                 <Star className="h-8 w-8 text-muted-foreground" />
