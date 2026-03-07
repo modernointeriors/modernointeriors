@@ -655,24 +655,21 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
   // Memoized client financial calculations (calculate once, reuse for all clients)
   const clientFinances = useMemo(() => {
-    const finances: Record<string, { totalSpending: number; commission: number }> = {};
+    const finances: Record<string, { totalSpending: number; pending: number }> = {};
     
-    // Group transactions by clientId for efficient calculation
     allTransactions.forEach((t: any) => {
-      if (t.status !== "completed" || !t.clientId) return;
+      if (!t.clientId) return;
       
       if (!finances[t.clientId]) {
-        finances[t.clientId] = { totalSpending: 0, commission: 0 };
+        finances[t.clientId] = { totalSpending: 0, pending: 0 };
       }
       
       const amount = parseFloat(t.amount || "0");
       
-      if (t.type === "payment") {
+      if (t.status === "completed") {
         finances[t.clientId].totalSpending += amount;
-      } else if (t.type === "refund") {
-        finances[t.clientId].totalSpending -= amount;
-      } else if (t.type === "commission") {
-        finances[t.clientId].commission += amount;
+      } else if (t.status === "pending") {
+        finances[t.clientId].pending += amount;
       }
     });
     
@@ -5023,20 +5020,14 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                         </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">Hoa hồng</label>
+                        <label className="text-sm font-medium text-muted-foreground">Chưa Thanh Toán</label>
                         <p className="text-base mt-1 font-semibold">
-                          {(clientFinances[viewingClient.id]?.commission || 0).toLocaleString('vi-VN')} đ
+                          {(clientFinances[viewingClient.id]?.pending || 0).toLocaleString('vi-VN')} đ
                         </p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">Order Count</label>
+                        <label className="text-sm font-medium text-muted-foreground">Số đơn hàng</label>
                         <p className="text-base mt-1">{viewingClient.orderCount || 0}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-muted-foreground">Refund Amount</label>
-                        <p className="text-base mt-1 font-semibold text-white">
-                          {viewingClient.refundAmount ? `${parseFloat(String(viewingClient.refundAmount)).toLocaleString('vi-VN')} đ` : "0 đ"}
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -5356,8 +5347,8 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <div className="text-xs font-normal text-muted-foreground mt-0.5">{t('crm.company')}</div>
                         </TableHead>
                         <TableHead className="w-[110px]">
-                          <div>{t('crm.totalSpending')}</div>
-                          <div className="text-xs font-normal text-muted-foreground mt-0.5">{language === 'vi' ? 'Hoa hồng' : 'Commission'}</div>
+                          <div>{language === 'vi' ? 'Thanh Toán' : 'Paid'}</div>
+                          <div className="text-xs font-normal text-muted-foreground mt-0.5">{language === 'vi' ? 'Chưa Thanh Toán' : 'Unpaid'}</div>
                         </TableHead>
                         <TableHead className="w-[110px] text-center">{t('crm.warrantyStatus')}</TableHead>
                         <TableHead className="w-[110px] text-center">{t('crm.pipelineStage')}</TableHead>
@@ -5396,7 +5387,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                               {(clientFinances[client.id]?.totalSpending || 0).toLocaleString('vi-VN')} đ
                             </div>
                             <div className="text-xs text-muted-foreground mt-1 whitespace-nowrap">
-                              {(clientFinances[client.id]?.commission || 0).toLocaleString('vi-VN')} đ
+                              {(clientFinances[client.id]?.pending || 0).toLocaleString('vi-VN')} đ
                             </div>
                           </TableCell>
                           <TableCell className="align-middle text-center">
