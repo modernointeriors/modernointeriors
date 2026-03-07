@@ -3413,11 +3413,11 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     name="category"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Category *</FormLabel>
+                        <FormLabel>Danh mục *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-project-category">
-                              <SelectValue placeholder="Select a category" />
+                              <SelectValue placeholder="Chọn danh mục" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -3632,7 +3632,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     name="images"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Card Image (Hình ảnh hiển thị trên Card dự án)</FormLabel>
+                        <FormLabel>Hình ảnh Card <span className="text-muted-foreground text-xs font-normal">(hiển thị trên danh sách dự án)</span></FormLabel>
                         <FormControl>
                           <ImageUpload
                             value={field.value}
@@ -3652,7 +3652,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     name="coverImages"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Cover Images (Maximum 2, 3:4 Aspect Ratio)</FormLabel>
+                        <FormLabel>Ảnh bìa <span className="text-muted-foreground text-xs font-normal">(Tối đa 2 ảnh, tỷ lệ 3:4)</span></FormLabel>
                         <FormControl>
                           <ImageUpload
                             value={field.value}
@@ -3672,7 +3672,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     name="contentImages"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Content Images (2 Images, 16:9 or 1:1 Aspect Ratio)</FormLabel>
+                        <FormLabel>Ảnh nội dung <span className="text-muted-foreground text-xs font-normal">(2 ảnh, tỷ lệ 16:9 hoặc 1:1)</span></FormLabel>
                         <FormControl>
                           <ImageUpload
                             value={field.value}
@@ -3692,7 +3692,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     name="galleryImages"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Gallery Images (Maximum 10, 16:9 or 1:1 Aspect Ratio)</FormLabel>
+                        <FormLabel>Ảnh thư viện <span className="text-muted-foreground text-xs font-normal">(Tối đa 10 ảnh, tỷ lệ 16:9 hoặc 1:1)</span></FormLabel>
                         <FormControl>
                           <ImageUpload
                             value={field.value}
@@ -3706,9 +3706,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     )}
                   />
 
-                  {/* Bilingual SEO Settings */}
+                  {/* Cài đặt SEO */}
                   <div className="space-y-4 border-t pt-4">
-                    <h4 className="text-sm font-light">SEO Settings</h4>
+                    <h4 className="text-sm font-light">Cài đặt SEO</h4>
                     
                     {/* URL Slug */}
                     <FormField
@@ -3716,9 +3716,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       name="slug"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>URL Slug</FormLabel>
+                          <FormLabel>Đường dẫn URL</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-project-slug" placeholder="auto-generated from English title if left empty" />
+                            <Input {...field} data-testid="input-project-slug" placeholder="Tự động tạo từ tiêu đề nếu để trống" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
