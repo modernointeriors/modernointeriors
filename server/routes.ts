@@ -1206,8 +1206,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return sum;
       }, 0);
 
+      const uniqueProjectSlugs = new Set(allProjects.map((p: any) => p.slug));
+
       res.json({
-        totalProjects: allProjects.length,
+        totalProjects: uniqueProjectSlugs.size,
         activeClients: activeClients.length,
         newInquiries: newInquiries.length,
         revenue: totalRevenue
