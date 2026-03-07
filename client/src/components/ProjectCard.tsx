@@ -13,70 +13,45 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   return (
     <Link href={project.slug ? `/portfolio/${project.slug}` : `/project/${project.id}`}>
       <div
-        className="project-card group relative overflow-hidden cursor-pointer w-full flex rounded-none transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-white/10 bg-white/5 border border-white/10 hover:border-white/20"
+        className="project-card group relative overflow-hidden cursor-pointer w-full flex flex-col rounded-none transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-white/10"
         data-index={index}
       >
-        {/* Image - left side */}
-        <div className="relative w-80 md:w-96 flex-shrink-0 h-64 overflow-hidden">
+        {/* Image */}
+        <div className="relative w-full aspect-[4/3] overflow-hidden">
           <img
             src={projectImage}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             data-testid={`img-project-${project.id}`}
           />
-          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-all duration-500" />
-        </div>
-
-        {/* Content - right side */}
-        <div className="flex flex-col justify-between p-8 flex-1">
-          <div>
-            <p className="text-white/60 text-xs uppercase tracking-widest mb-2" data-testid={`text-category-${project.id}`}>
+          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500" />
+          {/* Category badge */}
+          <div className="absolute top-4 left-4">
+            <p className="text-white/80 text-[10px] uppercase tracking-widest bg-black/40 px-2 py-1 backdrop-blur-sm" data-testid={`text-category-${project.id}`}>
               {project.category}
             </p>
-            <h3 className="text-white text-2xl font-light mb-3 group-hover:text-white/80 transition-colors" data-testid={`text-title-${project.id}`}>
-              {project.title}
-            </h3>
-            {project.description && (
-              <p className="text-white/50 text-sm font-light leading-relaxed line-clamp-2">
-                {project.description}
-              </p>
-            )}
-            {project.area && (
-              <p className="text-white/40 text-xs mt-2" data-testid={`text-area-${project.id}`}>
-                {project.area}
-              </p>
-            )}
           </div>
+        </div>
 
-          {/* Bottom info */}
-          <div className="flex items-end justify-between mt-4">
-            <div className="flex gap-8 text-white">
+        {/* Content */}
+        <div className="pt-4 pb-2 flex flex-col gap-2">
+          <h3 className="text-white text-base font-light group-hover:text-white/70 transition-colors line-clamp-1" data-testid={`text-title-${project.id}`}>
+            {project.title}
+          </h3>
+
+          <div className="flex items-center justify-between">
+            <div className="flex gap-4 text-white/50 text-xs font-light">
               {project.completionYear && (
-                <div>
-                  <p className="text-white/40 text-[10px] uppercase tracking-wider mb-0.5">Year</p>
-                  <p className="font-light text-sm" data-testid={`text-year-${project.id}`}>
-                    {project.completionYear}
-                  </p>
-                </div>
+                <span data-testid={`text-year-${project.id}`}>{project.completionYear}</span>
               )}
               {project.duration && (
-                <div>
-                  <p className="text-white/40 text-[10px] uppercase tracking-wider mb-0.5">Duration</p>
-                  <p className="font-light text-sm" data-testid={`text-duration-${project.id}`}>
-                    {project.duration}
-                  </p>
-                </div>
+                <span data-testid={`text-duration-${project.id}`}>{project.duration}</span>
               )}
               {project.location && (
-                <div>
-                  <p className="text-white/40 text-[10px] uppercase tracking-wider mb-0.5">Location</p>
-                  <p className="font-light text-sm">
-                    {project.location}
-                  </p>
-                </div>
+                <span className="truncate max-w-[100px]">{project.location}</span>
               )}
             </div>
-            <span className="text-white/30 text-xs tracking-widest uppercase group-hover:text-white/60 transition-colors">
+            <span className="text-white/30 text-[10px] tracking-widest uppercase group-hover:text-white/60 transition-colors flex-shrink-0">
               View →
             </span>
           </div>
