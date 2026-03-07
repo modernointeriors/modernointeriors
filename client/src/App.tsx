@@ -27,13 +27,30 @@ function Router() {
         <Layout>
           <Switch>
             <Route path="/" component={Home} />
+
+            {/* Portfolio — EN + VI */}
             <Route path="/portfolio" component={Portfolio} />
             <Route path="/portfolio/:slug" component={ProjectDetail} />
-            <Route path="/project/:id" component={ProjectDetail} />
+            <Route path="/du-an" component={Portfolio} />
+            <Route path="/du-an/:slug" component={ProjectDetail} />
+
+            {/* Blog — EN + VI */}
             <Route path="/blog" component={Blog} />
             <Route path="/blog/:slug" component={BlogDetail} />
+            <Route path="/tin-tuc" component={Blog} />
+            <Route path="/tin-tuc/:slug" component={BlogDetail} />
+
+            {/* About — EN + VI */}
             <Route path="/about" component={About} />
+            <Route path="/gioi-thieu" component={About} />
+
+            {/* Contact — EN + VI */}
             <Route path="/contact" component={Contact} />
+            <Route path="/lien-he" component={Contact} />
+
+            {/* Legacy project ID route */}
+            <Route path="/project/:id" component={ProjectDetail} />
+
             <Route path="/admin">
               <ProtectedRoute>
                 <Admin />

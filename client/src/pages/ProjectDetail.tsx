@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, MapPin, User, Eye, Share2, Check } from "lucide-react";
 import OptimizedImage from "@/components/OptimizedImage";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getRoute } from "@/lib/routes";
 import { useToast } from "@/hooks/use-toast";
 import type { Project } from "@shared/schema";
 
@@ -327,7 +328,7 @@ export default function ProjectDetail() {
               }
             </p>
             <Button asChild variant="outline" data-testid="button-back-portfolio">
-              <Link href="/portfolio">
+              <Link href={getRoute('portfolio', language)}>
                 {language === 'vi' ? 'Quay lại Danh mục' : 'Back to Portfolio'}
               </Link>
             </Button>
@@ -359,7 +360,7 @@ export default function ProjectDetail() {
           className="mb-8"
           data-testid="button-back-to-portfolio"
         >
-          <Link href="/portfolio">
+          <Link href={getRoute('portfolio', language)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             {language === 'vi' ? 'Quay lại Danh mục' : 'Back to Portfolio'}
           </Link>
@@ -565,7 +566,7 @@ export default function ProjectDetail() {
             <div className="overflow-x-auto scrollbar-hide">
               <div className="flex gap-6 pb-4" style={{ width: 'max-content' }}>
                 {allProjects.map((otherProject) => (
-                  <Link key={otherProject.id} href={otherProject.slug ? `/portfolio/${otherProject.slug}` : `/project/${otherProject.id}`}>
+                  <Link key={otherProject.id} href={otherProject.slug ? `${getRoute('portfolio', language)}/${otherProject.slug}` : `/project/${otherProject.id}`}>
                     <div className="group cursor-pointer w-72 aspect-square flex-shrink-0">
                       <OptimizedImage
                         src={(Array.isArray(otherProject.coverImages) ? otherProject.coverImages[0] : '') || (Array.isArray(otherProject.contentImages) ? otherProject.contentImages[0] : '') || otherProject.heroImage || (Array.isArray(otherProject.galleryImages) ? otherProject.galleryImages[0] : '') || (Array.isArray(otherProject.images) ? otherProject.images[0] : '') || '/placeholder-project.jpg'} 

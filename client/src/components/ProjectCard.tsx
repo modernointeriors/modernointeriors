@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import type { Project } from "@shared/schema";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getRoute } from "@/lib/routes";
 
 interface ProjectCardProps {
   project: Project;
@@ -18,7 +19,7 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     <div
       className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full rounded-none"
       data-index={index}
-      onClick={() => navigate(project.slug ? `/portfolio/${project.slug}` : `/project/${project.id}`)}
+      onClick={() => navigate(project.slug ? `${getRoute('portfolio', language)}/${project.slug}` : `/project/${project.id}`)}
     >
       <img
         src={projectImage}

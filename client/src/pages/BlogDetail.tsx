@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, ArrowLeft, Share2, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getRoute } from "@/lib/routes";
 import { useToast } from "@/hooks/use-toast";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article } from "@shared/schema";
@@ -71,7 +72,7 @@ function RelatedArticles({ currentArticleId, category, language }: { currentArti
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {relatedArticles.map((article) => (
           <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-related-article-${article.id}`}>
-            <Link href={`/blog/${article.slug}`}>
+            <Link href={`${getRoute('blog', language)}/${article.slug}`}>
               <div className="relative">
                 {(article.featuredImage || article.featuredImageData) ? (
                   <OptimizedImage
@@ -281,7 +282,7 @@ export default function BlogDetail() {
             }
           </p>
           <Button asChild>
-            <Link href="/blog">
+            <Link href={getRoute('blog', language)}>
               {language === 'vi' ? 'Quay lại Tin tức' : 'Back to News'}
             </Link>
           </Button>
@@ -300,7 +301,7 @@ export default function BlogDetail() {
           className="mb-8"
           data-testid="button-back-to-news"
         >
-          <Link href="/blog">
+          <Link href={getRoute('blog', language)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             {language === 'vi' ? 'Quay lại Tin tức' : 'Back to News'}
           </Link>

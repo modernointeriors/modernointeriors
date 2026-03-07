@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import { getRoute } from "@/lib/routes";
 import HeroSlider from "@/components/HeroSlider";
 import ScrollableContainer from "@/components/ScrollableContainer";
 import { Progress } from "@/components/ui/progress";
@@ -649,7 +650,7 @@ export default function Home() {
                   className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300"
                   data-testid="button-view-more-projects"
                 >
-                  <Link href="/portfolio">
+                  <Link href={getRoute('portfolio', language)}>
                     {t("common.viewMoreProjects")}{" "}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -683,7 +684,7 @@ export default function Home() {
                     <div
                       key={project.id}
                       className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card"
-                      onClick={() => navigate(project.slug ? `/portfolio/${project.slug}` : `/project/${project.id}`)}
+                      onClick={() => navigate(project.slug ? `${getRoute('portfolio', language)}/${project.slug}` : `/project/${project.id}`)}
                     >
                       <img
                         src={
@@ -810,7 +811,7 @@ export default function Home() {
                   className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300"
                   data-testid="button-view-more-news"
                 >
-                  <Link href="/blog">
+                  <Link href={getRoute('blog', language)}>
                     {t("common.viewMoreNews")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -854,7 +855,7 @@ export default function Home() {
                     <Card
                       key={article.id}
                       className="group overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card"
-                      onClick={() => navigate(`/blog/${article.slug}`)}
+                      onClick={() => navigate(`${getRoute('blog', language)}/${article.slug}`)}
                     >
                       <div className="relative">
                         <img

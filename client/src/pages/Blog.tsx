@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getRoute } from "@/lib/routes";
 import OptimizedImage from "@/components/OptimizedImage";
 import type { Article, Category } from "@shared/schema";
 import { useState, useEffect, useMemo } from "react";
@@ -454,7 +455,7 @@ export default function Blog() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {articles.map((article) => (
-                <Link key={article.id} href={`/blog/${article.slug}`}>
+                <Link key={article.id} href={`${getRoute('blog', language)}/${article.slug}`}>
                   <Card className="article-card group overflow-hidden hover-scale project-hover rounded-none cursor-pointer h-[28rem] flex flex-col" data-testid={`card-article-${article.id}`}>
                     <div className="relative">
                       {(article.featuredImage || article.featuredImageData) ? (

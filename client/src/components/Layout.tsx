@@ -5,18 +5,19 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescri
 import { Menu, X, Globe } from "lucide-react";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
+import { getRoute, translatePath, type RouteKey } from "@/lib/routes";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const getNavigation = (t: (key: string) => string) => {
+const getNavigation = (t: (key: string) => string, lang: 'en' | 'vi') => {
   return [
     { name: t('nav.home'), href: `/`, key: 'home' },
-    { name: t('nav.news'), href: `/blog`, key: 'news' },
-    { name: t('nav.about'), href: `/about`, key: 'about' },
-    { name: t('nav.projects'), href: `/portfolio`, key: 'portfolio' },
-    { name: t('nav.contacts'), href: `/contact`, key: 'contact' }
+    { name: t('nav.news'), href: getRoute('blog', lang), key: 'blog' },
+    { name: t('nav.about'), href: getRoute('about', lang), key: 'about' },
+    { name: t('nav.projects'), href: getRoute('portfolio', lang), key: 'portfolio' },
+    { name: t('nav.contacts'), href: getRoute('contact', lang), key: 'contact' },
   ];
 };
 
@@ -57,7 +58,7 @@ export default function Layout({ children }: LayoutProps) {
     return () => { document.body.style.overflow = ''; };
   }, [showSidebar]);
   const { language, setLanguage, t } = useLanguage();
-  const navigation = getNavigation(t);
+  const navigation = getNavigation(t, language);
 
   // Fetch logo settings
   const { data: settings } = useQuery<{ logoData?: string; logoUrl?: string }>({
@@ -118,13 +119,13 @@ export default function Layout({ children }: LayoutProps) {
     }
   }, [showSidebar, iconState]);
 
-  // Language switching without URL changes
   const handleLanguageChange = (lang: Language) => {
+    const newPath = translatePath(location, lang);
     setLanguage(lang);
-    // Chỉ thay đổi ngôn ngữ hiển thị, không thay đổi URL
+    if (newPath !== location) {
+      navigate(newPath);
+    }
   };
-
-  // No URL-based language detection needed
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -148,7 +149,9 @@ export default function Layout({ children }: LayoutProps) {
 
   const isActive = (href: string) => {
     if (href === '/') return location === '/';
-    return location.startsWith(href);
+    if (location.startsWith(href)) return true;
+    const altPath = translatePath(href, language === 'en' ? 'vi' : 'en');
+    return location.startsWith(altPath);
   };
 
   return (
@@ -443,7 +446,7 @@ export default function Layout({ children }: LayoutProps) {
               <ul className="space-y-3">
                 <li>
                   <Link 
-                    href={`/blog`} 
+                    href={getRoute('blog', language)} 
                     className="text-white/80 hover:text-white transition-colors font-light text-sm" 
                     data-testid="footer-news"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -453,7 +456,7 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <Link 
-                    href={`/about`} 
+                    href={getRoute('about', language)} 
                     className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
@@ -462,7 +465,7 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <Link 
-                    href={`/portfolio`} 
+                    href={getRoute('portfolio', language)} 
                     className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
@@ -471,7 +474,7 @@ export default function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <Link 
-                    href={`/contact`} 
+                    href={getRoute('contact', language)} 
                     className="text-white/80 hover:text-white transition-colors font-light text-sm"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
