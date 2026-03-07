@@ -5313,10 +5313,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Hoa hồng chi' : 'Commission Paid'}</p>
+                  <p className="text-sm text-muted-foreground">{language === 'vi' ? 'Chưa thanh toán' : 'Unpaid'}</p>
                   <p className="text-2xl font-semibold mt-1">
                     {allTransactions.reduce((sum, t) => {
-                      if (t.status !== "completed" || t.type !== "commission") return sum;
+                      if (t.status !== "pending") return sum;
                       return sum + parseFloat(t.amount || "0");
                     }, 0).toLocaleString('vi-VN')} đ
                   </p>
