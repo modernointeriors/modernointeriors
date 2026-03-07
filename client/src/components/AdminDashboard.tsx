@@ -4285,7 +4285,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                       </TableCell>
                       <TableCell>
                         <div>
-                          <p className="capitalize">{project.category}</p>
+                          <p className="capitalize">
+                            {(() => {
+                              const cat = categories.find(c => c.slug === project.category);
+                              return cat ? (language === 'vi' ? (cat.nameVi || cat.name) : cat.name) : project.category;
+                            })()}
+                          </p>
                           <p className="text-sm text-muted-foreground">{project.style || "—"}</p>
                         </div>
                       </TableCell>
@@ -7794,7 +7799,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                           <TableCell>
                             <div>
                               <span data-testid={`badge-category-${slug}`} className="text-sm">
-                                {displayArticle.category}
+                                {(() => {
+                                  const cat = categories.find(c => c.slug === displayArticle.category);
+                                  return cat ? (language === 'vi' ? (cat.nameVi || cat.name) : cat.name) : displayArticle.category;
+                                })()}
                               </span>
                               <div className="flex space-x-1 mt-1">
                                 {hasEn && <span className="text-xs text-muted-foreground">EN</span>}
