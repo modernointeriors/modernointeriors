@@ -4794,7 +4794,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                                 <div className="flex items-center gap-2">
                                   <span className="text-sm font-medium text-white">{transaction.title}</span>
                                   <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
-                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Hoa hồng" : "—"}
+                                    {transaction.type === "payment" ? "Thanh toán" : transaction.type === "pending_payment" ? "Đang chờ - thanh toán" : "—"}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -5081,7 +5081,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-white">{transaction.title}</span>
                                 <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-white/70 rounded-none">
-                                  {transaction.type === "payment" ? "Thanh toán" : transaction.type === "refund" ? "Hoàn tiền" : transaction.type === "commission" ? "Hoa hồng" : "—"}
+                                  {transaction.type === "payment" ? "Thanh toán" : transaction.type === "pending_payment" ? "Đang chờ - thanh toán" : "—"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-3">
@@ -5186,8 +5186,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="payment">Thanh toán</SelectItem>
-                              <SelectItem value="refund">Hoàn tiền</SelectItem>
-                              <SelectItem value="commission">Hoa hồng</SelectItem>
+                              <SelectItem value="pending_payment">Đang chờ - thanh toán</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
