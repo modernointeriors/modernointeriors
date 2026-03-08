@@ -118,7 +118,7 @@ export default function About() {
       )}
       {/* Architecture Showcase Section */}
       {((aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) || showcaseServices.length > 0) && (
-        <section className="relative h-[80vh] min-h-[600px] bg-black overflow-hidden -ml-16">
+        <section className="relative bg-black overflow-hidden -ml-16" style={{ minHeight: 'min(80vh, 600px)' }}>
           {(aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) && (
             <div
               className="absolute inset-0 bg-cover bg-center"
@@ -130,25 +130,19 @@ export default function About() {
             </div>
           )}
 
-          <div className="relative h-full flex items-end">
-            <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-              <div className="border-r-2 border-white/20" style={{ 
-                borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
-              }} />
-              <div className="border-r-2 border-white/20" style={{ 
-                borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
-              }} />
-              <div className="border-r-2 border-white/20" style={{ 
-                borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' 
-              }} />
+          <div className="relative flex items-end min-h-[inherit] md:min-h-0 md:h-[80vh]">
+            <div className="absolute inset-0 hidden md:grid md:grid-cols-2 lg:grid-cols-4">
+              <div className="border-r-2 border-white/20" style={{ borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' }} />
+              <div className="border-r-2 border-white/20" style={{ borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' }} />
+              <div className="border-r-2 border-white/20" style={{ borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' }} />
               <div />
             </div>
 
-            <div className="relative w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-end">
+            <div className="relative w-full grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 items-end">
               {showcaseServices.map((service, index) => (
-                <div key={service.id} className="px-6 py-8 md:px-8 md:py-12">
-                  <div className="space-y-3 h-[180px] flex flex-col">
-                    <h4 className="text-base md:text-lg font-light text-white uppercase tracking-wide">
+                <div key={service.id} className="px-4 py-6 md:px-8 md:py-12 border-r border-white/10 md:border-0 last:border-0">
+                  <div className="space-y-2 md:space-y-3">
+                    <h4 className="text-sm md:text-lg font-light text-white uppercase tracking-wide leading-snug">
                       {language === "vi" ? service.titleVi : service.titleEn}
                     </h4>
                     <p className="text-white/70 font-light text-xs md:text-sm leading-relaxed">
