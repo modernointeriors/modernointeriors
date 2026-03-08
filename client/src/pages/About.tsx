@@ -324,7 +324,58 @@ export default function About() {
               </h3>
             </div>
 
-            <div className="flex gap-0 items-stretch justify-center">
+            {/* Mobile layout - vertical accordion */}
+            <div className="md:hidden space-y-4">
+              {teamMembers.map((member, index) => {
+                const isExpanded = selectedMember === index;
+                return (
+                  <div key={member.id} className="border-t border-white/10">
+                    <button
+                      onClick={() => setSelectedMember(isExpanded ? null : index)}
+                      className="w-full flex items-center justify-between py-5 text-left"
+                      data-testid={`button-team-member-mobile-${member.id}`}
+                    >
+                      <div>
+                        <p className="text-lg font-light text-white uppercase tracking-wide">{member.name}</p>
+                        <p className="text-xs text-white/50 uppercase tracking-wider mt-1">
+                          {language === "vi" ? member.positionVi : member.positionEn}
+                        </p>
+                      </div>
+                      <span className={`text-2xl font-light text-white/60 transition-transform duration-300 ${isExpanded ? 'rotate-45' : ''}`}>+</span>
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[1000px] opacity-100 pb-8' : 'max-h-0 opacity-0'}`}>
+                      <div className="space-y-5">
+                        {(member.imageData || member.image) && (
+                          <div className="aspect-[3/2] overflow-hidden bg-white/10">
+                            <img src={member.imageData || member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+                          </div>
+                        )}
+                        {member.bioEn && member.bioVi && (
+                          <p className="text-white/70 font-light leading-relaxed text-sm">
+                            {language === "vi" ? member.bioVi : member.bioEn}
+                          </p>
+                        )}
+                        {member.achievementsEn && member.achievementsVi && (
+                          <div className="space-y-2">
+                            <h5 className="text-xs font-light text-white/80 uppercase tracking-wider">{language === "vi" ? "Thành tựu" : "Achievements"}</h5>
+                            <p className="text-white/70 font-light leading-relaxed text-sm">{language === "vi" ? member.achievementsVi : member.achievementsEn}</p>
+                          </div>
+                        )}
+                        {member.philosophyEn && member.philosophyVi && (
+                          <div className="space-y-2">
+                            <h5 className="text-xs font-light text-white/80 uppercase tracking-wider">{language === "vi" ? "Triết lý" : "Philosophy"}</h5>
+                            <p className="text-white/70 font-light leading-relaxed text-sm">{language === "vi" ? member.philosophyVi : member.philosophyEn}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop layout - horizontal accordion */}
+            <div className="hidden md:flex gap-0 items-stretch justify-center">
               {teamMembers.map((member, index) => {
                 const isExpanded = selectedMember === index;
                 const nameChars = member.name.toUpperCase().split('');
@@ -338,101 +389,51 @@ export default function About() {
                       }`}
                       data-testid={`button-team-member-${member.id}`}
                     >
-                      {/* Background Image */}
                       {(member.imageData || member.image) && (
                         <div 
                           className="absolute inset-0 bg-cover bg-center transition-all duration-300"
-                          style={{
-                            backgroundImage: `url(${member.imageData || member.image})`,
-                            filter: 'grayscale(100%) brightness(0.3)',
-                          }}
+                          style={{ backgroundImage: `url(${member.imageData || member.image})`, filter: 'grayscale(100%) brightness(0.3)' }}
                         />
                       )}
-                      
-                      {/* Overlay */}
-                      <div className={`absolute inset-0 transition-all duration-300 ${
-                        isExpanded ? 'bg-black/30' : 'bg-black/60'
-                      } group-hover:bg-black/40`} />
-                      
-                      {/* Content */}
+                      <div className={`absolute inset-0 transition-all duration-300 ${isExpanded ? 'bg-black/30' : 'bg-black/60'} group-hover:bg-black/40`} />
                       <div className="relative h-full flex flex-col items-center pt-8">
-                        {/* Plus Icon */}
-                        <div className={`text-4xl font-light mb-8 transition-all duration-300 ${
-                          isExpanded ? 'text-white' : 'text-white/60'
-                        }`}>
-                          +
-                        </div>
-                        
-                        {/* Name Vertical */}
+                        <div className={`text-4xl font-light mb-8 transition-all duration-300 ${isExpanded ? 'text-white' : 'text-white/60'}`}>+</div>
                         <div className="flex flex-col items-center">
                           {nameChars.map((char, charIndex) => (
-                            <span 
-                              key={charIndex} 
-                              className={`text-2xl font-light transition-all duration-300 ${
-                                isExpanded ? 'text-white' : 'text-white/70'
-                              }`}
-                            >
-                              {char}
-                            </span>
+                            <span key={charIndex} className={`text-2xl font-light transition-all duration-300 ${isExpanded ? 'text-white' : 'text-white/70'}`}>{char}</span>
                           ))}
                         </div>
                       </div>
                     </button>
 
-                    <div 
-                      className={`h-full overflow-hidden transition-all duration-1000 ease-in-out border-r border-white/10 ${
-                        isExpanded ? 'max-w-[800px] opacity-100' : 'max-w-0 opacity-0'
-                      }`}
-                    >
+                    <div className={`h-full overflow-hidden transition-all duration-1000 ease-in-out border-r border-white/10 ${isExpanded ? 'max-w-[800px] opacity-100' : 'max-w-0 opacity-0'}`}>
                       <div className="w-[800px] pl-12 pr-8 py-8">
                         <div className="flex gap-8 items-start">
                           {(member.imageData || member.image) && (
                             <div className="flex-shrink-0 w-64">
                               <div className="aspect-[9/16] overflow-hidden bg-white/10">
-                                <img 
-                                  src={member.imageData || member.image} 
-                                  alt={member.name}
-                                  className="w-full h-full object-cover"
-                                />
+                                <img src={member.imageData || member.image} alt={member.name} className="w-full h-full object-cover" />
                               </div>
                             </div>
                           )}
-
                           <div className="flex-1 space-y-6">
                             <div>
-                              <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">
-                                {member.name}
-                              </h4>
-                              <p className="text-sm text-white/60 uppercase tracking-wider">
-                                {language === "vi" ? member.positionVi : member.positionEn}
-                              </p>
+                              <h4 className="text-2xl font-light text-white mb-2 uppercase tracking-wide">{member.name}</h4>
+                              <p className="text-sm text-white/60 uppercase tracking-wider">{language === "vi" ? member.positionVi : member.positionEn}</p>
                             </div>
-                            
                             {member.bioEn && member.bioVi && (
-                              <p className="text-white/70 font-light leading-relaxed text-justify">
-                                {language === "vi" ? member.bioVi : member.bioEn}
-                              </p>
+                              <p className="text-white/70 font-light leading-relaxed text-justify">{language === "vi" ? member.bioVi : member.bioEn}</p>
                             )}
-
                             {member.achievementsEn && member.achievementsVi && (
                               <div className="space-y-2">
-                                <h5 className="text-sm font-light text-white/80 uppercase tracking-wider">
-                                  {language === "vi" ? "Thành tựu" : "Achievements"}
-                                </h5>
-                                <p className="text-white/70 font-light leading-relaxed text-justify">
-                                  {language === "vi" ? member.achievementsVi : member.achievementsEn}
-                                </p>
+                                <h5 className="text-sm font-light text-white/80 uppercase tracking-wider">{language === "vi" ? "Thành tựu" : "Achievements"}</h5>
+                                <p className="text-white/70 font-light leading-relaxed text-justify">{language === "vi" ? member.achievementsVi : member.achievementsEn}</p>
                               </div>
                             )}
-
                             {member.philosophyEn && member.philosophyVi && (
                               <div className="space-y-2">
-                                <h5 className="text-sm font-light text-white/80 uppercase tracking-wider">
-                                  {language === "vi" ? "Triết lý" : "Philosophy"}
-                                </h5>
-                                <p className="text-white/70 font-light leading-relaxed text-justify">
-                                  {language === "vi" ? member.philosophyVi : member.philosophyEn}
-                                </p>
+                                <h5 className="text-sm font-light text-white/80 uppercase tracking-wider">{language === "vi" ? "Triết lý" : "Philosophy"}</h5>
+                                <p className="text-white/70 font-light leading-relaxed text-justify">{language === "vi" ? member.philosophyVi : member.philosophyEn}</p>
                               </div>
                             )}
                           </div>
