@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Redirect } from 'wouter';
 import { ReactNode } from 'react';
+import SessionExpiryModal from '@/components/SessionExpiryModal';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -24,5 +25,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Redirect to="/login" />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <SessionExpiryModal />
+      {children}
+    </>
+  );
 }
