@@ -410,7 +410,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className={`pl-12 md:pl-16 flex-1 ${isAdminPage ? 'pb-0 mb-0' : 'pb-8 md:pb-6 mb-4'}`}>{children}</main>
 
       {/* Footer - Hidden on admin pages */}
-      {!isAdminPage && <footer className="bg-black text-white pt-10 pb-12 border-t border-gray-800 ml-12 md:ml-16">
+      {!isAdminPage && <footer className="bg-black text-white pt-10 pb-4 border-t border-gray-800 ml-12 md:ml-16">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-20 mb-8">
             {/* Corporate Office */}
@@ -539,7 +539,7 @@ export default function Layout({ children }: LayoutProps) {
             
           </div>
           
-          <div className="mt-5 pt-5 text-center border-t border-gray-800">
+          <div className="mt-5 pt-4 text-center border-t border-gray-800">
             <p className="text-white/60 text-base font-light">
               © 2025 Moderno Interiors Design
             </p>
