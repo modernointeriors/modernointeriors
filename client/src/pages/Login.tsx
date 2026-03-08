@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,10 +14,19 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false);
   const [, navigate] = useLocation();
   const { login } = useAuth();
   const { toast } = useToast();
   const { language } = useLanguage();
+
+  // Check for session expiry flag
+  useEffect(() => {
+    if (sessionStorage.getItem('session_expired') === '1') {
+      setSessionExpired(true);
+      sessionStorage.removeItem('session_expired');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +81,19 @@ export default function Login() {
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl rounded-none"></div>
             <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-none shadow-2xl overflow-hidden">
               
+              {/* Session expired banner */}
+              {sessionExpired && (
+                <div className="px-8 pt-6">
+                  <div className="border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-center">
+                    <p className="text-yellow-400 text-sm font-light">
+                      {language === 'vi'
+                        ? 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.'
+                        : 'Your session has expired. Please log in again to continue.'}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Header Section */}
               <div className="px-8 pt-10 pb-6 text-center">
                 {/* Logo */}

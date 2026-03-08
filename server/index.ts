@@ -44,7 +44,7 @@ app.use(session({
   cookie: {
     secure: false, // Temporarily disable for testing
     httpOnly: true,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    maxAge: 60 * 60 * 1000, // 1 hour
     sameSite: 'lax',
     path: '/'
   },
