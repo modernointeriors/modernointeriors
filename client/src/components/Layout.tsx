@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import upseinLogo from "@assets/UpSEIN_Logo_1774252017779.png";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -539,10 +540,26 @@ export default function Layout({ children }: LayoutProps) {
             
           </div>
           
-          <div className="mt-5 pt-4 text-center border-t border-gray-800">
+          <div className="mt-5 pt-4 border-t border-gray-800 flex items-center justify-between gap-4">
             <p className="text-white/30 text-xs font-light">
               Copyright © 2026 Moderno Interiors Design. All rights reserved.
             </p>
+            <a
+              href="https://upsein.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 group flex-shrink-0"
+              title="Developed by UpSEIN"
+            >
+              <span className="text-white/30 text-[11px] font-light group-hover:text-white/50 transition-colors duration-300">
+                Developed by
+              </span>
+              <img
+                src={upseinLogo}
+                alt="UpSEIN"
+                className="h-4 w-auto mix-blend-screen grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-300"
+              />
+            </a>
           </div>
         </div>
       </footer>}
