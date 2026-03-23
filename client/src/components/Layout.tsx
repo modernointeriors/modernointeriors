@@ -560,7 +560,7 @@ export default function Layout({ children }: LayoutProps) {
             <img
               src={upseinLogo}
               alt="UpSEIN"
-              className="h-4 w-auto mix-blend-screen grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-300"
+              className="h-6 w-auto mix-blend-screen grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-300"
             />
           </a>
         </div>
