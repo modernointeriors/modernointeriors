@@ -10,6 +10,7 @@ import fs from "fs";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
+import { pool as dbPool } from "./db";
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
@@ -32,7 +33,7 @@ console.log('[Session Config]', {
 
 app.use(session({
   store: new PgSession({
-    conString: process.env.DATABASE_URL,
+    pool: dbPool,
     tableName: 'session',
     createTableIfMissing: true
   }),
