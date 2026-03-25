@@ -72,7 +72,7 @@ function RelatedArticles({ currentArticleId, category, language }: { currentArti
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {relatedArticles.map((article) => (
           <Card key={article.id} className="group overflow-hidden hover-scale project-hover" data-testid={`card-related-article-${article.id}`}>
-            <Link href={`${getRoute('blog', language)}/${article.slug}`}>
+            <Link href={`${getRoute('blog', language)}/${language === 'vi' && article.slugVi ? article.slugVi : article.slug}`}>
               <div className="relative">
                 {(article.featuredImage || article.featuredImageData) ? (
                   <OptimizedImage

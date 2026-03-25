@@ -684,7 +684,10 @@ export default function Home() {
                     <div
                       key={project.id}
                       className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none project-card"
-                      onClick={() => navigate(project.slug ? `${getRoute('portfolio', language)}/${project.slug}` : `/project/${project.id}`)}
+                      onClick={() => {
+                        const slug = language === 'vi' && project.slugVi ? project.slugVi : project.slug;
+                        navigate(slug ? `${getRoute('portfolio', language)}/${slug}` : `/project/${project.id}`);
+                      }}
                     >
                       <img
                         src={
@@ -857,7 +860,7 @@ export default function Home() {
                     <Card
                       key={article.id}
                       className="group overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card"
-                      onClick={() => navigate(`${getRoute('blog', language)}/${article.slug}`)}
+                      onClick={() => navigate(`${getRoute('blog', language)}/${language === 'vi' && article.slugVi ? article.slugVi : article.slug}`)}
                     >
                       <div className="relative">
                         <img

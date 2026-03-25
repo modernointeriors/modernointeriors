@@ -18,7 +18,10 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     <div
       className="project-card group relative overflow-hidden cursor-pointer h-[28rem] w-full rounded-none bg-black"
       data-index={index}
-      onClick={() => navigate(project.slug ? `${getRoute('portfolio', language)}/${project.slug}` : `/project/${project.id}`)}
+      onClick={() => {
+        const slug = language === 'vi' && project.slugVi ? project.slugVi : project.slug;
+        navigate(slug ? `${getRoute('portfolio', language)}/${slug}` : `/project/${project.id}`);
+      }}
     >
       {projectImage && (
         <img
