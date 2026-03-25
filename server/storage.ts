@@ -283,6 +283,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getProjectBySlug(slug: string, language?: string): Promise<Project | undefined> {
+    // When language=vi, also check slugVi field so Vietnamese URLs work
+    if (language === 'vi') {
+      const [project] = await db.select().from(projects).where(
+        and(
+          or(eq(projects.slug, slug), eq(projects.slugVi, slug)),
+          eq(projects.language, 'vi')
+        )
+      );
+      return project || undefined;
+    }
     const conditions = [eq(projects.slug, slug)];
     if (language) {
       conditions.push(eq(projects.language, language));
@@ -503,6 +513,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getArticleBySlug(slug: string, language?: string): Promise<Article | undefined> {
+    // When language=vi, also check slugVi field so Vietnamese URLs work
+    if (language === 'vi') {
+      const [article] = await db.select().from(articles).where(
+        and(
+          or(eq(articles.slug, slug), eq(articles.slugVi, slug)),
+          eq(articles.language, 'vi')
+        )
+      );
+      return article || undefined;
+    }
     const conditions = [eq(articles.slug, slug)];
     if (language) {
       conditions.push(eq(articles.language, language));

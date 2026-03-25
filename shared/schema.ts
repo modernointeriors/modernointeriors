@@ -26,6 +26,7 @@ export const projects = pgTable("projects", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   slug: text("slug"),
+  slugVi: text("slug_vi"), // VI-specific URL slug (e.g. /du-an/ten-du-an)
   description: text("description"),
   detailedDescription: text("detailed_description"), // Rich detailed content for project page
   designPhilosophyTitle: text("design_philosophy_title"), // Customizable title for Design Philosophy section
@@ -117,6 +118,7 @@ export const articles = pgTable("articles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   slug: text("slug").notNull(),
+  slugVi: text("slug_vi"), // VI-specific URL slug (e.g. /tin-tuc/ten-bai-viet)
   excerpt: text("excerpt"),
   content: text("content").notNull(),
   featuredImage: text("featured_image"),

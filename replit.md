@@ -34,6 +34,7 @@ Preferred communication style: Simple, everyday language.
 ## Data Model
 The application manages core entities:
 - **Projects**: Portfolio items with categories (residential, commercial, architecture), images, location, and status tracking
+  - **Bilingual URLs**: `slug` = EN URL (`/portfolio/slug`), `slugVi` = VI URL (`/du-an/slug-tieng-viet`); auto-generated from titles if not set; backend looks up by `slugVi` when `language=vi`
 - **Clients**: CRM functionality with contact information, company details, and relationship status
   - **Automatic Warranty Management**: Warranty status is automatically calculated based on warranty expiry date
     - No expiry date set → Status: "None"
@@ -48,6 +49,7 @@ The application manages core entities:
   - No descriptions, websites, ordering, or status fields
   - Displays in two-row scrolling animation on homepage (seamless infinite loop with 20 copies, 5% translateX animation, mx-4 spacing)
   - Simple table view showing logo preview, name, and actions (edit/delete)
+- **Articles**: Blog/news posts with bilingual URL support via `slug` (EN: `/blog/slug`) and `slugVi` (VI: `/tin-tuc/slug-tieng-viet`)
 - **FAQs**: Frequently asked questions with multilingual support
   - Page-specific filtering (home, contact, etc.)
   - Language variants (EN/VI) with automatic language-aware display

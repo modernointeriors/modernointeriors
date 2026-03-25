@@ -70,6 +70,7 @@ const bilingualProjectSchema = z.object({
   materialSelectionEn: z.string().optional(),
   materialSelectionVi: z.string().optional(),
   slug: z.string().optional(),
+  slugVi: z.string().optional(),
   category: z.string().min(1, "Category is required"),
   locationEn: z.string().optional(),
   locationVi: z.string().optional(),
@@ -281,6 +282,7 @@ const bilingualArticleSchema = z.object({
   contentEn: z.string().min(1, "English content is required"),
   contentVi: z.string().min(1, "Vietnamese content is required"),
   slug: z.string().optional(),
+  slugVi: z.string().optional(),
   category: z.string().min(1, "Category is required"),
   featured: z.boolean().default(false),
   featuredImage: z.string().optional(),
@@ -696,6 +698,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       materialSelectionEn: "",
       materialSelectionVi: "",
       slug: "",
+      slugVi: "",
       category: "residential",
       locationEn: "",
       locationVi: "",
@@ -774,6 +777,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       contentEn: "",
       contentVi: "",
       slug: "",
+      slugVi: "",
       category: "news",
       featured: false,
       featuredImage: "",
@@ -2077,6 +2081,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       metaKeywordsEn: enVersion?.metaKeywords || "",
       metaKeywordsVi: viVersion?.metaKeywords || "",
       slug: project.slug || "",
+      slugVi: viVersion?.slugVi || "",
       category: project.category,
       locationEn: enVersion?.location || "",
       locationVi: viVersion?.location || "",
@@ -2142,11 +2147,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
     try {
       setIsProjectSubmitting(true);
       
-      // Generate slug if not provided
-      const slug = data.slug || data.titleEn
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      // Generate slugs if not provided
+      const toSlug = (str: string) => str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      const slug = data.slug || toSlug(data.titleEn);
+      const slugVi = data.slugVi || toSlug(data.titleVi);
 
       // Prepare English version
       const enProject = {
@@ -2181,6 +2185,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       const viProject = {
         title: data.titleVi || data.titleEn,
         slug: slug,
+        slugVi: slugVi,
         description: data.descriptionVi || data.descriptionEn,
         detailedDescription: data.detailedDescriptionVi || data.detailedDescriptionEn,
         designPhilosophyTitle: data.designPhilosophyTitleVi || data.designPhilosophyTitleEn,
@@ -2368,6 +2373,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       contentEn: enVersion?.content || "",
       contentVi: viVersion?.content || "",
       slug: article.slug,
+      slugVi: viVersion?.slugVi || "",
       category: article.category,
       featured: article.featured,
       featuredImage: article.featuredImage || "",
@@ -2396,11 +2402,10 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
   const onArticleSubmit = async (data: BilingualArticleFormData) => {
     try {
-      // Generate slug if not provided
-      const slug = data.slug || data.titleEn
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      // Generate slugs if not provided
+      const toSlug = (str: string) => str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      const slug = data.slug || toSlug(data.titleEn);
+      const slugVi = data.slugVi || toSlug(data.titleVi);
 
       // Prepare English version
       const enArticle: InsertArticle = {
@@ -2422,6 +2427,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
       const viArticle: InsertArticle = {
         title: data.titleVi,
         slug: slug,
+        slugVi: slugVi,
         excerpt: data.excerptVi,
         content: data.contentVi,
         category: data.category,
@@ -3898,20 +3904,35 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   <div className="space-y-4 border-t pt-4">
                     <h4 className="text-sm font-light">Cài đặt SEO</h4>
                     
-                    {/* URL Slug */}
-                    <FormField
-                      control={projectForm.control}
-                      name="slug"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Đường dẫn URL</FormLabel>
-                          <FormControl>
-                            <Input {...field} data-testid="input-project-slug" placeholder="Tự động tạo từ tiêu đề nếu để trống" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {/* URL Slug - bilingual */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <FormField
+                        control={projectForm.control}
+                        name="slug"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>URL (Tiếng Anh) <span className="text-muted-foreground text-xs font-normal">— /portfolio/...</span></FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-project-slug" placeholder="Tự động tạo từ tiêu đề EN" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={projectForm.control}
+                        name="slugVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>URL (Tiếng Việt) <span className="text-muted-foreground text-xs font-normal">— /du-an/...</span></FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-project-slug-vi" placeholder="Tự động tạo từ tiêu đề VI" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     
                     {/* Meta Title EN + VI */}
                     <div className="grid grid-cols-2 gap-3">
@@ -7590,15 +7611,28 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                   {/* Common Fields */}
                   <div className="border-t pt-6">
                     <h3 className="text-lg font-medium mb-4">{language === 'vi' ? 'Thông tin chung' : 'General Information'}</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <FormField
                         control={articleForm.control}
                         name="slug"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Slug</FormLabel>
+                            <FormLabel>URL (EN) <span className="text-muted-foreground text-xs font-normal">— /blog/...</span></FormLabel>
                             <FormControl>
                               <Input {...field} data-testid="input-article-slug" placeholder="auto-generated" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={articleForm.control}
+                        name="slugVi"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>URL (VI) <span className="text-muted-foreground text-xs font-normal">— /tin-tuc/...</span></FormLabel>
+                            <FormControl>
+                              <Input {...field} data-testid="input-article-slug-vi" placeholder="auto-generated" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
