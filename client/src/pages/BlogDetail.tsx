@@ -116,7 +116,7 @@ function RelatedArticles({ currentArticleId, category, language }: { currentArti
 
 export default function BlogDetail() {
   const { slug } = useParams();
-  const { language } = useLanguage();
+  const { language, setAltLangPath } = useLanguage();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
@@ -133,6 +133,19 @@ export default function BlogDetail() {
     },
     enabled: !!slug,
   });
+
+  // Register alternate language URL so the language switcher knows where to navigate
+  useEffect(() => {
+    if (article) {
+      const altLang = language === 'vi' ? 'en' : 'vi';
+      const altBase = altLang === 'vi' ? '/tin-tuc' : '/blog';
+      const altSlug = altLang === 'vi'
+        ? (article.slugVi || article.slug)
+        : article.slug;
+      setAltLangPath(`${altBase}/${altSlug}`);
+    }
+    return () => setAltLangPath(null);
+  }, [article, language]);
 
   // Update document title and meta tags for SEO
   useEffect(() => {

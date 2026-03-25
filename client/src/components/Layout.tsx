@@ -58,7 +58,7 @@ export default function Layout({ children }: LayoutProps) {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [showSidebar]);
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, altLangPath, setAltLangPath } = useLanguage();
   const navigation = getNavigation(t, language);
 
   // Fetch logo settings
@@ -121,6 +121,12 @@ export default function Layout({ children }: LayoutProps) {
   }, [showSidebar, iconState]);
 
   const handleLanguageChange = (lang: Language) => {
+    if (altLangPath) {
+      setLanguage(lang);
+      setAltLangPath(null);
+      navigate(altLangPath);
+      return;
+    }
     const newPath = translatePath(location, lang);
     setLanguage(lang);
     if (newPath !== location) {

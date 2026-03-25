@@ -7,6 +7,8 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  altLangPath: string | null;
+  setAltLangPath: (path: string | null) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -505,6 +507,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem('language');
     return (saved === 'en' || saved === 'vi') ? saved : 'vi';
   });
+  const [altLangPath, setAltLangPath] = useState<string | null>(null);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
@@ -516,7 +519,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, altLangPath, setAltLangPath }}>
       {children}
     </LanguageContext.Provider>
   );

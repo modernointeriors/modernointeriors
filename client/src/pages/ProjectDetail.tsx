@@ -134,7 +134,7 @@ export default function ProjectDetail() {
   
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
-  const { language } = useLanguage();
+  const { language, setAltLangPath } = useLanguage();
   const { toast } = useToast();
 
   const handleShare = async () => {
@@ -180,6 +180,19 @@ export default function ProjectDetail() {
       setLocation(`${base}/${project.slug}`, { replace: true });
     }
   }, [project?.slug, isSlugRoute, setLocation, language]);
+
+  // Register alternate language URL so the language switcher knows where to navigate
+  useEffect(() => {
+    if (project) {
+      const altLang = language === 'vi' ? 'en' : 'vi';
+      const altBase = altLang === 'vi' ? '/du-an' : '/portfolio';
+      const altSlug = altLang === 'vi'
+        ? (project.slugVi || project.slug)
+        : project.slug;
+      setAltLangPath(`${altBase}/${altSlug}`);
+    }
+    return () => setAltLangPath(null);
+  }, [project, language]);
 
   // Set SEO meta tags when project data is loaded
   useEffect(() => {
