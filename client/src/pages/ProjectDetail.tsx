@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRoute, Link, useLocation } from "wouter";
+import { useRoute, Link, useLocation, useParams } from "wouter";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -122,12 +122,14 @@ function parseFormattedText(text: string): JSX.Element[] {
 }
 
 export default function ProjectDetail() {
-  const [, slugParams] = useRoute("/portfolio/:slug");
+  // useParams captures :slug from whichever route matched (/portfolio/:slug OR /du-an/:slug)
+  const params = useParams<{ slug?: string; id?: string }>();
   const [, idParams] = useRoute("/project/:id");
   const [location, setLocation] = useLocation();
-  
-  const projectSlug = slugParams?.slug;
-  const projectId = idParams?.id;
+
+  // Slug comes from either /portfolio/:slug or /du-an/:slug via useParams
+  const projectSlug = params?.slug;
+  const projectId = idParams?.id ?? params?.id;
   const isSlugRoute = !!projectSlug;
   
   const [expanded, setExpanded] = useState(false);
@@ -174,9 +176,10 @@ export default function ProjectDetail() {
   // Redirect to slug-based URL if accessing by ID and project has a slug
   useEffect(() => {
     if (project?.slug && !isSlugRoute) {
-      setLocation(`/portfolio/${project.slug}`, { replace: true });
+      const base = getRoute('portfolio', language); // /portfolio or /du-an
+      setLocation(`${base}/${project.slug}`, { replace: true });
     }
-  }, [project?.slug, isSlugRoute, setLocation]);
+  }, [project?.slug, isSlugRoute, setLocation, language]);
 
   // Set SEO meta tags when project data is loaded
   useEffect(() => {
