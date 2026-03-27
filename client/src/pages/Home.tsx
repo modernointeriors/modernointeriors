@@ -19,7 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 import { getRoute } from "@/lib/routes";
 import HeroSlider from "@/components/HeroSlider";
 import ScrollableContainer from "@/components/ScrollableContainer";
-import { Progress } from "@/components/ui/progress";
 import { apiRequest } from "@/lib/queryClient";
 import { FormattedText } from "@/lib/textUtils";
 import type {
@@ -36,7 +35,6 @@ export default function Home() {
   const { language, t } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const [showLoading, setShowLoading] = useState(true);
   const [expandedStepNumber, setExpandedStepNumber] = useState<number | null>(null);
   const [contactFormExpanded, setContactFormExpanded] = useState(false);
@@ -479,27 +477,12 @@ export default function Home() {
     },
   });
 
-  // Controlled loading animation
+  // Hide loading screen after CSS animation completes (1.5s + 300ms buffer)
   useEffect(() => {
-    const startTime = Date.now();
-    const duration = 1500; // 1.5 seconds total loading time
-
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min((elapsed / duration) * 100, 100);
-
-      setLoadingProgress(progress);
-
-      if (progress >= 100) {
-        clearInterval(interval);
-        // Wait a bit then hide loading screen
-        setTimeout(() => {
-          setShowLoading(false);
-        }, 300);
-      }
-    }, 16); // 60fps for smoother animation
-
-    return () => clearInterval(interval);
+    const timer = setTimeout(() => {
+      setShowLoading(false);
+    }, 1800);
+    return () => clearTimeout(timer);
   }, []);
 
   // Cleanup timers on unmount
@@ -613,8 +596,8 @@ export default function Home() {
                 className="h-24 md:h-32 w-auto mx-auto"
               />
             </div>
-            <div className="w-80 mx-auto">
-              <Progress value={loadingProgress} className="h-1 bg-white/20" />
+            <div className="w-80 mx-auto h-[2px] bg-white/20 overflow-hidden rounded-full">
+              <div className="h-full bg-primary rounded-full loading-progress-bar" />
             </div>
           </div>
         </div>

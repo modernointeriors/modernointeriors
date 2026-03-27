@@ -333,6 +333,17 @@
     height: 100vh !important;
   }
 
+  /* Loading progress bar - pure CSS, GPU-accelerated, no JS re-renders */
+  @keyframes loading-fill {
+    from { width: 0%; }
+    to   { width: 100%; }
+  }
+  .loading-progress-bar {
+    width: 0%;
+    animation: loading-fill 1.5s linear forwards;
+    will-change: width;
+  }
+
   /* About hero swiper - full height on all devices */
   .about-hero-swiper,
   .about-hero-swiper .swiper-wrapper,
