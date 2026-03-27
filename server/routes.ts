@@ -74,6 +74,60 @@ function initAssetsDir(): string {
 const ASSETS_DIR = initAssetsDir();
 const ASSETS_URL_PREFIX = '/attached_assets';
 
+// ---------------------------------------------------------------------------
+// SEO helpers – server-side meta tag injection for social media crawlers
+// ---------------------------------------------------------------------------
+async function readHtmlTemplate(): Promise<string> {
+  const prodPath = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(prodPath)) {
+    return fs.promises.readFile(prodPath, 'utf-8');
+  }
+  const devPath = path.join(__dirname, '..', 'client', 'index.html');
+  return fs.promises.readFile(devPath, 'utf-8');
+}
+
+function escAttr(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function injectBeforeHead(html: string, meta: { title: string; description: string; image?: string; url: string; type?: string; keywords?: string }): string {
+  const { title, description, image, url, type = 'website', keywords } = meta;
+  const tags = [
+    `<title>${escAttr(title)}</title>`,
+    `<meta name="description" content="${escAttr(description)}" />`,
+    keywords ? `<meta name="keywords" content="${escAttr(keywords)}" />` : '',
+    `<meta property="og:type" content="${type}" />`,
+    `<meta property="og:site_name" content="Moderno Interiors Design Studio" />`,
+    `<meta property="og:title" content="${escAttr(title)}" />`,
+    `<meta property="og:description" content="${escAttr(description)}" />`,
+    `<meta property="og:url" content="${escAttr(url)}" />`,
+    image ? `<meta property="og:image" content="${escAttr(image)}" />` : '',
+    image ? `<meta property="og:image:width" content="1200" />` : '',
+    image ? `<meta property="og:image:height" content="630" />` : '',
+    `<meta name="twitter:card" content="${image ? 'summary_large_image' : 'summary'}" />`,
+    `<meta name="twitter:title" content="${escAttr(title)}" />`,
+    `<meta name="twitter:description" content="${escAttr(description)}" />`,
+    image ? `<meta name="twitter:image" content="${escAttr(image)}" />` : '',
+  ].filter(Boolean).join('\n    ');
+  return html.replace('</head>', `  <!-- SEO meta tags -->\n    ${tags}\n  </head>`);
+}
+
+const BOT_UA_PATTERN = /googlebot|bingbot|slurp|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|applebot|pinterest|vkshare|w3c_validator|zalo|crawl|spider/i;
+
+function shouldInjectSeo(req: Request): boolean {
+  if (process.env.NODE_ENV === 'production') return true;
+  const ua = req.get('user-agent') || '';
+  return BOT_UA_PATTERN.test(ua);
+}
+
+function resolveAbsoluteUrl(req: Request, imagePath: string | null | undefined): string {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
+  const host = req.get('host') || 'moderno.com.vn';
+  const proto = (req.headers['x-forwarded-proto'] as string) || req.protocol || 'https';
+  return `${proto}://${host}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+}
+
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -1896,6 +1950,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete status" });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // SEO routes – inject OG/Twitter meta tags for social media crawlers
+  // Must be registered BEFORE Vite / serveStatic so they take priority.
+  // In production every request gets injected (browsers still work fine).
+  // In development only bot User-Agents get injected (preserves Vite HMR).
+  // ---------------------------------------------------------------------------
+
+  // Project pages: /portfolio/:slug (EN) and /du-an/:slug (VI)
+  app.get(['/portfolio/:slug', '/du-an/:slug'], async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const { slug } = req.params;
+      const language = req.path.startsWith('/du-an/') ? 'vi' : 'en';
+      const project = await storage.getProjectBySlug(slug, language);
+      if (!project) return next();
+
+      const html = await readHtmlTemplate();
+      const title = project.metaTitle || `${project.title} | Moderno Interiors Design Studio`;
+      const desc = project.metaDescription || project.description || 'Thiết kế nội thất cao cấp bởi Moderno Interiors';
+      const coverImgs = Array.isArray(project.coverImages) ? (project.coverImages as string[]) : [];
+      const galleryImgs = Array.isArray((project as any).galleryImages) ? ((project as any).galleryImages as string[]) : [];
+      const rawImg = coverImgs[0] || project.heroImage || galleryImgs[0] || '';
+      const image = resolveAbsoluteUrl(req, rawImg);
+      const url = `${(req.headers['x-forwarded-proto'] as string) || req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+      const injected = injectBeforeHead(html, {
+        title, description: desc, image: image || undefined, url, type: 'article',
+        keywords: project.metaKeywords || undefined,
+      });
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.send(injected);
+    } catch (err) {
+      return next(err);
+    }
+  });
+
+  // Article/blog pages: /blog/:slug (EN) and /tin-tuc/:slug (VI)
+  app.get(['/blog/:slug', '/tin-tuc/:slug'], async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const { slug } = req.params;
+      const language = req.path.startsWith('/tin-tuc/') ? 'vi' : 'en';
+      const article = await storage.getArticleBySlug(slug, language);
+      if (!article) return next();
+
+      const html = await readHtmlTemplate();
+      const title = article.metaTitle || `${article.title} | Moderno Interiors Design Studio`;
+      const desc = article.metaDescription || article.excerpt || 'Bài viết từ Moderno Interiors Design Studio';
+      const image = resolveAbsoluteUrl(req, article.featuredImage || undefined);
+      const url = `${(req.headers['x-forwarded-proto'] as string) || req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+      const injected = injectBeforeHead(html, {
+        title, description: desc, image: image || undefined, url, type: 'article',
+        keywords: article.metaKeywords || undefined,
+      });
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.send(injected);
+    } catch (err) {
+      return next(err);
     }
   });
 
