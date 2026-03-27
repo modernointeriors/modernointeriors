@@ -54,8 +54,8 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           )}
         </div>
 
-        {(project.completionYear || project.duration) && (
-          <div className="grid grid-cols-2 gap-4 text-white">
+        {(project.completionYear || project.location) && (
+          <div className="flex gap-6 text-white">
             {project.completionYear && (
               <div>
                 <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
@@ -66,13 +66,13 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 </p>
               </div>
             )}
-            {project.duration && (
+            {project.location && (
               <div>
                 <p className="text-white/60 text-[10px] uppercase tracking-wider mb-0.5">
-                  {language === "vi" ? "Thời gian" : "Duration"}
+                  {language === "vi" ? "Khu vực" : "Location"}
                 </p>
-                <p className="text-sm font-light" data-testid={`text-duration-${project.id}`}>
-                  {project.duration}
+                <p className="text-sm font-light" data-testid={`text-location-${project.id}`}>
+                  {project.location}
                 </p>
               </div>
             )}

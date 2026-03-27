@@ -3760,35 +3760,20 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     )}
                   />
 
-                  {/* Completion Year + Duration side by side */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <FormField
-                      control={projectForm.control}
-                      name="completionYearEn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Năm hoàn thành</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="Ví dụ: 2024" data-testid="input-project-year-en" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={projectForm.control}
-                      name="durationEn"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Thời gian thực hiện</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="Ví dụ: 6 tháng" data-testid="input-project-duration-en" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  {/* Completion Year */}
+                  <FormField
+                    control={projectForm.control}
+                    name="completionYearEn"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Năm hoàn thành</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ví dụ: 2024" data-testid="input-project-year-en" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   {/* Style EN + VI */}
                   <div className="grid grid-cols-2 gap-3">
