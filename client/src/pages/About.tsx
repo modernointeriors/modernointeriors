@@ -69,7 +69,7 @@ export default function About() {
               {aboutContent.heroImages.map((imageUrl, index) => (
                 <SwiperSlide key={index} style={{ height: '100%' }}>
                   <div
-                    className="w-full h-full bg-cover bg-center"
+                    className="w-full h-full bg-contain bg-center bg-no-repeat"
                     style={{ backgroundImage: `url(${imageUrl})` }}
                   />
                 </SwiperSlide>
