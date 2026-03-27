@@ -50,47 +50,60 @@ function requirePermission(permission: string) {
   };
 }
 
-// Resolve and initialise the absolute path to attached_assets (runs once at startup)
-function initAssetsDir(): string {
-  const candidates = [
-    path.join(__dirname, '..', 'attached_assets'),          // dist/../attached_assets  (production)
-    path.join(__dirname, '..', '..', 'attached_assets'),    // dist/../../attached_assets
-    path.join(process.cwd(), 'attached_assets'),            // cwd/attached_assets      (dev / Passenger)
-    '/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets', // explicit Plesk path
-  ];
+// Resolve upload directory and the public URL prefix (runs once at startup)
+function initAssetsDir(): { dir: string; urlPrefix: string } {
+  const isProduction = process.env.NODE_ENV === 'production';
 
-  // Use first existing directory
-  for (const dir of candidates) {
-    if (fs.existsSync(dir)) {
-      console.log(`[Assets] Using existing directory: ${dir}`);
-      return dir;
+  if (isProduction) {
+    // In the production bundle (dist/index.js), __dirname === dist/
+    // dist/public/assets is served directly by Express static — no API needed
+    const publicAssetsCandidates = [
+      path.join(__dirname, 'public', 'assets'),                     // dist/public/assets ✓
+      '/var/www/vhosts/moderno.com.vn/httpdocs/dist/public/assets', // explicit Plesk
+      path.join(process.cwd(), 'dist', 'public', 'assets'),         // cwd/dist/public/assets
+    ];
+    for (const dir of publicAssetsCandidates) {
+      if (fs.existsSync(dir)) {
+        console.log(`[Assets] Production → ${dir} (url: /assets/*)`);
+        return { dir, urlPrefix: '/assets' };
+      }
     }
-  }
-
-  // None exist yet — create the most reliable candidate
-  // Prefer __dirname-relative so it stays next to the project regardless of cwd
-  const preferred = path.join(__dirname, '..', 'attached_assets');
-  try {
-    fs.mkdirSync(preferred, { recursive: true });
-    console.log(`[Assets] Created directory: ${preferred}`);
-    return preferred;
-  } catch (e1) {
-    // Fallback to cwd if __dirname-relative fails (e.g. permission issue)
-    const cwdBased = path.join(process.cwd(), 'attached_assets');
+    // Create if not found yet (first deploy before any build artifacts)
+    const preferred = path.join(__dirname, 'public', 'assets');
     try {
-      fs.mkdirSync(cwdBased, { recursive: true });
-      console.log(`[Assets] Created directory (cwd fallback): ${cwdBased}`);
-      return cwdBased;
-    } catch (e2) {
-      console.error(`[Assets] FAILED to create directory. preferred=${preferred}, cwd=${cwdBased}`, e2);
-      // Return preferred anyway — multer will report the error clearly
-      return preferred;
+      fs.mkdirSync(preferred, { recursive: true });
+      console.log(`[Assets] Production → created ${preferred} (url: /assets/*)`);
+      return { dir: preferred, urlPrefix: '/assets' };
+    } catch (e) {
+      console.error(`[Assets] Could not create ${preferred}:`, e);
     }
   }
+
+  // Development mode — attached_assets served via /api/assets route
+  const devCandidates = [
+    path.join(__dirname, '..', 'attached_assets'),
+    path.join(__dirname, '..', '..', 'attached_assets'),
+    path.join(process.cwd(), 'attached_assets'),
+  ];
+  for (const dir of devCandidates) {
+    if (fs.existsSync(dir)) {
+      console.log(`[Assets] Dev → ${dir} (url: /api/assets/*)`);
+      return { dir, urlPrefix: '/api/assets' };
+    }
+  }
+  // Create fallback
+  const fallback = path.join(process.cwd(), 'attached_assets');
+  try {
+    fs.mkdirSync(fallback, { recursive: true });
+  } catch (e) {
+    console.error(`[Assets] FAILED to create fallback directory ${fallback}:`, e);
+  }
+  console.log(`[Assets] Fallback → ${fallback} (url: /api/assets/*)`);
+  return { dir: fallback, urlPrefix: '/api/assets' };
 }
 
-// Cache at startup so every upload uses the same absolute path
-const ASSETS_DIR = initAssetsDir();
+// Cache at startup
+const { dir: ASSETS_DIR, urlPrefix: ASSETS_URL_PREFIX } = initAssetsDir();
 
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
@@ -267,8 +280,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
-      // Return API path (works in both dev and prod)
-      const filePath = `/api/assets/${req.file.filename}`;
+      // URL prefix depends on where the file was saved (dist/public/assets → /assets, attached_assets → /api/assets)
+      const filePath = `${ASSETS_URL_PREFIX}/${req.file.filename}`;
       res.json({ path: filePath });
     });
   });
