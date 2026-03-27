@@ -68,15 +68,9 @@ export default function About() {
             >
               {aboutContent.heroImages.map((imageUrl, index) => (
                 <SwiperSlide key={index} style={{ height: '100%' }}>
-                  <img 
-                    src={imageUrl} 
-                    alt={`About Hero ${index + 1}`}
-                    className="block w-full h-full object-cover"
-                    loading={index === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
+                  <div
+                    className="w-full h-full bg-cover bg-center"
+                    style={{ backgroundImage: `url(${imageUrl})` }}
                   />
                 </SwiperSlide>
               ))}
@@ -90,7 +84,7 @@ export default function About() {
       </section>
       {/* Principles Section */}
       {principles.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
+        <section className="py-20 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -138,7 +132,7 @@ export default function About() {
               <div />
             </div>
 
-            <div className="relative w-full grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 items-end">
+            <div className="relative w-full grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 items-end pl-14 sm:pl-0">
               {showcaseServices.map((service, index) => (
                 <div key={service.id} className="px-4 py-6 md:px-8 md:py-12 border-r border-white/10 md:border-0 last:border-0">
                   <div className="space-y-2 md:space-y-3">
@@ -157,7 +151,7 @@ export default function About() {
       )}
       {/* Stats Section */}
       {aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
+        <section className="py-20 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center space-y-2">
@@ -198,7 +192,7 @@ export default function About() {
       )}
       {/* Company History Section */}
       {aboutContent?.historyContentEn && aboutContent?.historyContentVi && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
+        <section className="py-20 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -232,7 +226,7 @@ export default function About() {
       )}
       {/* Mission & Vision Section - Image LEFT, Content RIGHT */}
       {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
+        <section className="py-20 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Image LEFT */}
@@ -279,7 +273,7 @@ export default function About() {
       )}
       {/* Core Values Section */}
       {coreValues.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
+        <section className="py-20 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -307,7 +301,7 @@ export default function About() {
       )}
       {/* Team Members Section */}
       {teamMembers.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 overflow-hidden">
+        <section className="py-20 bg-black overflow-hidden">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -443,7 +437,7 @@ export default function About() {
       )}
       {/* Process Section */}
       {processSteps.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
+        <section className="py-20 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
