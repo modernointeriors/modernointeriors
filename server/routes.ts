@@ -128,6 +128,55 @@ function resolveAbsoluteUrl(req: Request, imagePath: string | null | undefined):
   return `${proto}://${host}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
 }
 
+function getPageOrigin(req: Request): string {
+  const proto = (req.headers['x-forwarded-proto'] as string) || req.protocol || 'https';
+  const host = req.get('host') || 'moderno.com.vn';
+  return `${proto}://${host}`;
+}
+
+// Build per-page meta from global site settings
+interface PageSeoMeta {
+  title: string;
+  description: string;
+  keywords?: string;
+  image?: string;
+  url: string;
+  type?: string;
+}
+
+async function buildStaticPageSeo(
+  req: Request,
+  opts: { pageTitleEn: string; pageTitleVi: string; language: 'en' | 'vi'; image?: string }
+): Promise<PageSeoMeta> {
+  const siteSettings = await storage.getSettings();
+  const origin = getPageOrigin(req);
+  const url = `${origin}${req.originalUrl}`;
+  const lang = opts.language;
+
+  const siteName = (lang === 'vi' ? siteSettings?.siteTitleVi : siteSettings?.siteTitle)
+    || 'Moderno Interiors Design Studio';
+  const pageLabel = lang === 'vi' ? opts.pageTitleVi : opts.pageTitleEn;
+  const title = `${pageLabel} | ${siteName}`;
+  const description = (lang === 'vi' ? siteSettings?.metaDescriptionVi : siteSettings?.metaDescription)
+    || (lang === 'vi'
+      ? 'Khám phá dịch vụ thiết kế và thi công nội thất cao cấp bởi Moderno Interiors.'
+      : 'Discover premium interior design and architecture services by Moderno Interiors.');
+  const keywords = (lang === 'vi' ? siteSettings?.metaKeywordsVi : siteSettings?.metaKeywords) || undefined;
+
+  return { title, description, keywords, image: opts.image, url, type: 'website' };
+}
+
+async function serveWithSeo(req: Request, res: Response, next: NextFunction, meta: PageSeoMeta) {
+  try {
+    const html = await readHtmlTemplate();
+    const injected = injectBeforeHead(html, meta);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.send(injected);
+  } catch {
+    return next();
+  }
+}
+
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -1959,6 +2008,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // In production every request gets injected (browsers still work fine).
   // In development only bot User-Agents get injected (preserves Vite HMR).
   // ---------------------------------------------------------------------------
+
+  // ── Homepage ────────────────────────────────────────────────────────────────
+  app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const siteSettings = await storage.getSettings();
+      const origin = getPageOrigin(req);
+      // Try to get hero image from homepage content for OG image
+      const homepageContent = await storage.getHomepageContent();
+      const heroImgs: string[] = Array.isArray((homepageContent as any)?.heroImages)
+        ? (homepageContent as any).heroImages : [];
+      const rawImg = heroImgs[0] || '';
+      const image = rawImg ? resolveAbsoluteUrl(req, rawImg) : undefined;
+
+      const lang = 'vi'; // default lang for homepage
+      const title = siteSettings?.siteTitleVi || siteSettings?.siteTitle || 'Moderno Interiors Design Studio';
+      const description = siteSettings?.metaDescriptionVi || siteSettings?.metaDescription
+        || 'Khám phá dịch vụ thiết kế và thi công nội thất cao cấp bởi Moderno Interiors.';
+      const keywords = siteSettings?.metaKeywordsVi || siteSettings?.metaKeywords || undefined;
+      const url = `${origin}/`;
+      return serveWithSeo(req, res, next, { title, description, keywords, image, url, type: 'website' });
+    } catch { return next(); }
+  });
+
+  // ── About page ──────────────────────────────────────────────────────────────
+  app.get(['/about', '/gioi-thieu'], async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const language = req.path === '/gioi-thieu' ? 'vi' : 'en';
+      const meta = await buildStaticPageSeo(req, {
+        pageTitleEn: 'About Us',
+        pageTitleVi: 'Giới Thiệu',
+        language,
+      });
+      return serveWithSeo(req, res, next, meta);
+    } catch { return next(); }
+  });
+
+  // ── Portfolio / Projects listing ─────────────────────────────────────────────
+  app.get(['/portfolio', '/du-an'], async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const language = req.path === '/du-an' ? 'vi' : 'en';
+      const meta = await buildStaticPageSeo(req, {
+        pageTitleEn: 'Our Projects',
+        pageTitleVi: 'Dự Án',
+        language,
+      });
+      return serveWithSeo(req, res, next, meta);
+    } catch { return next(); }
+  });
+
+  // ── Blog / News listing ───────────────────────────────────────────────────────
+  app.get(['/blog', '/tin-tuc'], async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const language = req.path === '/tin-tuc' ? 'vi' : 'en';
+      const meta = await buildStaticPageSeo(req, {
+        pageTitleEn: 'News & Articles',
+        pageTitleVi: 'Tin Tức',
+        language,
+      });
+      return serveWithSeo(req, res, next, meta);
+    } catch { return next(); }
+  });
+
+  // ── Contact page ──────────────────────────────────────────────────────────────
+  app.get(['/contact', '/lien-he'], async (req: Request, res: Response, next: NextFunction) => {
+    if (!shouldInjectSeo(req)) return next();
+    try {
+      const language = req.path === '/lien-he' ? 'vi' : 'en';
+      const meta = await buildStaticPageSeo(req, {
+        pageTitleEn: 'Contact',
+        pageTitleVi: 'Liên Hệ',
+        language,
+      });
+      return serveWithSeo(req, res, next, meta);
+    } catch { return next(); }
+  });
 
   // Project pages: /portfolio/:slug (EN) and /du-an/:slug (VI)
   app.get(['/portfolio/:slug', '/du-an/:slug'], async (req: Request, res: Response, next: NextFunction) => {
