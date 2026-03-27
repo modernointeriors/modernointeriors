@@ -615,12 +615,20 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   const [projectsPage, setProjectsPage] = useState(1);
   const projectsPerPage = 10;
   // Deduplicate projects by slug — 1 row per project (prefer version matching current language)
+  // For shared numeric fields like completionYear, always use EN version as source of truth
   const uniqueProjectSlugs = new Map<string, Project>();
   projects.forEach(p => {
     if (!uniqueProjectSlugs.has(p.slug)) {
       uniqueProjectSlugs.set(p.slug, p);
-    } else if (p.language === language) {
-      uniqueProjectSlugs.set(p.slug, p);
+    } else {
+      const existing = uniqueProjectSlugs.get(p.slug)!;
+      const preferred = p.language === language ? p : existing;
+      const enVersion = p.language === 'en' ? p : (existing.language === 'en' ? existing : null);
+      uniqueProjectSlugs.set(p.slug, {
+        ...preferred,
+        // Always use EN completionYear as it's a shared numeric field (not translatable)
+        completionYear: (enVersion?.completionYear) || preferred.completionYear,
+      });
     }
   });
   const allProjects = Array.from(uniqueProjectSlugs.values());

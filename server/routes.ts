@@ -2003,6 +2003,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ---------------------------------------------------------------------------
+  // Maintenance: sync completionYear from EN → VI for projects where VI has invalid year
+  app.post('/api/admin/fix-completion-years', async (req, res) => {
+    try {
+      const allProjects = await storage.getProjects();
+      const enProjects = allProjects.filter((p: any) => p.language === 'en');
+      const viProjects = allProjects.filter((p: any) => p.language === 'vi');
+      const yearRegex = /^\d{4}$/;
+      let fixed = 0;
+      for (const en of enProjects) {
+        if (!en.completionYear || !yearRegex.test(en.completionYear)) continue;
+        const vi = viProjects.find((v: any) => v.slug === en.slug);
+        if (vi && (!vi.completionYear || !yearRegex.test(vi.completionYear))) {
+          await storage.updateProject(vi.id, { completionYear: en.completionYear });
+          fixed++;
+        }
+      }
+      res.json({ message: `Fixed ${fixed} project(s)` });
+    } catch (error) {
+      res.status(500).json({ message: "Fix failed", error: String(error) });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
   // SEO routes – inject OG/Twitter meta tags for social media crawlers
   // Must be registered BEFORE Vite / serveStatic so they take priority.
   // In production every request gets injected (browsers still work fine).
