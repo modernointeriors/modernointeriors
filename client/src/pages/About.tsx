@@ -340,8 +340,8 @@ export default function About() {
                     <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[1000px] opacity-100 pb-8' : 'max-h-0 opacity-0'}`}>
                       <div className="space-y-5">
                         {(member.imageData || member.image) && (
-                          <div className="aspect-[3/2] overflow-hidden bg-white/10">
-                            <img src={member.imageData || member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+                          <div className="overflow-hidden">
+                            <img src={member.imageData || member.image} alt={member.name} className="w-full h-auto block" />
                           </div>
                         )}
                         {member.bioEn && member.bioVi && (
