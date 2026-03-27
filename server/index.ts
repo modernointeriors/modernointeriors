@@ -5,6 +5,7 @@ import ConnectPgSimple from "connect-pg-simple";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { createHash } from "crypto";
+import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
 import { registerRoutes } from "./routes";
@@ -16,7 +17,26 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
-// Images are now served via API route /api/assets/:filename in routes.ts
+// Serve attached_assets folder as static files at /attached_assets
+// Works in both dev and production regardless of build output location
+const __filenameIndex = fileURLToPath(import.meta.url);
+const __dirnameIndex = path.dirname(__filenameIndex);
+const attachedAssetsDir = (() => {
+  const candidates = [
+    path.join(__dirnameIndex, '..', 'attached_assets'),
+    path.join(__dirnameIndex, '..', '..', 'attached_assets'),
+    '/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets',
+    path.join(process.cwd(), 'attached_assets'),
+  ];
+  for (const dir of candidates) {
+    if (fs.existsSync(dir)) return dir;
+  }
+  const fallback = path.join(process.cwd(), 'attached_assets');
+  fs.mkdirSync(fallback, { recursive: true });
+  return fallback;
+})();
+app.use('/attached_assets', express.static(attachedAssetsDir));
+console.log(`[Static] /attached_assets → ${attachedAssetsDir}`);
 
 // Trust proxy for production (Plesk/Nginx) - Always trust first proxy
 app.set('trust proxy', 1);
