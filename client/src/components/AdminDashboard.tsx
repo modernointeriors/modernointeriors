@@ -2198,7 +2198,7 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
         duration: data.durationVi || data.durationEn,
         style: data.styleVi || data.styleEn,
         designer: data.designerVi || data.designerEn,
-        completionYear: data.completionYearVi || data.completionYearEn,
+        completionYear: data.completionYearEn,
         coverImages: data.coverImages,
         contentImages: data.contentImages,
         galleryImages: data.galleryImages,
