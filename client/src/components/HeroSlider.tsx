@@ -206,13 +206,17 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   
                   {/* Hero Footer */}
                   <div className="flex justify-between items-end pb-8">
-                    <div className="flex items-center gap-6 text-white text-sm font-light">
+                    <div className="flex items-center text-white text-sm font-light">
                       <span>{language === 'vi' ? 'Bài viết' : 'Article'}</span>
-                      <span>{language === 'vi' ? 'bởi' : 'by'} {project.designer || 'MODERNO INTERIORS Design'}</span>
-                      <span>{project.completionYear || new Date().getFullYear()}</span>
-                      <span className="capitalize">
-                        {getCategoryName(project.category)}
+                      <span className="mx-4 text-white/30">—</span>
+                      <span>
+                        <span className="text-white/50 mr-2">{language === 'vi' ? 'bởi' : 'by'}</span>
+                        {project.designer || 'MODERNO INTERIORS Design'}
                       </span>
+                      <span className="mx-4 text-white/30">—</span>
+                      <span>{project.completionYear || new Date().getFullYear()}</span>
+                      <span className="mx-4 text-white/30">—</span>
+                      <span className="capitalize">{getCategoryName(project.category)}</span>
                     </div>
                     
                     {/* Navigation Arrows */}
