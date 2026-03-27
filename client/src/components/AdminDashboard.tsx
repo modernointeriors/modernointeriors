@@ -614,12 +614,12 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
   // Pagination state for Projects - show only English version in table
   const [projectsPage, setProjectsPage] = useState(1);
   const projectsPerPage = 10;
-  // Deduplicate projects by slug — 1 row per project (prefer VI version)
+  // Deduplicate projects by slug — 1 row per project (prefer version matching current language)
   const uniqueProjectSlugs = new Map<string, Project>();
   projects.forEach(p => {
     if (!uniqueProjectSlugs.has(p.slug)) {
       uniqueProjectSlugs.set(p.slug, p);
-    } else if (p.language === 'vi') {
+    } else if (p.language === language) {
       uniqueProjectSlugs.set(p.slug, p);
     }
   });
