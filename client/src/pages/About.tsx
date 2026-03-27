@@ -64,14 +64,14 @@ export default function About() {
               autoplay={{ delay: 5000, disableOnInteraction: false }}
               loop={true}
               speed={800}
-              className="absolute inset-0 w-full h-full"
+              className="about-hero-swiper absolute inset-0 w-full h-full"
             >
               {aboutContent.heroImages.map((imageUrl, index) => (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} style={{ height: '100%' }}>
                   <img 
                     src={imageUrl} 
                     alt={`About Hero ${index + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="block w-full h-full object-cover"
                     loading={index === 0 ? "eager" : "lazy"}
                     decoding="async"
                     onError={(e) => {

@@ -332,6 +332,13 @@
     height: 100vh !important;
   }
 
+  /* About hero swiper - full height on all devices */
+  .about-hero-swiper,
+  .about-hero-swiper .swiper-wrapper,
+  .about-hero-swiper .swiper-slide {
+    height: 100% !important;
+  }
+
   /* Hide scrollbar for custom scroll containers */
   .scrollbar-hide {
     -ms-overflow-style: none;
