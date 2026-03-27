@@ -52,9 +52,9 @@ export default function About() {
   };
 
   return (
-    <main className="ml-12 md:ml-16 pb-8 md:pb-6 mb-4">
+    <div className="pb-8 md:pb-6 mb-4">
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-12 md:-ml-16">
+      <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-12 md:-ml-16 w-screen">
         <div className="relative h-screen">
           {/* Background Images Slider */}
           {aboutContent?.heroImages && aboutContent.heroImages.length > 0 ? (
@@ -90,7 +90,7 @@ export default function About() {
       </section>
       {/* Principles Section */}
       {principles.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16">
+        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -118,7 +118,7 @@ export default function About() {
       )}
       {/* Architecture Showcase Section */}
       {((aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) || showcaseServices.length > 0) && (
-        <section className="relative bg-black overflow-hidden -ml-12 md:-ml-16" style={{ minHeight: 'min(80vh, 600px)' }}>
+        <section className="relative bg-black overflow-hidden -ml-12 md:-ml-16 w-screen" style={{ minHeight: 'min(80vh, 600px)' }}>
           {(aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) && (
             <div
               className="absolute inset-0 bg-cover bg-center"
@@ -157,7 +157,7 @@ export default function About() {
       )}
       {/* Stats Section */}
       {aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16">
+        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center space-y-2">
@@ -198,7 +198,7 @@ export default function About() {
       )}
       {/* Company History Section */}
       {aboutContent?.historyContentEn && aboutContent?.historyContentVi && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16">
+        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -232,7 +232,7 @@ export default function About() {
       )}
       {/* Mission & Vision Section - Image LEFT, Content RIGHT */}
       {(aboutContent?.missionContentEn || aboutContent?.visionContentEn) && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16">
+        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Image LEFT */}
@@ -279,7 +279,7 @@ export default function About() {
       )}
       {/* Core Values Section */}
       {coreValues.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16">
+        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -443,7 +443,7 @@ export default function About() {
       )}
       {/* Process Section */}
       {processSteps.length > 0 && aboutContent && (
-        <section className="py-20 bg-black -ml-12 md:-ml-16">
+        <section className="py-20 bg-black -ml-12 md:-ml-16 w-screen">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-16">
               <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
@@ -470,6 +470,6 @@ export default function About() {
           </div>
         </section>
       )}
-    </main>
+    </div>
   );
 }
