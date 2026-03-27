@@ -50,10 +50,29 @@ function requirePermission(permission: string) {
   };
 }
 
+// Resolve the absolute path to attached_assets folder (works in dev and production/Plesk)
+function resolveAssetsDir(): string {
+  const candidates = [
+    '/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets',
+    path.join(__dirname, '..', 'attached_assets'),
+    path.join(__dirname, '..', '..', 'attached_assets'),
+    path.join(process.cwd(), 'attached_assets'),
+  ];
+  for (const dir of candidates) {
+    if (fs.existsSync(dir)) return dir;
+  }
+  // None found — create under cwd
+  const fallback = path.join(process.cwd(), 'attached_assets');
+  fs.mkdirSync(fallback, { recursive: true });
+  return fallback;
+}
+
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'attached_assets/');
+    const dir = resolveAssetsDir();
+    fs.mkdirSync(dir, { recursive: true }); // ensure it exists
+    cb(null, dir);
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -217,18 +236,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // File upload endpoint
-  app.post("/api/upload", upload.single('file'), (req, res) => {
-    try {
+  app.post("/api/upload", (req, res) => {
+    upload.single('file')(req, res, (err) => {
+      if (err) {
+        console.error('[Upload] Multer error:', err);
+        return res.status(500).json({ message: `Upload failed: ${err.message}` });
+      }
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
-      
       // Return API path (works in both dev and prod)
       const filePath = `/api/assets/${req.file.filename}`;
       res.json({ path: filePath });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to upload file" });
-    }
+    });
   });
 
   // Authentication routes
