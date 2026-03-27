@@ -1193,14 +1193,30 @@ export default function AboutAdminTab({
 
       {/* Process Steps Management */}
       <Card>
-        <CardHeader>
-          <CardTitle>Process Steps (4 Items - Fixed)</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Các Bước Quy Trình</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">Tối đa 6 bước — hiện có {aboutProcessSteps.length}/6</p>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => {
+              setEditingProcessStep(null);
+              processStepForm.reset({ stepNumber: String(aboutProcessSteps.length + 1).padStart(2, '0'), titleEn: "", titleVi: "", descriptionEn: "", descriptionVi: "", order: aboutProcessSteps.length });
+              setIsProcessStepDialogOpen(true);
+            }}
+            disabled={aboutProcessSteps.length >= 6}
+            data-testid="button-add-process-step"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Thêm Bước
+          </Button>
         </CardHeader>
         <CardContent>
-          <Dialog open={isProcessStepDialogOpen} onOpenChange={setIsProcessStepDialogOpen}>
+          <Dialog open={isProcessStepDialogOpen} onOpenChange={(open) => { setIsProcessStepDialogOpen(open); if (!open) setEditingProcessStep(null); }}>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Edit Process Step</DialogTitle>
+                <DialogTitle>{editingProcessStep ? 'Chỉnh sửa Bước Quy Trình' : 'Thêm Bước Quy Trình Mới'}</DialogTitle>
               </DialogHeader>
               <Form {...processStepForm}>
                 <form onSubmit={processStepForm.handleSubmit(handleProcessStepSubmit)} className="space-y-4">
@@ -1209,9 +1225,9 @@ export default function AboutAdminTab({
                     name="stepNumber"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Step Number</FormLabel>
+                        <FormLabel>Số thứ tự (ví dụ: 01, 02...)</FormLabel>
                         <FormControl>
-                          <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value))} data-testid="input-step-number" />
+                          <Input {...field} placeholder="01" data-testid="input-step-number" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -1223,9 +1239,9 @@ export default function AboutAdminTab({
                       name="titleEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title (English)</FormLabel>
+                          <FormLabel>Tiêu đề (English)</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-step-title-en" />
+                            <Input {...field} placeholder="Consultation" data-testid="input-step-title-en" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1236,9 +1252,9 @@ export default function AboutAdminTab({
                       name="titleVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title (Tiếng Việt)</FormLabel>
+                          <FormLabel>Tiêu đề (Tiếng Việt)</FormLabel>
                           <FormControl>
-                            <Input {...field} data-testid="input-step-title-vi" />
+                            <Input {...field} placeholder="Tư vấn & Khảo sát" data-testid="input-step-title-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1251,9 +1267,9 @@ export default function AboutAdminTab({
                       name="descriptionEn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description (English)</FormLabel>
+                          <FormLabel>Mô tả (English)</FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={3} data-testid="textarea-step-description-en" />
+                            <Textarea {...field} rows={3} placeholder="Meet, listen to requirements..." data-testid="textarea-step-description-en" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1264,17 +1280,30 @@ export default function AboutAdminTab({
                       name="descriptionVi"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description (Tiếng Việt)</FormLabel>
+                          <FormLabel>Mô tả (Tiếng Việt)</FormLabel>
                           <FormControl>
-                            <Textarea {...field} rows={3} data-testid="textarea-step-description-vi" />
+                            <Textarea {...field} rows={3} placeholder="Gặp gỡ, lắng nghe nhu cầu..." data-testid="textarea-step-description-vi" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
+                  <FormField
+                    control={processStepForm.control}
+                    name="order"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Thứ tự hiển thị</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="number" onChange={e => field.onChange(parseInt(e.target.value) || 0)} data-testid="input-step-order" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <Button type="submit" className="w-full" data-testid="button-submit-step">
-                    Update Process Step
+                    {editingProcessStep ? 'Cập nhật Bước' : 'Thêm Bước'}
                   </Button>
                 </form>
               </Form>
@@ -1287,35 +1316,51 @@ export default function AboutAdminTab({
                 <div key={i} className="h-16 bg-muted rounded animate-pulse" />
               ))}
             </div>
+          ) : aboutProcessSteps.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-8">Chưa có bước nào. Nhấn "Thêm Bước" để bắt đầu.</p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Step</TableHead>
-                  <TableHead>Title (EN)</TableHead>
-                  <TableHead>Title (VI)</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="w-16">Bước</TableHead>
+                  <TableHead>Tiêu đề (EN)</TableHead>
+                  <TableHead>Tiêu đề (VI)</TableHead>
+                  <TableHead className="text-right w-24">Thao tác</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {aboutProcessSteps.map((step) => (
+                {aboutProcessSteps
+                  .slice()
+                  .sort((a, b) => a.order - b.order)
+                  .map((step) => (
                   <TableRow key={step.id}>
-                    <TableCell>{step.stepNumber}</TableCell>
+                    <TableCell className="font-mono font-light">{step.stepNumber}</TableCell>
                     <TableCell>{step.titleEn}</TableCell>
                     <TableCell>{step.titleVi}</TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setEditingProcessStep(step);
-                          processStepForm.reset(step);
-                          setIsProcessStepDialogOpen(true);
-                        }}
-                        data-testid={`button-edit-step-${step.id}`}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingProcessStep(step);
+                            processStepForm.reset(step);
+                            setIsProcessStepDialogOpen(true);
+                          }}
+                          data-testid={`button-edit-step-${step.id}`}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => deleteProcessStepMutation.mutate(step.id)}
+                          data-testid={`button-delete-step-${step.id}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
