@@ -54,6 +54,18 @@ export default function Layout({ children }: LayoutProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileSidebarHidden, setMobileSidebarHidden] = useState(false);
 
+  // Sync --layout-offset CSS variable so full-bleed sections always span edge-to-edge
+  useEffect(() => {
+    const update = () => {
+      const isMobile = window.innerWidth < 768;
+      const offset = !isMobile ? '4rem' : mobileSidebarHidden ? '0rem' : '3rem';
+      document.documentElement.style.setProperty('--layout-offset', offset);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [mobileSidebarHidden]);
+
   // Lock scroll during menu for smooth performance
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';

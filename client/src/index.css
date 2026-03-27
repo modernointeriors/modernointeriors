@@ -5,6 +5,7 @@
 @tailwind utilities;
 
 :root {
+  --layout-offset: 3rem; /* mobile sidebar width (w-12) */
   --background: transparent;
   --foreground: hsl(0 0% 95%);
   --card: hsl(0 0% 0%);

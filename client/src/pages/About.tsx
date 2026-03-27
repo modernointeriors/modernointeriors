@@ -54,7 +54,10 @@ export default function About() {
   return (
     <div className="pb-8 md:pb-6 mb-4">
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[600px] bg-black overflow-hidden -ml-12 md:-ml-16 w-screen">
+      <section
+        className="relative h-screen min-h-[600px] bg-black overflow-hidden"
+        style={{ marginLeft: 'calc(-1 * var(--layout-offset, 3rem))', width: '100vw' }}
+      >
         <div className="relative h-screen">
           {/* Background Images Slider */}
           {aboutContent?.heroImages && aboutContent.heroImages.length > 0 ? (
@@ -112,7 +115,10 @@ export default function About() {
       )}
       {/* Architecture Showcase Section */}
       {((aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) || showcaseServices.length > 0) && (
-        <section className="relative bg-black overflow-hidden -ml-12 md:-ml-16 w-screen" style={{ minHeight: 'min(80vh, 600px)' }}>
+        <section
+          className="relative bg-black overflow-hidden"
+          style={{ marginLeft: 'calc(-1 * var(--layout-offset, 3rem))', width: '100vw', minHeight: 'min(80vh, 600px)' }}
+        >
           {(aboutContent?.showcaseBannerImageData || aboutContent?.showcaseBannerImage) && (
             <div
               className="absolute inset-0 bg-cover bg-center"
