@@ -52,7 +52,8 @@ export default function Layout({ children }: LayoutProps) {
   }, [showSidebar, mobileMenuOpen]);
   
   const [isScrolled, setIsScrolled] = useState(false);
-  
+  const [mobileSidebarHidden, setMobileSidebarHidden] = useState(false);
+
   // Lock scroll during menu for smooth performance
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
@@ -146,6 +147,15 @@ export default function Layout({ children }: LayoutProps) {
       } else if (direction === "up" || scrollY < 50) {
         setIsScrolled(false);
       }
+
+      // Hide sidebar on mobile when any scroll happens; show when back at top
+      if (window.innerWidth < 768) {
+        if (scrollY > 10) {
+          setMobileSidebarHidden(true);
+        } else {
+          setMobileSidebarHidden(false);
+        }
+      }
       
       lastScrollY = scrollY > 0 ? scrollY : 0;
     };
@@ -153,6 +163,38 @@ export default function Layout({ children }: LayoutProps) {
     window.addEventListener("scroll", updateScrollDirection);
     return () => window.removeEventListener("scroll", updateScrollDirection);
   }, []);
+
+  // Swipe gesture: show sidebar when swiping right from left edge on mobile
+  useEffect(() => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (window.innerWidth >= 768) return;
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      const deltaY = Math.abs(e.changedTouches[0].clientY - touchStartY);
+      // Swipe right from left edge (start within 30px of left, move right > 60px, mostly horizontal)
+      if (touchStartX < 30 && deltaX > 60 && deltaY < 80) {
+        setMobileSidebarHidden(false);
+      }
+      // Swipe left anywhere to hide sidebar
+      if (deltaX < -60 && deltaY < 80 && !showSidebar) {
+        setMobileSidebarHidden(true);
+      }
+    };
+
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [showSidebar]);
 
   const isActive = (href: string) => {
     if (href === '/') return location === '/';
@@ -164,9 +206,9 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col relative">
       {/* Top Header with Navigation */}
-      <header className={`fixed top-0 left-12 md:left-16 right-0 z-50 bg-black/50 backdrop-blur-sm transition-transform duration-300 ${
+      <header className={`fixed top-0 right-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-300 ${
         isScrolled ? '-translate-y-full' : 'translate-y-0'
-      }`}>
+      } ${mobileSidebarHidden && !showSidebar ? 'left-0' : 'left-12'} md:left-16`}>
         <div className="flex items-center justify-between py-3 px-3 md:py-4 md:px-6">
           {/* Logo */}
           <Link 
@@ -238,7 +280,9 @@ export default function Layout({ children }: LayoutProps) {
       />
 
       {/* Vertical Navigation Sidebar - IIDA Style */}
-      <aside className="fixed top-0 left-0 h-screen w-12 md:w-16 z-40 bg-black flex flex-col items-center justify-center">
+      <aside className={`fixed top-0 left-0 h-screen w-12 md:w-16 z-40 bg-black flex flex-col items-center justify-center transition-transform duration-300 ${
+        mobileSidebarHidden && !showSidebar ? '-translate-x-full md:translate-x-0' : 'translate-x-0'
+      }`}>
         {/* Hamburger Menu at Center */}
         <Sheet open={true} modal={false} onOpenChange={() => {
           // Keep always open to maintain DOM presence for smooth animations
@@ -414,10 +458,14 @@ export default function Layout({ children }: LayoutProps) {
 
 
       {/* Main Content - Adjusted for header and sidebar */}
-      <main className={`pl-12 md:pl-16 flex-1 ${isAdminPage ? 'pb-0 mb-0' : 'pb-8 md:pb-6 mb-4'}`}>{children}</main>
+      <main className={`transition-[padding] duration-300 md:pl-16 flex-1 ${
+        mobileSidebarHidden && !showSidebar ? 'pl-0' : 'pl-12'
+      } ${isAdminPage ? 'pb-0 mb-0' : 'pb-8 md:pb-6 mb-4'}`}>{children}</main>
 
       {/* Footer - Hidden on admin pages */}
-      {!isAdminPage && <footer className="bg-black text-white pt-10 pb-4 border-t border-white/10 ml-12 md:ml-16">
+      {!isAdminPage && <footer className={`bg-black text-white pt-10 pb-4 border-t border-white/10 transition-[margin] duration-300 md:ml-16 ${
+        mobileSidebarHidden && !showSidebar ? 'ml-0' : 'ml-12'
+      }`}>
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-20 mb-8">
             {/* Corporate Office */}
