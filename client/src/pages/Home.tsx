@@ -633,21 +633,21 @@ export default function Home() {
                 }
               </h2>
             </div>
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="max-w-4xl">
-                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
+                <p className="text-xl sm:text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
                   {language === "vi"
                     ? (homepageContent?.featuredDescriptionVi || homepageContent?.featuredDescription || t("featured.projectsDesc"))
                     : (homepageContent?.featuredDescription || t("featured.projectsDesc"))
                   }
                 </p>
               </div>
-              <div className="flex-shrink-0 ml-8">
+              <div className="flex-shrink-0 sm:ml-8">
                 <Button
                   variant="ghost"
                   size="default"
                   asChild
-                  className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300"
+                  className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300 px-0 sm:px-4"
                   data-testid="button-view-more-projects"
                 >
                   <Link href={getRoute('portfolio', language)}>
@@ -769,9 +769,9 @@ export default function Home() {
         )}
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60" />
         <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-20 w-full items-center">
             <div className="text-white space-y-6 scroll-animate">
-              <p className="text-[36px] font-light">
+              <p className="text-2xl sm:text-[30px] md:text-[36px] font-light">
                 {homepageContent?.qualityLeftText || (language === "vi"
                   ? "Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và trông hoàn hảo."
                   : "Each detail is selected so that the interior will serve for a long time and look impeccable.")}
@@ -799,21 +799,21 @@ export default function Home() {
                 }
               </h2>
             </div>
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="max-w-4xl">
-                <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
+                <p className="text-xl sm:text-2xl md:text-3xl font-light text-foreground leading-relaxed scroll-animate">
                   {language === "vi"
                     ? (homepageContent?.featuredNewsSubtitleVi || homepageContent?.featuredNewsSubtitle || t("featured.newsDesc"))
                     : (homepageContent?.featuredNewsSubtitle || t("featured.newsDesc"))
                   }
                 </p>
               </div>
-              <div className="flex-shrink-0 ml-8">
+              <div className="flex-shrink-0 sm:ml-8">
                 <Button
                   variant="ghost"
                   size="default"
                   asChild
-                  className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300"
+                  className="rounded-none hover:bg-transparent text-white/60 hover:text-white view-more-btn scroll-animate transition-colors duration-300 px-0 sm:px-4"
                   data-testid="button-view-more-news"
                 >
                   <Link href={getRoute('blog', language)}>
@@ -1263,7 +1263,7 @@ export default function Home() {
           <div
             className={`overflow-hidden transition-all duration-500 ease-in-out ${
               contactFormExpanded
-                ? "max-h-[800px] opacity-100 mt-8"
+                ? "max-h-[1400px] opacity-100 mt-8"
                 : "max-h-0 opacity-0"
             }`}
           >

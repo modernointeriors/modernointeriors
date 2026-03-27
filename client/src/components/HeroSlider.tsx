@@ -5,7 +5,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import type { Project, Category } from '@shared/schema';
-import { ChevronRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { useQuery } from '@tanstack/react-query';
 
@@ -192,7 +191,7 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                       data-testid={`slide-link-${project.id}`}
                     >
                       <div className="max-w-4xl">
-                        <h2 className="js-slider-slide-title break-words text-[48px] font-light leading-tight tracking-wide" style={{ position: 'relative', zIndex: 20 }}>
+                        <h2 className="js-slider-slide-title break-words text-[28px] sm:text-[36px] md:text-[48px] font-light leading-tight tracking-wide" style={{ position: 'relative', zIndex: 20 }}>
                           {project.title}
                         </h2>
                         
@@ -206,22 +205,27 @@ export default function HeroSlider({ projects }: HeroSliderProps) {
                   
                   {/* Hero Footer */}
                   <div className="flex justify-between items-end pb-8">
-                    <div className="flex items-center text-white text-sm font-light">
-                      <span>{language === 'vi' ? 'Bài viết' : 'Article'}</span>
-                      <span className="mx-4 text-white/30">—</span>
-                      <span>
+                    <div className="flex items-center text-white text-sm font-light min-w-0 mr-4">
+                      {/* Mobile: show only year + category */}
+                      <span className="md:hidden">{project.completionYear || new Date().getFullYear()}</span>
+                      <span className="md:hidden mx-3 text-white/30">—</span>
+                      <span className="md:hidden capitalize">{getCategoryName(project.category)}</span>
+                      {/* Desktop: show full info */}
+                      <span className="hidden md:inline">{language === 'vi' ? 'Bài viết' : 'Article'}</span>
+                      <span className="hidden md:inline mx-4 text-white/30">—</span>
+                      <span className="hidden md:inline">
                         <span className="text-white/50 mr-2">{language === 'vi' ? 'bởi' : 'by'}</span>
                         {project.designer || 'MODERNO INTERIORS Design'}
                       </span>
-                      <span className="mx-4 text-white/30">—</span>
-                      <span>{project.completionYear || new Date().getFullYear()}</span>
-                      <span className="mx-4 text-white/30">—</span>
-                      <span className="capitalize">{getCategoryName(project.category)}</span>
+                      <span className="hidden md:inline mx-4 text-white/30">—</span>
+                      <span className="hidden md:inline">{project.completionYear || new Date().getFullYear()}</span>
+                      <span className="hidden md:inline mx-4 text-white/30">—</span>
+                      <span className="hidden md:inline capitalize">{getCategoryName(project.category)}</span>
                     </div>
                     
                     {/* Navigation Arrows */}
-                    <div className="flex gap-4">
-                      <button className="swiper-button-prev-custom w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+                    <div className="flex gap-3 flex-shrink-0">
+                      <button className="swiper-button-prev-custom w-9 h-9 md:w-10 md:h-10 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
                         &lt;
                       </button>
                       
