@@ -174,12 +174,33 @@ export default function ProjectDetail() {
   });
 
   // Redirect to slug-based URL if accessing by ID and project has a slug
+  // Also auto-redirect if URL prefix doesn't match current language
   useEffect(() => {
-    if (project?.slug && !isSlugRoute) {
-      const base = getRoute('portfolio', language); // /portfolio or /du-an
-      setLocation(`${base}/${project.slug}`, { replace: true });
+    if (!project) return;
+
+    const currentPath = location; // e.g. /portfolio/slug or /du-an/slug-vi
+
+    if (!isSlugRoute) {
+      // ID-based route → redirect to slug-based URL
+      const base = language === 'vi' ? '/du-an' : '/portfolio';
+      const slug = language === 'vi' ? (project.slugVi || project.slug) : project.slug;
+      setLocation(`${base}/${slug}`, { replace: true });
+      return;
     }
-  }, [project?.slug, isSlugRoute, setLocation, language]);
+
+    // Slug-based route: ensure URL prefix matches language
+    const onViPath = currentPath.startsWith('/du-an/');
+    const onEnPath = currentPath.startsWith('/portfolio/');
+
+    if (language === 'vi' && onEnPath) {
+      // User is in VI mode but URL is English → redirect to Vietnamese URL
+      const viSlug = project.slugVi || project.slug;
+      setLocation(`/du-an/${viSlug}`, { replace: true });
+    } else if (language === 'en' && onViPath) {
+      // User is in EN mode but URL is Vietnamese → redirect to English URL
+      setLocation(`/portfolio/${project.slug}`, { replace: true });
+    }
+  }, [project, isSlugRoute, language, location, setLocation]);
 
   // Register alternate language URL so the language switcher knows where to navigate
   useEffect(() => {

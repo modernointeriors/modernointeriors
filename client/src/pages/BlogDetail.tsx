@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "wouter";
+import { Link, useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -119,6 +119,7 @@ export default function BlogDetail() {
   const { language, setAltLangPath } = useLanguage();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
+  const [location, setLocation] = useLocation();
 
   const { data: article, isLoading, error } = useQuery<Article>({
     queryKey: ['/api/articles/slug', slug, language],
@@ -133,6 +134,23 @@ export default function BlogDetail() {
     },
     enabled: !!slug,
   });
+
+  // Auto-redirect if URL prefix doesn't match current language
+  useEffect(() => {
+    if (!article) return;
+
+    const onViPath = location.startsWith('/tin-tuc/');
+    const onEnPath = location.startsWith('/blog/');
+
+    if (language === 'vi' && onEnPath) {
+      // User is in VI mode but URL is English → redirect to Vietnamese URL
+      const viSlug = article.slugVi || article.slug;
+      setLocation(`/tin-tuc/${viSlug}`, { replace: true });
+    } else if (language === 'en' && onViPath) {
+      // User is in EN mode but URL is Vietnamese → redirect to English URL
+      setLocation(`/blog/${article.slug}`, { replace: true });
+    }
+  }, [article, language, location, setLocation]);
 
   // Register alternate language URL so the language switcher knows where to navigate
   useEffect(() => {
