@@ -857,51 +857,49 @@ export default function Home() {
                   style={{ width: "max-content" }}
                 >
                   {featuredArticles?.slice(0, 10).map((article, index) => (
-                    <Card
+                    <div
                       key={article.id}
-                      className="group overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card"
+                      className="group relative overflow-hidden cursor-pointer h-[28rem] w-72 flex-shrink-0 rounded-none article-card animated animate-fade-in-up"
                       onClick={() => navigate(`${getRoute('blog', language)}/${language === 'vi' && article.slugVi ? article.slugVi : article.slug}`)}
                     >
-                      <div className="relative">
-                        <img
-                          src={
-                            article.featuredImage || article.featuredImageData ||
-                            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
-                          }
-                          alt={article.title}
-                          className="w-full h-48 object-cover"
-                          data-testid={`img-article-${article.id}`}
-                        />
-                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
-                      <CardContent className="p-6">
+                      {/* Full-height image */}
+                      <img
+                        src={
+                          article.featuredImage || article.featuredImageData ||
+                          "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
+                        }
+                        alt={article.title}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        data-testid={`img-article-${article.id}`}
+                      />
+                      {/* Gradient overlay - stronger at bottom */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 group-hover:from-black/70 transition-all duration-300" />
+
+                      {/* Content pinned to bottom */}
+                      <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                        <p className="text-white/60 text-[10px] uppercase tracking-wider mb-2">
+                          {article.publishedAt &&
+                            new Date(article.publishedAt).toLocaleDateString(
+                              language === "vi" ? "vi-VN" : "en-US",
+                              { year: "numeric", month: "long", day: "numeric" },
+                            )}
+                        </p>
                         <h3
-                          className="text-xl font-sans font-light mb-2 line-clamp-2"
+                          className="text-white text-xl font-light mb-2 line-clamp-2"
                           data-testid={`text-article-title-${article.id}`}
                         >
                           {article.title}
                         </h3>
-                        <p className="text-muted-foreground mb-3 text-sm">
-                          {article.publishedAt &&
-                            new Date(article.publishedAt).toLocaleDateString(
-                              language === "vi" ? "vi-VN" : "en-US",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              },
-                            )}
-                        </p>
                         <p
-                          className="text-foreground/80 text-sm line-clamp-3"
+                          className="text-white/70 text-sm line-clamp-2 font-light"
                           data-testid={`text-article-excerpt-${article.id}`}
                         >
-                          {article.excerpt 
+                          {article.excerpt
                             ? <FormattedText text={article.excerpt} />
-                            : "Discover insights and trends in interior design..."}
+                            : ""}
                         </p>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </ScrollableContainer>
