@@ -771,7 +771,7 @@ export default function Home() {
         <div className="relative h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 w-full items-center">
             <div className="text-white space-y-6 scroll-animate">
-              <p className="md:text-5xl font-light text-[36px]">
+              <p className="text-[36px] font-light">
                 {homepageContent?.qualityLeftText || (language === "vi"
                   ? "Mỗi chi tiết được lựa chọn để nội thất phục vụ lâu dài và trông hoàn hảo."
                   : "Each detail is selected so that the interior will serve for a long time and look impeccable.")}
