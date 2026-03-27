@@ -50,34 +50,56 @@ function requirePermission(permission: string) {
   };
 }
 
-// Resolve the absolute path to attached_assets folder (works in dev and production/Plesk)
-function resolveAssetsDir(): string {
+// Resolve and initialise the absolute path to attached_assets (runs once at startup)
+function initAssetsDir(): string {
   const candidates = [
-    '/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets',
-    path.join(__dirname, '..', 'attached_assets'),
-    path.join(__dirname, '..', '..', 'attached_assets'),
-    path.join(process.cwd(), 'attached_assets'),
+    path.join(__dirname, '..', 'attached_assets'),          // dist/../attached_assets  (production)
+    path.join(__dirname, '..', '..', 'attached_assets'),    // dist/../../attached_assets
+    path.join(process.cwd(), 'attached_assets'),            // cwd/attached_assets      (dev / Passenger)
+    '/var/www/vhosts/moderno.com.vn/httpdocs/attached_assets', // explicit Plesk path
   ];
+
+  // Use first existing directory
   for (const dir of candidates) {
-    if (fs.existsSync(dir)) return dir;
+    if (fs.existsSync(dir)) {
+      console.log(`[Assets] Using existing directory: ${dir}`);
+      return dir;
+    }
   }
-  // None found — create under cwd
-  const fallback = path.join(process.cwd(), 'attached_assets');
-  fs.mkdirSync(fallback, { recursive: true });
-  return fallback;
+
+  // None exist yet — create the most reliable candidate
+  // Prefer __dirname-relative so it stays next to the project regardless of cwd
+  const preferred = path.join(__dirname, '..', 'attached_assets');
+  try {
+    fs.mkdirSync(preferred, { recursive: true });
+    console.log(`[Assets] Created directory: ${preferred}`);
+    return preferred;
+  } catch (e1) {
+    // Fallback to cwd if __dirname-relative fails (e.g. permission issue)
+    const cwdBased = path.join(process.cwd(), 'attached_assets');
+    try {
+      fs.mkdirSync(cwdBased, { recursive: true });
+      console.log(`[Assets] Created directory (cwd fallback): ${cwdBased}`);
+      return cwdBased;
+    } catch (e2) {
+      console.error(`[Assets] FAILED to create directory. preferred=${preferred}, cwd=${cwdBased}`, e2);
+      // Return preferred anyway — multer will report the error clearly
+      return preferred;
+    }
+  }
 }
+
+// Cache at startup so every upload uses the same absolute path
+const ASSETS_DIR = initAssetsDir();
 
 // Configure multer for file uploads
 const uploadStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = resolveAssetsDir();
-    fs.mkdirSync(dir, { recursive: true }); // ensure it exists
-    cb(null, dir);
+  destination: (_req, _file, cb) => {
+    cb(null, ASSETS_DIR);
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const filename = `${randomUUID()}${ext}`;
-    cb(null, filename);
+    cb(null, `${randomUUID()}${ext}`);
   }
 });
 
