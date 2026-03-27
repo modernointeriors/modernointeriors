@@ -384,7 +384,7 @@ export default function ProjectDetail() {
 
         {/* Project Title Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-light tracking-wider mb-3 text-white uppercase" data-testid="text-project-title">
+          <h1 className="text-4xl font-light tracking-wider mb-3 text-white uppercase break-words overflow-hidden" data-testid="text-project-title">
             {project.title}
           </h1>
         </div>
@@ -523,7 +523,7 @@ export default function ProjectDetail() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {project.designPhilosophy && (
                   <div className="space-y-3">
-                    <h3 className="text-lg font-light tracking-wider text-white uppercase">
+                    <h3 className="text-lg font-light tracking-wider text-white uppercase break-words overflow-hidden">
                       {project.designPhilosophyTitle || (language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy')}
                     </h3>
                     <div className="text-zinc-300 leading-relaxed text-sm overflow-hidden break-all max-w-full">
@@ -533,7 +533,7 @@ export default function ProjectDetail() {
                 )}
                 {project.materialSelection && (
                   <div className="space-y-3">
-                    <h3 className="text-lg font-light tracking-wider text-white uppercase">
+                    <h3 className="text-lg font-light tracking-wider text-white uppercase break-words overflow-hidden">
                       {project.materialSelectionTitle || (language === 'vi' ? 'Lựa chọn vật liệu' : 'Material Selection')}
                     </h3>
                     <div className="text-zinc-300 leading-relaxed text-sm overflow-hidden break-all max-w-full">
