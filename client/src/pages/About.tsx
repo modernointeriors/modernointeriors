@@ -337,7 +337,7 @@ export default function About() {
                       </div>
                       <span className={`text-2xl font-light text-white/60 transition-transform duration-300 ${isExpanded ? 'rotate-45' : ''}`}>+</span>
                     </button>
-                    <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[1000px] opacity-100 pb-8' : 'max-h-0 opacity-0'}`}>
+                    <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[5000px] opacity-100 pb-8' : 'max-h-0 opacity-0'}`}>
                       <div className="space-y-5">
                         {(member.imageData || member.image) && (
                           <div className="overflow-hidden">
