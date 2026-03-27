@@ -431,13 +431,12 @@ export default function ProjectDetail() {
           );
         })()}
 
-        {/* Content Text Below Images */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {/* Left Text Content - Description */}
-          <div className="text-zinc-300 leading-relaxed text-base overflow-hidden" data-testid="text-description">
-            <div className="break-words whitespace-pre-wrap">
-              {parseFormattedText(project.description || 
-                (language === 'vi' 
+        {/* Staggered Content: Block A — Text left (40%) | Image right (60%) */}
+        <div className="flex flex-col lg:flex-row items-stretch mb-0">
+          <div className="lg:w-2/5 flex items-center py-10 lg:pr-14" data-testid="text-description">
+            <div className="text-zinc-300 leading-relaxed text-base overflow-hidden break-all max-w-full">
+              {parseFormattedText(project.description ||
+                (language === 'vi'
                   ? 'Một không gian nội thất nơi những sắc thái than chì nghiêm ngặt được kết hợp với sự ấm áp của đồ nội thất màu đất nung và các kết cấu mềm mại.'
                   : 'An interior where strict graphite shades are combined with the warmth of terracotta furniture and soft textures.'
                 )
@@ -445,35 +444,57 @@ export default function ProjectDetail() {
             </div>
           </div>
 
-          {/* Right Content with Image */}
-          <div className="space-y-6">
-            {/* Detail image - from gallery images or cover images */}
-            {(galleryImages[0] || coverImages[0]) && (
-              <div className="w-full aspect-video">
-                <OptimizedImage
-                  src={galleryImages[0] || coverImages[0]}
-                  alt={`${project.title} - Detail`}
-                  width={600}
-                  height={337}
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full object-cover"
-                  data-testid="img-detail"
-                />
-              </div>
-            )}
-            
-            {/* Detailed Description */}
-            {project.detailedDescription && (
-              <div className="text-zinc-300 leading-relaxed text-base break-words whitespace-pre-wrap" data-testid="text-detailed-description">
-                {parseFormattedText(project.detailedDescription)}
-              </div>
-            )}
-          </div>
+          {(galleryImages[0] || coverImages[0]) && (
+            <div className="lg:w-3/5 aspect-[4/3] lg:aspect-auto lg:min-h-[360px]">
+              <OptimizedImage
+                src={galleryImages[0] || coverImages[0]}
+                alt={`${project.title} - Detail`}
+                width={720}
+                height={540}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                data-testid="img-detail"
+              />
+            </div>
+          )}
         </div>
 
-        {/* View More Button - Only show if there are additional gallery images and not expanded */}
-        {galleryImages.length > 1 && !expanded && (
-          <div className="text-center mb-16">
+        {/* Staggered Content: Block B — Image left (60%) | Detailed description right (40%) */}
+        {project.detailedDescription && (galleryImages[1] || coverImages[1]) && (
+          <div className="flex flex-col lg:flex-row-reverse items-stretch mb-0">
+            <div className="lg:w-2/5 flex items-center py-10 lg:pl-14" data-testid="text-detailed-description">
+              <div className="text-zinc-300 leading-relaxed text-base overflow-hidden break-all max-w-full">
+                {parseFormattedText(project.detailedDescription)}
+              </div>
+            </div>
+            <div className="lg:w-3/5 aspect-[4/3] lg:aspect-auto lg:min-h-[360px]">
+              <OptimizedImage
+                src={galleryImages[1] || coverImages[1]}
+                alt={`${project.title} - Detail 2`}
+                width={720}
+                height={540}
+                wrapperClassName="w-full h-full"
+                className="w-full h-full object-cover"
+                data-testid="img-detail-2"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Detailed description without paired image */}
+        {project.detailedDescription && !(galleryImages[1] || coverImages[1]) && (
+          <div className="mb-8 mt-4" data-testid="text-detailed-description">
+            <div className="text-zinc-300 leading-relaxed text-base overflow-hidden break-all max-w-full">
+              {parseFormattedText(project.detailedDescription)}
+            </div>
+          </div>
+        )}
+
+        <div className="mb-10" />
+
+        {/* View More Button - show when there are gallery images beyond index 1 */}
+        {galleryImages.length > 2 && !expanded && (
+          <div className="text-center mb-10">
             <button 
               onClick={() => {
                 setExpanded(true);
@@ -495,27 +516,27 @@ export default function ProjectDetail() {
         )}
 
         {/* Additional Gallery Section - Detailed Content */}
-        {expanded && galleryImages.length > 1 && (
-          <div id="additional-gallery" className="mt-24 space-y-16" data-testid="section-additional" tabIndex={-1}>
-            {/* Additional detailed text content - only show if there's content */}
+        {expanded && galleryImages.length > 2 && (
+          <div id="additional-gallery" className="mt-10 space-y-10" data-testid="section-additional" tabIndex={-1}>
+            {/* Design Philosophy & Material Selection — staggered */}
             {(project.designPhilosophy || project.materialSelection) && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {project.designPhilosophy && (
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-light tracking-wider text-white uppercase">
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-light tracking-wider text-white uppercase">
                       {project.designPhilosophyTitle || (language === 'vi' ? 'Triết lý thiết kế' : 'Design Philosophy')}
                     </h3>
-                    <div className="text-zinc-300 leading-relaxed">
+                    <div className="text-zinc-300 leading-relaxed text-sm overflow-hidden break-all max-w-full">
                       {parseFormattedText(project.designPhilosophy)}
                     </div>
                   </div>
                 )}
                 {project.materialSelection && (
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-light tracking-wider text-white uppercase">
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-light tracking-wider text-white uppercase">
                       {project.materialSelectionTitle || (language === 'vi' ? 'Lựa chọn vật liệu' : 'Material Selection')}
                     </h3>
-                    <div className="text-zinc-300 leading-relaxed">
+                    <div className="text-zinc-300 leading-relaxed text-sm overflow-hidden break-all max-w-full">
                       {parseFormattedText(project.materialSelection)}
                     </div>
                   </div>
@@ -523,19 +544,19 @@ export default function ProjectDetail() {
               </div>
             )}
 
-            {/* Additional Gallery Images (16:9 or 1:1 aspect ratio) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {galleryImages.slice(1).map((image: string, index: number) => (
-                <div key={index} className="aspect-video">
+            {/* Gallery grid — images start from index 2 (index 0 and 1 used in staggered blocks) */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              {galleryImages.slice(2).map((image: string, index: number) => (
+                <div key={index} className="aspect-[4/3]">
                   <OptimizedImage
                     src={image}
-                    alt={`${project.title} - Gallery ${index + 2}`}
+                    alt={`${project.title} - Gallery ${index + 3}`}
                     width={400}
-                    height={225}
+                    height={300}
                     wrapperClassName="w-full h-full"
                     className="w-full h-full object-cover hover:opacity-90 transition-opacity"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    data-testid={`img-gallery-${index + 2}`}
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                    data-testid={`img-gallery-${index + 3}`}
                   />
                 </div>
               ))}
