@@ -4331,9 +4331,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
                     const hasVI = langVersions.some(p => p.language === 'vi');
                     return (
                     <TableRow key={project.id} data-testid={`row-project-${project.id}`}>
-                      <TableCell>
+                      <TableCell className="max-w-[260px]">
                         <div>
-                          <p className="font-light">{project.title}</p>
+                          <p className="font-light truncate" title={project.title}>{project.title}</p>
                           <p className="text-sm text-muted-foreground">{formatDate(project.createdAt)}</p>
                         </div>
                       </TableCell>
@@ -7827,9 +7827,9 @@ export default function AdminDashboard({ activeTab, user, hasPermission }: Admin
 
                       return (
                         <TableRow key={slug} data-testid={`row-article-${slug}`}>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium max-w-[280px]">
                             <div>
-                              <p>{displayArticle.title}</p>
+                              <p className="truncate" title={displayArticle.title}>{displayArticle.title}</p>
                               {!hasEn && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu EN' : 'Missing EN'}</p>}
                               {!hasVi && <p className="text-xs text-yellow-500">{language === 'vi' ? 'Thiếu VI' : 'Missing VI'}</p>}
                             </div>
