@@ -140,7 +140,7 @@ export default function About() {
 
             <div className="relative w-full h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-stretch" style={{ paddingLeft: 'var(--layout-offset, 3rem)' }}>
               {showcaseServices.map((service, index) => (
-                <div key={service.id} className="flex flex-col justify-end px-6 pb-6 pt-4 sm:px-4 md:px-8 md:pb-12 md:pt-4 border-b border-white/10 sm:border-b-0 sm:border-r last:border-0">
+                <div key={service.id} className="flex flex-col justify-end px-6 pb-4 pt-4 sm:px-4 md:px-8 md:pb-6 md:pt-4 border-b border-white/10 sm:border-b-0 sm:border-r last:border-0">
                   <div className="h-44 md:h-56 flex flex-col overflow-hidden">
                     <h4 className="text-sm md:text-lg font-light text-white uppercase tracking-wide leading-snug mb-3 flex-shrink-0">
                       {language === "vi" ? service.titleVi : service.titleEn}
