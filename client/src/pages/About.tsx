@@ -131,14 +131,14 @@ export default function About() {
           )}
 
           <div className="relative flex items-end min-h-[inherit] md:min-h-0 md:h-[80vh]">
-            <div className="absolute inset-0 hidden md:grid md:grid-cols-2 lg:grid-cols-4">
+            <div className="absolute hidden md:grid md:grid-cols-2 lg:grid-cols-4" style={{ top: 0, bottom: 0, right: 0, left: 'var(--layout-offset, 3rem)' }}>
               <div className="border-r-2 border-white/20" style={{ borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' }} />
               <div className="border-r-2 border-white/20" style={{ borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' }} />
               <div className="border-r-2 border-white/20" style={{ borderImage: 'linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0)) 1' }} />
               <div />
             </div>
 
-            <div className="relative w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end">
+            <div className="relative w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end" style={{ paddingLeft: 'var(--layout-offset, 3rem)' }}>
               {showcaseServices.map((service, index) => (
                 <div key={service.id} className="px-6 py-6 sm:px-4 md:px-8 md:py-12 border-b border-white/10 sm:border-b-0 sm:border-r last:border-0">
                   <div className="space-y-2 md:space-y-3">
