@@ -458,10 +458,10 @@ export default function About() {
               {processSteps.map((step) => (
                 <div key={step.id} className="border-t border-white/10 pt-8 pb-4 pr-8 space-y-6">
                   <div className="text-7xl font-light text-white/10 leading-none">{step.stepNumber}</div>
-                  <h4 className="text-sm font-light text-white uppercase tracking-widest leading-relaxed">
+                  <h4 className="text-base font-light text-white uppercase tracking-wider leading-relaxed">
                     {language === "vi" ? step.titleVi : step.titleEn}
                   </h4>
-                  <p className="text-white/50 font-light text-xs leading-loose">
+                  <p className="text-white/50 font-light text-sm leading-relaxed">
                     {language === "vi" ? step.descriptionVi : step.descriptionEn}
                   </p>
                 </div>
