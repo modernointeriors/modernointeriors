@@ -456,9 +456,9 @@ export default function About() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-0">
               {processSteps.map((step) => (
-                <div key={step.id} className="border-t border-white/10 pt-8 pb-4 pr-8 space-y-6">
-                  <div className="text-7xl font-light text-white/10 leading-none">{step.stepNumber}</div>
-                  <h4 className="text-base font-light text-white uppercase tracking-wider leading-relaxed">
+                <div key={step.id} className="border-t border-white/10 pt-8 pb-4 pr-8 flex flex-col">
+                  <div className="text-7xl font-light text-white/10 leading-none mb-6">{step.stepNumber}</div>
+                  <h4 className="text-base font-light text-white uppercase tracking-wider leading-relaxed min-h-[5rem] mb-4">
                     {language === "vi" ? step.titleVi : step.titleEn}
                   </h4>
                   <p className="text-white/50 font-light text-sm leading-relaxed">
