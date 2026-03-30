@@ -443,25 +443,25 @@ export default function About() {
       )}
       {/* Process Section */}
       {processSteps.length > 0 && aboutContent && (
-        <section className="py-20 bg-black">
+        <section className="py-28 md:py-36 bg-black">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-16">
-              <h2 className="text-sm font-light tracking-widest text-white/60 uppercase mb-4">
+            <div className="mb-24">
+              <h2 className="text-xs font-light tracking-[0.2em] text-white/40 uppercase mb-6">
                 {language === "vi" ? aboutContent.processSubtitleVi : aboutContent.processSubtitleEn}
               </h2>
-              <h3 className="text-3xl md:text-4xl font-light text-white uppercase tracking-wide">
+              <h3 className="text-3xl md:text-5xl font-light text-white uppercase tracking-wide">
                 {language === "vi" ? aboutContent.processTitleVi : aboutContent.processTitleEn}
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-0">
               {processSteps.map((step) => (
-                <div key={step.id} className="space-y-4">
-                  <div className="text-6xl font-light text-white/20">{step.stepNumber}</div>
-                  <h4 className="text-xl font-light text-white uppercase">
+                <div key={step.id} className="border-t border-white/10 pt-8 pb-4 pr-8 space-y-6">
+                  <div className="text-7xl font-light text-white/10 leading-none">{step.stepNumber}</div>
+                  <h4 className="text-sm font-light text-white uppercase tracking-widest leading-relaxed">
                     {language === "vi" ? step.titleVi : step.titleEn}
                   </h4>
-                  <p className="text-white/70 font-light text-sm leading-relaxed">
+                  <p className="text-white/50 font-light text-xs leading-loose">
                     {language === "vi" ? step.descriptionVi : step.descriptionEn}
                   </p>
                 </div>
